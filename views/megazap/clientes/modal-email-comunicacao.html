@@ -1,0 +1,25 @@
+<div class="modal-header">
+    <h3>{{'EMAIL-COMUNICACAO'|translate}}</h3>
+</div>
+
+
+<div class="modal-body">
+    <div class="row p-t-10">
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div ng-if="!emailComunicacao.tela">
+                    <h5>{{'ATUALIZACAO-CADASTRO-DESCRICAO'|translate}}</h5>
+                    <br><br>
+                </div>
+                <div class="fg-line">
+                    <input id="input-email-comunicacao" ng-model="emailComunicacao.email" type="email" maxlength="255" class="form-control fg-input input-lg" autofocus>
+                    <label class="fg-label">{{'EMAIL-COMUNICACAO'|translate}}</label>
+                </div>               
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onAtualizarEmailComunicacao()" ng-disabled="emailComunicacao.email.length === 0">{{'ENVIAR'|translate}}</button>
+    <button class="btn btn-link" ng-if="emailComunicacao.tela =='PERFIL'" ng-click="onModalEmailComunicacaoCancelar()">{{'CANCELAR'|translate}}</button> 
+</div>

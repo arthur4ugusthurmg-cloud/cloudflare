@@ -1,0 +1,163 @@
+<link href="css/crm.css?VERSION_HASH" rel="stylesheet" />
+<link href="css/ai.css?VERSION_HASH" rel="stylesheet" />
+<div class="container-fluid" ng-app="cardDiv" data-ng-controller="AiAssistantTemplateController" ng-init="onInit()">
+    <div id="cardDiv" class="card crm-d-block m-b-15" style="margin-left: 5px; margin-right: 5px;">
+        <div class="card-header ch-alt" style="border-radius: 8px 8px 0 0;">
+            <h2>
+                {{'MODELOS-COMPORTAMENTO'|translate}}
+                <button ng-if="hasTutorial('149')" ng-click="showTutorial('149')"
+                    title="Clique aqui para visualizar o video de explicação."
+                    class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                    <i class="zmdi zmdi-videocam m-r-5"></i>{{'TUTORIAL'|translate}}
+                </button>
+            </h2>
+            <button title="{{ 'ADICIONAR' | translate }}" class="btn bgm-teal btn-float btn-float-2 waves-effect"
+                ng-click="openEditTemplate(0)">
+                <i class="zmdi zmdi-plus"></i>
+            </button>
+            <button title="{{'PESQUISAR'| translate}}" class="btn bgm-blue btn-float btn-float-2 waves-effect"
+                ng-click="onInit()" ng-if="isAdministrador()">
+                <i class="zmdi zmdi-search"></i>
+            </button>
+        </div>
+        <div class="card-body card-padding">
+            <div class="row">
+                <div class="col-md-4" ng-if="isAdministrador()">
+                    <div class="form-group fg-float m-t-10 m-b-10">
+                        <div class="fg-line">
+                            <input type="text" ng-model="selectPartner" lta-enter="onInit()"
+                                typeahead-on-select="onInit()" typeahead-show-hint="true" typeahead-min-length="3"
+                                uib-typeahead="partner as partner.nome for partner in getResellersByName($viewValue)"
+                                typeahead-loading="loadingCustomer" class="form-control input-lg">
+                            <label class="fg-label">{{'REVENDEDOR'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div ng-class="{'col-sm-4' : isAdministrador(), 'col-sm-6' : !isAdministrador()}">
+                    <div class="form-group fg-float m-t-10 m-b-10">
+                        <div class="fg-line fg-toggled">
+                            <select class="form-control fg-input input-lg" ng-model="filtro.status"
+                                ng-change="onInit()">
+                                <option value=""></option>
+                                <option value="ALL">{{'TODOS'|translate}}</option>
+                                <option value="INACTIVE">{{'INACTIVE'|translate}}</option>
+                                <option value="ACTIVE">{{'ACTIVE'|translate}}</option>
+                            </select>
+                            <label class="fg-label">{{'STATUS'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div ng-class="{'col-sm-4' : isAdministrador(), 'col-sm-6' : !isAdministrador()}">
+                    <div class="form-group fg-float m-t-10 m-b-10">
+                        <div class="fg-line fg-toggled">
+                            <select class="form-control fg-input input-lg" ng-model="filtro.isVisible"
+                                ng-change="onInit()">
+                                <option value=""></option>
+                                <option value="ALL">{{'TODOS'|translate}}</option>
+                                <option value="VISIVEL">{{'VISIVEL'|translate}}</option>
+                                <option value="INVISIVEL">{{'INVISIVEL'|translate}}</option>
+                            </select>
+                            <label class="fg-label">{{'VISUALIZACAO'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="container-services">
+            <div class="not-date" ng-if="templates.length === 0">{{'NENHUM-REGISTRO'| translate}}</div>
+            <div class="row">
+                <div class="col-sm-12" ng-repeat="template in templates | orderBy:customOrder">
+                    <div class="card m-b-20">
+                        <div class="card-header ch-alt">
+                            <h2>
+                                {{template.nome}}
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <table id="content-table" class="table table-striped table-vmiddle">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20%">{{'NOME'|translate}}</th>
+                                        <th style="width: 20%">{{'STATUS'|translate}}</th>
+                                        <th style="width: 20%">{{'VISUALIZACAO'|translate}}</th>
+                                        <th style="width: 60%">{{'INSTRUCTIONS'|translate}}</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in template.templates">
+                                        <td>
+                                            {{item.name}}
+                                        </td>
+                                        <td>
+                                            <div class="m-t-5"
+                                                ng-class="{'c-green' : item.active, 'c-red' : !item.active}">
+                                                <b>{{item.active ? 'ATIVO' : 'INATIVO'}}</b>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="m-t-5"
+                                                ng-class="{'c-green' : item.isVisible, 'c-red' : !item.isVisible}">
+                                                <b>{{item.isVisible ? 'VISIVEL' : 'INVISIVEL'}}</b>
+                                            </div>
+                                        </td>
+                                        <td class="text-right">
+                                            {{ getInstructionTitles(item) }}
+                                        </td>
+                                        <td
+                                            style="justify-content: end; display: flex; right: 12px; position: absolute;">
+                                            <div class="options-feature dropdown" uib-dropdown="">
+                                                <a href="" uib-dropdown-toggle="" aria-expanded="false"
+                                                    class="dropdown-toggle" aria-haspopup="true">
+                                                    <i class="zmdi zmdi-more-vert"></i>
+                                                </a>
+
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li
+                                                        ng-if="(item.revendedorId && isRevendedor()) || (!item.revendedorId && isAdministrador())">
+                                                        <a ng-click="openEditTemplate(item.id)" href="">
+                                                            {{'EDITAR'| translate}}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="viewTemplate(item.id)" href="">
+                                                            {{'VISUALIZAR'| translate}}
+                                                        </a>
+                                                    </li>
+                                                    <li
+                                                        ng-if="(isRevendedor()) || (!item.revendedorId && isAdministrador())">
+                                                        <a ng-click="toggleStatus(item)" href="">
+                                                            {{item.active ?
+                                                            ('DESATIVAR' | translate) : ('ATIVAR' | translate)}}
+                                                        </a>
+                                                    </li>
+                                                    <li
+                                                        ng-if="(item.revendedorId && isRevendedor()) || (!item.revendedorId && isAdministrador())">
+                                                        <a ng-click="deleteTemplate(item.id)" href="">
+                                                            {{'REMOVER'| translate}}
+                                                        </a>
+                                                    </li>
+                                                    <li
+                                                        ng-if="(item.revendedorId && isRevendedor()) || (!item.revendedorId && isAdministrador())">
+                                                        <a ng-click="updateVisible(item)" href="">
+                                                            {{item.isVisible ?
+                                                            ('INVISIVEL' | translate) : ('VISIVEL' | translate)}}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

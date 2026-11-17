@@ -1,0 +1,460 @@
+body,
+html {
+  /* background-color: #FFF !important; */
+  height: 100% !important;
+}
+
+/*LEFT, RIGHT*/
+
+.login-left,
+.login-right {
+  height: 100% !important;
+}
+
+.login-left .login,
+.login-right .login {
+  flex-direction: row;
+  box-sizing: border-box;
+  display: flex;
+  place-content: stretch flex-start;
+  align-items: stretch;
+  height: 100%;
+}
+
+.login-left .login-form-container,
+.login-right .login-form-container {
+  flex-direction: column;
+  box-sizing: border-box;
+  display: flex;
+  place-content: center;
+  align-items: center;
+  flex: 1 1 auto;
+  height: 100%;
+  background-color: #fff;
+  overflow-y: auto;
+  width: 550px;
+  min-width: 550px;
+  max-width: 550px;
+}
+
+.login-left .login-form,
+.login-right .login-form {
+  width: 100%;
+  padding: 60px;
+}
+
+.login-left .login-intro,
+.login-right .login-intro {
+  flex-direction: column;
+  box-sizing: border-box;
+  display: flex;
+  place-content: center;
+  align-items: center;
+  flex: 1 1 auto;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  text-align: center;
+}
+
+.login-left .login-intro div,
+.login-right .login-intro div {
+  max-width: 60%;
+}
+
+.login-left .login-intro img,
+.login-right .login-intro img {
+  max-width: 200px;
+  max-height: 200px;
+}
+
+.login-left .login-intro p,
+.login-right .login-intro p {
+  margin: auto;
+  color: #333333 !important;
+  font-size: 16px !important;
+}
+
+/*CENTER*/
+
+.login-center {
+  text-align: center;
+  height: 100%;
+}
+
+.login-center:before {
+  height: 50%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  content: "";
+  z-index: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+}
+
+.login-center .login {
+  flex-direction: column;
+  box-sizing: border-box;
+  display: flex;
+  place-content: center;
+  align-items: center;
+  flex: 1 1 auto;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  text-align: center;
+}
+
+.login-center .login-form-container {
+  background-color: #fff;
+  overflow-y: auto;
+  width: 550px;
+  min-width: 550px;
+  max-width: 550px;
+  z-index: 1;
+  box-shadow: 0 1px 11px rgba(0, 0, 0, 0.27);
+  border-radius: 10px;
+}
+
+.login-center .login-form {
+  width: 100%;
+  padding: 40px 60px 40px 60px;
+}
+
+/*GERAL*/
+
+.login-form .logo {
+  text-align: center;
+}
+
+.login-form img {
+  max-width: 200px;
+  max-height: 200px;
+}
+
+.login-form .logo img {
+  width: 100%;
+  max-width: 250px;
+  max-height: 250px;
+}
+
+.login-form h1 {
+  font-size: 21px;
+  text-align: center;
+}
+
+.login-form .input-group {
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 15px 5px 15px 15px;
+}
+
+.login-form .fg-float .fg-toggled .fg-label {
+  top: -25px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.login-form .form-control {
+  border: none;
+}
+
+.login-form .input-group label {
+  background-color: #fff;
+  padding: 3px;
+}
+
+.login-form button {
+  border-radius: 5px;
+}
+
+.login-user-selection-container {
+  position: relative;
+}
+
+.login-user-selection {
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  position: relative;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  cursor: pointer;
+  place-content: space-between;
+}
+
+.login-user-list-item img,
+.login-user-selection img {
+  width: 40px;
+  height: 40px;
+  margin-right: 14px;
+}
+
+.profile-picture {
+  width: 40px;
+  height: 40px;
+  margin-right: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  place-content: center;
+  font-size: 26px;
+  color: white;
+}
+
+.login-user-selection .label {
+  position: absolute;
+  top: -8px;
+  left: 16px;
+  font-size: 11px;
+  color: #555;
+  font-weight: 100;
+  background: white;
+}
+
+.login-user-list {
+  position: absolute;
+  width: 100%;
+  z-index: 100;
+  max-height: 190px;
+  margin-top: -1px;
+  overflow: auto;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+}
+
+.login-user-list-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.login-user-list-item:hover {
+  background-color: #e0e0e0;
+}
+
+.login-user-list-btn-remove {
+  position: absolute;
+  right: 20px;
+  cursor: pointer;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  display: none;
+  place-content: center;
+  align-items: center;
+}
+
+.login-user-list-item:hover .login-user-list-btn-remove {
+  display: flex;
+}
+
+@media screen and (max-width: 1024px) {
+  .login-left .login-form-container,
+  .login-right .login-form-container {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .login-left .login-form,
+  .login-right .login-form {
+    max-width: 550px !important;
+    padding: 30px 40px 30px 40px;
+  }
+
+  .login-left .login-intro,
+  .login-right .login-intro {
+    display: none !important;
+  }
+
+  .login-center .login {
+    padding: 20px;
+  }
+
+  .login-center .login-form-container {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .login-center .login-form {
+    padding: 30px 40px 30px 40px;
+  }
+}
+
+table.sales-services {
+  width: 100%;
+  border-collapse: collapse; /* Ensures borders are collapsed */
+}
+
+table.sales-services {
+  padding: 10px; /* Padding for table cells */
+  text-align: left; /* Align text to the left */
+}
+
+table.sales-services th {
+  background-color: #f11717; /* Light gray background for headers */
+}
+
+td.subtitle {
+  width: 400px;
+  color: #000000;
+  padding-left: 2px !important;
+  padding-left: 2px !important;
+  font-size: 12px;
+}
+
+table.subvalue {
+  width: 400px;
+  border-left: 1px solid #000000;
+  font-size: 16px;
+  padding: 0 10px 0px 10px !important;
+}
+
+.invoice-not-found {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  padding: 20px;
+  margin: auto;
+  max-width: 600px;
+  box-shadow: 0 1px 11px rgba(0, 0, 0, 0.27);
+  height: 300px;
+}
+
+.invoice-not-found h4 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.invoice-not-found p {
+  font-size: 16px;
+  margin: 0;
+}
+
+.table.sales-services > thead > tr > th,
+.table.sales-services > tbody > tr > th,
+.table.sales-services > tfoot > tr > th,
+.table.sales-services > thead > tr > td,
+.table.sales-services > tbody > tr > td,
+.table.sales-services > tfoot > tr > td,
+.table.sales-services > thead > tr {
+  padding: 10px !important;
+  border: 1px solid #3333331f;
+}
+
+.table.sales-services > thead > tr > td.subvalue,
+.table.sales-services > tbody > tr > td.subvalue,
+.table.sales-services > tfoot > tr > td.subvalue {
+  padding-top: 10px;
+  padding: 10px 0px 14px 8px !important;
+}
+table.sales-services > tbody > tr > td:first-child {
+  margin-top: 10px !important;
+}
+
+.details-description {
+  padding: 30px;
+  border: solid 1px;
+  border-radius: 20px;
+  border-color: #3333331f;
+  text-align: start;
+  margin-bottom: 15px;
+}
+
+img.invert-color {
+  filter: brightness(0) saturate(100%) invert(100%);
+}
+
+.title-description h4,
+.title-description a,
+.title-description {
+  color: white !important;
+}
+
+.title-description h4 {
+  margin-bottom: 0px;
+}
+
+.title-description a {
+  margin-top: 30px !important;
+}
+
+.title-details-description {
+  text-align: start;
+}
+
+.button-dowload {
+  position: absolute;
+  top: 20px;
+  right: 15px;
+}
+img.logo {
+  min-height: 99px;
+  width: 148px;
+}
+
+.card-body-logo {
+  min-height: 170px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.container-logo {
+  background-color: #1c6499;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+  border-radius: 10px 0 0 10px;
+}
+
+.container-logo-inf {
+  display: flex;
+}
+
+.container-logo-inf .title-description {
+  border-radius: 0px 10px 10px 0px;
+}
+
+.title-details-description.services h4 {
+  padding-left: 10px;
+}
+
+@media (max-width: 430px) {
+
+  .container-logo-inf {
+    display: flex;
+    padding: 0px;
+    flex-direction: column;
+  }
+
+  .container-logo-inf .container-logo {    
+    border-radius: 10px 10px 0 0;
+  }
+
+  .container-logo-inf .title-description {
+    border-radius: 0 0 10px 10px;
+    padding-bottom: 20px;
+    text-align: center;
+  }
+
+  img.logo {
+    padding: 10px;
+  }
+}

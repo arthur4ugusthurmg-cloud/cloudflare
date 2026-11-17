@@ -1,0 +1,22 @@
+{
+  "empresas": {
+    "LinkFly": [
+      {
+        "id": "tel-001",
+        "telefone": "5531999999999",
+        "nome": "WhatsApp LinkFly",
+        "tipo": "WHATSAPP",
+        "ativo": true
+      }
+    ],
+    "EmpresaTeste": [
+      {
+        "id": "tel-002",
+        "telefone": "5531888888888",
+        "nome": "WhatsApp de teste",
+        "tipo": "WHATSAPP",
+        "ativo": true
+      }
+    ]
+  }
+}

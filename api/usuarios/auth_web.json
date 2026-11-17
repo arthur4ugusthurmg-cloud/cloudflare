@@ -1,0 +1,81 @@
+{
+    "usuarios": [
+        {
+            "id": "0",
+            "sso": "848578",
+            "empresa": "LinkFly",
+            "usuario": "demo",
+            "twoFA": false,
+            "senha": "134144",
+            "usuarioPerfil": "ADMINISTRADOR",
+            "scope": "$scope.isAdministrador",
+            "email": "sac@n3bot.com.br",
+            "image": "https:\/\/v2b-13.n3bot.com.br\/arquivos\/marcio.png",
+            "instance_id": "...",
+            "token_ultramsg": "...",
+            "token": "6b086eaf779ce113dc15677a4af5ef0c478244d00d4fa90d011aefb9693c75bd",
+            "remember_token": "",
+            "remember_expira": 0
+        },
+        {
+            "id": "1",
+            "sso": "95235",
+            "empresa": "Leitrores brincantes",
+            "usuario": "marcia",
+            "senha": "Lebrin2918*",
+            "usuarioPerfil": "ADMINISTRADOR",
+            "email": "marcia340204@gmail.com",
+            "instance_id": "...",
+            "token_ultramsg": "...",
+            "token": "f36f609fb26291ac7d9d50605dabe654b912debfcbeca7819fea6eea52e19020",
+            "remember_token": "",
+            "remember_expira": 0
+        },
+        {
+            "id": "2",
+            "sso": "95235",
+            "empresa": "Leitrores brincantes",
+            "usuario": "marcio",
+            "senha": "Ma*543474",
+            "usuarioPerfil": "ATENDENTE",
+            "email": "marcia340204@gmail.com",
+            "foto": "https:\/\/v2b-13.n3bot.com.br\/arquivos\/marcio.png",
+            "instance_id": "...",
+            "token_ultramsg": "...",
+            "token": "8de718d1fd3dcf87cde60993e26ddf5e52f528fe66f218cad2c3256f4bc7e592",
+            "remember_token": "",
+            "remember_expira": 0
+        },
+        {
+            "id": "30",
+            "sso": "000",
+            "empresa": "000",
+            "usuario": "meta",
+            "twoFA": false,
+            "senha": "151315",
+            "usuarioPerfil": "ADMINISTRADOR",
+            "email": "sac@n3bot.com.br",
+            "instance_id": "...",
+            "token_ultramsg": "...",
+            "token": "",
+            "remember_token": "",
+            "remember_expira": 0
+        },
+        {
+            "nome": "arthur augusto",
+            "usuario": "n3ss4rthur",
+            "email": "linkfly868@gmail.comn",
+            "perfil": "ATENDENTE",
+            "usuarioPerfil": "ATENDENTE",
+            "scope": "ATENDENTE",
+            "id": "38bd39c668f29c25c8ba91be2530f1af",
+            "token": "430149ac0e49648fc9cb8c9395f5406bf9ff653d766b3e2081843e8b31c45a69",
+            "telefone": "3191221743",
+            "emailAtendente": "linkfly868@gmail.comn",
+            "login": "n3ss4rthur",
+            "departamentos": [],
+            "permissionPages": [],
+            "diasAtendimento": []
+        }
+    ]
+}

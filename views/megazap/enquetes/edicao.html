@@ -1,0 +1,135 @@
+<div class="container-fluid" data-ng-controller="EnqueteEdicaoController" ng-init="onInit()">   
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>{{'ENQUETE'|translate}}</h2>        
+            <button ng-click="onRemover(registro)" class="btn bgm-red btn-float waves-effect pull-right"><i class="zmdi zmdi-delete"></i></button>
+        </div>
+
+        <div class="card-body card-padding">
+            <br/>            
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <div id="imagem-input" class="fileinput fileinput-new" data-provides="fileinput">                        
+                        <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="line-height: 200px;">
+                            <img ng-src="{{registro.imagem}}"/>
+                        </div>
+                        <div>
+                            <span class="btn btn-info btn-file">
+                                <span class="fileinput-new">{{'SELECIONAR-IMAGEM'|translate}}</span>
+                                <span class="fileinput-exists">{{'ALTERAR'|translate}}</span>
+                                <input type="file" name="...">
+                            </span>
+                            <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">{{'REMOVER'|translate}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <br/>
+            <div class="form-group m-b-30">
+                <label>{{'QUANTIDADE-VOTOS'|translate}}</label>
+                <div>{{registro.quantidadeVotos}}</div>
+            </div>
+            <br/>
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input type="number" class="form-control fg-input input-lg" style="width: 100px" ng-model="registro.numero">
+                    <label class="fg-label">{{'NUMERO'|translate}}</label>
+                </div>
+            </div>
+            <br/>
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <textarea class="form-control input-lg" msd-elastic ng-model="registro.texto"></textarea>
+                    <label class="fg-label">{{'TEXTO'|translate}}</label>
+                </div>
+            </div>
+            <br/>
+            <div class="checkbox m-b-15">
+                <label>
+                    <input type="checkbox" data-ng-model="registro.ativa">
+                    <i class="input-helper"></i>
+                    {{'ATIVA'|translate}}
+                </label>
+            </div> 
+        </div>
+    </div>           
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <a href=""><h2>{{'OPCOES'|translate}}</h2></a>
+            <button ng-click="onModalOpcao();" class="btn bgm-teal btn-float waves-effect pull-right"><i class="zmdi zmdi-plus"></i></button>
+        </div>
+        <div class="card-body card-padding">
+            <p>{{'OPCOES-DESCRICAO'|translate}}</p>
+        </div>
+    </div>
+
+    <div>
+        <ul class="main-menu perguntas-menu">
+            <li class="sub-menu" ng-repeat="opcao in registro.opcoes" ng-if="opcao.excluido !== true">
+                <div class="card" toggle-submenu>
+                    <div class="dropdown pull-right" uib-dropdown="" style="">
+                        <a class="dropdown-toggle" href="" uib-dropdown-toggle="" aria-expanded="false" uib-dropdown-toggle="" aria-haspopup="true" aria-expanded="false" aria-haspopup="true">
+                            <i class="zmdi zmdi-more-vert"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-right">
+                            <li ng-click="onModalOpcao(opcao)" class="ng-scope">
+                                <a href="" class="ng-binding">{{'EDITAR'|translate}}</a>
+                            </li>
+                            <li class="ng-scope">
+                                <a ng-click="onRemoverOpcao(opcao)" href="" class="ng-binding">{{'REMOVER'|translate}}</a>
+                            </li>                        
+                        </ul>
+                    </div>
+
+                    <div ng-if="opcao.quantidadeVotos !== undefined">{{opcao.quantidadeVotos}} {{'VOTOS'|translate}}</div>
+                    <div>{{opcao.numero}} - {{opcao.texto}}</div>
+
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <br/><br/>
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>{{'AUDITORIA'|translate}}</h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <br/>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group m-b-30">
+                        <label>{{'CRIADOR'|translate}}</label>
+                        <div>{{registro.criador}}</div>
+                    </div>
+                    <br/>
+                    <div class="form-group m-b-30">
+                        <label>{{'DATA-CRIACAO'|translate}}</label>
+                        <div>{{registro.dataCriacao|date:('DATE-FORMAT'|translate)}}</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group m-b-30">
+                        <label>{{'ATUALIZADOR'|translate}}</label>
+                        <div>{{registro.atualizador}}</div>
+                    </div>
+                    <br/>
+                    <div class="form-group m-b-30">
+                        <label>{{'DATA-ATUALIZACAO'|translate}}o</label>
+                        <div>{{registro.dataAtualizacao|date:('DATE-FORMAT'|translate)}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+    <button ng-click="onSalvar()" class="btn btn-float bgm-blue m-btn waves-effect waves-circle"><i class="zmdi zmdi-floppy"></i></button>
+
+</div>
+
+

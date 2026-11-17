@@ -1,0 +1,1940 @@
+<div class="container-fluid" data-ng-controller="GrupoPerguntaEdicaoController" ng-init="onInit()">
+
+    <div class="block-header">
+        <h2>
+            {{registro.nome}}
+            <small>{{registro.tipo}}</small>
+        </h2>
+    </div>
+
+    <div class="alert alert-danger" role="alert" ng-if="hasErrorPerguntasIniciais()">
+        <i class="zmdi zmdi-alert-circle-o zmdi-hc-fw"></i> {{"ALERTA-MENU-INICIAIS-COM-PROBLEMAS" }}
+    </div>
+
+    <div class="alert alert-danger" role="alert" ng-if="hasErrorPergunta">
+        <i class="zmdi zmdi-alert-circle-o zmdi-hc-fw"></i> {{"ALERTA-MENU-COM-PROBLEMAS" }} <a
+            style="cursor: pointer; text-decoration: underline; color: black;"
+            ng-click="loadPerguntasError()">{{"CLIQUE-AQUI" }}</a> {{"PARA-EXIBI-LOS" }}.
+    </div>
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>
+                {{'INFORMACOES'}}
+                <button ng-if="registro.tipo !== 'EMAIL' && hasTutorial('011')" ng-click="showTutorial('011')"
+                    title="Clique aqui para visualizar o video de explicação."
+                    class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                    <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                </button>
+                <button ng-if="registro.tipo === 'EMAIL' && hasTutorial('137')" ng-click="showTutorial('137')"
+                    title="Clique aqui para visualizar o video de explicação."
+                    class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                    <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                </button>
+            </h2>
+            <button ng-click="onRemover(registro)" class="btn bgm-red btn-float waves-effect pull-right"><i
+                    class="zmdi zmdi-delete"></i></button>
+        </div>
+
+        <br />
+
+        <div class="card-body card-padding">
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group fg-float m-b-10">
+                        <div class="fg-line">
+                            <textarea class="form-control input-lg" msd-elastic ng-model="registro.nome"></textarea>
+                            <label class="fg-label">{{'NOME'}}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12"
+                    ng-class="{'col-sm-6': registro.tipo === 'CHATBOT', 'col-sm-12': registro.tipo === 'EMAIL' || registro.tipo === 'JADI'}">
+                    <div class="form-group fg-float">
+                        <br />
+                        <div class="fg-line">
+                            <textarea class="form-control input-lg" msd-elastic
+                                ng-model="registro.descricao"></textarea>
+                            <label class="fg-label">{{"DESCRICAO" }}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12" ng-if="registro.tipo === 'JADI'">
+                    <div class="form-group fg-float m-b-30 m-t-20">
+                        <div class="fg-line">
+                            <select class="form-control input-lg select-simples" ng-model="registro.aiAssistantId">
+                                <option value="{{assistant.id}}" ng-repeat="assistant in assistants | orderBy: 'name'">
+                                    {{assistant.name}}</option>
+                            </select>
+                            <label class="fg-label">{{"ASSISTENTE-VIRTUAL-IA" }}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12" ng-if="registro.tipo === 'EMAIL'">
+                    <div class="form-group fg-float m-b-30">
+                        <br />
+                        <div class="fg-line">
+                            <select class="form-control input-lg select-simples"
+                                ng-model="registro.botEmailDepartamentoId">
+                                <option ng-repeat="departamento in departamentos"
+                                    value="{{departamento.confDepartamentoId}}">{{departamento.confDepartamentoNome}}
+                                </option>
+                            </select>
+                            <label class="fg-label" ng-if="registro.tipo !== 'EMAIL'">{{ "DEPARTAMENTO-RESPONSAVEL"
+                                 }}</label>
+                            <label class="fg-label" ng-if="registro.tipo === 'EMAIL'">{{ "DEPARTAMENTO-PADRAO"
+                                 }}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-class="{'col-sm-6': registro.tipo === 'CHATBOT', 'col-sm-4': registro.tipo === 'JADI'}"
+                    ng-if="registro.tipo === 'CHATBOT' || registro.tipo === 'JADI'">
+                    <div class="form-group fg-float m-b-30 m-t-20">
+                        <br />
+                        <div class="fg-line">
+                            <select class="form-control input-lg select-simples" ng-model="registro.tipoPotenciais">
+                                <option value="NUNCA">{{"NUNCA-APARECER-EM-POTENCIAIS" }}</option>
+                                <option value="NOVO_CONTATO">{{"APENAS-NOVOS-CONTATOS" }}</option>
+                                <option value="CONTATO_ANTIGO_SEM_ATENDIMENTO">{{"CONTATOS-MENSAGEM-SEM-ATENDIMENTO"
+                                    }}</option>
+                            </select>
+                            <label class="fg-label">{{"CONTROLE-POTENCIAIS" }}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4" ng-if="registro.tipo === 'CHATBOT' || registro.tipo === 'JADI'">
+                    <div class="form-group fg-float m-b-30 m-t-20">
+                        <div class="fg-line">
+                            <input type="number" class="form-control fg-input input-lg"
+                                ng-model="registro.minutosFinalizarAvaliacao">
+                            <label class="fg-label">{{"LIMITE-TEMPO-AVALIACAO-ATENDIMENTO" }}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4" ng-if="registro.tipo === 'CHATBOT'">
+                    <div class="form-group fg-float m-b-30 m-t-20">
+                        <div class="fg-line">
+                            <input type="number" class="form-control fg-input input-lg"
+                                ng-model="registro.minutosFinalizarRecado">
+                            <label class="fg-label">{{"LIMITE-TEMPO-RECADO" }}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4" ng-if="registro.tipo === 'CHATBOT' || registro.tipo === 'JADI'">
+                    <div class="form-group fg-float m-b-30 m-t-20">
+                        <div class="fg-line">
+                            <input type="number" class="form-control fg-input input-lg"
+                                ng-model="registro.minutosNovoPotencial">
+                            <label class="fg-label">{{"TEMPO-VIRAR-NOVO-POTENCIAL" }}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12" ng-if="registro.tipo === 'EMAIL' && registro.avaliacaoAtendimento">
+                    <div class="form-group fg-float m-b-30">
+                        <br />
+                        <div class="fg-line">
+                            <select class="form-control input-lg select-simples"
+                                ng-model="registro.botEmailNotaMaximaAvaliacao"
+                                ng-options="nota as ('0 a ' + nota) for nota in notasAvaliacaoAtendimento">
+                                <!-- <option ng-repeat="nota in notasAvaliacaoAtendimento" value="{{parseIntnota}}">0 a {{nota}}</option> -->
+                            </select>
+                            <label class="fg-label">{{ "NOTAS-AVALIACAO-ATENDIMENTO"  }}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checkbox inline-block m-r-20 m-b-10">
+                <label>
+                    <input type="checkbox" value="" ng-model="registro.avaliacaoAtendimento">
+                    <i class="input-helper"></i>
+                    {{"PERMITIR-AVALIACAO-ATENDIMENTO" }}
+                </label>
+            </div>
+
+            <div class="checkbox inline-block m-r-20 m-b-10" ng-if="registro.tipo === 'CHATBOT'">
+                <label>
+                    <input type="checkbox" value="" ng-model="registro.palavrasChave">
+                    <i class="input-helper"></i>
+                    {{"UTILIZAR-PALAVRAS-CHAVE" }}
+                </label>
+            </div>
+
+            <div class="checkbox inline-block m-r-20 m-b-10"
+                ng-if="registro.tipo === 'CHATBOT' || registro.tipo === 'JADI'">
+                <label>
+                    <input type="checkbox" value="" ng-model="registro.visualizarTodosAtendimentos">
+                    <i class="input-helper"></i>
+                    {{"PERMITIR-ATENDENTE-VISUALIZAR-ATENDIMENTO-CONTATO" }}
+                </label>
+            </div>
+
+            <div class="checkbox inline-block m-r-20 m-b-10"
+                ng-if="registro.tipo === 'CHATBOT' || registro.tipo === 'JADI'">
+                <label>
+                    <input type="checkbox" value="" ng-model="registro.enviarNomeAtendente">
+                    <i class="input-helper"></i>
+                    {{"ENVIAR-NOME-ATENDENTE-MENSAGEM" }}
+                </label>
+            </div>
+
+            <div class="checkbox inline-block m-r-20 m-b-10 m-t-10">
+                <label>
+                    <input type="checkbox" value="" ng-model="registro.solicitarMotivo">
+                    <i class="input-helper"></i>
+                    {{"SOLICITAR-MOTIVO-FINALIZAR-ATENDIMENTO" }}
+                </label>
+            </div>
+
+            <div class="checkbox inline-block m-r-20 m-b-10 m-t-10" ng-if="registro.tipo === 'CHATBOT'">
+                <label>
+                    <input type="checkbox" value="" ng-model="registro.permitirContatoFinalizar">
+                    <i class="input-helper"></i>
+                    {{"PERMITIR-CONTATO-FINALIZAR" }}
+                </label>
+            </div>
+
+            <div class="checkbox inline-block m-r-20 m-b-10 m-t-10"
+                ng-if="registro.tipo === 'CHATBOT' || registro.tipo === 'JADI'">
+                <label>
+                    <input type="checkbox" value="" ng-model="registro.responderGrupos">
+                    <i class="input-helper"></i>
+                    {{"RESPONDER-GRUPOS" }} (apenas bot v3 de WhatsApp)
+                </label>
+            </div>
+
+            <!-- <div ng-if="registro.possuiApiWhatsapp">
+                <div class="clearfix"></div>
+
+                <div class="checkbox inline-block m-r-20 m-b-5 m-t-10">
+                    <label>
+                        <input type="checkbox" value="" ng-model="registro.agruparMensagens">
+                        <i class="input-helper"></i>
+                        {{"AGRUPAMENTO-MENSAGENS" }}
+                    </label>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <small class="c-gray">
+                    <i class="zmdi zmdi-info-outline m-r-5"></i>{{"AGRUPAMENTO-MENSAGENS-OBSERVACAO" }}
+                </small>
+
+                <div class="row" ng-if="registro.agruparMensagens">
+                    <div class="col-sm-4">
+                        <div class="form-group fg-float m-b-20 m-t-20">
+                            <div class="fg-line">
+                                <select class="form-control input-lg select-simples"
+                                    ng-model="registro.agruparMensagensLimite"
+                                    ng-options="limite as ('AGRUPAMENTO-MENSAGENS-ATE' :{ quantidade: limite }) for limite in limitesAgrupamentoMensagens">
+                                </select>
+                                <label class="fg-label">{{"AGRUPAMENTO-MENSAGENS-LIMITE" }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="checkbox" ng-if="template && registro.tipo === 'CHATBOT'">
+                <hr>
+                <label>
+                    <input type="checkbox" value="" ng-model="registro.templateDisponivel">
+                    <i class="input-helper"></i>
+                    {{"TEMPLATE-DISPONIVEL" }}
+                </label>
+            </div>
+
+        </div>
+    </div>
+
+    <div ng-if="registro.tipo === 'CHATBOT'">
+        <div class="card">
+            <div class="card-header ch-alt">
+                <h2>
+                    {{"BUTTONS-ON-MENU" }}
+                    <button ng-if="hasTutorial('144')" ng-click="showTutorial('144')"
+                        title="Clique aqui para visualizar o video de explicação."
+                        class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                        <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                    </button>
+                    <small>
+                        <b>{{'ATENCAO' }}!</b> {{"BUTTONS-ON-MENU-WARNING" }}
+                    </small>
+                </h2>
+            </div>
+
+            <div class="card-body card-padding p-b-10">
+
+                <div class="checkbox inline-block m-r-20">
+                    <label>
+                        <input type="checkbox" value="" ng-disabled="!registro.possuiApiWhatsapp"
+                            ng-model="registro.waHabilitarBotoesSimples" ng-click="validatePerguntas()">
+                        <i class="input-helper"></i>
+                        {{"BUTTONS-ON-MENU-SIMPLE" }}
+
+                    </label>
+                </div>
+
+                <div class="checkbox inline-block ">
+                    <label>
+                        <input type="checkbox" value="" ng-disabled="!registro.possuiApiWhatsapp"
+                            ng-model="registro.waHabilitarBotoesListaSuspensa" ng-click="validatePerguntas()">
+                        <i class="input-helper"></i>
+                        {{"BUTTONS-ON-MENU-LIST" }}
+                    </label>
+                </div>
+
+                <div ng-if="registro.waHabilitarBotoesSimples || registro.waHabilitarBotoesListaSuspensa">
+
+                    <hr />
+
+                    <h4>Ações</h4>
+
+                    <div class="m-b-15">
+                        Caso essas ações sejam habilitadas, suas respectivas mensagens não serão enviadas pelo bot.
+                    </div>
+
+                    <div>
+                        <div class="checkbox inline-block m-r-20"
+                            ng-if="registro.waHabilitarBotoesSimples || registro.waHabilitarBotoesListaSuspensa">
+                            <label>
+                                <input type="checkbox" value="" ng-model="registro.waHabilitarBotaoPerfil">
+                                <i class="input-helper"></i>
+                                #perfil
+                            </label>
+                        </div>
+
+                        <div class="form-group"
+                            ng-if="registro.waHabilitarBotaoPerfil && (registro.waHabilitarBotoesSimples || registro.waHabilitarBotoesListaSuspensa)">
+                            <div class="fg-line">
+                                <input class="form-control input-lg" msd-elastic ng-model="registro.waBotaoPerfilTexto"
+                                    placeholder="Digite o texto do menu..."></input>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="checkbox inline-block m-r-20"
+                            ng-if="registro.waHabilitarBotoesSimples || registro.waHabilitarBotoesListaSuspensa">
+                            <label>
+                                <input type="checkbox" value="" ng-model="registro.waHabilitarBotaoVoltar">
+                                <i class="input-helper"></i>
+                                #voltar
+                            </label>
+                        </div>
+
+                        <div class="form-group m-b-30"
+                            ng-if="registro.waHabilitarBotaoVoltar && (registro.waHabilitarBotoesSimples || registro.waHabilitarBotoesListaSuspensa)">
+                            <div class="fg-line">
+                                <input class="form-control input-lg" msd-elastic ng-model="registro.waBotaoVoltarTexto"
+                                    placeholder="Digite o texto do menu..."></input>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="checkbox inline-block m-r-20"
+                            ng-if="registro.waHabilitarBotoesSimples || registro.waHabilitarBotoesListaSuspensa">
+                            <label>
+                                <input type="checkbox" value="" ng-model="registro.waHabilitarBotaoInicio">
+                                <i class="input-helper"></i>
+                                #inicio
+                            </label>
+                        </div>
+
+
+                        <div class="form-group"
+                            ng-if="registro.waHabilitarBotaoInicio && (registro.waHabilitarBotoesSimples || registro.waHabilitarBotoesListaSuspensa)">
+                            <div class="fg-line">
+                                <input class="form-control input-lg" msd-elastic ng-model="registro.waBotaoInicioTexto"
+                                    placeholder="Digite o texto do menu..."></input>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="card-footer p-b-10 p-t-5 m-t-15" style="background-color: #f7f7f7">
+                <div class="m-25">
+                    <span ng-if="registro.waHabilitarBotoesSimples">{{"BUTTONS-ON-MENU-RULE1-START" }}
+                        <b>{{"MSG-ESCOLHA-OPCOES-BOTOES" }}</b> {{"BUTTONS-ON-MENU-RULE1-END" }}
+                        <br /></span>
+                    <span ng-if="registro.waHabilitarBotoesListaSuspensa">{{"BUTTONS-ON-MENU-RULE1-START" }}
+                        <b>{{"MSG-ESCOLHA-OPCOES-LISTA" }}</b> {{"BUTTONS-ON-MENU-RULE1-END" }}
+                        <br /></span>
+                    <span
+                        ng-if="registro.waHabilitarBotoesSimples || registro.waHabilitarBotoesListaSuspensa">{{"BUTTONS-ON-MENU-RULE1-START"
+                        }} <b>{{"MSG-PERFIL-BOTOES" }}</b> {{"BUTTONS-ON-MENU-RULE1-END"
+                        }} <br /></span>
+                    {{"BUTTONS-ON-MENU-RULE2" }}
+                    <br />
+                    {{"BUTTONS-ON-MENU-RULE3" }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="registro.tipo === 'CHATBOT' && registro.possuiApiWhatsapp">
+        <div class="card">
+            <div class="card-header ch-alt">
+                <h2>{{"WEBCHAT-CONVERSATION" }}</h2>
+                <small class="text-muted">{{"WEBCHAT-CONVERSATION-DESC" }}</small>
+            </div>
+
+            <div class="card-body card-padding p-b-10">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="" ng-model="registro.webchatConversationAtiva">
+                        <i class="input-helper"></i>
+                        {{"WEBCHAT-CONVERSATION" }}
+                    </label>
+                </div>
+
+                <div class="form-group fg-float m-t-25 m-b-10" ng-if="registro.webchatConversationAtiva">
+                    <div class="fg-line">
+                        <select class="form-control input-lg select-simples"
+                            ng-model="registro.webchatConversationTemplateId"
+                            ng-options="template.id as (template.whatsappName + (template.language ? ' (' + template.language + ')' : '')) for template in webchatConversationTemplates">
+                            <option value="">{{"WEBCHAT-CONVERSATION-TEMPLATE-PLACEHOLDER" }}</option>
+                        </select>
+                        <label class="fg-label">{{"WEBCHAT-CONVERSATION-TEMPLATE" }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div ng-if="registro.tipo === 'EMAIL'">
+
+        <div class="card">
+            <div class="card-header ch-alt">
+                <h2>Templates</h2>
+                <button class="btn bgm-teal btn-float waves-effect" ng-click="onMostrarModalInserirTemplate()"><i
+                        class="zmdi zmdi-plus"></i></button>
+            </div>
+
+            <div class="card-body card-padding">
+                <span ng-if="registro.botEmailTemplates.length == 0">{{ "NENHUM-TEMPLATE-CADASTRADO" 
+                    }}</span>
+                <table class="table" ng-if="registro.botEmailTemplates.length > 0">
+                    <thead>
+                        <tr>
+                            <th>{{'NOME'}}</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="botEmailTemplate in registro.botEmailTemplates | orderBy: 'nome'"
+                            ng-if="!botEmailTemplate.excluido">
+                            <td style="vertical-align: middle">{{botEmailTemplate.nome}}</td>
+                            <td class="actions" uib-dropdown>
+                                <button uib-dropdown-toggle title="Editar"
+                                    class="btn btn-default btn-icon waves-effect waves-circle">
+                                    <i class="zmdi zmdi-edit"></i>
+                                </button>
+
+                                <ul class="dropdown-menu dm-icon">
+                                    <li>
+                                        <a href="" ng-click="onMostrarModalEditarTemplate(botEmailTemplate)">
+                                            <i class="zmdi zmdi-edit"></i> {{"EDITAR-SIMPLES" }}
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a href="" ng-click="onMostrarModalEditorHtml('TEMPLATE', botEmailTemplate)">
+                                            <i class="zmdi zmdi-code"></i> {{"EDITAR-EDITO-HTML" }}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td class="actions">
+                                <button
+                                    ng-click="onMostrarModalVisualizacaoHtml(botEmailTemplate.nome, botEmailTemplate.template)"
+                                    title="Visualizar" class="btn btn-success btn-icon waves-effect waves-circle">
+                                    <i class="zmdi zmdi-open-in-browser"></i>
+                                </button>
+                            </td>
+                            <td class="actions">
+                                <button ng-click="onRemoverEmailTemplate(botEmailTemplate)" title="Remover"
+                                    class="btn btn-danger btn-icon waves-effect waves-circle">
+                                    <i class="zmdi zmdi-delete"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div ng-if="registro.tipo === 'EMAIL'">
+
+        <div class="card">
+            <div class="card-header ch-alt">
+                <h2>
+                    {{"TEMPLATE-PADRAO" }}
+                    <small>
+                        {{"TEMPLATE-INFORMACAO-TAG" }}
+                        <br />
+                        - {{"PROTOCOLO-ATENDIMENTO" }}: <b ng-non-bindable="true">{{ticket.id}}</b><br />
+                        - {{"NOME-CONTATO" }} <b ng-non-bindable="true">{{contact.name}}</b><br />
+                        - {{"NOME-ATENDENTE" }}: <b ng-non-bindable="true">{{agent.name}}</b><br />
+                        - {{"FOTO-ATENDENTE" }}: <b ng-non-bindable="true">{{agent.photo}}</b><br />
+                        - {{"CONTEUDO-MENSAGEM" }}: <b ng-non-bindable="true">{{body}}</b>
+                    </small>
+                </h2>
+                <button ng-click="onMostrarModalEditorHtml('TEMPLATE_PADRAO', registro.botEmailTemplatePadrao)"
+                    title="Abrir editor" class="btn btn-sm bgm-blue waves-effect m-t-30">
+                    <i class="zmdi zmdi-code m-r-5"></i>{{"EDITOR-HTML" }}
+                </button>
+                <button ng-click="onMostrarModalVisualizacaoHtml('Template Padrão', registro.botEmailTemplatePadrao)"
+                    title="Visualizar" class="btn btn-sm bgm-green waves-effect m-t-30 m-l-10">
+                    <i class="zmdi zmdi-open-in-browser m-r-5"></i>{{"VISUALIZAR"  }}
+                </button>
+            </div>
+
+            <br />
+
+            <div class="card-body card-padding">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group fg-float m-b-30">
+                            <div class="fg-line">
+                                <textarea class="form-control input-lg" style="font-family:monospace; font-size: 1em;"
+                                    rows="10" ng-model="registro.botEmailTemplatePadrao"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div ng-if="registro.tipo === 'EMAIL'">
+
+        <div class="card">
+            <div class="card-header ch-alt">
+                <h2>
+                    {{"TICKET_CREATED" }}
+                    <small>
+                        {{"TEMPLATE-INFORMACAO-TAG" }}
+                        <br />
+                        - {{"PROTOCOLO-ATENDIMENTO" }}: <b ng-non-bindable="true">{{ticket.id}}</b><br />
+                        - {{"NOME-CONTATO" }} <b ng-non-bindable="true">{{contact.name}}</b>
+                    </small>
+                </h2>
+                <button ng-click="onMostrarModalEditorHtml('CRIADO', registro.mensagemAtendimento)" title="Abrir editor"
+                    class="btn btn-sm bgm-blue waves-effect m-t-30">
+                    <i class="zmdi zmdi-code m-r-5"></i>{{"EDITOR-HTML" }}
+                </button>
+                <button ng-click="onMostrarModalVisualizacaoHtml('Atendimento Criado', registro.mensagemAtendimento)"
+                    title="Visualizar" class="btn btn-sm bgm-green waves-effect m-t-30 m-l-10">
+                    <i class="zmdi zmdi-open-in-browser m-r-5"></i>{{"VISUALIZAR" }}
+                </button>
+            </div>
+
+            <br />
+
+            <div class="card-body card-padding">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group fg-float m-b-30">
+                            <div class="fg-line">
+                                <textarea class="form-control input-lg" style="font-family:monospace; font-size: 1em;"
+                                    rows="10" ng-model="registro.mensagemAtendimento"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div ng-if="registro.tipo === 'EMAIL'">
+
+        <div class="card">
+            <div class="card-header ch-alt">
+                <h2>
+                    {{"TICKET_FINISHED"  }}
+                    <small>
+                        {{"TEMPLATE-INFORMACAO-TAG" }}
+                        <br />
+                        - {{"PROTOCOLO-ATENDIMENTO" }}: <b ng-non-bindable="true">{{ticket.id}}</b><br />
+                        - {{"NOME-CONTATO" }} <b ng-non-bindable="true">{{contact.name}}</b><br />
+                        - {{"NOTAS-AVALIACAO-ATENDIMENTO" }} <b ng-non-bindable="true">{{ticket.rating}}</b>
+                    </small>
+                </h2>
+                <button ng-click="onMostrarModalEditorHtml('FINALIZADO', registro.mensagemAtendimentoFinalizado)"
+                    title="Abrir editor" class="btn btn-sm bgm-blue waves-effect m-t-30">
+                    <i class="zmdi zmdi-code m-r-5"></i>Editor HTML
+                </button>
+                <button
+                    ng-click="onMostrarModalVisualizacaoHtml('Atendimento Finalizado', registro.mensagemAtendimentoFinalizado)"
+                    title="Visualizar" class="btn btn-sm bgm-green waves-effect m-t-30 m-l-10">
+                    <i class="zmdi zmdi-open-in-browser m-r-5"></i>Visualizar
+                </button>
+            </div>
+
+            <br />
+
+            <div class="card-body card-padding">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group fg-float m-b-30">
+                            <div class="fg-line">
+                                <textarea class="form-control input-lg" style="font-family:monospace; font-size: 1em;"
+                                    rows="10" ng-model="registro.mensagemAtendimentoFinalizado"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="registro.tipo === 'EMAIL'">
+
+        <div class="card">
+            <div class="card-header ch-alt">
+                <h2>
+                    {{"RESPOSTA-AVALIACAO-ATENDIMENTO" }}
+                    <small>
+                        {{"TEMPLATE-INFORMACAO-TAG" }}
+                        <br />
+                        - {{"PROTOCOLO-ATENDIMENTO" }}: <b ng-non-bindable="true">{{ticket.id}}</b><br />
+                        - {{"NOME-CONTATO" }} <b ng-non-bindable="true">{{contact.name}}</b><br />
+                        - {{"MENSAGEM-RESPOSTA" }} <b ng-non-bindable="true">{{message}}</b>
+                    </small>
+                </h2>
+                <button ng-click="onMostrarModalEditorHtml('FINALIZADO', registro.respostaAvaliacaoAtendimento)"
+                    title="Abrir editor" class="btn btn-sm bgm-blue waves-effect m-t-30">
+                    <i class="zmdi zmdi-code m-r-5"></i>{{"EDITOR-HTML" }}
+                </button>
+                <button
+                    ng-click="onMostrarModalVisualizacaoHtml('Resposta da Avaliação do Atendimento', registro.respostaAvaliacaoAtendimento)"
+                    title="Visualizar" class="btn btn-sm bgm-green waves-effect m-t-30 m-l-10">
+                    <i class="zmdi zmdi-open-in-browser m-r-5"></i>{{"VISUALIZAR" }}
+                </button>
+            </div>
+
+            <br />
+
+            <div class="card-body card-padding">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group fg-float m-b-30">
+                            <div class="fg-line">
+                                <textarea class="form-control input-lg" style="font-family:monospace; font-size: 1em;"
+                                    rows="10" ng-model="registro.respostaAvaliacaoAtendimento"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs" ng-init="selectedTab = 1"
+        ng-show="registro.tipo === 'CHATBOT' || registro.tipo === 'JADI'">
+        <li ng-class="{active: selectedTab == 1}"><a href="" ng-click="selectedTab = 1">{{"MENSAGENS" }}</a>
+        </li>
+        <li ng-show="!template && registro.tipo === 'CHATBOT'" ng-class="{active: selectedTab == 2}"><a href=""
+                ng-click="selectedTab = 2">{{"ARQUIVOS" }}</a></li>
+        <li ng-show="registro.tipo === 'CHATBOT'" ng-class="{active: selectedTab == 3}"><a href=""
+                ng-click="selectedTab = 3">{{"PERGUNTAS" }}</a></li>
+        <li ng-show="registro.tipo === 'CHATBOT'" ng-class="{active: selectedTab == 4}"><a href=""
+                ng-click="selectedTab = 4">{{"AUDITORIA" }}</a></li>
+    </ul>
+
+    <div class="tab-content" ng-show="registro.tipo === 'CHATBOT' || registro.tipo === 'JADI'">
+
+        <!--MENSAGENS-->
+
+        <div ng-show="selectedTab == 1">
+            <div class="card">
+                <div class="card-header ch-alt">
+                    <ul class="actions" ng-if="hasTutorial('012')" style="right: 25px">
+                        <li class="dropdown" uib-dropdown="">
+                            <button ng-click="showTutorial('012')"
+                                title="Clique aqui para visualizar o video de explicação."
+                                class="btn btn-sm bgm-blue waves-effect">
+                                <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                            </button>
+                        </li>
+                    </ul>
+                    <h2>
+                        <small>
+                            {{'MSG-PERGUNTA-DESC'}}
+                            <br />
+                            <br />
+                            - {{'NOME-CLIENTE'}}: <b ng-non-bindable="true">{{client.name}}</b>
+                            <br />
+                            - {{'NOME-USUARIO'}}: <b ng-non-bindable="true">{{contact.name}}</b>
+                            <br />
+                            - {{'PROTOCOLO'}}: <b ng-non-bindable="true">{{ticket.id}}</b>
+                        </small>
+                    </h2>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-2" style="padding-top: 0px; padding-right: 0;">
+
+                        <ul class="main-menu" ng-init="selectedTabMensagens = 1">
+                            <li>
+                                <a ng-show="registro.tipo === 'CHATBOT'" data-ui-sref-active="active"
+                                    ng-class="{active: selectedTabMensagens == 1}" href=""
+                                    data-ng-click="selectedTabMensagens = 1">{{ "GERAIS"  }}</a>
+                                <a data-ui-sref-active="active" ng-class="{active: selectedTabMensagens == 2}" href=""
+                                    data-ng-click="selectedTabMensagens = 2">{{ "ATENDIMENTO"  }}</a>
+                                <a ng-show="registro.tipo === 'CHATBOT'" data-ui-sref-active="active"
+                                    ng-class="{active: selectedTabMensagens == 3}" href=""
+                                    data-ng-click="selectedTabMensagens = 3">{{ "RECADO"  }}</a>
+                                <a ng-show="registro.tipo === 'CHATBOT'" data-ui-sref-active="active"
+                                    ng-class="{active: selectedTabMensagens == 4}" href=""
+                                    data-ng-click="selectedTabMensagens = 4">{{ "ENQUETE"  }}</a>
+                                <!-- <a data-ui-sref-active="active" ng-class="{active: selectedTabMensagens == 5}" href="" data-ng-click="selectedTabMensagens = 5">Avaliação</a> -->
+                                <a ng-show="registro.tipo === 'CHATBOT'" ng-show="registro.palavrasChave"
+                                    data-ui-sref-active="active" ng-class="{active: selectedTabMensagens == 6}" href=""
+                                    data-ng-click="selectedTabMensagens = 6">{{ "PALAVRAS-CHAVE"  }}</a>
+                                <a ng-show="registro.tipo === 'CHATBOT'" data-ui-sref-active="active"
+                                    ng-class="{active: selectedTabMensagens == 7}" href=""
+                                    data-ng-click="selectedTabMensagens = 7">{{ "VALIDACOES"  }}</a>
+                            </li>
+                        </ul>
+
+                        <br />
+                        <br />
+
+                    </div>
+
+                    <div class="col-lg-10" style="padding-left: 15px;">
+
+                        <div class="card-body"
+                            style="padding-top: 35px; padding-right: 25px; padding-bottom: 15px; min-height: 270px;">
+
+                            <!--GERAIS-->
+
+                            <div ng-show="selectedTabMensagens == 1">
+
+                                <ul class="actions pull-right" ng-if="hasTutorial('013')"
+                                    style="margin-top: -20px; margin-bottom: 15px;">
+                                    <li class="dropdown" uib-dropdown="">
+                                        <button ng-click="showTutorial('013')"
+                                            title="Clique aqui para visualizar o video de explicação."
+                                            class="btn btn-sm bgm-blue waves-effect">
+                                            <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                                        </button>
+                                    </li>
+                                </ul>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="registro.perguntaBemVindo"></textarea>
+                                        <label class="fg-label">{{'MSG-BEM-VINDO'}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="registro.perguntaEscolhaOpcoes"></textarea>
+                                        <label class="fg-label">{{'MSG-ESCOLHA-OPCOES-TEXTO'}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30" ng-if="registro.waHabilitarBotoesSimples">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="registro.perguntaEscolhaOpcoesBotoes" maxlength="1024"></textarea>
+                                        <label class="fg-label">{{'MSG-ESCOLHA-OPCOES-BOTOES'}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30" ng-if="registro.waHabilitarBotoesListaSuspensa">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="registro.perguntaEscolhaOpcoesLista" maxlength="1024"></textarea>
+                                        <label class="fg-label">{{'MSG-ESCOLHA-OPCOES-LISTA'}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="registro.mensagemPerfil"></textarea>
+                                        <label class="fg-label">{{'MSG-PERFIL-TEXTO'}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30"
+                                    ng-if="registro.waHabilitarBotoesSimples || registro.waHabilitarBotoesListaSuspensa">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="registro.mensagemBotaoVoltarInicio"></textarea>
+                                        <label class="fg-label">{{'MSG-PERFIL-BOTOES'}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="registro.mensagemInicialId"></textarea>
+                                        <label class="fg-label">{{'MSG-INICIAL-PERFIL'}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="registro.perguntaOpcaoInvalida"></textarea>
+                                        <label class="fg-label">{{'MSG-OPCAO-INVALIDA'}}</label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!--ATENDIMENTO-->
+
+                            <div ng-show="selectedTabMensagens == 2">
+
+                                <ul class="actions pull-right" style="margin-top: -20px; margin-bottom: 15px;">
+
+
+                                    <li class="dropdown m-r-5" uib-dropdown="">
+
+                                        <div class="dropdown " uib-dropdown="" style="">
+                                            <a class="dropdown-toggle btn btn-sm bgm-red waves-effect" href=""
+                                                uib-dropdown-toggle="" aria-expanded="false" uib-dropdown-toggle=""
+                                                aria-haspopup="true" aria-expanded="false" aria-haspopup="true">
+                                                <i class="zmdi zmdi-delete m-r-5"></i>{{ "LIMPAR-MENSAGENS" 
+                                                }}
+                                            </a>
+                                            <ul class="dropdown-menu pull-right">
+                                                <li ng-click="limparMensagens(departamentoMsgAtendimentoId)"
+                                                    ng-if="departamentoMsgAtendimentoId != 0"
+                                                    ng-click="onRemoverPergunta(item)" class="ng-scope">
+                                                    <a href="" class="ng-binding">{{ "DO-DEPARTAMENTO"  }}
+                                                        {{departamentoMsgAtendimento.name}}</a>
+                                                </li>
+                                                <li ng-click="limparMensagens()" class="ng-scope">
+                                                    <a href="" class="ng-binding">{{ "DE-TODOS-DEPARTAMENTOS"
+                                                         }}</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                    </li>
+
+                                    <li class="dropdown m-r-5" uib-dropdown="">
+
+                                        <div class="dropdown " uib-dropdown="" style="">
+                                            <a class="dropdown-toggle btn btn-sm bgm-blue waves-effect" href=""
+                                                uib-dropdown-toggle="" aria-expanded="false" uib-dropdown-toggle=""
+                                                aria-haspopup="true" aria-expanded="false" aria-haspopup="true">
+                                                <i class="zmdi zmdi-copy m-r-5"></i>{{ "COPIAR-MENSAGENS-PADRAO"
+                                                 }}
+                                            </a>
+                                            <ul class="dropdown-menu pull-right">
+                                                <li ng-click="copiarDepartamentoMsgAtendimento(departamentoMsgAtendimentoId)"
+                                                    ng-if="departamentoMsgAtendimentoId != 0"
+                                                    ng-click="onRemoverPergunta(item)" class="ng-scope">
+                                                    <a href="" class="ng-binding">{{ "PARA-DEPARTAMENTO"  }}
+                                                        {{departamentoMsgAtendimento.name}}</a>
+                                                </li>
+                                                <li ng-click="copiarDepartamentoMsgAtendimento()" class="ng-scope">
+                                                    <a href="" class="ng-binding">{{ "PARA-TODOS-DEPARTAMENTOS"
+                                                         }}</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                    </li>
+
+                                    <li class="dropdown" uib-dropdown="" ng-if="hasTutorial('014')">
+                                        <button ng-click="showTutorial('014')"
+                                            title="Clique aqui para visualizar o video de explicação."
+                                            class="btn btn-sm bgm-blue waves-effect">
+                                            <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                                        </button>
+                                    </li>
+                                </ul>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <br />
+                                    <div class="fg-line fg-toggled-forced">
+                                        <select class="form-control input-lg select-simples"
+                                            ng-model="departamentoMsgAtendimentoId"
+                                            ng-change="selecionarDepartamentoMsgAtendimento()">
+                                            <option value="0">{{ "PADRAO"  }}</option>
+                                            <option ng-repeat="mensagensDepartamento in registro.mensagensDepartamento"
+                                                value="{{mensagensDepartamento.id}}">{{mensagensDepartamento.name}}
+                                            </option>
+                                        </select>
+                                        <label class="fg-label">{{ "DEPARTAMENTO"  }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="alert alert-default text-center" role="alert"
+                                    ng-if="departamentoMsgAtendimentoId != 0">
+                                    <i><b>{{ "ATENCAO"  }}!</b> {{ "DESC-MSG-CONFIGURADA"  }}.</i>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30" ng-show="registro.tipo === 'CHATBOT'">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="departamentoMsgAtendimento.viewMessages.mensagemAtendimento"></textarea>
+                                        <label class="fg-label">{{ "SOLICITACAO-ATENDIMENTO"  }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="departamentoMsgAtendimento.viewMessages.mensagemAtendimentoFinalizado"></textarea>
+                                        <label class="fg-label">{{'MSG-ATENDIMENTO-FINALIZADO'}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30" ng-show="registro.tipo === 'CHATBOT'">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="departamentoMsgAtendimento.viewMessages.mensagemAtendentesAusentesCriacao"></textarea>
+                                        <label
+                                            class="fg-label">{{'ATENDENTES-AUSENTES-CRIACAO-ATENDIMENTO'}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30" ng-show="registro.tipo === 'CHATBOT'">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="departamentoMsgAtendimento.viewMessages.mensagemAtendentesAusentesMensagens"></textarea>
+                                        <label
+                                            class="fg-label">{{'ATENDENTES-AUSENTES-ENVIO-MSG-ATENDIMENTO'}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="departamentoMsgAtendimento.viewMessages.solicitacaoAvaliacaoAtendimento"></textarea>
+                                        <label class="fg-label">{{ "SOLICITACAO-AVALIACAO"  }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="departamentoMsgAtendimento.viewMessages.agradecimentoAvaliacaoAtendimento"></textarea>
+                                        <label class="fg-label">{{ "AGRADECIMENTO-AVALIACAO"  }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="departamentoMsgAtendimento.viewMessages.mensagemErroAvaliacao"></textarea>
+                                        <label class="fg-label">{{ "ERRO-AVALIACAO-INVALIDA"  }}.</label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!--RECADO-->
+
+                            <div ng-show="selectedTabMensagens == 3">
+
+                                <ul class="actions pull-right" ng-if="hasTutorial('015')"
+                                    style="margin-top: -20px; margin-bottom: 15px;">
+                                    <li class="dropdown" uib-dropdown="">
+                                        <button ng-click="showTutorial('015')"
+                                            title="Clique aqui para visualizar o video de explicação."
+                                            class="btn btn-sm bgm-blue waves-effect">
+                                            <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                                        </button>
+                                    </li>
+                                </ul>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="registro.mensagemRecado"></textarea>
+                                        <label class="fg-label">{{ "SOLICITACAO-RECADO"  }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="registro.mensagemRecadoFinalizado"></textarea>
+                                        <label class="fg-label">{{ "RECADO-FINALIZADO"  }}</label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!--ENQUETE-->
+
+                            <div ng-show="selectedTabMensagens == 4">
+
+                                <ul class="actions pull-right" ng-if="hasTutorial('016')"
+                                    style="margin-top: -20px; margin-bottom: 15px;">
+                                    <li class="dropdown" uib-dropdown="">
+                                        <button ng-click="showTutorial('016')"
+                                            title="Clique aqui para visualizar o video de explicação."
+                                            class="btn btn-sm bgm-blue waves-effect">
+                                            <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                                        </button>
+                                    </li>
+                                </ul>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="registro.mensagemVotoDuplicado"></textarea>
+                                        <label class="fg-label">{{'MSG-VOTO-DUPLICADO'}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="registro.mensagemVotoRegistrado"></textarea>
+                                        <label class="fg-label">{{'MSG-VOTO-REGISTRADO'}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="registro.mensagemErroVotacao"></textarea>
+                                        <label class="fg-label">{{ "ERRO-ESCOLHER-OPCAO-ERRADA"  }}</label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!--PALAVRAS CHAVE-->
+
+                            <div ng-show="selectedTabMensagens == 6">
+
+                                <ul class="actions pull-right" ng-if="hasTutorial('018')"
+                                    style="margin-top: -20px; margin-bottom: 15px;">
+                                    <li class="dropdown" uib-dropdown="">
+                                        <button ng-click="showTutorial('018')"
+                                            title="Clique aqui para visualizar o video de explicação."
+                                            class="btn btn-sm bgm-blue waves-effect">
+                                            <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                                        </button>
+                                    </li>
+                                </ul>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="registro.perguntaPalavraChave"></textarea>
+                                        <label class="fg-label">{{ "SOLICITACAO-PALAVRA-CHAVE"  }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="registro.mensagemErroPalavraChave"></textarea>
+                                        <label class="fg-label">{{ "DESC-ERRO-NAO-ENCONTRE-MENU"  }}</label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!--VALIDACOES-->
+
+                            <div ng-show="selectedTabMensagens == 7">
+
+                                <div class="form-group fg-float m-b-30">
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="registro.mensagemValidacaoVideo"></textarea>
+                                        <label class="fg-label">{{ "MSG-ERRO-VIDEO-NAO-PERMITIDO"  }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group fg-float m-b-30">
+                                    <br />
+                                    <div class="fg-line">
+                                        <textarea class="form-control input-lg" msd-elastic
+                                            ng-model="registro.mensagemValidacaoAudio"></textarea>
+                                        <label class="fg-label">{{ "MSG-ERRO-AUDIO-NAO-PERMITIDO"  }}</label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!--IMAGENS-->
+
+        <div ng-show="selectedTab == 2">
+            <div class="card">
+
+                <div class="card-header ch-alt">
+                    <ul class="actions" ng-if="hasTutorial('019')" style="right: 25px">
+                        <li class="dropdown" uib-dropdown="">
+                            <button ng-click="showTutorial('019')"
+                                title="Clique aqui para visualizar o video de explicação."
+                                class="btn btn-sm bgm-blue waves-effect">
+                                <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                            </button>
+                        </li>
+                    </ul>
+
+                    <h2>
+                        <small>
+                            {{"ARQUIVOS-ENVIADOS-JUNTO-MENSAGEM-CONFIGURADA" }}
+                        </small>
+                    </h2>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-2" style="padding-top: 0px; padding-right: 0;">
+
+                        <ul class="main-menu" ng-init="selectedTabImagens = 1">
+                            <li>
+                                <a data-ui-sref-active="active" ng-class="{active: selectedTabImagens == 1}" href=""
+                                    data-ng-click="selectedTabImagens = 1">{{"GERAIS" }}</a>
+                                <a data-ui-sref-active="active" ng-class="{active: selectedTabImagens == 2}" href=""
+                                    data-ng-click="selectedTabImagens = 2">{{"ATENDIMENTO" }}</a>
+                                <a data-ui-sref-active="active" ng-class="{active: selectedTabImagens == 3}" href=""
+                                    data-ng-click="selectedTabImagens = 3">{{"AVALIACAO" }}</a>
+                            </li>
+                        </ul>
+
+                        <br />
+                        <br />
+
+                    </div>
+
+                    <div class="col-lg-10" style="padding-left: 15px;">
+
+                        <div class="card-body"
+                            style="padding-top: 35px; padding-right: 25px; padding-bottom: 15px; min-height: 270px;">
+
+                            <!--GERAIS-->
+
+                            <div ng-show="selectedTabImagens == 1">
+
+                                <div ng-class="col - sm - 12">
+                                    <div class="form-group m-b-30 text-center">
+                                        <h4>{{'MSG-BEM-VINDO'}}</h4>
+                                        <div id="imagem-bem-vindo-input" class="fileinput fileinput-new"
+                                            data-provides="fileinput" style="width: 250px">
+
+                                            <div ng-if="getTipoArquivo(registro.imagemBemVindo) && getTipoArquivo(registro.imagemBemVindo) === 'IMAGEM'"
+                                                class="fileinput-preview thumbnail" data-trigger="fileinput"
+                                                style="line-height: 200px; width: 200px">
+                                                <img ng-src="{{registro.imagemBemVindo}}" />
+                                            </div>
+                                            <div ng-if="getTipoArquivo(registro.imagemBemVindo) !== 'IMAGEM'"
+                                                style="line-height: 200px; height: 200px; border: 1px solid #ededed;">
+
+                                                <div ng-if="getTipoArquivo(registro.imagemBemVindo) === 'VIDEO'"
+                                                    style="max-width: 100%;">
+                                                    <video style="max-width: 100%; height: 180px;" controls>
+                                                        <source ng-src="{{registro.imagemBemVindo| trustUrl}}"
+                                                            type="video/mp4">
+                                                    </video>
+                                                </div>
+
+                                                <div ng-if="getTipoArquivo(registro.imagemBemVindo) === 'AUDIO'">
+                                                    <audio style="max-width: 100%; padding:10px; margin-top: 70px"
+                                                        preload="none" width="200" controls>
+                                                        <source ng-src="{{registro.imagemBemVindo| trustUrl}}"
+                                                            type="audio/mp3" />
+                                                    </audio>
+                                                </div>
+
+                                                <div ng-if="getTipoArquivo(registro.imagemBemVindo) === 'ARQUIVO'">
+                                                    <i style="font-size: 100px; margin-top: 50px;"
+                                                        class="zmdi zmdi-file"></i>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="m-t-5 m-b-5 p-5"
+                                                style="text-overflow: ellipsis; overflow-x: hidden; white-space: nowrap;"
+                                                title="{{getFileName(registro.imagemBemVindo)}}">
+                                                {{getFileName(registro.imagemBemVindo)}}</div>
+
+                                            <div>
+                                                <span class="btn btn-block btn-info btn-file">
+                                                    <span
+                                                        class="fileinput-new fileinput-selecionar-bem-vindo">{{'SELECIONAR'}}</span>
+                                                    <span
+                                                        class="fileinput-exists fileinput-action-bem-vindo">{{'ALTERAR'}}</span>
+                                                    <input type="file" name="...">
+                                                </span>
+                                                <a class="btn btn-danger btn-block fileinput-exists fileinput-action-bem-vindo"
+                                                    data-dismiss="fileinput">{{'REMOVER'}}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!--ATENDIMENTO-->
+
+                            <div ng-show="selectedTabImagens == 2">
+
+                                <div class="col-sm-12">
+                                    <div class="form-group m-b-30 text-center">
+                                        <h4>{{'MSG-ATENDIMENTO-FINALIZADO'}}</h4>
+                                        <div id="imagem-atendimento-finalizado-input" class="fileinput fileinput-new"
+                                            data-provides="fileinput" style="width: 250px">
+
+                                            <div ng-if="getTipoArquivo(registro.imagemAtendimentoFinalizado) && getTipoArquivo(registro.imagemAtendimentoFinalizado) === 'IMAGEM'"
+                                                class="fileinput-preview thumbnail" data-trigger="fileinput"
+                                                style="line-height: 200px; width: 200px">
+                                                <img ng-src="{{registro.imagemAtendimentoFinalizado}}" />
+                                            </div>
+                                            <div ng-if="getTipoArquivo(registro.imagemAtendimentoFinalizado) !== 'IMAGEM'"
+                                                style="line-height: 200px; height: 200px; border: 1px solid #ededed;">
+
+                                                <div ng-if="getTipoArquivo(registro.imagemAtendimentoFinalizado) === 'VIDEO'"
+                                                    style="max-width: 100%;">
+                                                    <video style="max-width: 100%; height: 180px;" controls>
+                                                        <source
+                                                            ng-src="{{registro.imagemAtendimentoFinalizado| trustUrl}}"
+                                                            type="video/mp4">
+                                                    </video>
+                                                </div>
+
+                                                <div
+                                                    ng-if="getTipoArquivo(registro.imagemAtendimentoFinalizado) === 'AUDIO'">
+                                                    <audio style="max-width: 100%; padding:10px; margin-top: 70px"
+                                                        preload="none" width="200" controls>
+                                                        <source
+                                                            ng-src="{{registro.imagemAtendimentoFinalizado| trustUrl}}"
+                                                            type="audio/mp3" />
+                                                    </audio>
+                                                </div>
+
+                                                <div
+                                                    ng-if="getTipoArquivo(registro.imagemAtendimentoFinalizado) === 'ARQUIVO'">
+                                                    <i style="font-size: 100px; margin-top: 50px;"
+                                                        class="zmdi zmdi-file"></i>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="m-t-5 m-b-5 p-5"
+                                                style="text-overflow: ellipsis; overflow-x: hidden; white-space: nowrap;"
+                                                title="{{getFileName(registro.imagemAtendimentoFinalizado)}}">
+                                                {{getFileName(registro.imagemAtendimentoFinalizado)}}</div>
+
+                                            <div>
+                                                <span class="btn btn-block btn-info btn-file">
+                                                    <span
+                                                        class="fileinput-new fileinput-selecionar-atendimento-finalizado">{{'SELECIONAR-IMAGEM'}}</span>
+                                                    <span
+                                                        class="fileinput-exists fileinput-action-atendimento-finalizado">{{'ALTERAR'}}</span>
+                                                    <input type="file" name="...">
+                                                </span>
+                                                <a class="btn btn-danger btn-block fileinput-exists fileinput-action-atendimento-finalizado"
+                                                    data-dismiss="fileinput">{{'REMOVER'}}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!--AVALIAÇÃO-->
+
+                            <div ng-show="selectedTabImagens == 3">
+
+                                <div class="col-sm-12">
+                                    <div class="form-group m-b-30 text-center">
+                                        <h4>{{"AGRADECIMENTO-AVALIACAO" }}</h4>
+                                        <div id="imagem-avaliacao-atendimento-input" class="fileinput fileinput-new"
+                                            data-provides="fileinput" style="width: 250px">
+
+                                            <div ng-if="getTipoArquivo(registro.imagemAvaliacaoAtendimento) && getTipoArquivo(registro.imagemAvaliacaoAtendimento) === 'IMAGEM'"
+                                                class="fileinput-preview thumbnail" data-trigger="fileinput"
+                                                style="line-height: 200px; width: 200px">
+                                                <img ng-src="{{registro.imagemAvaliacaoAtendimento}}" />
+                                            </div>
+                                            <div ng-if="getTipoArquivo(registro.imagemAvaliacaoAtendimento) !== 'IMAGEM'"
+                                                style="line-height: 200px; height: 200px; border: 1px solid #ededed;">
+
+                                                <div ng-if="getTipoArquivo(registro.imagemAvaliacaoAtendimento) === 'VIDEO'"
+                                                    style="max-width: 100%;">
+                                                    <video style="max-width: 100%; height: 180px;" controls>
+                                                        <source
+                                                            ng-src="{{registro.imagemAvaliacaoAtendimento| trustUrl}}"
+                                                            type="video/mp4">
+                                                    </video>
+                                                </div>
+
+                                                <div
+                                                    ng-if="getTipoArquivo(registro.imagemAvaliacaoAtendimento) === 'AUDIO'">
+                                                    <audio style="max-width: 100%; padding:10px; margin-top: 70px"
+                                                        preload="none" width="200" controls>
+                                                        <source
+                                                            ng-src="{{registro.imagemAvaliacaoAtendimento| trustUrl}}"
+                                                            type="audio/mp3" />
+                                                    </audio>
+                                                </div>
+
+                                                <div
+                                                    ng-if="getTipoArquivo(registro.imagemAvaliacaoAtendimento) === 'ARQUIVO'">
+                                                    <i style="font-size: 100px; margin-top: 50px;"
+                                                        class="zmdi zmdi-file"></i>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="m-t-5 m-b-5 p-5"
+                                                style="text-overflow: ellipsis; overflow-x: hidden; white-space: nowrap;"
+                                                title="{{getFileName(registro.imagemAvaliacaoAtendimento)}}">
+                                                {{getFileName(registro.imagemAvaliacaoAtendimento)}}</div>
+
+                                            <div>
+                                                <span class="btn btn-block btn-info btn-file">
+                                                    <span
+                                                        class="fileinput-new fileinput-selecionar-avaliacao-atendimento">{{'SELECIONAR-IMAGEM'}}</span>
+                                                    <span
+                                                        class="fileinput-exists fileinput-action-avaliacao-atendimento">{{'ALTERAR'}}</span>
+                                                    <input type="file" name="...">
+                                                </span>
+                                                <a class="btn btn-danger btn-block fileinput-exists fileinput-action-avaliacao-atendimento"
+                                                    data-dismiss="fileinput">{{'REMOVER'}}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!--PERGUNTAS-->
+
+        <div ng-show="selectedTab == 3">
+            <div class="card">
+
+                <div class="card-header ch-alt">
+                    <div ng-show="selectedTabPerguntas == 1">
+                        <ul class="actions" ng-if="hasTutorial('020')" style="right: 25px">
+                            <li class="dropdown" uib-dropdown="">
+                                <button ng-click="showTutorial('020')"
+                                    title="Clique aqui para visualizar o video de explicação."
+                                    class="btn btn-sm bgm-blue waves-effect">
+                                    <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div ng-show="selectedTabPerguntas == 2">
+                        <ul class="actions" ng-if="hasTutorial('021')" style="right: 25px">
+                            <li class="dropdown" uib-dropdown="">
+                                <button ng-click="showTutorial('021')"
+                                    title="Clique aqui para visualizar o video de explicação."
+                                    class="btn btn-sm bgm-blue waves-effect">
+                                    <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <h2>
+                        <small ng-show="selectedTabPerguntas == 1">{{"INFORMACOES-PRIMEIRO-CONTATO-BOT" 
+                            }}.</small>
+                        <small
+                            ng-show="selectedTabPerguntas == 2">{{"MENUS-ABAIXO-EXIBIDOS-APOS-PREENCHIMENTO-INFORMACOES"
+                            }}.</small>
+                        <br />
+                        <small>
+                            {{'MSG-PERGUNTA-DESC'}}
+                            <br />
+                            <br />
+                            - {{'NOME-CLIENTE'}}: <b ng-non-bindable="true">{{client.name}}</b>
+                            <br />
+                            - {{'NOME-USUARIO'}}: <b ng-non-bindable="true">{{contact.name}}</b>
+                            <br />
+                            - {{'PROTOCOLO'}}: <b ng-non-bindable="true">{{ticket.id}}</b>
+                        </small>
+                    </h2>
+
+                    <button ng-show="selectedTabPerguntas == 1" ng-click="onModalPergunta(registro, true, true)"
+                        class="btn bgm-teal btn-float waves-effect pull-right"><i class="zmdi zmdi-plus"></i></button>
+                    <button ng-show="(selectedTabPerguntas == 2 && viewMode !== 'mindmap')"
+                        ng-click="onModalPergunta(perguntasMenu, true, false)"
+                        class="btn bgm-teal btn-float waves-effect pull-right"><i class="zmdi zmdi-plus"></i></button>
+
+                    <!-- Toggle Lista / Mapa Mental -->
+                    <div class="btn-group pull-right" style="margin-top: 5px; z-index: 10; margin-bottom: -12px;"
+                        ng-class="{'m-r-75': viewMode !== 'mindmap'}" ng-show="selectedTabPerguntas == 2">
+                        <button class="btn btn-sm waves-effect"
+                            ng-class="{'bgm-bluegray': viewMode !== 'mindmap', 'btn-default': viewMode === 'mindmap'}"
+                            ng-click="viewMode = 'list'">
+                            <i class="zmdi zmdi-format-list-bulleted m-r-5"></i>Lista
+                        </button>
+                        <button class="btn btn-sm waves-effect"
+                            ng-class="{'bgm-bluegray': viewMode === 'mindmap', 'btn-default': viewMode !== 'mindmap'}"
+                            ng-click="switchToMindMap()">
+                            <i class="zmdi zmdi-device-hub m-r-5"></i>Mapa Mental
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row" ng-show="viewMode !== 'mindmap'">
+
+                    <div class="col-lg-2" style="padding-top: 0px; padding-right: 0;">
+
+                        <ul class="main-menu">
+                            <li>
+                                <a ng-show="!template" data-ui-sref-active="active"
+                                    ng-class="{active: selectedTabPerguntas == 1}" href=""
+                                    data-ng-click="selectedTabPerguntas = 1">{{"INICIAIS" }}</a>
+                                <a data-ui-sref-active="active" ng-class="{active: selectedTabPerguntas == 2}" href=""
+                                    data-ng-click="selectedTabPerguntas = 2">{{"MENUS" }}</a>
+                            </li>
+                        </ul>
+
+                        <br />
+                        <br />
+
+                    </div>
+
+                    <div class="col-lg-10" style="padding-left: 0px;">
+
+                        <div class="card-body" style="min-height: 270px;">
+
+                            <!--INICIAIS-->
+
+                            <div ng-show="selectedTabPerguntas == 1">
+
+                                <div ng-if='!registro.perguntasIniciais || registro.perguntasIniciais.length == 0'
+                                    class="p-15">
+                                    {{"SEM-PERGUNTA-INICIAL" }}.
+                                </div>
+
+                                <ul class="main-menu perguntas-menu perguntas-principais" id="perguntas-iniciais">
+
+                                    <li class="sub-menu menu-main"
+                                        ng-repeat="item in registro.perguntasIniciais| orderBy: 'ordem'"
+                                        ng-show="!item.excluido" uuid="{{item.UUID}}" ordem="{{item.ordem}}">
+                                        <div class="card">
+                                            <div class="dropdown pull-right" uib-dropdown="" style="">
+                                                <a title="{{item.errorDetail || 'Sem erros'}}" class="badge m-r-5"
+                                                    ng-class="{'bgm-red': item.totalPerguntas == 0}"
+                                                    style="margin-top: -6px;">{{item.totalPerguntas}}</a>
+                                                <a class="dropdown-toggle" href="" uib-dropdown-toggle=""
+                                                    aria-expanded="false" uib-dropdown-toggle="" aria-haspopup="true"
+                                                    aria-expanded="false" aria-haspopup="true">
+                                                    <i class="zmdi zmdi-more-vert"></i>
+                                                </a>
+                                                <ul class="dropdown-menu pull-right">
+                                                    <li ng-click="onModalPergunta(item, false, true)" class="ng-scope">
+                                                        <a href="" class="ng-binding">{{'EDITAR'}}</a>
+                                                    </li>
+                                                    <li ng-click="onRemoverPergunta(item)" class="ng-scope">
+                                                        <a href="" class="ng-binding">{{'REMOVER'}}</a>
+                                                    </li>
+                                                    <li ng-click="onModalPergunta(item, true, true)" class="ng-scope">
+                                                        <a href="" class="ng-binding">{{'ADICIONAR'}}</a>
+                                                    </li>
+                                                    <li ng-if="isTipoPergunta(item)" ng-click="onDuplicar(item)"
+                                                        class="ng-scope">
+                                                        <a href="" class="ng-binding">{{'CRIAR-COPIA'}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="menu-body" ng-click="loadPerguntasCache(item, true)">
+                                                <span class="sort-action m-r-20"
+                                                    ng-mousedown="enableOrdenationPerguntasIniciais($event, item)"
+                                                    title="Clique e segure para ordenar">
+                                                    <i class="zmdi zmdi-format-align-justify"></i>
+                                                </span>
+
+                                                <div class="titulo-pergunta p-t-10">
+                                                    {{getContatoInformacaoNome(item.contatoInformacaoId)}}</div>
+                                                <div>
+                                                    <span ng-if="item.emoticon !== undefined"
+                                                        style="font-size: 32px;">{{item.emoticon}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- SUBMENUS -->
+
+                                        <ul ng-show="item.show" ng-include="'item-pergunta.html'"></ul>
+
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+                            <!--MENUS-->
+
+                            <div ng-show="selectedTabPerguntas == 2">
+
+                                <div ng-if='!perguntasMenu.perguntas || perguntasMenu.perguntas.length == 0'
+                                    class="p-15">
+                                    {{"SEM-MENU" }}.
+                                </div>
+
+                                <ul class="main-menu perguntas-menu perguntas-principais" id="perguntas-principais">
+
+                                    <li class="sub-menu menu-main"
+                                        ng-repeat="item in perguntasMenu.perguntas track by $index"
+                                        ng-show="!item.excluido" uuid="{{item.UUID}}" ordem="{{item.ordem}}">
+
+                                        <!-- MENU PRINCIPAL -->
+
+                                        <div class="card">
+                                            <div class="dropdown pull-right" uib-dropdown="">
+                                                <a title="{{item.errorDetail || 'Sem erros'}}" class="badge m-r-5"
+                                                    ng-class="{'bgm-red': item.hasError, 'bgm-orange': item.hasErrorSubmenu}"
+                                                    style="margin-top: -6px;">{{item.totalPerguntas}}</a>
+                                                <a class="dropdown-toggle" href="" uib-dropdown-toggle=""
+                                                    aria-expanded="false" uib-dropdown-toggle="" aria-haspopup="true"
+                                                    aria-expanded="false" aria-haspopup="true">
+                                                    <i class="zmdi zmdi-more-vert"></i>
+                                                </a>
+                                                <ul class="dropdown-menu pull-right">
+                                                    <li ng-click="onModalPergunta(item, false, false)" class="ng-scope">
+                                                        <a href="" class="ng-binding">{{'EDITAR'}}</a>
+                                                    </li>
+                                                    <li ng-click="onRemoverPergunta(item)" class="ng-scope">
+                                                        <a href="" class="ng-binding">{{'REMOVER'}}</a>
+                                                    </li>
+                                                    <li ng-if="!isTipoInformacao(item) && !isTipoArquivo(item)"
+                                                        ng-click="onModalPergunta(item, true)" class="ng-scope">
+                                                        <a href="" class="ng-binding">{{'ADICIONAR'}}</a>
+                                                    </li>
+                                                    <li ng-if="isTipoPergunta(item)" ng-click="onDuplicar(item)"
+                                                        class="ng-scope">
+                                                        <a href="" class="ng-binding">{{'CRIAR-COPIA'}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="menu-body" ng-click="loadPerguntasCache(item, true)">
+
+                                                <span class="sort-action m-r-20"
+                                                    ng-mousedown="enableOrdenationPerguntasMenu($event, item)"
+                                                    title="Clique e segure para ordenar">
+                                                    <i class="zmdi zmdi-format-align-justify"></i>
+                                                </span>
+
+                                                <div class="titulo-pergunta p-t-10"
+                                                    ='{{item.tipoPerguntaNome.toUpperCase()}}'></div>
+                                                <div style="margin-left: 35px">
+                                                    <span ng-if="item.numero !== undefined">{{item.numero}} - </span>
+                                                    <span ng-if="item.emoticon !== undefined"
+                                                        style="font-size: 32px;">{{item.emoticon}}</span>
+                                                    <span>{{item.texto}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- SUBMENUS -->
+
+                                        <ul ng-show="item.show" ng-if="!isTipoArquivo(item) && !isTipoInformacao(item)"
+                                            ng-include="'item-pergunta.html'"></ul>
+
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- MAPA MENTAL -->
+                <div class="mindmap-container" ng-class="{'full-h': isFullscreen}" ng-show="viewMode === 'mindmap'" id="mapa-mental-container">
+                    <div class="mindmap-wrapper" id="mindmap-wrapper">
+                        <div class="mindmap-tree">
+                            <!-- Botao de adicionar do mapa mental -->
+                            <div class="mm-root-node" ng-show="(selectedTabPerguntas == 2 && viewMode === 'mindmap')">
+                                <div class="mm-node mm-node-root" ng-click="onModalPergunta(perguntasMenu, true, false)"
+                                    style="flex-direction: row; display: flex; align-items: center; justify-content: center;">
+                                    <i class="zmdi zmdi-plus m-r-5"></i>
+                                    Adicionar
+                                </div>
+                                <div class="mm-children" data-parent-uuid="root"
+                                    ng-if="perguntasMenu.perguntas && perguntasMenu.perguntas.length > 0">
+                                    <div class="mm-branch" ng-repeat="node in perguntasMenu.perguntas track by $index"
+                                        ng-show="!node.excluido">
+                                        <div class="mm-connector"></div>
+                                        <div ng-include="'mindmap-node.html'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mindmap-floating-toolbar" ng-class="{'fixed': isFullscreen}">
+                        <button ng-click="toggleFullscreen()" class="btn btn-sm bgm-bluegray waves-effect" title="{{isFullscreen ? 'Sair do modo tela cheia' : 'Tela cheia'}}">
+                            <i class="zmdi" ng-class="isFullscreen ? 'zmdi-fullscreen-exit' : 'zmdi-fullscreen'"></i>
+                        </button>
+                        <button class="btn btn-sm bgm-blue waves-effect" ng-click="mindmapCollapseAll()" title="Recolher Tudo">
+                            <i class="zmdi zmdi-unfold-less"></i>
+                        </button>
+                        <div class="mm-toolbar-divider" ng-if="isFullscreen"></div>
+                        <button class="btn btn-sm bgm-gray waves-effect" ng-if="isFullscreen" ng-click="mindmapZoomOut()" title="Diminuir zoom">
+                            <i class="zmdi zmdi-minus"></i>
+                        </button>
+                        <span class="mm-zoom-label" ng-if="isFullscreen">{{mindmapZoomLevel}}%</span>
+                        <button class="btn btn-sm bgm-gray waves-effect" ng-if="isFullscreen" ng-click="mindmapZoomIn()" title="Aumentar zoom">
+                            <i class="zmdi zmdi-plus"></i>
+                        </button>
+                        <button class="btn btn-sm bgm-gray waves-effect" ng-if="isFullscreen" ng-click="mindmapZoomReset()" title="Resetar zoom" style="font-size: 11px; font-weight: 600; height: 22px;">
+                            100%
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TEMPLATE MAPA MENTAL -->
+        <script type="text/ng-template" id="mindmap-node.html">
+            <div class="mm-node-wrapper">
+                <div class="mm-node-move-buttons" ng-click="$event.stopPropagation();">
+                    <button ng-click="mindmapMoveUp(node)" ng-disabled="!mindmapCanMoveUp(node)" title="Subir">
+                        <i class="zmdi zmdi-chevron-up"></i>
+                    </button>
+                    <button ng-click="mindmapMoveDown(node)" ng-disabled="!mindmapCanMoveDown(node)" title="Descer">
+                        <i class="zmdi zmdi-chevron-down"></i>
+                    </button>
+                </div>
+                <div class="mm-node"
+                    ng-class="getMindmapNodeClass(node)"
+                    ng-click="onMindmapNodeClick(node)"
+                    draggable="true"
+                    data-uuid="{{node.UUID}}">
+                    <div class="mm-node-header">
+                        <span class="mm-node-icon">
+                            <i class="zmdi" ng-class="getMindmapIcon(node)"></i>
+                        </span>
+                        <span class="mm-node-type">{{getMindmapNodeTypeName(node)}}</span>
+                        <span class="mm-node-badge"
+                            ng-if="!isTipoInformacao(node) && !isTipoArquivo(node)"
+                            ng-class="{'mm-badge-error': node.hasError, 'mm-badge-warning': !node.hasError && node.hasErrorSubmenu}"
+                            title="{{node.errorDetail || 'Sem erros'}}">{{node.totalPerguntas}}</span>
+                        <div class="dropdown mm-node-actions" uib-dropdown="" ng-click="$event.stopPropagation()">
+                            <a class="dropdown-toggle" href="" uib-dropdown-toggle="">
+                                <i class="zmdi zmdi-more-vert"></i>
+                            </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li ng-if="!isTipoArquivo(node)" ng-click="onModalPergunta(node, false, false)">
+                                    <a href="">{{'EDITAR'}}</a>
+                                </li>
+                                <li ng-click="onRemoverPergunta(node)">
+                                    <a href="">{{'REMOVER'}}</a>
+                                </li>
+                                <li ng-if="!isTipoInformacao(node) && !isTipoArquivo(node)" ng-click="onModalPergunta(node, true, false)">
+                                    <a href="">{{'ADICIONAR'}}</a>
+                                </li>
+                                <li ng-if="isTipoPergunta(node)" ng-click="onDuplicar(node)">
+                                    <a href="">{{'CRIAR-COPIA'}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mm-node-body">
+                        <span ng-if="node.numero !== undefined && (isTipoPergunta(node) || isTipoRecado(node) || isTipoEnquete(node))">{{node.numero}} - </span>
+                        <span ng-if="node.emoticon !== undefined" class="mm-emoji">{{node.emoticon}}</span>
+                        <span class="mm-node-text">{{node.texto || node.fileName || getContatoInformacaoNome(node.contatoInformacaoId) || '...'}}</span>
+                    </div>
+                    <div class="mm-node-expand" ng-if="node.totalPerguntas > 0"
+                        ng-click="onMindmapToggle(node); $event.stopPropagation();" title="{{node.mmExpanded ? ('RECOLHER' ) : ('EXPANDIR' )}}">
+                        <i class="zmdi" ng-class="{'zmdi-chevron-right': !node.mmExpanded, 'zmdi-chevron-down': node.mmExpanded}"></i>
+                    </div>
+                    <div class="mm-node-add" ng-if="!isTipoInformacao(node) && !isTipoArquivo(node)"
+                        ng-click="onModalPergunta(node, true, false); $event.stopPropagation();"
+                        title="{{'ADICIONAR' }}">
+                        <i class="zmdi zmdi-plus"></i>
+                    </div>
+                </div>
+                <div class="mm-children" data-parent-uuid="{{node.UUID}}" ng-if="node.mmExpanded && node.perguntas && node.perguntas.length > 0">
+                    <div class="mm-branch" ng-repeat="node in node.perguntas track by $index" ng-show="!node.excluido">
+                        <div class="mm-connector"></div>
+                        <div ng-include="'mindmap-node.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <!-- MODAL DETALHES MAPA MENTAL -->
+        <script type="text/ng-template" id="modal-mindmap-detalhes.html">
+            <div class="modal-header" ng-class="getMindmapNodeClass(mindmapDetalheNode)" style="min-width: 385px; padding: 17px 22px;">
+                <button type="button" class="close" ng-click="fecharModalMindmapDetalhes()">
+                    <i class="zmdi zmdi-close"></i>
+                </button>
+                <h4 class="modal-title" style="color: #fff;">
+                    <i class="zmdi m-r-5" ng-class="getMindmapIcon(mindmapDetalheNode)"></i>
+                    {{getMindmapNodeTypeName(mindmapDetalheNode)}}
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="mm-detail-section" ng-if="mindmapDetalheNode.numero !== undefined && (isTipoPergunta(mindmapDetalheNode) || isTipoRecado(mindmapDetalheNode) || isTipoEnquete(mindmapDetalheNode))">
+                    <label class="mm-detail-label">{{'NUMERO' }}</label>
+                    <div class="mm-detail-value">{{mindmapDetalheNode.numero}}</div>
+                </div>
+
+                <div class="mm-detail-section" ng-if="mindmapDetalheNode.emoticon">
+                    <label class="mm-detail-label">Emoticon</label>
+                    <div class="mm-detail-value" style="font-size: 28px;">{{mindmapDetalheNode.emoticon}}</div>
+                </div>
+
+                <div class="mm-detail-section" ng-if="mindmapDetalheNode.texto">
+                    <label class="mm-detail-label">{{'TEXTO' }}</label>
+                    <div class="mm-detail-value mm-detail-text">{{mindmapDetalheNode.texto}}</div>
+                </div>
+
+                <div class="mm-detail-section" ng-if="mindmapDetalheNode.possuiImagem && mindmapDetalheNode.imagem">
+                    <label class="mm-detail-label">{{'IMAGEM' }}</label>
+                    <div class="mm-detail-value">
+                        <img ng-src="{{mindmapDetalheNode.imagem}}" class="mm-detail-media-img" alt="Imagem">
+                    </div>
+                </div>
+
+                <div class="mm-detail-section" ng-if="isTipoArquivo(mindmapDetalheNode) && mindmapDetalheNode.fileUrl">
+                    <label class="mm-detail-label">{{'ARQUIVO' }}</label>
+                    <div class="mm-detail-value">
+                        <div ng-if="mindmapDetalheNode.fileType === 'IMAGEM'" class="m-b-10">
+                            <img ng-src="{{mindmapDetalheNode.fileUrl}}" class="mm-detail-media-img" alt="{{mindmapDetalheNode.fileName}}">
+                        </div>
+                        <div ng-if="mindmapDetalheNode.fileType === 'VIDEO'" class="m-b-10">
+                            <video controls class="mm-detail-media-video">
+                                <source ng-src="{{mindmapDetalheNode.fileUrl}}">
+                            </video>
+                        </div>
+                        <div ng-if="mindmapDetalheNode.fileType === 'AUDIO'" class="m-b-10">
+                            <audio controls style="width: 100%;">
+                                <source ng-src="{{mindmapDetalheNode.fileUrl}}">
+                            </audio>
+                        </div>
+                        <div>
+                            <i class="zmdi zmdi-attachment m-r-5"></i>
+                            <a ng-href="{{mindmapDetalheNode.fileUrl}}" target="_blank">{{mindmapDetalheNode.fileName}}</a>
+                            <span ng-if="mindmapDetalheNode.fileType" class="badge m-l-5">{{mindmapDetalheNode.fileType}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mm-detail-section" ng-if="isTipoArquivo(mindmapDetalheNode) && !mindmapDetalheNode.fileUrl && mindmapDetalheNode.fileName">
+                    <label class="mm-detail-label">{{'ARQUIVO' }}</label>
+                    <div class="mm-detail-value">
+                        <i class="zmdi zmdi-attachment m-r-5"></i>{{mindmapDetalheNode.fileName}}
+                        <span ng-if="mindmapDetalheNode.fileType" class="badge m-l-5">{{mindmapDetalheNode.fileType}}</span>
+                    </div>
+                </div>
+
+                <div class="mm-detail-section" ng-if="isTipoContatoInformacao(mindmapDetalheNode)">
+                    <label class="mm-detail-label">{{'INFORMACAO' }}</label>
+                    <div class="mm-detail-value">{{getContatoInformacaoNome(mindmapDetalheNode.contatoInformacaoId)}}</div>
+                </div>
+
+                <div class="mm-detail-section" ng-if="mindmapDetalheNode.palavrasChave">
+                    <label class="mm-detail-label">{{'PALAVRAS-CHAVE' }}</label>
+                    <div class="mm-detail-value">{{mindmapDetalheNode.palavrasChave}}</div>
+                </div>
+
+                <div class="mm-detail-section" ng-if="mindmapDetalheNode.totalPerguntas > 0 && !isTipoInformacao(mindmapDetalheNode) && !isTipoArquivo(mindmapDetalheNode)">
+                    <label class="mm-detail-label">Submenus</label>
+                    <div class="mm-detail-value">
+                        <span class="badge bgm-blue">{{mindmapDetalheNode.totalPerguntas}}</span> itens
+                    </div>
+                </div>
+
+                <div class="mm-detail-section" ng-if="mindmapDetalheNode.msgErro">
+                    <label class="mm-detail-label">{{'MSG-ERRO' }}</label>
+                    <div class="mm-detail-value mm-detail-text">{{mindmapDetalheNode.msgErro}}</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default waves-effect" ng-click="fecharModalMindmapDetalhes()">{{'FECHAR' }}</button>
+                <button class="btn bgm-blue waves-effect" ng-if="!isTipoArquivo(mindmapDetalheNode)" ng-click="fecharModalMindmapDetalhes(); onModalPergunta(mindmapDetalheNode, false, false)">
+                    <i class="zmdi zmdi-edit m-r-5"></i>{{'EDITAR' }}
+                </button>
+            </div>
+        </script>
+
+        <!-- TEMPLATE -->
+
+        <script type="text/ng-template" id="item-pergunta.html">
+
+            <li class="sub-menu" ng-if="!item.hasPerguntas">
+                <div class="card">
+                    {{"NENHUM-MENU-NIVEL-ATUAL" }}.
+                </div>
+            </li>
+
+            <li class="sub-menu menu-main" ng-repeat="item in item.perguntas track by $index" ng-show="!item.excluido" uuid="{{item.UUID}}" ordem="{{item.ordem}}">
+                <div class="card">                    
+                    <div class="dropdown pull-right" uib-dropdown="" style="">
+                        <a title="{{item.errorDetail || 'Sem erros'}}" ng-if="!isTipoInformacao(item) && !isTipoArquivo(item)" ng-class="{'bgm-red': item.hasError, 'bgm-orange': item.hasErrorSubmenu}" class="badge m-r-5" style="margin-top: -6px;">{{item.totalPerguntas}}</a>
+                        <a class="dropdown-toggle" href="" uib-dropdown-toggle="" aria-expanded="false" uib-dropdown-toggle="" aria-haspopup="true" aria-expanded="false" aria-haspopup="true">
+                            <i class="zmdi zmdi-more-vert"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-right">
+                            <li ng-if="!isTipoArquivo(item)" ng-click="onModalPergunta(item, false, false)" class="ng-scope">
+                                <a href="" class="ng-binding">{{'EDITAR'}}</a>
+                            </li>
+                            <li ng-click="onRemoverPergunta(item)" class="ng-scope">
+                                <a href="" class="ng-binding">{{'REMOVER'}}</a>
+                            </li>
+                            <li ng-if="!isTipoInformacao(item) && !isTipoArquivo(item)" ng-click="onModalPergunta(item, true, false)" class="ng-scope">
+                                <a href="" class="ng-binding">{{'ADICIONAR'}}</a>
+                            </li>
+                            <li ng-if="isTipoPergunta(item)" ng-click="onDuplicar(item)" class="ng-scope">
+                                <a href="" class="ng-binding">{{'CRIAR-COPIA'}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="menu-body" ng-click="loadPerguntasCache(item, true)">
+
+                        <span class="sort-action m-r-20" ng-mousedown="enableOrdenationPerguntasMenu($event, item)" title="Clique e segure para ordenar">
+                            <i class="zmdi zmdi-format-align-justify"></i>
+                        </span>
+
+                        <div ng-if="isTipoArquivo(item)" class="titulo-pergunta p-t-10" ='{{item.fileType.toUpperCase()}}'></div>
+                        <div ng-if="!isTipoArquivo(item) && !isTipoContatoInformacao(item)" class="titulo-pergunta p-t-10" ='{{item.tipoPerguntaNome.toUpperCase()}}'></div>
+                        <div ng-if="!isTipoArquivo(item) && isTipoContatoInformacao(item)" class="titulo-pergunta p-t-10">{{getContatoInformacaoNome(item.contatoInformacaoId)}}</div>
+
+                        <div style="margin-left: 35px">
+                            <span ng-if="!isTipoContatoInformacao(item) && !isTipoInformacao(item) && !isTipoArquivo(item)" ng-if="item.numero !== undefined">{{item.numero}} - </span>
+                            <span ng-if="item.emoticon !== undefined" style="font-size: 32px;">{{item.emoticon}}</span>
+                            <span>{{item.texto}}</span>
+                        </div>
+                        
+                        <div class="titulo-pergunta-thumbnail-container" ng-if="isTipoArquivo(item)">
+                            <div class="titulo-pergunta-thumbnail" style="background-image:url({{item.fileUrl}})" title="{{item.fileName}}">
+                                <span ng-if="item.fileType != 'IMAGEM'">{{item.fileName}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ul ng-show="item.show" ng-if="isTipoContatoInformacao(item) || isTipoPergunta(item) || isTipoAtendimento(item) || isTipoIntegracao(item) || isTipoRecado(item)" ng-include="'item-pergunta.html'"></ul>
+            </li>
+
+        </script>
+
+        <!--AUDITORIA-->
+
+        <div ng-show="selectedTab == 4">
+            <div class="card">
+                <div class="card-header ch-alt">
+                    <ul class="actions" ng-if="hasTutorial('022')" style="right: 25px">
+                        <li class="dropdown" uib-dropdown="">
+                            <button ng-click="showTutorial('022')"
+                                title="Clique aqui para visualizar o video de explicação."
+                                class="btn btn-sm bgm-blue waves-effect">
+                                <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                            </button>
+                        </li>
+                    </ul>
+                    <br />
+                </div>
+                <div class="card-body card-padding">
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group m-b-30">
+                                <label>{{'CRIADOR'}}</label>
+                                <div>{{registro.criador}}</div>
+                            </div>
+                            <br />
+                            <div class="form-group m-b-30">
+                                <label>{{'DATA-CRIACAO'}}</label>
+                                <div>{{registro.dataCriacao|date:('DATE-FORMAT')}}</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group m-b-30">
+                                <label>{{'ATUALIZADOR'}}</label>
+                                <div>{{registro.atualizador}}</div>
+                            </div>
+                            <br />
+                            <div class="form-group m-b-30">
+                                <label>{{'DATA-ATUALIZACAO'}}</label>
+                                <div>{{registro.dataAtualizacao|date:('DATE-FORMAT')}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <br />
+
+    </div>
+
+    <div ng-if="loadingDuplicar" class="question-group-loading-overlay">
+        <div class="question-group-spinner"></div>
+        <p>Duplicando pergunta, aguarde...</p>
+    </div>
+
+    <button ng-click="onSalvar()" class="btn btn-float bgm-blue m-btn waves-effect waves-circle" style="z-index: 99 !important;">
+        <i class="zmdi zmdi-floppy"></i>
+    </button>
+
+</div>

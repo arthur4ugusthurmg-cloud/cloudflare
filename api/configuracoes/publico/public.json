@@ -1,0 +1,11 @@
+{
+    "notificacao": {
+        "id": 74,
+        "ativo": false,
+        "mensagem": "🔗 Sua operação pode fazer mais com a SMBOT. Descubra o que integrar e garanta 15% OFF por tempo limitado!",
+        "textoBotao": "Acesse agora",
+        "linkBotao": "https://forms.cloud.microsoft/r/4T6ixNS5NW",
+        "cor": "#de0a43",
+        "updatedAt": 1790863496434
+    }
+}

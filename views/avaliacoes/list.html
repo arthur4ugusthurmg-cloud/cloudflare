@@ -1,0 +1,110 @@
+<div class="container-fluid" data-ng-controller="AvaliacoesController" ng-init="onInit()">
+  <div class="card">
+    <div class="card-header ch-alt">
+      <h2>{{"AVALIACAOES" | translate}}</h2>
+
+      <button title="{{'PESQUISAR' | translate}}" class="btn bgm-blue btn-float btn-float-2 waves-effect"
+        ng-click="getAll(false)">
+        <i class="zmdi zmdi-search"></i>
+      </button>
+
+      <button title="Nova avaliação" class="btn bgm-teal btn-float btn-float-2 waves-effect"
+        data-ui-sref="avaliacoes.new">
+        <i class="zmdi zmdi-plus"></i>
+      </button>
+    </div>
+
+    <div class="card-body card-padding" style="padding-bottom: 5px;">
+      <div class="row m-t-15">
+        <div class="col-sm-6">
+          <div class="form-group fg-float m-b-30">
+            <div class="fg-line">
+              <input type="text" class="form-control fg-input input-lg" ng-model="filter.titulo"
+                ng-keyup="$event.keyCode == 13 && getAll(false)" />
+              <label class="fg-label">Título</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group fg-float m-b-30">
+            <div class="fg-line fg-toggled">
+              <select class="form-control input-lg select-simples" ng-model="filter.ativo" ng-change="getAll(false)">
+                <option value="all">{{"TODOS" | translate}}</option>
+                <option value="true">{{"ATIVO" | translate}}</option>
+                <option value="false">{{"INACTIVE" | translate}}</option>
+              </select>
+              <label class="fg-label">{{"STATUS" | translate}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <table class="table table-striped table-vmiddle">
+        <thead>
+          <tr>
+            <th style="width: 35%;">Título</th>
+            <th style="width: 10%;" class="text-center">Perguntas</th>
+            <th style="width: 10%;" class="text-center">Respostas</th>
+            <th style="width: 20%;">Período</th>
+            <th style="width: 10%;">{{"STATUS" | translate}}</th>
+            <th style="width: 1%;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-if="avaliacoes.length === 0">
+            <td colspan="6" class="text-center p-t-20 p-b-20">Nenhuma avaliação encontrada.</td>
+          </tr>
+          <tr ng-repeat="avaliacao in avaliacoes">
+            <td>
+              {{avaliacao.titulo}}
+              <div style="font-size: 11px; color: #999;" ng-if="avaliacao.anonima">
+                <i class="zmdi zmdi-eye-off"></i> Anônima
+              </div>
+            </td>
+            <td class="text-center">{{avaliacao.totalPerguntas || 0}}</td>
+            <td class="text-center">{{avaliacao.totalRespostas || 0}}</td>
+            <td>
+              <span ng-if="avaliacao.dataInicio">{{avaliacao.dataInicio | date:'dd/MM/yyyy'}}</span>
+              <span ng-if="avaliacao.dataInicio && avaliacao.dataFim"> a </span>
+              <span ng-if="avaliacao.dataFim">{{avaliacao.dataFim | date:'dd/MM/yyyy'}}</span>
+              <span ng-if="!avaliacao.dataInicio && !avaliacao.dataFim">Sem período definido</span>
+            </td>
+            <td>
+              <span ng-if="avaliacao.ativo" class="btn bgm-green btn-block status-td" style="cursor: default"
+                translate="ATIVO"></span>
+              <span ng-if="!avaliacao.ativo" class="btn bgm-red btn-block status-td" style="cursor: default"
+                translate="INACTIVE"></span>
+            </td>
+            <td class="actions" style="white-space: nowrap">
+              <button class="btn bgm-blue waves-effect m-r-5" ui-sref="avaliacoes.edit({id: avaliacao.id})"
+                title="Editar">
+                <i class="zmdi zmdi-edit"></i>
+              </button>
+              <button ng-if="avaliacao.ativo" class="btn btn-secondary waves-effect m-r-5"
+                ng-click="disable(avaliacao.id)" title="Desativar">
+                <i class="zmdi zmdi-block"></i>
+              </button>
+              <button ng-if="!avaliacao.ativo" class="btn bgm-green waves-effect m-r-5" ng-click="active(avaliacao.id)"
+                title="Ativar">
+                <i class="zmdi zmdi-check"></i>
+              </button>
+              <button class="btn bgm-red waves-effect" ng-click="delete(avaliacao.id)" title="Excluir">
+                <i class="zmdi zmdi-delete"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div ng-if="showMore" class="text-center p-b-30 p-t-30">
+        <button ng-click="getAll(20)" class="btn btn-default waves-effect">
+          <i class="zmdi zmdi-refresh"></i> {{ "MAIS" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

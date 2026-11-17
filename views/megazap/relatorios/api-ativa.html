@@ -1,0 +1,117 @@
+<div class="container-fluid" data-ng-controller="RelatorioApiAtivaController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>
+                {{"API-ATIVA" | translate}}
+                <small>{{"API-ATIVA-DESC" | translate}}.</small>
+            </h2>
+
+            <button title="{{'BUSCAR'| translate}}" class="btn bgm-blue btn-float btn-float-2 waves-effect" ng-click="getAll()"><i class="zmdi zmdi-search"></i></button>
+
+        </div>
+        <div class="card-body card-padding">
+            <br />
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAll()" name="nome" type="text" class="form-control fg-input input-lg" ng-model="filter.endpoint">
+                            <label class="fg-label">URL</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="getAll()" class="form-control input-lg select-simples" ng-model="filter.status">
+                                <option value="ALL">{{"TODOS" | translate}}</option>
+                                <option value="QUEUED">{{"QUEUED" | translate}}</option>
+                                <option value="PROCESSING">{{"PROCESSANDO" | translate}}</option>
+                                <option value="SUCCESS">{{"SUCESSO" | translate}}</option>
+                                <option value="DELETED">{{"DELETED" | translate}}</option>
+                                <option value="ERROR">{{"ERRO" | translate}}</option>
+                            </select>
+                            <label class="fg-label">{{ "STATUS" | translate }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAll()" type="text" class="form-control ng-isolate-scope input-lg" data-input-mask="{mask: '00/00/0000'}" maxlength="10" autocomplete="off" ng-model="filter.createdAtFrom">
+                            <label class="fg-label">{{"DATA-CRIACAO-DE" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAll()" type="text" class="form-control ng-isolate-scope input-lg" data-input-mask="{mask: '00/00/0000'}" maxlength="10" autocomplete="off" ng-model="filter.createdAtUntil">
+                            <label class="fg-label">{{"DATA-CRIACAO-ATE" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAll()" name="nome" type="text" class="form-control fg-input input-lg" ng-model="filter.payload">
+                            <label class="fg-label">Payload</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="registros.length > 0" class="card">
+        <div class="card-body">
+            <div>
+                <table id="content-table" class="table table-striped table-vmiddle">
+                    <thead>
+                        <tr>
+                            <th style="width: 1%">Status</th>
+                            <th>URL</th>
+                            <th>{{"MENSAGEM" | translate}}</th>
+                            <th style="width: 1%;">{{"DATA" | translate}}</th>
+                            <th style="width: 1%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="registro in registros">
+                            <td style='white-space: nowrap; text-align: center'>
+                                <div ng-if="registro.status === 'QUEUED'" class="status-td bgm-gray c-white">{{"QUEUED" | translate}}</div>
+                                <div ng-if="registro.status === 'PROCESSING'" class="status-td bgm-blue c-white">{{"PROCESSANDO" | translate}}</div>
+                                <div ng-if="registro.status === 'DELETED'" class="status-td bgm-red c-white">{{"DELETADO" | translate}}</div>
+                                <div ng-if="registro.status === 'SUCCESS'" class="status-td bgm-green c-white">{{"SUCESSO" | translate}}</div>
+                                <div ng-if="registro.status === 'ERROR'" class="status-td bgm-red c-white">{{"ERRO" | translate}}</div>
+                            </td>
+                            <td style="word-break: break-all">
+                                {{registro.method}}: {{ registro.endpoint}}
+                            </td>
+                            <td>
+                                {{ registro.response && registro.response.exception ? registro.response.exception.message : ''}}
+                            </td>
+                            <td class="text-nowrap">
+                                {{ registro.createdAt | date:"dd/MM/yyyy HH:mm"}}
+                            </td>
+                            <td class="text-center" style="white-space: nowrap">
+                                <button ng-click="showDetails(registro)" class="btn btn-default waves-effect"><i class="zmdi zmdi-search"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="showMore" class="text-center p-b-30">
+        <button ng-click="getAll(true)" class="btn btn-default waves-effect"><i class="zmdi zmdi-refresh"></i> {{"MAIS" | translate}}</button>
+    </div>
+
+</div>

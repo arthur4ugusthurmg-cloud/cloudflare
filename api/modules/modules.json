@@ -1,0 +1,54 @@
+{
+  "sucesso": true,
+  "modulos": [
+    {
+      "id": "MODULE_ALL",
+      "nome": "Todos os módulos",
+      "descricao": "Acesso geral às funcionalidades do sistema",
+      "ativo": true,
+      "ordem": 1
+    },
+    {
+      "id": "MODULE_HELPDESK",
+      "nome": "Atendimento",
+      "descricao": "Central de atendimento, contatos, tickets e WhatsApp",
+      "ativo": true,
+      "ordem": 2
+    },
+    {
+      "id": "MODULE_CRM",
+      "nome": "CRM",
+      "descricao": "Gestão de clientes, oportunidades e relacionamento",
+      "ativo": true,
+      "ordem": 3
+    },
+    {
+      "id": "MODULE_CHATBOT",
+      "nome": "Chatbot",
+      "descricao": "Criação e gerenciamento de chatbots",
+      "ativo": true,
+      "ordem": 4
+    },
+    {
+      "id": "MODULE_DELIVERY",
+      "nome": "Delivery",
+      "descricao": "Gestão de pedidos e entregas",
+      "ativo": true,
+      "ordem": 5
+    },
+    {
+      "id": "MODULE_FINANCE",
+      "nome": "Financeiro",
+      "descricao": "Controle financeiro e relatórios",
+      "ativo": true,
+      "ordem": 6
+    },
+    {
+      "id": "MODULE_AUTOMATION",
+      "nome": "Automações",
+      "descricao": "Fluxos e automações do sistema",
+      "ativo": true,
+      "ordem": 7
+    }
+  ]
+}

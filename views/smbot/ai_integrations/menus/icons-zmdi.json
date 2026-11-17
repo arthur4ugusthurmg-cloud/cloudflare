@@ -1,0 +1,2660 @@
+[
+    {
+        "name": "zmdi-3d-rotation"
+    },
+    {
+        "name": "zmdi-airplane-off"
+    },
+    {
+        "name": "zmdi-airplane"
+    },
+    {
+        "name": "zmdi-album"
+    },
+    {
+        "name": "zmdi-archive"
+    },
+    {
+        "name": "zmdi-assignment-account"
+    },
+    {
+        "name": "zmdi-assignment-alert"
+    },
+    {
+        "name": "zmdi-assignment-check"
+    },
+    {
+        "name": "zmdi-assignment-o"
+    },
+    {
+        "name": "zmdi-assignment-return"
+    },
+    {
+        "name": "zmdi-assignment-returned"
+    },
+    {
+        "name": "zmdi-assignment"
+    },
+    {
+        "name": "zmdi-attachment-alt"
+    },
+    {
+        "name": "zmdi-attachment"
+    },
+    {
+        "name": "zmdi-audio"
+    },
+    {
+        "name": "zmdi-badge-check"
+    },
+    {
+        "name": "zmdi-balance-wallet"
+    },
+    {
+        "name": "zmdi-balance"
+    },
+    {
+        "name": "zmdi-battery-alert"
+    },
+    {
+        "name": "zmdi-battery-flash"
+    },
+    {
+        "name": "zmdi-battery-unknown"
+    },
+    {
+        "name": "zmdi-battery"
+    },
+    {
+        "name": "zmdi-bike"
+    },
+    {
+        "name": "zmdi-block-alt"
+    },
+    {
+        "name": "zmdi-block"
+    },
+    {
+        "name": "zmdi-boat"
+    },
+    {
+        "name": "zmdi-book-image"
+    },
+    {
+        "name": "zmdi-book"
+    },
+    {
+        "name": "zmdi-bookmark-outline"
+    },
+    {
+        "name": "zmdi-bookmark"
+    },
+    {
+        "name": "zmdi-brush"
+    },
+    {
+        "name": "zmdi-bug"
+    },
+    {
+        "name": "zmdi-bus"
+    },
+    {
+        "name": "zmdi-cake"
+    },
+    {
+        "name": "zmdi-car-taxi"
+    },
+    {
+        "name": "zmdi-car-wash"
+    },
+    {
+        "name": "zmdi-car"
+    },
+    {
+        "name": "zmdi-card-giftcard"
+    },
+    {
+        "name": "zmdi-card-membership"
+    },
+    {
+        "name": "zmdi-card-travel"
+    },
+    {
+        "name": "zmdi-card"
+    },
+    {
+        "name": "zmdi-case-check"
+    },
+    {
+        "name": "zmdi-case-download"
+    },
+    {
+        "name": "zmdi-case-play"
+    },
+    {
+        "name": "zmdi-case"
+    },
+    {
+        "name": "zmdi-cast-connected"
+    },
+    {
+        "name": "zmdi-cast"
+    },
+    {
+        "name": "zmdi-chart-donut"
+    },
+    {
+        "name": "zmdi-chart"
+    },
+    {
+        "name": "zmdi-city-alt"
+    },
+    {
+        "name": "zmdi-city"
+    },
+    {
+        "name": "zmdi-close-circle-o"
+    },
+    {
+        "name": "zmdi-close-circle"
+    },
+    {
+        "name": "zmdi-close"
+    },
+    {
+        "name": "zmdi-cocktail"
+    },
+    {
+        "name": "zmdi-code-setting"
+    },
+    {
+        "name": "zmdi-code-smartphone"
+    },
+    {
+        "name": "zmdi-code"
+    },
+    {
+        "name": "zmdi-coffee"
+    },
+    {
+        "name": "zmdi-collection-bookmark"
+    },
+    {
+        "name": "zmdi-collection-case-play"
+    },
+    {
+        "name": "zmdi-collection-folder-image"
+    },
+    {
+        "name": "zmdi-collection-image-o"
+    },
+    {
+        "name": "zmdi-collection-image"
+    },
+    {
+        "name": "zmdi-collection-item-1"
+    },
+    {
+        "name": "zmdi-collection-item-2"
+    },
+    {
+        "name": "zmdi-collection-item-3"
+    },
+    {
+        "name": "zmdi-collection-item-4"
+    },
+    {
+        "name": "zmdi-collection-item-5"
+    },
+    {
+        "name": "zmdi-collection-item-6"
+    },
+    {
+        "name": "zmdi-collection-item-7"
+    },
+    {
+        "name": "zmdi-collection-item-8"
+    },
+    {
+        "name": "zmdi-collection-item-9-plus"
+    },
+    {
+        "name": "zmdi-collection-item-9"
+    },
+    {
+        "name": "zmdi-collection-item"
+    },
+    {
+        "name": "zmdi-collection-music"
+    },
+    {
+        "name": "zmdi-collection-pdf"
+    },
+    {
+        "name": "zmdi-collection-plus"
+    },
+    {
+        "name": "zmdi-collection-speaker"
+    },
+    {
+        "name": "zmdi-collection-text"
+    },
+    {
+        "name": "zmdi-collection-video"
+    },
+    {
+        "name": "zmdi-compass"
+    },
+    {
+        "name": "zmdi-cutlery"
+    },
+    {
+        "name": "zmdi-delete"
+    },
+    {
+        "name": "zmdi-dialpad"
+    },
+    {
+        "name": "zmdi-dns"
+    },
+    {
+        "name": "zmdi-drink"
+    },
+    {
+        "name": "zmdi-edit"
+    },
+    {
+        "name": "zmdi-email-open"
+    },
+    {
+        "name": "zmdi-email"
+    },
+    {
+        "name": "zmdi-eye-off"
+    },
+    {
+        "name": "zmdi-eye"
+    },
+    {
+        "name": "zmdi-eyedropper"
+    },
+    {
+        "name": "zmdi-favorite-outline"
+    },
+    {
+        "name": "zmdi-favorite"
+    },
+    {
+        "name": "zmdi-filter-list"
+    },
+    {
+        "name": "zmdi-fire"
+    },
+    {
+        "name": "zmdi-flag"
+    },
+    {
+        "name": "zmdi-flare"
+    },
+    {
+        "name": "zmdi-flash-auto"
+    },
+    {
+        "name": "zmdi-flash-off"
+    },
+    {
+        "name": "zmdi-flash"
+    },
+    {
+        "name": "zmdi-flip"
+    },
+    {
+        "name": "zmdi-flower-alt"
+    },
+    {
+        "name": "zmdi-flower"
+    },
+    {
+        "name": "zmdi-font"
+    },
+    {
+        "name": "zmdi-fullscreen-alt"
+    },
+    {
+        "name": "zmdi-fullscreen-exit"
+    },
+    {
+        "name": "zmdi-fullscreen"
+    },
+    {
+        "name": "zmdi-functions"
+    },
+    {
+        "name": "zmdi-gas-station"
+    },
+    {
+        "name": "zmdi-gesture"
+    },
+    {
+        "name": "zmdi-globe-alt"
+    },
+    {
+        "name": "zmdi-globe-lock"
+    },
+    {
+        "name": "zmdi-globe"
+    },
+    {
+        "name": "zmdi-graduation-cap"
+    },
+    {
+        "name": "zmdi-home"
+    },
+    {
+        "name": "zmdi-hospital-alt"
+    },
+    {
+        "name": "zmdi-hospital"
+    },
+    {
+        "name": "zmdi-hotel"
+    },
+    {
+        "name": "zmdi-hourglass-alt"
+    },
+    {
+        "name": "zmdi-hourglass-outline"
+    },
+    {
+        "name": "zmdi-hourglass"
+    },
+    {
+        "name": "zmdi-http"
+    },
+    {
+        "name": "zmdi-image-alt"
+    },
+    {
+        "name": "zmdi-image-o"
+    },
+    {
+        "name": "zmdi-image"
+    },
+    {
+        "name": "zmdi-inbox"
+    },
+    {
+        "name": "zmdi-invert-colors-off"
+    },
+    {
+        "name": "zmdi-invert-colors"
+    },
+    {
+        "name": "zmdi-key"
+    },
+    {
+        "name": "zmdi-label-alt-outline"
+    },
+    {
+        "name": "zmdi-label-alt"
+    },
+    {
+        "name": "zmdi-label-heart"
+    },
+    {
+        "name": "zmdi-label"
+    },
+    {
+        "name": "zmdi-labels"
+    },
+    {
+        "name": "zmdi-lamp"
+    },
+    {
+        "name": "zmdi-landscape"
+    },
+    {
+        "name": "zmdi-layers-off"
+    },
+    {
+        "name": "zmdi-layers"
+    },
+    {
+        "name": "zmdi-library"
+    },
+    {
+        "name": "zmdi-link"
+    },
+    {
+        "name": "zmdi-lock-open"
+    },
+    {
+        "name": "zmdi-lock-outline"
+    },
+    {
+        "name": "zmdi-lock"
+    },
+    {
+        "name": "zmdi-mail-reply-all"
+    },
+    {
+        "name": "zmdi-mail-reply"
+    },
+    {
+        "name": "zmdi-mail-send"
+    },
+    {
+        "name": "zmdi-mall"
+    },
+    {
+        "name": "zmdi-map"
+    },
+    {
+        "name": "zmdi-menu"
+    },
+    {
+        "name": "zmdi-money-box"
+    },
+    {
+        "name": "zmdi-money-off"
+    },
+    {
+        "name": "zmdi-money"
+    },
+    {
+        "name": "zmdi-more-vert"
+    },
+    {
+        "name": "zmdi-more"
+    },
+    {
+        "name": "zmdi-movie-alt"
+    },
+    {
+        "name": "zmdi-movie"
+    },
+    {
+        "name": "zmdi-nature-people"
+    },
+    {
+        "name": "zmdi-nature"
+    },
+    {
+        "name": "zmdi-navigation"
+    },
+    {
+        "name": "zmdi-open-in-browser"
+    },
+    {
+        "name": "zmdi-open-in-new"
+    },
+    {
+        "name": "zmdi-palette"
+    },
+    {
+        "name": "zmdi-parking"
+    },
+    {
+        "name": "zmdi-pin-account"
+    },
+    {
+        "name": "zmdi-pin-assistant"
+    },
+    {
+        "name": "zmdi-pin-drop"
+    },
+    {
+        "name": "zmdi-pin-help"
+    },
+    {
+        "name": "zmdi-pin-off"
+    },
+    {
+        "name": "zmdi-pin"
+    },
+    {
+        "name": "zmdi-pizza"
+    },
+    {
+        "name": "zmdi-plaster"
+    },
+    {
+        "name": "zmdi-power-setting"
+    },
+    {
+        "name": "zmdi-power"
+    },
+    {
+        "name": "zmdi-print"
+    },
+    {
+        "name": "zmdi-puzzle-piece"
+    },
+    {
+        "name": "zmdi-quote"
+    },
+    {
+        "name": "zmdi-railway"
+    },
+    {
+        "name": "zmdi-receipt"
+    },
+    {
+        "name": "zmdi-refresh-alt"
+    },
+    {
+        "name": "zmdi-refresh-sync-alert"
+    },
+    {
+        "name": "zmdi-refresh-sync-off"
+    },
+    {
+        "name": "zmdi-refresh-sync"
+    },
+    {
+        "name": "zmdi-refresh"
+    },
+    {
+        "name": "zmdi-roller"
+    },
+    {
+        "name": "zmdi-ruler"
+    },
+    {
+        "name": "zmdi-scissors"
+    },
+    {
+        "name": "zmdi-screen-rotation-lock"
+    },
+    {
+        "name": "zmdi-screen-rotation"
+    },
+    {
+        "name": "zmdi-search-for"
+    },
+    {
+        "name": "zmdi-search-in-file"
+    },
+    {
+        "name": "zmdi-search-in-page"
+    },
+    {
+        "name": "zmdi-search-replace"
+    },
+    {
+        "name": "zmdi-search"
+    },
+    {
+        "name": "zmdi-seat"
+    },
+    {
+        "name": "zmdi-settings-square"
+    },
+    {
+        "name": "zmdi-settings"
+    },
+    {
+        "name": "zmdi-shield-check"
+    },
+    {
+        "name": "zmdi-shield-security"
+    },
+    {
+        "name": "zmdi-shopping-basket"
+    },
+    {
+        "name": "zmdi-shopping-cart-plus"
+    },
+    {
+        "name": "zmdi-shopping-cart"
+    },
+    {
+        "name": "zmdi-sign-in"
+    },
+    {
+        "name": "zmdi-sort-amount-asc"
+    },
+    {
+        "name": "zmdi-sort-amount-desc"
+    },
+    {
+        "name": "zmdi-sort-asc"
+    },
+    {
+        "name": "zmdi-sort-desc"
+    },
+    {
+        "name": "zmdi-spellcheck"
+    },
+    {
+        "name": "zmdi-storage"
+    },
+    {
+        "name": "zmdi-store-24"
+    },
+    {
+        "name": "zmdi-store"
+    },
+    {
+        "name": "zmdi-subway"
+    },
+    {
+        "name": "zmdi-sun"
+    },
+    {
+        "name": "zmdi-tab-unselected"
+    },
+    {
+        "name": "zmdi-tab"
+    },
+    {
+        "name": "zmdi-tag-close"
+    },
+    {
+        "name": "zmdi-tag-more"
+    },
+    {
+        "name": "zmdi-tag"
+    },
+    {
+        "name": "zmdi-thumb-down"
+    },
+    {
+        "name": "zmdi-thumb-up-down"
+    },
+    {
+        "name": "zmdi-thumb-up"
+    },
+    {
+        "name": "zmdi-ticket-star"
+    },
+    {
+        "name": "zmdi-toll"
+    },
+    {
+        "name": "zmdi-toys"
+    },
+    {
+        "name": "zmdi-traffic"
+    },
+    {
+        "name": "zmdi-translate"
+    },
+    {
+        "name": "zmdi-triangle-down"
+    },
+    {
+        "name": "zmdi-triangle-up"
+    },
+    {
+        "name": "zmdi-truck"
+    },
+    {
+        "name": "zmdi-turning-sign"
+    },
+    {
+        "name": "zmdi-wallpaper"
+    },
+    {
+        "name": "zmdi-washing-machine"
+    },
+    {
+        "name": "zmdi-window-maximize"
+    },
+    {
+        "name": "zmdi-window-minimize"
+    },
+    {
+        "name": "zmdi-window-restore"
+    },
+    {
+        "name": "zmdi-wrench"
+    },
+    {
+        "name": "zmdi-zoom-in"
+    },
+    {
+        "name": "zmdi-zoom-out"
+    },
+    {
+        "name": "zmdi-alert-circle-o"
+    },
+    {
+        "name": "zmdi-alert-circle"
+    },
+    {
+        "name": "zmdi-alert-octagon"
+    },
+    {
+        "name": "zmdi-alert-polygon"
+    },
+    {
+        "name": "zmdi-alert-triangle"
+    },
+    {
+        "name": "zmdi-help-outline"
+    },
+    {
+        "name": "zmdi-help"
+    },
+    {
+        "name": "zmdi-info-outline"
+    },
+    {
+        "name": "zmdi-info"
+    },
+    {
+        "name": "zmdi-notifications-active"
+    },
+    {
+        "name": "zmdi-notifications-add"
+    },
+    {
+        "name": "zmdi-notifications-none"
+    },
+    {
+        "name": "zmdi-notifications-off"
+    },
+    {
+        "name": "zmdi-notifications-paused"
+    },
+    {
+        "name": "zmdi-notifications"
+    },
+    {
+        "name": "zmdi-account-add"
+    },
+    {
+        "name": "zmdi-account-box-mail"
+    },
+    {
+        "name": "zmdi-account-box-o"
+    },
+    {
+        "name": "zmdi-account-box-phone"
+    },
+    {
+        "name": "zmdi-account-box"
+    },
+    {
+        "name": "zmdi-account-calendar"
+    },
+    {
+        "name": "zmdi-account-circle"
+    },
+    {
+        "name": "zmdi-account-o"
+    },
+    {
+        "name": "zmdi-account"
+    },
+    {
+        "name": "zmdi-accounts-add"
+    },
+    {
+        "name": "zmdi-accounts-alt"
+    },
+    {
+        "name": "zmdi-accounts-list-alt"
+    },
+    {
+        "name": "zmdi-accounts-list"
+    },
+    {
+        "name": "zmdi-accounts-outline"
+    },
+    {
+        "name": "zmdi-accounts"
+    },
+    {
+        "name": "zmdi-face"
+    },
+    {
+        "name": "zmdi-female"
+    },
+    {
+        "name": "zmdi-male-alt"
+    },
+    {
+        "name": "zmdi-male-female"
+    },
+    {
+        "name": "zmdi-male"
+    },
+    {
+        "name": "zmdi-mood-bad"
+    },
+    {
+        "name": "zmdi-mood"
+    },
+    {
+        "name": "zmdi-run"
+    },
+    {
+        "name": "zmdi-walk"
+    },
+    {
+        "name": "zmdi-cloud-box"
+    },
+    {
+        "name": "zmdi-cloud-circle"
+    },
+    {
+        "name": "zmdi-cloud-done"
+    },
+    {
+        "name": "zmdi-cloud-download"
+    },
+    {
+        "name": "zmdi-cloud-off"
+    },
+    {
+        "name": "zmdi-cloud-outline-alt"
+    },
+    {
+        "name": "zmdi-cloud-outline"
+    },
+    {
+        "name": "zmdi-cloud-upload"
+    },
+    {
+        "name": "zmdi-cloud"
+    },
+    {
+        "name": "zmdi-download"
+    },
+    {
+        "name": "zmdi-file-plus"
+    },
+    {
+        "name": "zmdi-file-text"
+    },
+    {
+        "name": "zmdi-file"
+    },
+    {
+        "name": "zmdi-folder-outline"
+    },
+    {
+        "name": "zmdi-folder-person"
+    },
+    {
+        "name": "zmdi-folder-star-alt"
+    },
+    {
+        "name": "zmdi-folder-star"
+    },
+    {
+        "name": "zmdi-folder"
+    },
+    {
+        "name": "zmdi-gif"
+    },
+    {
+        "name": "zmdi-upload"
+    },
+    {
+        "name": "zmdi-border-all"
+    },
+    {
+        "name": "zmdi-border-bottom"
+    },
+    {
+        "name": "zmdi-border-clear"
+    },
+    {
+        "name": "zmdi-border-color"
+    },
+    {
+        "name": "zmdi-border-horizontal"
+    },
+    {
+        "name": "zmdi-border-inner"
+    },
+    {
+        "name": "zmdi-border-left"
+    },
+    {
+        "name": "zmdi-border-outer"
+    },
+    {
+        "name": "zmdi-border-right"
+    },
+    {
+        "name": "zmdi-border-style"
+    },
+    {
+        "name": "zmdi-border-top"
+    },
+    {
+        "name": "zmdi-border-vertical"
+    },
+    {
+        "name": "zmdi-copy"
+    },
+    {
+        "name": "zmdi-crop"
+    },
+    {
+        "name": "zmdi-format-align-center"
+    },
+    {
+        "name": "zmdi-format-align-justify"
+    },
+    {
+        "name": "zmdi-format-align-left"
+    },
+    {
+        "name": "zmdi-format-align-right"
+    },
+    {
+        "name": "zmdi-format-bold"
+    },
+    {
+        "name": "zmdi-format-clear-all"
+    },
+    {
+        "name": "zmdi-format-clear"
+    },
+    {
+        "name": "zmdi-format-color-fill"
+    },
+    {
+        "name": "zmdi-format-color-reset"
+    },
+    {
+        "name": "zmdi-format-color-text"
+    },
+    {
+        "name": "zmdi-format-indent-decrease"
+    },
+    {
+        "name": "zmdi-format-indent-increase"
+    },
+    {
+        "name": "zmdi-format-italic"
+    },
+    {
+        "name": "zmdi-format-line-spacing"
+    },
+    {
+        "name": "zmdi-format-list-bulleted"
+    },
+    {
+        "name": "zmdi-format-list-numbered"
+    },
+    {
+        "name": "zmdi-format-ltr"
+    },
+    {
+        "name": "zmdi-format-rtl"
+    },
+    {
+        "name": "zmdi-format-size"
+    },
+    {
+        "name": "zmdi-format-strikethrough-s"
+    },
+    {
+        "name": "zmdi-format-strikethrough"
+    },
+    {
+        "name": "zmdi-format-subject"
+    },
+    {
+        "name": "zmdi-format-underlined"
+    },
+    {
+        "name": "zmdi-format-valign-bottom"
+    },
+    {
+        "name": "zmdi-format-valign-center"
+    },
+    {
+        "name": "zmdi-format-valign-top"
+    },
+    {
+        "name": "zmdi-redo"
+    },
+    {
+        "name": "zmdi-select-all"
+    },
+    {
+        "name": "zmdi-space-bar"
+    },
+    {
+        "name": "zmdi-text-format"
+    },
+    {
+        "name": "zmdi-transform"
+    },
+    {
+        "name": "zmdi-undo"
+    },
+    {
+        "name": "zmdi-wrap-text"
+    },
+    {
+        "name": "zmdi-comment-alert"
+    },
+    {
+        "name": "zmdi-comment-alt-text"
+    },
+    {
+        "name": "zmdi-comment-alt"
+    },
+    {
+        "name": "zmdi-comment-edit"
+    },
+    {
+        "name": "zmdi-comment-image"
+    },
+    {
+        "name": "zmdi-comment-list"
+    },
+    {
+        "name": "zmdi-comment-more"
+    },
+    {
+        "name": "zmdi-comment-outline"
+    },
+    {
+        "name": "zmdi-comment-text-alt"
+    },
+    {
+        "name": "zmdi-comment-text"
+    },
+    {
+        "name": "zmdi-comment-video"
+    },
+    {
+        "name": "zmdi-comment"
+    },
+    {
+        "name": "zmdi-comments"
+    },
+    {
+        "name": "zmdi-check-all"
+    },
+    {
+        "name": "zmdi-check-circle-u"
+    },
+    {
+        "name": "zmdi-check-circle"
+    },
+    {
+        "name": "zmdi-check-square"
+    },
+    {
+        "name": "zmdi-check"
+    },
+    {
+        "name": "zmdi-circle-o"
+    },
+    {
+        "name": "zmdi-circle"
+    },
+    {
+        "name": "zmdi-dot-circle-alt"
+    },
+    {
+        "name": "zmdi-dot-circle"
+    },
+    {
+        "name": "zmdi-minus-circle-outline"
+    },
+    {
+        "name": "zmdi-minus-circle"
+    },
+    {
+        "name": "zmdi-minus-square"
+    },
+    {
+        "name": "zmdi-minus"
+    },
+    {
+        "name": "zmdi-plus-circle-o-duplicate"
+    },
+    {
+        "name": "zmdi-plus-circle-o"
+    },
+    {
+        "name": "zmdi-plus-circle"
+    },
+    {
+        "name": "zmdi-plus-square"
+    },
+    {
+        "name": "zmdi-plus"
+    },
+    {
+        "name": "zmdi-square-o"
+    },
+    {
+        "name": "zmdi-star-circle"
+    },
+    {
+        "name": "zmdi-star-half"
+    },
+    {
+        "name": "zmdi-star-outline"
+    },
+    {
+        "name": "zmdi-star"
+    },
+    {
+        "name": "zmdi-bluetooth-connected"
+    },
+    {
+        "name": "zmdi-bluetooth-off"
+    },
+    {
+        "name": "zmdi-bluetooth-search"
+    },
+    {
+        "name": "zmdi-bluetooth-setting"
+    },
+    {
+        "name": "zmdi-bluetooth"
+    },
+    {
+        "name": "zmdi-camera-add"
+    },
+    {
+        "name": "zmdi-camera-alt"
+    },
+    {
+        "name": "zmdi-camera-bw"
+    },
+    {
+        "name": "zmdi-camera-front"
+    },
+    {
+        "name": "zmdi-camera-mic"
+    },
+    {
+        "name": "zmdi-camera-party-mode"
+    },
+    {
+        "name": "zmdi-camera-rear"
+    },
+    {
+        "name": "zmdi-camera-roll"
+    },
+    {
+        "name": "zmdi-camera-switch"
+    },
+    {
+        "name": "zmdi-camera"
+    },
+    {
+        "name": "zmdi-card-alert"
+    },
+    {
+        "name": "zmdi-card-off"
+    },
+    {
+        "name": "zmdi-card-sd"
+    },
+    {
+        "name": "zmdi-card-sim"
+    },
+    {
+        "name": "zmdi-desktop-mac"
+    },
+    {
+        "name": "zmdi-desktop-windows"
+    },
+    {
+        "name": "zmdi-device-hub"
+    },
+    {
+        "name": "zmdi-devices-off"
+    },
+    {
+        "name": "zmdi-devices"
+    },
+    {
+        "name": "zmdi-dock"
+    },
+    {
+        "name": "zmdi-floppy"
+    },
+    {
+        "name": "zmdi-gamepad"
+    },
+    {
+        "name": "zmdi-gps-dot"
+    },
+    {
+        "name": "zmdi-gps-off"
+    },
+    {
+        "name": "zmdi-gps"
+    },
+    {
+        "name": "zmdi-headset-mic"
+    },
+    {
+        "name": "zmdi-headset"
+    },
+    {
+        "name": "zmdi-input-antenna"
+    },
+    {
+        "name": "zmdi-input-composite"
+    },
+    {
+        "name": "zmdi-input-hdmi"
+    },
+    {
+        "name": "zmdi-input-power"
+    },
+    {
+        "name": "zmdi-input-svideo"
+    },
+    {
+        "name": "zmdi-keyboard-hide"
+    },
+    {
+        "name": "zmdi-keyboard"
+    },
+    {
+        "name": "zmdi-laptop-chromebook"
+    },
+    {
+        "name": "zmdi-laptop-mac"
+    },
+    {
+        "name": "zmdi-laptop"
+    },
+    {
+        "name": "zmdi-mic-off"
+    },
+    {
+        "name": "zmdi-mic-outline"
+    },
+    {
+        "name": "zmdi-mic-setting"
+    },
+    {
+        "name": "zmdi-mic"
+    },
+    {
+        "name": "zmdi-mouse"
+    },
+    {
+        "name": "zmdi-network-alert"
+    },
+    {
+        "name": "zmdi-network-locked"
+    },
+    {
+        "name": "zmdi-network-off"
+    },
+    {
+        "name": "zmdi-network-outline"
+    },
+    {
+        "name": "zmdi-network-setting"
+    },
+    {
+        "name": "zmdi-network"
+    },
+    {
+        "name": "zmdi-phone-bluetooth"
+    },
+    {
+        "name": "zmdi-phone-end"
+    },
+    {
+        "name": "zmdi-phone-forwarded"
+    },
+    {
+        "name": "zmdi-phone-in-talk"
+    },
+    {
+        "name": "zmdi-phone-locked"
+    },
+    {
+        "name": "zmdi-phone-missed"
+    },
+    {
+        "name": "zmdi-phone-msg"
+    },
+    {
+        "name": "zmdi-phone-paused"
+    },
+    {
+        "name": "zmdi-phone-ring"
+    },
+    {
+        "name": "zmdi-phone-setting"
+    },
+    {
+        "name": "zmdi-phone-sip"
+    },
+    {
+        "name": "zmdi-phone"
+    },
+    {
+        "name": "zmdi-portable-wifi-changes"
+    },
+    {
+        "name": "zmdi-portable-wifi-off"
+    },
+    {
+        "name": "zmdi-portable-wifi"
+    },
+    {
+        "name": "zmdi-radio"
+    },
+    {
+        "name": "zmdi-reader"
+    },
+    {
+        "name": "zmdi-remote-control-alt"
+    },
+    {
+        "name": "zmdi-remote-control"
+    },
+    {
+        "name": "zmdi-router"
+    },
+    {
+        "name": "zmdi-scanner"
+    },
+    {
+        "name": "zmdi-smartphone-android"
+    },
+    {
+        "name": "zmdi-smartphone-download"
+    },
+    {
+        "name": "zmdi-smartphone-erase"
+    },
+    {
+        "name": "zmdi-smartphone-info"
+    },
+    {
+        "name": "zmdi-smartphone-iphone"
+    },
+    {
+        "name": "zmdi-smartphone-landscape-lock"
+    },
+    {
+        "name": "zmdi-smartphone-landscape"
+    },
+    {
+        "name": "zmdi-smartphone-lock"
+    },
+    {
+        "name": "zmdi-smartphone-portrait-lock"
+    },
+    {
+        "name": "zmdi-smartphone-ring"
+    },
+    {
+        "name": "zmdi-smartphone-setting"
+    },
+    {
+        "name": "zmdi-smartphone-setup"
+    },
+    {
+        "name": "zmdi-smartphone"
+    },
+    {
+        "name": "zmdi-speaker"
+    },
+    {
+        "name": "zmdi-tablet-android"
+    },
+    {
+        "name": "zmdi-tablet-mac"
+    },
+    {
+        "name": "zmdi-tablet"
+    },
+    {
+        "name": "zmdi-tv-alt-play"
+    },
+    {
+        "name": "zmdi-tv-list"
+    },
+    {
+        "name": "zmdi-tv-play"
+    },
+    {
+        "name": "zmdi-tv"
+    },
+    {
+        "name": "zmdi-usb"
+    },
+    {
+        "name": "zmdi-videocam-off"
+    },
+    {
+        "name": "zmdi-videocam-switch"
+    },
+    {
+        "name": "zmdi-videocam"
+    },
+    {
+        "name": "zmdi-watch"
+    },
+    {
+        "name": "zmdi-wifi-alt-2"
+    },
+    {
+        "name": "zmdi-wifi-alt"
+    },
+    {
+        "name": "zmdi-wifi-info"
+    },
+    {
+        "name": "zmdi-wifi-lock"
+    },
+    {
+        "name": "zmdi-wifi-off"
+    },
+    {
+        "name": "zmdi-wifi-outline"
+    },
+    {
+        "name": "zmdi-wifi"
+    },
+    {
+        "name": "zmdi-arrow-left-bottom"
+    },
+    {
+        "name": "zmdi-arrow-left"
+    },
+    {
+        "name": "zmdi-arrow-merge"
+    },
+    {
+        "name": "zmdi-arrow-missed"
+    },
+    {
+        "name": "zmdi-arrow-right-top"
+    },
+    {
+        "name": "zmdi-arrow-right"
+    },
+    {
+        "name": "zmdi-arrow-split"
+    },
+    {
+        "name": "zmdi-arrows"
+    },
+    {
+        "name": "zmdi-caret-down-circle"
+    },
+    {
+        "name": "zmdi-caret-down"
+    },
+    {
+        "name": "zmdi-caret-left-circle"
+    },
+    {
+        "name": "zmdi-caret-left"
+    },
+    {
+        "name": "zmdi-caret-right-circle"
+    },
+    {
+        "name": "zmdi-caret-right"
+    },
+    {
+        "name": "zmdi-caret-up-circle"
+    },
+    {
+        "name": "zmdi-caret-up"
+    },
+    {
+        "name": "zmdi-chevron-down"
+    },
+    {
+        "name": "zmdi-chevron-left"
+    },
+    {
+        "name": "zmdi-chevron-right"
+    },
+    {
+        "name": "zmdi-chevron-up"
+    },
+    {
+        "name": "zmdi-forward"
+    },
+    {
+        "name": "zmdi-long-arrow-down"
+    },
+    {
+        "name": "zmdi-long-arrow-left"
+    },
+    {
+        "name": "zmdi-long-arrow-return"
+    },
+    {
+        "name": "zmdi-long-arrow-right"
+    },
+    {
+        "name": "zmdi-long-arrow-tab"
+    },
+    {
+        "name": "zmdi-long-arrow-up"
+    },
+    {
+        "name": "zmdi-rotate-ccw"
+    },
+    {
+        "name": "zmdi-rotate-cw"
+    },
+    {
+        "name": "zmdi-rotate-left"
+    },
+    {
+        "name": "zmdi-rotate-right"
+    },
+    {
+        "name": "zmdi-square-down"
+    },
+    {
+        "name": "zmdi-square-right"
+    },
+    {
+        "name": "zmdi-swap-alt"
+    },
+    {
+        "name": "zmdi-swap-vertical-circle"
+    },
+    {
+        "name": "zmdi-swap-vertical"
+    },
+    {
+        "name": "zmdi-swap"
+    },
+    {
+        "name": "zmdi-trending-down"
+    },
+    {
+        "name": "zmdi-trending-flat"
+    },
+    {
+        "name": "zmdi-trending-up"
+    },
+    {
+        "name": "zmdi-unfold-less"
+    },
+    {
+        "name": "zmdi-unfold-more"
+    },
+    {
+        "name": "zmdi-apps"
+    },
+    {
+        "name": "zmdi-grid-off"
+    },
+    {
+        "name": "zmdi-grid"
+    },
+    {
+        "name": "zmdi-view-agenda"
+    },
+    {
+        "name": "zmdi-view-array"
+    },
+    {
+        "name": "zmdi-view-carousel"
+    },
+    {
+        "name": "zmdi-view-column"
+    },
+    {
+        "name": "zmdi-view-comfy"
+    },
+    {
+        "name": "zmdi-view-compact"
+    },
+    {
+        "name": "zmdi-view-dashboard"
+    },
+    {
+        "name": "zmdi-view-day"
+    },
+    {
+        "name": "zmdi-view-headline"
+    },
+    {
+        "name": "zmdi-view-list-alt"
+    },
+    {
+        "name": "zmdi-view-list"
+    },
+    {
+        "name": "zmdi-view-module"
+    },
+    {
+        "name": "zmdi-view-quilt"
+    },
+    {
+        "name": "zmdi-view-stream"
+    },
+    {
+        "name": "zmdi-view-subtitles"
+    },
+    {
+        "name": "zmdi-view-toc"
+    },
+    {
+        "name": "zmdi-view-web"
+    },
+    {
+        "name": "zmdi-view-week"
+    },
+    {
+        "name": "zmdi-widgets"
+    },
+    {
+        "name": "zmdi-alarm-check"
+    },
+    {
+        "name": "zmdi-alarm-off"
+    },
+    {
+        "name": "zmdi-alarm-plus"
+    },
+    {
+        "name": "zmdi-alarm-snooze"
+    },
+    {
+        "name": "zmdi-alarm"
+    },
+    {
+        "name": "zmdi-calendar-alt"
+    },
+    {
+        "name": "zmdi-calendar-check"
+    },
+    {
+        "name": "zmdi-calendar-close"
+    },
+    {
+        "name": "zmdi-calendar-note"
+    },
+    {
+        "name": "zmdi-calendar"
+    },
+    {
+        "name": "zmdi-time-countdown"
+    },
+    {
+        "name": "zmdi-time-interval"
+    },
+    {
+        "name": "zmdi-time-restore-setting"
+    },
+    {
+        "name": "zmdi-time-restore"
+    },
+    {
+        "name": "zmdi-time"
+    },
+    {
+        "name": "zmdi-timer-off"
+    },
+    {
+        "name": "zmdi-timer"
+    },
+    {
+        "name": "zmdi-android-alt"
+    },
+    {
+        "name": "zmdi-android"
+    },
+    {
+        "name": "zmdi-apple"
+    },
+    {
+        "name": "zmdi-behance"
+    },
+    {
+        "name": "zmdi-codepen"
+    },
+    {
+        "name": "zmdi-dribbble"
+    },
+    {
+        "name": "zmdi-dropbox"
+    },
+    {
+        "name": "zmdi-evernote"
+    },
+    {
+        "name": "zmdi-facebook-box"
+    },
+    {
+        "name": "zmdi-facebook"
+    },
+    {
+        "name": "zmdi-github-box"
+    },
+    {
+        "name": "zmdi-github"
+    },
+    {
+        "name": "zmdi-google-drive"
+    },
+    {
+        "name": "zmdi-google-earth"
+    },
+    {
+        "name": "zmdi-google-glass"
+    },
+    {
+        "name": "zmdi-google-maps"
+    },
+    {
+        "name": "zmdi-google-pages"
+    },
+    {
+        "name": "zmdi-google-play"
+    },
+    {
+        "name": "zmdi-google-plus-box"
+    },
+    {
+        "name": "zmdi-google-plus"
+    },
+    {
+        "name": "zmdi-google"
+    },
+    {
+        "name": "zmdi-instagram"
+    },
+    {
+        "name": "zmdi-language-css3"
+    },
+    {
+        "name": "zmdi-language-html5"
+    },
+    {
+        "name": "zmdi-language-javascript"
+    },
+    {
+        "name": "zmdi-language-python-alt"
+    },
+    {
+        "name": "zmdi-language-python"
+    },
+    {
+        "name": "zmdi-lastfm"
+    },
+    {
+        "name": "zmdi-linkedin-box"
+    },
+    {
+        "name": "zmdi-paypal"
+    },
+    {
+        "name": "zmdi-pinterest-box"
+    },
+    {
+        "name": "zmdi-pocket"
+    },
+    {
+        "name": "zmdi-polymer"
+    },
+    {
+        "name": "zmdi-share"
+    },
+    {
+        "name": "zmdi-stackoverflow"
+    },
+    {
+        "name": "zmdi-steam-square"
+    },
+    {
+        "name": "zmdi-steam"
+    },
+    {
+        "name": "zmdi-twitter-box"
+    },
+    {
+        "name": "zmdi-twitter"
+    },
+    {
+        "name": "zmdi-vk"
+    },
+    {
+        "name": "zmdi-wikipedia"
+    },
+    {
+        "name": "zmdi-windows"
+    },
+    {
+        "name": "zmdi-aspect-ratio-alt"
+    },
+    {
+        "name": "zmdi-aspect-ratio"
+    },
+    {
+        "name": "zmdi-blur-circular"
+    },
+    {
+        "name": "zmdi-blur-linear"
+    },
+    {
+        "name": "zmdi-blur-off"
+    },
+    {
+        "name": "zmdi-blur"
+    },
+    {
+        "name": "zmdi-brightness-2"
+    },
+    {
+        "name": "zmdi-brightness-3"
+    },
+    {
+        "name": "zmdi-brightness-4"
+    },
+    {
+        "name": "zmdi-brightness-5"
+    },
+    {
+        "name": "zmdi-brightness-6"
+    },
+    {
+        "name": "zmdi-brightness-7"
+    },
+    {
+        "name": "zmdi-brightness-auto"
+    },
+    {
+        "name": "zmdi-brightness-setting"
+    },
+    {
+        "name": "zmdi-broken-image"
+    },
+    {
+        "name": "zmdi-center-focus-strong"
+    },
+    {
+        "name": "zmdi-center-focus-weak"
+    },
+    {
+        "name": "zmdi-compare"
+    },
+    {
+        "name": "zmdi-crop-16-9"
+    },
+    {
+        "name": "zmdi-crop-3-2"
+    },
+    {
+        "name": "zmdi-crop-5-4"
+    },
+    {
+        "name": "zmdi-crop-7-5"
+    },
+    {
+        "name": "zmdi-crop-din"
+    },
+    {
+        "name": "zmdi-crop-free"
+    },
+    {
+        "name": "zmdi-crop-landscape"
+    },
+    {
+        "name": "zmdi-crop-portrait"
+    },
+    {
+        "name": "zmdi-crop-square"
+    },
+    {
+        "name": "zmdi-exposure-alt"
+    },
+    {
+        "name": "zmdi-exposure"
+    },
+    {
+        "name": "zmdi-filter-b-and-w"
+    },
+    {
+        "name": "zmdi-filter-center-focus"
+    },
+    {
+        "name": "zmdi-filter-frames"
+    },
+    {
+        "name": "zmdi-filter-tilt-shift"
+    },
+    {
+        "name": "zmdi-gradient"
+    },
+    {
+        "name": "zmdi-grain"
+    },
+    {
+        "name": "zmdi-graphic-eq"
+    },
+    {
+        "name": "zmdi-hdr-off"
+    },
+    {
+        "name": "zmdi-hdr-strong"
+    },
+    {
+        "name": "zmdi-hdr-weak"
+    },
+    {
+        "name": "zmdi-hdr"
+    },
+    {
+        "name": "zmdi-iridescent"
+    },
+    {
+        "name": "zmdi-leak-off"
+    },
+    {
+        "name": "zmdi-leak"
+    },
+    {
+        "name": "zmdi-looks"
+    },
+    {
+        "name": "zmdi-loupe"
+    },
+    {
+        "name": "zmdi-panorama-horizontal"
+    },
+    {
+        "name": "zmdi-panorama-vertical"
+    },
+    {
+        "name": "zmdi-panorama-wide-angle"
+    },
+    {
+        "name": "zmdi-photo-size-select-large"
+    },
+    {
+        "name": "zmdi-photo-size-select-small"
+    },
+    {
+        "name": "zmdi-picture-in-picture"
+    },
+    {
+        "name": "zmdi-slideshow"
+    },
+    {
+        "name": "zmdi-texture"
+    },
+    {
+        "name": "zmdi-tonality"
+    },
+    {
+        "name": "zmdi-vignette"
+    },
+    {
+        "name": "zmdi-wb-auto"
+    },
+    {
+        "name": "zmdi-eject-alt"
+    },
+    {
+        "name": "zmdi-eject"
+    },
+    {
+        "name": "zmdi-equalizer"
+    },
+    {
+        "name": "zmdi-fast-forward"
+    },
+    {
+        "name": "zmdi-fast-rewind"
+    },
+    {
+        "name": "zmdi-forward-10"
+    },
+    {
+        "name": "zmdi-forward-30"
+    },
+    {
+        "name": "zmdi-forward-5"
+    },
+    {
+        "name": "zmdi-hearing"
+    },
+    {
+        "name": "zmdi-pause-circle-outline"
+    },
+    {
+        "name": "zmdi-pause-circle"
+    },
+    {
+        "name": "zmdi-pause"
+    },
+    {
+        "name": "zmdi-play-circle-outline"
+    },
+    {
+        "name": "zmdi-play-circle"
+    },
+    {
+        "name": "zmdi-play"
+    },
+    {
+        "name": "zmdi-playlist-audio"
+    },
+    {
+        "name": "zmdi-playlist-plus"
+    },
+    {
+        "name": "zmdi-repeat-one"
+    },
+    {
+        "name": "zmdi-repeat"
+    },
+    {
+        "name": "zmdi-replay-10"
+    },
+    {
+        "name": "zmdi-replay-30"
+    },
+    {
+        "name": "zmdi-replay-5"
+    },
+    {
+        "name": "zmdi-replay"
+    },
+    {
+        "name": "zmdi-shuffle"
+    },
+    {
+        "name": "zmdi-skip-next"
+    },
+    {
+        "name": "zmdi-skip-previous"
+    },
+    {
+        "name": "zmdi-stop"
+    },
+    {
+        "name": "zmdi-surround-sound"
+    },
+    {
+        "name": "zmdi-tune"
+    },
+    {
+        "name": "zmdi-volume-down"
+    },
+    {
+        "name": "zmdi-volume-mute"
+    },
+    {
+        "name": "zmdi-volume-off"
+    },
+    {
+        "name": "zmdi-volume-up"
+    },
+    {
+        "name": "zmdi-n-1-square"
+    },
+    {
+        "name": "zmdi-n-2-square"
+    },
+    {
+        "name": "zmdi-n-3-square"
+    },
+    {
+        "name": "zmdi-n-4-square"
+    },
+    {
+        "name": "zmdi-n-5-square"
+    },
+    {
+        "name": "zmdi-n-6-square"
+    },
+    {
+        "name": "zmdi-neg-1"
+    },
+    {
+        "name": "zmdi-neg-2"
+    },
+    {
+        "name": "zmdi-plus-1"
+    },
+    {
+        "name": "zmdi-plus-2"
+    },
+    {
+        "name": "zmdi-sec-10"
+    },
+    {
+        "name": "zmdi-sec-3"
+    },
+    {
+        "name": "zmdi-zero"
+    },
+    {
+        "name": "zmdi-airline-seat-flat-angled"
+    },
+    {
+        "name": "zmdi-airline-seat-flat"
+    },
+    {
+        "name": "zmdi-airline-seat-individual-suite"
+    },
+    {
+        "name": "zmdi-airline-seat-legroom-extra"
+    },
+    {
+        "name": "zmdi-airline-seat-legroom-normal"
+    },
+    {
+        "name": "zmdi-airline-seat-legroom-reduced"
+    },
+    {
+        "name": "zmdi-airline-seat-recline-extra"
+    },
+    {
+        "name": "zmdi-airline-seat-recline-normal"
+    },
+    {
+        "name": "zmdi-airplay"
+    },
+    {
+        "name": "zmdi-closed-caption"
+    },
+    {
+        "name": "zmdi-confirmation-number"
+    },
+    {
+        "name": "zmdi-developer-board"
+    },
+    {
+        "name": "zmdi-disc-full"
+    },
+    {
+        "name": "zmdi-explicit"
+    },
+    {
+        "name": "zmdi-flight-land"
+    },
+    {
+        "name": "zmdi-flight-takeoff"
+    },
+    {
+        "name": "zmdi-flip-to-back"
+    },
+    {
+        "name": "zmdi-flip-to-front"
+    },
+    {
+        "name": "zmdi-group-work"
+    },
+    {
+        "name": "zmdi-hd"
+    },
+    {
+        "name": "zmdi-hq"
+    },
+    {
+        "name": "zmdi-markunread-mailbox"
+    },
+    {
+        "name": "zmdi-memory"
+    },
+    {
+        "name": "zmdi-nfc"
+    },
+    {
+        "name": "zmdi-play-for-work"
+    },
+    {
+        "name": "zmdi-power-input"
+    },
+    {
+        "name": "zmdi-present-to-all"
+    },
+    {
+        "name": "zmdi-satellite"
+    },
+    {
+        "name": "zmdi-tap-and-play"
+    },
+    {
+        "name": "zmdi-vibration"
+    },
+    {
+        "name": "zmdi-voicemail"
+    },
+    {
+        "name": "zmdi-group"
+    },
+    {
+        "name": "zmdi-rss"
+    },
+    {
+        "name": "zmdi-shape"
+    },
+    {
+        "name": "zmdi-spinner"
+    },
+    {
+        "name": "zmdi-ungroup"
+    },
+    {
+        "name": "zmdi-500px"
+    },
+    {
+        "name": "zmdi-8tracks"
+    },
+    {
+        "name": "zmdi-amazon"
+    },
+    {
+        "name": "zmdi-blogger"
+    },
+    {
+        "name": "zmdi-delicious"
+    },
+    {
+        "name": "zmdi-disqus"
+    },
+    {
+        "name": "zmdi-flattr"
+    },
+    {
+        "name": "zmdi-flickr"
+    },
+    {
+        "name": "zmdi-github-alt"
+    },
+    {
+        "name": "zmdi-google-old"
+    },
+    {
+        "name": "zmdi-linkedin"
+    },
+    {
+        "name": "zmdi-odnoklassniki"
+    },
+    {
+        "name": "zmdi-outlook"
+    },
+    {
+        "name": "zmdi-paypal-alt"
+    },
+    {
+        "name": "zmdi-pinterest"
+    },
+    {
+        "name": "zmdi-playstation"
+    },
+    {
+        "name": "zmdi-reddit"
+    },
+    {
+        "name": "zmdi-skype"
+    },
+    {
+        "name": "zmdi-slideshare"
+    },
+    {
+        "name": "zmdi-soundcloud"
+    },
+    {
+        "name": "zmdi-tumblr"
+    },
+    {
+        "name": "zmdi-twitch"
+    },
+    {
+        "name": "zmdi-vimeo"
+    },
+    {
+        "name": "zmdi-whatsapp"
+    },
+    {
+        "name": "zmdi-xbox"
+    },
+    {
+        "name": "zmdi-yahoo"
+    },
+    {
+        "name": "zmdi-youtube-play"
+    },
+    {
+        "name": "zmdi-youtube"
+    },
+    {
+        "name": "zmdi-import-export"
+    },
+    {
+        "name": "zmdi-swap-vertical-"
+    },
+    {
+        "name": "zmdi-airplanemode-inactive"
+    },
+    {
+        "name": "zmdi-airplanemode-active"
+    },
+    {
+        "name": "zmdi-rate-review"
+    },
+    {
+        "name": "zmdi-comment-sign"
+    },
+    {
+        "name": "zmdi-network-warning"
+    },
+    {
+        "name": "zmdi-shopping-cart-add"
+    },
+    {
+        "name": "zmdi-file-add"
+    },
+    {
+        "name": "zmdi-network-wifi-scan"
+    },
+    {
+        "name": "zmdi-collection-add"
+    },
+    {
+        "name": "zmdi-format-playlist-add"
+    },
+    {
+        "name": "zmdi-format-queue-music"
+    },
+    {
+        "name": "zmdi-plus-box"
+    },
+    {
+        "name": "zmdi-tag-backspace"
+    },
+    {
+        "name": "zmdi-alarm-add"
+    },
+    {
+        "name": "zmdi-battery-charging"
+    },
+    {
+        "name": "zmdi-daydream-setting"
+    },
+    {
+        "name": "zmdi-more-horiz"
+    },
+    {
+        "name": "zmdi-book-photo"
+    },
+    {
+        "name": "zmdi-incandescent"
+    },
+    {
+        "name": "zmdi-wb-iridescent"
+    },
+    {
+        "name": "zmdi-calendar-remove"
+    },
+    {
+        "name": "zmdi-refresh-sync-disabled"
+    },
+    {
+        "name": "zmdi-refresh-sync-problem"
+    },
+    {
+        "name": "zmdi-crop-original"
+    },
+    {
+        "name": "zmdi-power-off"
+    },
+    {
+        "name": "zmdi-power-off-setting"
+    },
+    {
+        "name": "zmdi-leak-remove"
+    },
+    {
+        "name": "zmdi-star-border"
+    },
+    {
+        "name": "zmdi-brightness-low"
+    },
+    {
+        "name": "zmdi-brightness-medium"
+    },
+    {
+        "name": "zmdi-brightness-high"
+    },
+    {
+        "name": "zmdi-smartphone-portrait"
+    },
+    {
+        "name": "zmdi-live-tv"
+    },
+    {
+        "name": "zmdi-format-textdirection-l-to-r"
+    },
+    {
+        "name": "zmdi-format-textdirection-r-to-l"
+    },
+    {
+        "name": "zmdi-arrow-back"
+    },
+    {
+        "name": "zmdi-arrow-forward"
+    },
+    {
+        "name": "zmdi-arrow-in"
+    },
+    {
+        "name": "zmdi-arrow-out"
+    },
+    {
+        "name": "zmdi-rotate-90-degrees-ccw"
+    },
+    {
+        "name": "zmdi-adb"
+    },
+    {
+        "name": "zmdi-network-wifi"
+    },
+    {
+        "name": "zmdi-network-wifi-alt"
+    },
+    {
+        "name": "zmdi-network-wifi-lock"
+    },
+    {
+        "name": "zmdi-network-wifi-off"
+    },
+    {
+        "name": "zmdi-network-wifi-outline"
+    },
+    {
+        "name": "zmdi-network-wifi-info"
+    },
+    {
+        "name": "zmdi-layers-clear"
+    },
+    {
+        "name": "zmdi-colorize"
+    },
+    {
+        "name": "zmdi-format-paint"
+    },
+    {
+        "name": "zmdi-format-quote"
+    },
+    {
+        "name": "zmdi-camera-monochrome-photos"
+    },
+    {
+        "name": "zmdi-sort-by-alpha"
+    },
+    {
+        "name": "zmdi-folder-shared"
+    },
+    {
+        "name": "zmdi-folder-special"
+    },
+    {
+        "name": "zmdi-comment-dots"
+    },
+    {
+        "name": "zmdi-reorder"
+    },
+    {
+        "name": "zmdi-dehaze"
+    },
+    {
+        "name": "zmdi-sort"
+    },
+    {
+        "name": "zmdi-pages"
+    },
+    {
+        "name": "zmdi-stack-overflow"
+    },
+    {
+        "name": "zmdi-calendar-account"
+    },
+    {
+        "name": "zmdi-paste"
+    },
+    {
+        "name": "zmdi-cut"
+    },
+    {
+        "name": "zmdi-save"
+    },
+    {
+        "name": "zmdi-smartphone-code"
+    },
+    {
+        "name": "zmdi-directions-bike"
+    },
+    {
+        "name": "zmdi-directions-boat"
+    },
+    {
+        "name": "zmdi-directions-bus"
+    },
+    {
+        "name": "zmdi-directions-car"
+    },
+    {
+        "name": "zmdi-directions-railway"
+    },
+    {
+        "name": "zmdi-directions-run"
+    },
+    {
+        "name": "zmdi-directions-subway"
+    },
+    {
+        "name": "zmdi-directions-walk"
+    },
+    {
+        "name": "zmdi-local-hotel"
+    },
+    {
+        "name": "zmdi-local-activity"
+    },
+    {
+        "name": "zmdi-local-play"
+    },
+    {
+        "name": "zmdi-local-airport"
+    },
+    {
+        "name": "zmdi-local-atm"
+    },
+    {
+        "name": "zmdi-local-bar"
+    },
+    {
+        "name": "zmdi-local-cafe"
+    },
+    {
+        "name": "zmdi-local-car-wash"
+    },
+    {
+        "name": "zmdi-local-convenience-store"
+    },
+    {
+        "name": "zmdi-local-dining"
+    },
+    {
+        "name": "zmdi-local-drink"
+    },
+    {
+        "name": "zmdi-local-florist"
+    },
+    {
+        "name": "zmdi-local-gas-station"
+    },
+    {
+        "name": "zmdi-local-grocery-store"
+    },
+    {
+        "name": "zmdi-local-hospital"
+    },
+    {
+        "name": "zmdi-local-laundry-service"
+    },
+    {
+        "name": "zmdi-local-library"
+    },
+    {
+        "name": "zmdi-local-mall"
+    },
+    {
+        "name": "zmdi-local-movies"
+    },
+    {
+        "name": "zmdi-local-offer"
+    },
+    {
+        "name": "zmdi-local-parking"
+    },
+    {
+        "name": "zmdi-local-pharmacy"
+    },
+    {
+        "name": "zmdi-local-phone"
+    },
+    {
+        "name": "zmdi-local-pizza"
+    },
+    {
+        "name": "zmdi-local-post-office"
+    },
+    {
+        "name": "zmdi-local-printshop"
+    },
+    {
+        "name": "zmdi-local-see"
+    },
+    {
+        "name": "zmdi-local-shipping"
+    },
+    {
+        "name": "zmdi-local-store"
+    },
+    {
+        "name": "zmdi-local-taxi"
+    },
+    {
+        "name": "zmdi-local-wc"
+    },
+    {
+        "name": "zmdi-my-location"
+    },
+    {
+        "name": "zmdi-directions"
+    }
+]

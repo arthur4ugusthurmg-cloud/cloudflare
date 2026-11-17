@@ -1,0 +1,573 @@
+<link href="css/crm.css?VERSION_HASH" rel="stylesheet" />
+
+<div class="container-fluid"
+     data-ng-controller="TasksController"
+     ng-init="onInit()">
+
+    <div id="cardDiv"
+         class="card crm-d-block"
+         style="border-radius: 8px; margin-bottom: 14px; margin-left: 5px; margin-right: 5px;">
+
+        <div class="card-header ch-alt"
+             style="border-radius: 8px 8px 0 0;">
+
+            <h2>
+                Tarefas
+
+                <button ng-if="hasTutorial('150')"
+                        ng-click="showTutorial('150')"
+                        title="Clique aqui para visualizar o vídeo de explicação."
+                        class="btn btn-sm bgm-blue m-l-10 waves-effect">
+
+                    <i class="zmdi zmdi-videocam m-r-5"></i>
+                    Tutorial
+
+                </button>
+            </h2>
+
+            <button title="Pesquisar"
+                    class="btn bgm-blue btn-float btn-float-2 waves-effect"
+                    ng-click="getAll()">
+
+                <i class="zmdi zmdi-search"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="card-body card-padding">
+
+            <div class="row">
+
+                <!-- NOME -->
+                <div class="col-sm-2">
+
+                    <div class="form-group fg-float m-b-20">
+
+                        <div class="fg-line">
+
+                            <input lta-enter="getAll()"
+                                   name="name"
+                                   type="text"
+                                   class="form-control fg-input input-lg"
+                                   ng-model="filtro.name">
+
+                            <label class="fg-label">
+                                Nome
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STATUS -->
+                <div class="col-sm-2">
+
+                    <div class="form-group fg-float m-b-20">
+
+                        <div class="fg-line">
+
+                            <select class="form-control input-lg select-simples"
+                                    ng-change="getAll()"
+                                    ng-model="filtro.status">
+
+                                <option value=""></option>
+
+                                <option value="ALL">
+                                    Todos
+                                </option>
+
+                                <option value="DONE">
+                                    Concluído
+                                </option>
+
+                                <option value="CANCELED">
+                                    Cancelado
+                                </option>
+
+                            </select>
+
+                            <label class="fg-label">
+                                Status
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RESPONSÁVEL -->
+                <div class="col-sm-2">
+
+                    <div class="form-group fg-float m-b-20">
+
+                        <div class="fg-line">
+
+                            <select ng-change="getAll()"
+                                    name="responsibleId"
+                                    class="form-control fg-input input-lg"
+                                    ng-model="filtro.responsibleId">
+
+                                <option value="0">
+                                    Todos
+                                </option>
+
+                                <option ng-repeat="atend in usuarios"
+                                        value="{{atend.id}}">
+
+                                    {{atend.nome}}
+
+                                </option>
+
+                            </select>
+
+                            <label class="fg-label">
+                                Responsável
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- EXECUTOR -->
+                <div class="col-sm-2">
+
+                    <div class="form-group fg-float m-b-20">
+
+                        <div class="fg-line">
+
+                            <select ng-change="getAll()"
+                                    name="executorId"
+                                    class="form-control fg-input input-lg"
+                                    ng-model="filtro.executorId">
+
+                                <option value="0">
+                                    Todos
+                                </option>
+
+                                <option ng-repeat="atend in usuarios"
+                                        value="{{atend.id}}">
+
+                                    {{atend.nome}}
+
+                                </option>
+
+                            </select>
+
+                            <label class="fg-label">
+                                Executor
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DATA DE -->
+                <div class="col-sm-2">
+
+                    <div class="form-group fg-float m-b-20">
+
+                        <div class="fg-line">
+
+                            <input data-input-mask="{mask: '00/00/0000 00:00'}"
+                                   lta-enter="getAll()"
+                                   name="finishedStartDate"
+                                   type="text"
+                                   class="form-control fg-input input-lg"
+                                   ng-model="filtro.finishedStartDate">
+
+                            <label class="fg-label">
+                                Data finalização de
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DATA ATÉ -->
+                <div class="col-sm-2">
+
+                    <div class="form-group fg-float m-b-20">
+
+                        <div class="fg-line">
+
+                            <input data-input-mask="{mask: '00/00/0000 00:00'}"
+                                   lta-enter="getAll()"
+                                   name="finishedEndDate"
+                                   type="text"
+                                   class="form-control fg-input input-lg"
+                                   ng-model="filtro.finishedEndDate">
+
+                            <label class="fg-label">
+                                Data finalização até
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BOTÃO LISTA / CALENDÁRIO -->
+    <div ng-if="taskData.length > 0"
+         style="display: flex; align-items: center; justify-content: end; margin: 16px 6px 2px 6px;">
+
+        <div class="toggle-container"
+             ng-click="toggleCalendar()">
+
+            <div class="toggle-switch"
+                 ng-class="{'toggle-switch-selected': isCalendarVisible}">
+
+                <i ng-if="!isCalendarVisible"
+                   class="zmdi zmdi-view-list-alt">
+                </i>
+
+                <i ng-if="isCalendarVisible"
+                   class="zmdi zmdi-calendar-alt">
+                </i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CALENDÁRIO -->
+    <div ng-if="isCalendarVisible"
+         class="row"
+         data-ng-controller="TasksCalendarController"
+         ng-init="onInit()">
+
+        <div class="container-services">
+
+            <div class="task-calendar-wrapper">
+
+                <div id="calendar"
+                     ng-style="{'background-color': '#F7F7F7'}">
+                </div>
+
+                <div class="task-calendar-loading"
+                     ng-if="calendarLoading">
+
+                    <i class="zmdi zmdi-refresh zmdi-hc-spin"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- LISTA -->
+    <div class="row"
+         ng-if="!isCalendarVisible">
+
+        <div class="container-services">
+
+
+            <!-- SEM REGISTROS -->
+            <div class="not-date"
+                 ng-if="taskData.length === 0">
+
+                Nenhum registro encontrado
+
+            </div>
+
+
+            <!-- TABELA -->
+            <table class="table table-striped"
+                   ng-if="taskData.length > 0">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Nome</th>
+
+                        <th>Descrição</th>
+
+                        <th>Status</th>
+
+                        <th>Data início</th>
+
+                        <th>Data limite</th>
+
+                        <th>Responsável</th>
+
+                        <th>Executor</th>
+
+                        <th></th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr ng-repeat="task in taskData">
+
+                        <td>
+                            #{{task.id}}
+                        </td>
+
+
+                        <td>
+                            {{task.name}}
+                        </td>
+
+
+                        <td class="ppp"
+                            title="{{task.description}}">
+
+                            {{task.description}}
+
+                        </td>
+
+
+                        <td>
+
+                            <small class="small-crm"
+                                   ng-class="{
+                                       'background-pending': task.status === 'PENDING',
+                                       'background-done': task.status === 'DONE',
+                                       'background-canceled': task.status === 'CANCELED',
+                                       'background-late': task.status === 'LATE'
+                                   }">
+
+                                <strong>
+
+                                    <span ng-if="task.status === 'PENDING'">
+                                        PENDENTE
+                                    </span>
+
+                                    <span ng-if="task.status === 'DONE'">
+                                        CONCLUÍDO
+                                    </span>
+
+                                    <span ng-if="task.status === 'CANCELED'">
+                                        CANCELADO
+                                    </span>
+
+                                    <span ng-if="task.status === 'LATE'">
+                                        ATRASADO
+                                    </span>
+
+                                </strong>
+
+
+                                <i style="cursor: pointer;"
+                                   ng-click="openObservation(task.finishedNotes)"
+                                   ng-if="task.finishedNotes"
+                                   title="{{task.finishedNotes}}"
+                                   class="fas fa-comment-alt">
+                                </i>
+
+                            </small>
+
+                        </td>
+
+
+                        <td>
+                            {{task.startAt | date:'dd/MM/yyyy HH:mm'}}
+                        </td>
+
+
+                        <td>
+                            {{task.endAt | date:'dd/MM/yyyy HH:mm'}}
+                        </td>
+
+
+                        <!-- RESPONSÁVEL -->
+                        <td>
+
+                            <div class="task-responsible-container">
+
+                                <div class="photo-container"
+                                     ng-if="task.responsible.photo">
+
+                                    <img ng-src="{{task.responsible.photo}}"
+                                         title="{{task.responsible.name}}" />
+
+                                </div>
+
+
+                                <div class="initial-container"
+                                     ng-if="!task.responsible.photo">
+
+                                    {{task.responsible.name.charAt(0)}}
+
+                                </div>
+
+
+                                <div class="name-container">
+
+                                    {{task.responsible.name}}
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- EXECUTOR -->
+                        <td>
+
+                            <div class="task-responsible-container"
+                                 ng-if="task.executor.name">
+
+                                <div class="photo-container"
+                                     ng-if="task.executor.photo">
+
+                                    <img ng-src="{{task.executor.photo}}"
+                                         title="{{task.executor.name}}" />
+
+                                </div>
+
+
+                                <div class="initial-container"
+                                     ng-if="!task.executor.photo">
+
+                                    {{task.executor.name.charAt(0)}}
+
+                                </div>
+
+
+                                <div class="name-container">
+
+                                    {{task.executor.name}}
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- AÇÕES -->
+                        <td style="width: 55px;">
+
+                            <div style="position: absolute; display: flex; align-items: center;"
+                                 uib-dropdown>
+
+                                <a uib-dropdown-toggle
+                                   aria-expanded="false"
+                                   class="btn-options-table"
+                                   aria-haspopup="true">
+
+                                    <i class="zmdi zmdi-more-vert"></i>
+
+                                </a>
+
+
+                                <ul class="dropdown-menu dropdown-menu-right">
+
+
+                                    <!-- EDITAR -->
+                                    <li ng-if="task.status === 'PENDING' || task.status === 'LATE'">
+
+                                        <a ng-click="onOpenModalTask(true, task.id, task)">
+
+                                            Editar
+
+                                        </a>
+
+                                    </li>
+
+
+                                    <!-- VISUALIZAR -->
+                                    <li ng-if="task.status === 'CANCELED' || task.status === 'DONE'">
+
+                                        <a ng-click="onOpenModalTask(true, task.id, task, true)">
+
+                                            Visualizar
+
+                                        </a>
+
+                                    </li>
+
+
+                                    <!-- CONCLUIR -->
+                                    <li ng-if="task.status === 'PENDING' || task.status === 'LATE'">
+
+                                        <a ng-click="onOpenModalTaskDone(false, task.id)">
+
+                                            Concluir
+
+                                        </a>
+
+                                    </li>
+
+
+                                    <!-- CANCELAR -->
+                                    <li ng-if="task.status === 'PENDING' || task.status === 'LATE'">
+
+                                        <a ng-click="onOpenModalTaskDone(true, task.id)">
+
+                                            Cancelar
+
+                                        </a>
+
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+
+            <!-- MAIS -->
+            <div ng-if="hasMore"
+                 class="text-center p-b-30">
+
+                <button ng-click="nextPage()"
+                        class="btn btn-default waves-effect">
+
+                    <i class="zmdi zmdi-refresh"></i>
+
+                    Mais
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

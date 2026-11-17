@@ -1,0 +1,452 @@
+<div class="container-fluid" data-ng-controller="RelatorioAtendimentosController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>
+                {{'RELATORIO-ATENDIMENTOS'| translate}}
+                <button ng-if="hasTutorial('007')" ng-click="showTutorial('007')" title="Clique aqui para visualizar o video de explicação." class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                    <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                </button>
+            </h2>
+
+            <button ng-if="showOtherPage" title="Fechar Tela" class="btn bgm-red btn-float-2 btn-float waves-effect mobile-hide" ng-click="closeOtherPage()"><i class="zmdi zmdi-close"></i></button>
+            <button title="{{'BUSCAR'| translate}}" class="btn bgm-blue btn-float btn-float-2 waves-effect" ng-click="getAtendimentos()"><i class="zmdi zmdi-search"></i></button>
+            <button title="{{'BAIXAR-EXCEL'| translate}}" class="btn bgm-teal btn-float-2 btn-float waves-effect" ng-click="onExportarExcel()" ng-if="canPermissionDownloadReport()"><i class="zmdi zmdi-download"></i></button>
+
+        </div>
+        <div class="card-body card-padding">
+            <br />
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <select ng-change="getAtendimentos()" class="form-control input-lg select-simples" ng-model="filtro.botId">
+                                <option value="0">{{'TODOS'|translate}}</option>
+                                <option ng-repeat="canal in canais" value="{{canal.botId}}">{{(canal.canal | translate) + ' - ' + canal.numero}}</option>
+                            </select>
+                            <label class="fg-label">{{ 'CANAL' | translate }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <select ng-change="getAtendimentos()" class="form-control input-lg select-simples" ng-model="filtro.origem">
+                                <option value="TODOS">{{'TODOS'|translate}}</option>
+                                <option value="ATIVO">{{ 'ATIVO' | translate }}</option>
+                                <option value="REATIVO">{{ 'REATIVO' | translate }}</option>
+                                <option value="POTENCIAL">{{ 'POTENCIAL-MAIUSCULA' | translate }}</option>
+                                <option value="API">{{ 'INTEGRACAO' | translate }}</option>
+                            </select>
+                            <label class="fg-label">{{ 'ORIGEM' | translate }}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAtendimentos()" name="nome" type="text" class="form-control fg-input input-lg" ng-model="filtro.atendimentoId">
+                            <label class="fg-label">{{'PROTOCOLO'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAtendimentos()" name="nome" type="text" class="form-control fg-input input-lg" ng-model="filtro.contatoNumero">
+                            <label class="fg-label">{{ 'NUMERO' | translate }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAtendimentos()" name="nome" type="text" class="form-control fg-input input-lg" ng-model="filtro.contatoNome">
+                            <label class="fg-label">{{'NOME'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <select ng-change="getAtendimentos()" class="form-control input-lg select-simples" ng-model="filtro.status">
+                                <option value="Todos">{{'TODOS'|translate}}</option>
+                                <option value="Aguardando">{{'AGUARDANDO'|translate}}</option>
+                                <option value="Ativo">{{'ATIVO'|translate}}</option>
+                                <option value="Finalizado">{{'FINALIZADO'|translate}}</option>
+                            </select>
+                            <label class="fg-label">{{'STATUS'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <select ng-change="getAtendimentos()" class="form-control input-lg select-simples" ng-model="filtro.atendenteId">
+                                <option value="-1">{{'TODOS'|translate}}</option>
+                                <option ng-repeat="atendente in atendentes" value="{{atendente.id}}">{{atendente.nome}}</option>
+                            </select>
+                            <label class="fg-label">{{'ATENDENTES'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <select ng-change="getAtendimentos(); getMotivos();" class="form-control input-lg select-simples" ng-model="filtro.departamentoId">
+                                <option value="-1">{{'TODOS'|translate}}</option>
+                                <option ng-repeat="departamento in departamentosUsuario" value="{{departamento.id}}">{{departamento.nome}}</option>
+                            </select>
+                            <label class="fg-label">{{'DEPARTAMENTOS'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <select ng-change="getAtendimentos()" class="form-control input-lg select-simples" ng-model="filtro.motivoId">
+                                <option value="-1">{{'TODOS'|translate}}</option>
+                                <option ng-repeat="m in departamentoMotivos" value="{{m.id}}">{{m.motivo}}</option>
+                            </select>
+                            <label class="fg-label">{{'MOTIVOS'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAtendimentos()" type="text" class="form-control ng-isolate-scope input-lg" data-input-mask="{mask: '00/00/0000'}" maxlength="10" autocomplete="off" ng-model="filtro.dataCriacaoDe">
+                            <label class="fg-label">{{ "DATA-CRIACAO-DE" | translate }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAtendimentos()" type="text" class="form-control ng-isolate-scope input-lg" data-input-mask="{mask: '00/00/0000'}" maxlength="10" autocomplete="off" ng-model="filtro.dataCriacaoAte">
+                            <label class="fg-label">{{ "DATA-CRIACAO-ATE" | translate }}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAtendimentos()" type="text" class="form-control ng-isolate-scope input-lg" data-input-mask="{mask: '00/00/0000'}" maxlength="10" autocomplete="off" ng-model="filtro.dataUltimaMensagemDe">
+                            <label class="fg-label">{{ "DATA-ULTIMA-MENSAGEM-DE" | translate }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAtendimentos()" type="text" class="form-control ng-isolate-scope input-lg" data-input-mask="{mask: '00/00/0000'}" maxlength="10" autocomplete="off" ng-model="filtro.dataUltimaMensagemAte">
+                            <label class="fg-label">{{ "DATA-ULTIMA-MENSAGEM-ATE" | translate }}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAtendimentos()" type="text" class="form-control ng-isolate-scope input-lg" data-input-mask="{mask: '00/00/0000'}" maxlength="10" autocomplete="off" ng-model="filtro.dataFinalizacaoDe">
+                            <label class="fg-label">{{ "DATA-FINALIZACAO-DE" | translate }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAtendimentos()" type="text" class="form-control ng-isolate-scope input-lg" data-input-mask="{mask: '00/00/0000'}" maxlength="10" autocomplete="off" ng-model="filtro.dataFinalizacaoAte">
+                            <label class="fg-label">{{ "DATA-FINALIZACAO-ATE" | translate }}</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <dropdown-multiselect model="filtro.tagsId" options="tagsFiltered" is-array="true" title="'TAGS'"></dropdown-multiselect>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" ng-if="camposSegmentacao.length > 0">
+        <div class="card-header ch-alt">
+            <h2>{{ 'CAMPOS-SEGMENTACAO' | translate }}</h2>
+        </div>
+        <div class="card-body card-padding">
+            <br />
+            <div class="row">
+
+                <div class="col-sm-3 m-b-15" ng-repeat="campo in camposSegmentacao" ng-if="campo.tipoDado !== 'ARQUIVO'">
+                    <div class="form-group fg-float m-b-30" ng-if="campo.tipoDado == 'TEXTO'">
+
+                        <div class="fg-line" ng-if="!campo.alternativas && !campo.integracaoLista && campo.id != 1">
+                            <div class="fg-line">
+                                <input dynamic-mask="{{campo.mascara}}" maxlength={{campo.limiteCaracteres}} lta-enter="getAtendimentos(null, campo)" name="nome" type="text" class="form-control fg-input input-lg" ng-model="campo.valor">
+                                <label class="fg-label">{{campo.id == 1 ? ((campo.nome | uppercase) | translate) : campo.nome}}</label>
+                            </div>
+                        </div>
+
+                        <div class="fg-line" ng-if="campo.id == 1">
+                            <input lta-enter="getAtendimentos()" name="nome" type="text" class="form-control fg-input input-lg" ng-model="filtro.contatoNome">
+                            <label class="fg-label">{{'NOME'|translate}}</label>
+                        </div>
+
+                        <div class="fg-line" ng-if="campo.alternativas && !campo.integracao">
+                            <select ng-change="getAtendimentos(null, campo)" class="form-control input-lg select-simples" ng-model="campo.valor">
+                                <option value="TODOS">{{'TODOS'|translate}}</option>
+                                <option ng-repeat="alternativa in splitArray(campo.alternativas, ',')" value="{{alternativa}}">{{alternativa}}</option>
+                            </select>
+                            <label class="fg-label">{{campo.id == 1 ? ((campo.nome | uppercase) | translate) : campo.nome}}</label>
+                        </div>
+
+                        <div class="fg-line" ng-if="campo.integracao && campo.integracaoLista">
+                            <select ng-disabled="campo.apenasVisualizacao" ng-change="getAtendimentos(null, campo)" class="form-control input-lg select-simples" ng-model="campo.valorIntegracao">
+                                <option value=""></option>
+                                <option ng-repeat="alternativa in campo.integracaoLista" value="{{alternativa.id}}">{{alternativa.value}}</option>
+                            </select>
+                            <label class="fg-label">{{campo.nome}}</label>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group fg-float m-b-30" ng-if="campo.tipoDado == 'DATA'">
+                        <div class="fg-line">
+                            <input dynamic-mask="{{campo.mascara}}" maxlength={{campo.limiteCaracteres}} lta-enter="getAtendimentos(null, campo)" name="nome" type="text" class="form-control fg-input input-lg" ng-model="campo.valor">
+                            <label class="fg-label">{{campo.id == 1 ? ((campo.nome | uppercase) | translate) : campo.nome}}</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group fg-float m-b-30" ng-if="campo.tipoDado == 'HORA'">
+                        <div class="fg-line">
+                            <input dynamic-mask="{{campo.mascara}}" maxlength={{campo.limiteCaracteres}} lta-enter="getAtendimentos(null, campo)" name="nome" type="text" class="form-control fg-input input-lg" ng-model="campo.valor">
+                            <label class="fg-label">{{campo.id == 1 ? ((campo.nome | uppercase) | translate) : campo.nome}}</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group fg-float m-b-30" ng-if="campo.tipoDado == 'NUMERO_INTEIRO'">
+                        <div class="fg-line">
+                            <input lta-enter="getAtendimentos(null, campo)" maxlength={{campo.limiteCaracteres}} name="nome" type="number" class="form-control fg-input input-lg" ng-model="campo.valor">
+                            <label class="fg-label">{{campo.id == 1 ? ((campo.nome | uppercase) | translate) : campo.nome}}</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group fg-float m-b-30" ng-if="campo.tipoDado == 'NUMERO_INTEIRO_POSITIVO'">
+                        <div class="fg-line">
+                            <input lta-enter="getAtendimentos(null, campo)" maxlength={{campo.limiteCaracteres}} name="nome" type="number" class="form-control fg-input input-lg" ng-model="campo.valor">
+                            <label class="fg-label">{{campo.id == 1 ? ((campo.nome | uppercase) | translate) : campo.nome}}</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group fg-float m-b-30" ng-if="campo.tipoDado == 'NUMERO_DECIMAL'">
+                        <div class="fg-line">
+                            <input lta-enter="getAtendimentos(null, campo)" maxlength={{campo.limiteCaracteres}} name="nome" type="number" class="form-control fg-input input-lg" ng-model="campo.valor">
+                            <label class="fg-label">{{campo.id == 1 ? ((campo.nome | uppercase) | translate) : campo.nome}}</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group fg-float m-b-30" ng-if="campo.tipoDado == 'NUMERO_DECIMAL_POSITIVO'">
+                        <div class="fg-line">
+                            <input lta-enter="getAtendimentos(null, campo)" maxlength={{campo.limiteCaracteres}} name="nome" type="number" class="form-control fg-input input-lg" ng-model="campo.valor">
+                            <label class="fg-label">{{campo.id == 1 ? ((campo.nome | uppercase) | translate) : campo.nome}}</label>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="card" ng-if="totalSelecionado() != 0">
+        <div class="card-body card-padding">
+            <div class="table-actions">
+                <div ng-if="!registrosSelecionados.acaoEmRegistrosFiltrados">
+                    {{totalSelecionado()}} <span ng-if="totalSelecionado() != 1">{{ 'ATENDIMENTOS' | translate }}</span><span ng-if="totalSelecionado() == 1">{{ 'ATENDIMENTO' | translate }}</span> <span ng-if="totalSelecionado() == 1">{{ 'SELECIONADO' | translate }}</span><span ng-if="totalSelecionado() != 1">{{ 'SELECIONADOS' | translate }}</span>.
+                    <a ng-click="onSelecionarTodosFiltrados()" ng-if="filtro.status != 'Todos'">{{"SELECIONE-TODOS-ATENDENTES-F" | translate}}</a>
+                </div>
+                <div ng-if="registrosSelecionados.acaoEmRegistrosFiltrados ">
+                    {{"TODOS-ATENDIMENTOS-F" | translate}}
+                </div>
+            </div>
+            <div style="display: flex; place-content: center; padding: 10px; gap: 10px;">
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                <button ng-if="selecionadosFinalizados() && permissions.reabrirAtendimento" title="Abrir Atendimento" ng-click="onAbrirModalDepartamentosNovoAtendimentoEmMassa()" class="btn btn-success waves-effect"><i class="zmdi zmdi-time-restore-setting"></i> {{ 'ABRIR-ATENDIMENTO' | translate }}</button>
+                <p ng-if="selecionadosFinalizados() && !permissions.reabrirAtendimento" style="margin: 0; font-size: 12px;">{{ 'SEM-PERMISSAO-REABRIR-ATENDIMENTO' | translate }}</p>
+                </div>
+                <button ng-if="(isGestor() || isSupervisorChatbot() || permissions.permissaoTransferirMassa) && selecionadosNaoFinalizados()" ng-click="onMostarModalTransferenciaEmMassa()" class="btn btn-default bgm-blue waves-effect"><i class="zmdi zmdi-swap"></i> {{ 'TRANSFERIR' | translate }}</button>
+                <button ng-if="selecionadosNaoFinalizados() && (isAtendente() || isGestor() || isSupervisorChatbot({ module: 'MODULE_HELPDESK', page: 'ACTION_FINISH_TICKET' }))" title="Finalizar" ng-click="mostrarModalFinalizarAtendimentosEmMassa()" class="btn btn-success waves-effect"><i class="zmdi zmdi-check-all"></i> {{ 'FINALIZAR' | translate }}</button>
+                <div ng-if="!selecionadosNaoFinalizados() && !selecionadosFinalizados()">{{ 'HABILITAR-ACOES-MASSA' | translate }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="registros.length > 0" class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="content-table" class="table table-striped table-vmiddle">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="checkbox checkbox-inline p-l-0">
+                                    <label>
+                                        <input type="checkbox" ng-model="registrosSelecionados.todos" ng-click="onToggleSelecionarTodos()">
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                            </th>                         
+                            <th>{{'STATUS'|translate}}</th>                            
+                            <th>{{'PROTOCOLO'|translate}}</th>
+                            <th>{{'CANAL'|translate}}</th>
+                            <th>{{'CONTATO'|translate}}</th>
+                            <th>{{'ATENDENTE'|translate}}</th>
+                            <th style="cursor: pointer; min-width: 158px; max-width: 158px;" ng-click="changeOrder('CREATE_DATE')">
+                                {{'DATA-CRIACAO'|translate}}
+                                <i class="zmdi zmdi-long-arrow-down" ng-if="filtro.orderByFieldName === 'CREATE_DATE' && filtro.orderByFieldOrdenation === 'DESC'" title="Ordenação Decrescente"></i>
+                                <i class="zmdi zmdi-long-arrow-up" ng-if="filtro.orderByFieldName === 'CREATE_DATE' && filtro.orderByFieldOrdenation === 'ASC'" title="Ordenação Crescente"></i>
+                            </th>
+                            <th style="cursor: pointer; min-width: 158px; max-width: 158px;" ng-click="changeOrder('LAST_MESSAGE_DATE')">
+                                {{'DATA-ULTIMA-MENSAGEM'|translate}}
+                                <i class="zmdi zmdi-long-arrow-down" ng-if="filtro.orderByFieldName === 'LAST_MESSAGE_DATE' && filtro.orderByFieldOrdenation === 'DESC'" title="Ordenação Decrescente"></i>
+                                <i class="zmdi zmdi-long-arrow-up" ng-if="filtro.orderByFieldName === 'LAST_MESSAGE_DATE' && filtro.orderByFieldOrdenation === 'ASC'" title="Ordenação Crescente"></i>
+                            </th>
+                            <th style="cursor: pointer; min-width: 158px; max-width: 158px;" ng-click="changeOrder('FINISHED_DATE')">
+                                {{'DATA-FINALIZACAO'|translate}}
+                                <i class="zmdi zmdi-long-arrow-down" ng-if="filtro.orderByFieldName === 'FINISHED_DATE' && filtro.orderByFieldOrdenation === 'DESC'" title="Ordenação Decrescente"></i>
+                                <i class="zmdi zmdi-long-arrow-up" ng-if="filtro.orderByFieldName === 'FINISHED_DATE' && filtro.orderByFieldOrdenation === 'ASC'" title="Ordenação Crescente"></i>
+                            </th>
+                            <th>{{'AVALIACAO'|translate}}</th>
+                            <th>{{'TAGS'|translate}}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="registro in registros">
+                            <td>
+                                <div class="checkbox checkbox-inline p-l-0">
+                                    <label>
+                                        <input type="checkbox" ng-click="onDeselecionarTodosFiltrados()" ng-model="registrosSelecionados[$index]">
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                            </td>                        
+                            <td class="text-center">
+                                <span ng-if="registro.status == 'FINALIZADO'" class="btn bgm-gray btn-block status-td" style="cursor: default" translate="FINALIZADO"></span>
+                                <span ng-if="registro.status == 'ATIVO'" class="btn bgm-green btn-block status-td" style="cursor: default" translate="ATIVO"></span>
+                                <span ng-if="registro.status == 'AGUARDANDO'" class="btn bgm-blue btn-block status-td" style="cursor: default" translate="AGUARDANDO"></span>
+                            </td>
+                            <td>
+                                {{ registro.protocolo}}
+                            </td>
+                            <td>
+                                <img ng-if="registro.origem === 'WHATSAPP'" style="width: 35px;" src="img/atendimento/wa-messenger.png" />
+                                <img ng-if="registro.origem === 'SITE'" style="width: 35px;" src="img/atendimento/site.png" />
+                                <img ng-if="registro.origem === 'FACEBOOK'" style="width: 35px;" src="img/atendimento/fb-messenger.png" />
+                                <img ng-if="registro.origem === 'INSTAGRAM'" style="width: 35px;" src="img/atendimento/instagram.png" />
+                                <img ng-if="registro.origem === 'GOOGLE_BUSINESS_MESSAGES'" style="width: 35px;" src="img/atendimento/google-my-business.png" />
+                                <img ng-if="registro.origem === 'TELEGRAM'" style="width: 35px;" src="img/atendimento/telegram.png" />
+                                <img ng-if="registro.origem === 'EMAIL'" style="width: 35px;" src="img/atendimento/email.png" />
+                                <span class="m-l-5">{{registro.botDisplayName}}</span>
+                            </td>
+                            <td>
+                                <div style="font-weight: 500;">
+                                    <i ng-show="registro.grupo" class="fas fa-user-friends"></i>
+                                    {{ registro.nome.substring(0, 20)}}
+                                </div>
+                                <div>
+                                    {{ registro.numero}}
+                                </div>
+                            </td>
+                            <td>
+                                <div style="font-weight: 500;" title="{{'ATENDENTE'|translate}}">
+                                    <i style="width: 18px;" class="zmdi zmdi-account text-center"></i>
+                                    {{registro.atendente ? registro.atendente : '-'}}
+                                </div>
+                                <div title="{{'DEPARTAMENTO'|translate}}">
+                                    <i style="width: 18px;" class="zmdi zmdi-folder text-center"></i>
+                                    {{ registro.departamento}}
+                                </div>
+                            </td>
+                            <td>
+                                {{ registro.data}}
+                            </td>                            
+                            <td>
+                                {{ registro.dataUltimaMensagem}}
+                            </td>
+                            <td>
+                                {{ registro.dataFinalizacao}}
+                            </td>
+                            <td class="text-center">
+                                {{ registro.avaliacao}}
+                            </td>
+                            <td class="text-center">
+                                <i ng-if="registro.tags && registro.tags.length == 1" class="fas fa-tag" title="{{getFormattedTitleTags(registro.tags)}}"></i>
+                                <i ng-if="registro.tags && registro.tags.length > 1" class="fas fa-tags" title="{{getFormattedTitleTags(registro.tags)}}"></i>
+                            </td>
+                            <td>
+
+                                <ul class="actions pull-right">
+                                    <li class="dropdown" uib-dropdown="" dropdown-append-to-body>
+                                        <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                                            <i class="zmdi zmdi-more-vert"></i>
+                                        </a>
+
+                                        <ul uib-dropdown-menu class="dropdown-menu dropdown-menu-right">
+
+                                            <li>
+                                                <a ng-click="abrirLogsAtendimento(registro)" href="">{{ 'INFORMACOES' | translate }}</a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="abrirChatAtendimento(registro)" href="">{{ 'MENSAGENS' | translate }}</a>
+                                            </li>
+                                            <li ng-if="registro.status != 'FINALIZADO'">
+                                                <a ng-click="onMostarModalTransferencia(registro.protocolo)" href="">{{ 'TRANSFERIR' | translate }}</a>
+                                            </li>
+                                            <li ng-if="registro.status == 'FINALIZADO' && permissions.reabrirAtendimento">
+                                                <a ng-click="onAbrirModalDepartamentosNovoAtendimento(registro)" href="">{{ 'ABRIR-ATENDIMENTO' | translate }}</a>
+                                            </li>
+                                            <li ng-if="registro.status == 'FINALIZADO' && (isGestor() || isSupervisorChatbot())">
+                                                <a ng-click="showModalAvaliacao(registro)" href="">{{ 'EDITAR-AVALIACAO' | translate }}</a>
+                                            </li>
+                                            <li ng-if="registro.status != 'FINALIZADO' && (isAtendente() || isGestor() || isSupervisorChatbot({ module: 'MODULE_HELPDESK', page: 'ACTION_FINISH_TICKET' }))">
+                                                <a ng-click="mostrarModalFinalizarAtendimentosIndividual(registro.protocolo)" href="">{{ 'FINALIZAR' | translate }}</a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="onBloquearContato(registro)" href="">{{ 'BLOQUEAR' | translate }}</a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="abrirModalWebhooks(registro.protocolo)" ng-if="isIntegracaoWebhook()" href="">Webhooks</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="showMore" class="text-center p-b-30">
+        <button ng-click="getAtendimentos(true)" class="btn btn-default waves-effect"><i class="zmdi zmdi-refresh"></i> {{ "MAIS" | translate }}</button>
+    </div>
+
+</div>

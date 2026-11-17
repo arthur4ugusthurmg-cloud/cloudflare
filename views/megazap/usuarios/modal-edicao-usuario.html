@@ -1,0 +1,61 @@
+<div class="modal-header">
+    <h3>{{novoRegistro.nome}}<small>{{'NOVO-REGISTRO-DESCRICAO'|translate}}</small></h3>
+</div>
+<div class="modal-body">
+    <br/>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="nome" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.nome" autofocus>
+                    <label class="fg-label">{{'NOME'|translate}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-if="isAdministrador() && isCargoEditavel(novoRegistro.cargoMz)">
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <select class="form-control input-lg select-simples" ng-model="novoRegistro.cargoMz">
+                        <option value="SUPORTE">Suporte</option>
+                        <option value="LIDER_SUPORTE">Lider de Suporte</option>
+                        <option value="LIDER_VENDAS">Lider de Vendas</option>
+                        <option ng-if="podeAtribuirVendedor || novoRegistro.cargoMz == 'VENDEDOR'" value="VENDEDOR">Vendedor</option>
+                    </select>
+                    <label class="fg-label">{{'CARGO'|translate}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="login" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.login">
+                    <label class="fg-label">{{'LOGIN'|translate}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <!-- <div ng-class="{'col-sm-10': isAdministrador() || isRevendedor() || (isSupervisorRevenda() && !permissions.apenasVisualizacao), 'col-sm-12': !isAdministrador()}"> -->
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="email" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.email">
+                    <label class="fg-label">{{'EMAIL'|translate}}</label>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="col-sm-1" ng-if="isAdministrador() || isRevendedor() || (isSupervisorRevenda() && !permissions.apenasVisualizacao)">
+            <button ng-click="onReenviarEmail(novoRegistro)" class="btn btn-default btn-icon waves-effect waves-circle" title="Reenviar e-mail">
+                <i class="zmdi zmdi-mail-send"></i>
+            </button>
+        </div>  -->
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onModalAtualizar()">{{'ENVIAR'|translate}}</button>
+    <button class="btn btn-link" ng-click="onModalCancelar()">{{'CANCELAR'|translate}}</button>
+</div>

@@ -1,0 +1,253 @@
+<div class="modal-header">
+    <h3>{{perguntaSelecionada.tipoPerguntaId ? getTipoPerguntaNome(perguntaSelecionada.tipoPerguntaId): 'Selecione o tipo...'}}</h3>
+    <div ng-if="perguntaSelecionada.tipoPerguntaId != '2'" title="Código utilizado na integração.">
+        <b ng-if="perguntaSelecionada.UUID || perguntaSelecionada.uuid">UUID: </b>
+        <span>{{perguntaSelecionada.uuid ? perguntaSelecionada.uuid : ''}}</span>
+        <span>{{!perguntaSelecionada.uuid && perguntaSelecionada.UUID ? perguntaSelecionada.UUID : ''}}</span>
+    </div>
+</div>
+<div class="modal-body modal-pergunta">
+
+    <div class="alert alert-info" ng-if="perguntaSelecionada.tipoPerguntaId && isTipoIntegracao(perguntaSelecionada)" role="alert">
+        <i class="zmdi zmdi-alert-circle-o zmdi-hc-fw"></i>
+        {{'CLIQUE'|translate}} <a target="_blank"
+            href="https://apidoc.com.br/src/file/Integracao_Menus_v1.7.pdf">{{'AQUI'|translate}}</a>
+        {{'SABER-FUNCIONA'|translate}}
+        <br />
+    </div>
+
+    <div class="row" style="padding-right: 25px;">
+
+        <div class="col-sm-12">
+
+            <!-- <div class="row">
+
+                <div class="col-sm-6">
+                    pergunta inicial:
+                    <pre style="height: 200px">{{perguntaRoot | json}}</pre>
+                </div>
+
+                <div class="col-sm-6">
+                    pergunta alterada:
+                    <pre style="height: 200px">{{perguntaSelecionada | json}}</pre>
+                </div>
+
+            </div> -->
+
+            <div class="row">
+                <br />
+                <div class="col-sm-12" ng-if="(!perguntaSelecionada.inicial && !perguntaSelecionada.edicao) || (perguntaSelecionada.inicial && !perguntaSelecionada.edicao && perguntaSelecionada.nivel == 2)">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <div class="select">
+                                <select class="form-control input-lg select-simples" ng-change="selecionarPergunta()" ng-model="perguntaSelecionada.tipoPerguntaId" autofocus>
+                                    <option ng-if="perguntaRoot.nivel > 0" value="2">{{'INFORMACAO'|translate}}</option>
+                                    <option ng-if="perguntaRoot.nivel > 0" value="8">{{'ARQUIVO'|translate}}</option>
+
+                                    <option ng-if="!perguntaRoot.inicial && canAddMenu(perguntaRoot) && !hasCampoSegmentacao(perguntaRoot) && (perguntaRoot.nivel == 0 || isTipoPergunta(perguntaRoot) || isTipoContatoInformacao(perguntaRoot))" value="1">{{'PERGUNTA'|translate}}</option>
+                                    <option ng-if="!perguntaRoot.inicial && canAddMenu(perguntaRoot) && !hasCampoSegmentacao(perguntaRoot) && (perguntaRoot.nivel == 0 || isTipoPergunta(perguntaRoot) || isTipoContatoInformacao(perguntaRoot))" value="3">{{'ENQUETES'|translate}}</option>
+                                    <option ng-if="!perguntaRoot.inicial && canAddMenu(perguntaRoot) && !hasCampoSegmentacao(perguntaRoot) && (perguntaRoot.nivel == 0 || isTipoPergunta(perguntaRoot) || isTipoContatoInformacao(perguntaRoot))" value="4">{{'ATENDIMENTO'|translate}}</option>
+                                    <option ng-if="!perguntaRoot.inicial && canAddMenu(perguntaRoot) && !hasCampoSegmentacao(perguntaRoot) && !template && (perguntaRoot.nivel == 0 || isTipoPergunta(perguntaRoot) || isTipoContatoInformacao(perguntaRoot))" value="5">{{'INTEGRACAO'|translate}}</option>
+                                    <option ng-if="!perguntaRoot.inicial && canAddMenu(perguntaRoot) && !hasCampoSegmentacao(perguntaRoot) && (perguntaRoot.nivel == 0 || isTipoPergunta(perguntaRoot) || isTipoContatoInformacao(perguntaRoot)) && !isTipoVisualizacaoBotao(perguntaRoot)" value="6">{{'RECADO'|translate}}</option>
+                                    <option ng-if="!perguntaRoot.inicial && canAddMenu(perguntaRoot) && !hasMenus(perguntaRoot) && !template && (isTipoPergunta(perguntaRoot) || isTipoContatoInformacao(perguntaRoot)) && !isTipoVisualizacaoBotao(perguntaRoot)" value="7">{{'CAMPO-SEGMENTACAO'|translate}}</option>
+                                </select>
+                                <label class="fg-label">{{'TIPO'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12" ng-if="perguntaSelecionada.tipoPerguntaId && isTipoContatoInformacao(perguntaSelecionada)">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <div class="select">
+                                <select class="form-control input-lg select-simples" ng-model="perguntaSelecionada.contatoInformacaoId" required="">
+                                    <option ng-selected="contatoInformacao.id == perguntaSelecionada.contatoInformacaoId" ng-repeat="contatoInformacao in contatoInformacoes" value="{{contatoInformacao.id}}">{{contatoInformacao.nome}}</option>
+                                </select>
+                                <label class="fg-label">{{"CAMPO-SEGMENTACAO" | translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3" ng-if="perguntaSelecionada.tipoPerguntaId && !isTipoInformacao(perguntaSelecionada) && !isTipoContatoInformacao(perguntaSelecionada) && !isTipoArquivo(perguntaSelecionada)">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="number" class="form-control fg-input input-lg" ng-model="perguntaSelecionada.numero">
+                            <label class="fg-label" ng-if="!isTipoContatoInformacao(perguntaSelecionada)">{{'NUMERO'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3" ng-if="!isTipoInformacao(perguntaSelecionada) && !isTipoContatoInformacao(perguntaSelecionada) && !isTipoArquivo(perguntaSelecionada)">
+                    <div class="form-group m-b-30">
+                        <button class="btn btn-block btn-info waves-effect" ng-if="perguntaSelecionada.emoticon === undefined" ng-click="onModalEmojis()"><i class="zmdi zmdi-plus"></i> {{'EMOJI'|translate}}</button>
+                        <span ng-click="onModalEmojis()" style="font-size: 32px">{{perguntaSelecionada.emoticon}}</span>
+                        <i style="font-size: 15px; position: absolute;" ng-if="perguntaSelecionada.emoticon" ng-click="onRemoveEmoji()" class="zmdi zmdi-close cursor-pointer"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="perguntaSelecionada.tipoPerguntaId">
+
+                <div class="row" ng-if="isTipoIntegracao(perguntaSelecionada)">
+                    <div class="col-sm-8">
+                        <div class="form-group fg-float m-b-30">
+                            <div class="fg-line">
+                                <input type="text" class="form-control fg-input input-lg" ng-model="perguntaSelecionada.integracao">
+                                <label class="fg-label">{{'URL'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group fg-float m-b-30">
+                            <div class="fg-line">
+                                <input type="text" class="form-control fg-input input-lg" ng-model="perguntaSelecionada.mzAuthorization">
+                                <label class="fg-label">{{'MZ-AUTHORIZATION'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+
+                <div class="form-group fg-float m-b-30" ng-if="!isTipoContatoInformacao(perguntaSelecionada) && !isTipoArquivo(perguntaSelecionada)">
+                    <div class="fg-line">
+                        <textarea class="form-control input-lg" id="perguntaTexto" data-auto-size ng-model="perguntaSelecionada.texto"></textarea>
+                        <label class="fg-label">{{'TEXTO'|translate}}</label>
+                    </div>
+                </div>
+
+                <!-- CAMPO DE SEGMENTACAO -->
+
+                <div class="form-group fg-float m-b-30" ng-if="isTipoContatoInformacao(perguntaSelecionada)">
+                    <div class="fg-line">
+                        <textarea class="form-control input-lg" data-auto-size ng-model="perguntaSelecionada.msgErro"></textarea>
+                        <label class="fg-label">{{"MENSAGEM-ERRO-VALIDACAO" | translate}}</label>
+                    </div>
+                </div>
+                <div ng-if="registro.palavrasChave" class="form-group fg-float m-b-30" ng-if="!isTipoContatoInformacao(perguntaSelecionada) && !isTipoInformacao(perguntaSelecionada)">
+                    <div class="fg-line">
+                        <textarea class="form-control input-lg" data-auto-size ng-model="perguntaSelecionada.palavrasChave"></textarea>
+                        <label class="fg-label">{{'PALAVRAS-CHAVE-DICA' | translate}}</label>
+                    </div>
+                </div>                
+
+                <!-- ATENDIMENTO -->
+
+                <div class="form-group" ng-if="isTipoAtendimento(perguntaSelecionada)">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" value="" ng-model="perguntaSelecionada.todosDepartamentos" ng-click="onSelecionarTodosDepartamentos()">
+                            <i class="input-helper"></i>
+                            {{"TODOS-DEPARTAMENTOS" | translate}}
+                        </label>
+                    </div>
+                </div>
+
+                <!-- ARQUIVOS -->
+
+                <div class="form-group" ng-if="isTipoArquivo(perguntaSelecionada)">
+
+                    <div class="modal-pergunta-images-container">
+                        <div id="parq-{{$index}}" ng-class="{'modal-pergunta-draggable-file': !perguntaSelecionada.edicao}" ng-repeat="arquivo in perguntaSelecionada.arquivos" draggable="{{!perguntaSelecionada.edicao}}" title="{{arquivo.nome}}">
+                            <div ng-if="arquivo.tipo == 'IMAGEM'" class="modal-pergunta-image-container" style="background-image: url({{arquivo.url}})">
+                                <i ng-if="!perguntaSelecionada.edicao" class="fas fa-times btn-remove-file" ng-click="removerFilePerguntaArquivo($index)"></i>
+                            </div>
+                            <div ng-if="arquivo.tipo != 'IMAGEM'" class="modal-pergunta-link-container">
+                                <i ng-if="!perguntaSelecionada.edicao" class="fas fa-times btn-remove-file" ng-click="removerFilePerguntaArquivo($index)"></i>
+                                <i class="fas fa-file-alt"></i>
+                                <span>{{arquivo.nome}}</span>
+                            </div>
+                        </div>
+
+                        <label ng-if="!perguntaSelecionada.edicao" for="files-pergunta-arquivos" draggable="false" class="modal-pergunta-link-container">
+                            <i class="fas fa-plus"></i>
+                        </label>
+                    </div>
+                    <input ng-if="!perguntaSelecionada.edicao" on-file-change="uploadFilesPerguntaArquivo" type="file" multiple="true" class="hidden" name="files-pergunta-arquivos" id="files-pergunta-arquivos">
+
+                </div>
+
+                <!-- ATENDIMENTO -->
+
+                <div class="form-group" ng-if="isTipoAtendimento(perguntaSelecionada)">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" value="" ng-model="perguntaSelecionada.escolherAtendentes">
+                            <i class="input-helper"></i>
+                            {{"LISTAR-ATENDENTES" | translate}}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group m-b-30" ng-if="isTipoAtendimento(perguntaSelecionada)">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" value="" ng-model="perguntaSelecionada.enviarMensagemSolicitacaoAtendimento">
+                            <i class="input-helper"></i>
+                            {{"ENVIAR-MENSAGEM-SOLICITACAO-ATENDIMENTO" | translate}}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group m-b-30" ng-if="isTipoContatoInformacao(perguntaSelecionada) && perguntaSelecionada.nivel > 1">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" value="" ng-model="perguntaSelecionada.semprePerguntar">
+                            <i class="input-helper"></i>
+                            {{"SEMPRE-PERGUNTAR" | translate}}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group m-b-30" ng-if="isTipoContatoInformacao(perguntaSelecionada) && possuiAlternativasContatoInformacao(perguntaSelecionada)">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" value="" ng-model="perguntaSelecionada.mostrarAlternativas">
+                            <i class="input-helper"></i>
+                            {{"LISTAR-ALTERNATIVAS" | translate}}
+                        </label>
+                    </div>
+                </div>
+
+                <!-- REDIRECIONAMENTO -->
+                <div class="form-group fg-float m-b-30" ng-if="isTipoRedirecionamento(perguntaSelecionada)">
+                    <div class="fg-line">
+                        <input type="text" class="form-control fg-input input-lg" ng-model="perguntaSelecionada.uuidRedirecionamento">
+                        <label class="fg-label">UUID do menu de redirecionamento</label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ATENDIMENTO -->
+
+<div class="card" ng-if="perguntaSelecionada.tipoPerguntaId && isTipoAtendimento(perguntaSelecionada) && !template" ng-show="!perguntaSelecionada.todosDepartamentos" style="max-height: 400px; overflow: auto">
+    <div class="card-header ch-alt">
+        <a href="">
+            <h2>{{'DEPARTAMENTOS'|translate}}</h2>
+        </a>
+        <br />
+        <button ng-click="onControlarSelecaoDepartamentos(true)" class="btn bgm-green btn-float btn-float-two waves-effect pull-right"><i class="zmdi zmdi-check-square"></i></button>
+        <button ng-click="onControlarSelecaoDepartamentos(false)" class="btn bgm-red btn-float waves-effect pull-right"><i class="zmdi zmdi-minus-square"></i></button>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <tbody>
+                <tr ng-repeat="departamento in perguntaSelecionada.departamentos">
+                    <td class="actions">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="" ng-model="departamento.selecionado" ng-click="onSelecionarDepartamento()">
+                                <i class="input-helper"></i>
+                                {{departamento.confDepartamentoNome}}
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onModalSalvarPergunta()">{{'ENVIAR'|translate}}</button>
+    <button class="btn btn-link" ng-click="onModalCancelar()">{{'CANCELAR'|translate}}</button>
+</div>

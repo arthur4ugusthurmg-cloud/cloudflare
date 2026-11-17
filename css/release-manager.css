@@ -1,0 +1,48 @@
+.fg-float .fg-line .fg-input {
+    position: relative;
+    background: transparent;
+    z-index: 1;
+  }
+  
+  .fg-float .fg-line .fg-label {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    transition: 0.2s ease all;
+  }
+  
+  .fg-float .fg-line.fg-toggled .fg-label,
+  .fg-float .fg-line .fg-input:focus + .fg-label,
+  .fg-float .fg-line .fg-input:valid + .fg-label,
+  .fg-float .fg-line .fg-input.ng-not-empty + .fg-label {
+    top: -20px;
+    font-size: 12px;
+  }
+  
+  .date-picker .fg-line .fg-label {
+    top: -20px;
+    font-size: 12px;
+  }
+  
+  .date-picker .fg-line .fg-input {
+    padding-top: 8px;
+  }
+
+  .container-fluid.position-relative {
+    padding-bottom: 80px; 
+  }
+  .container-fluid.position-relative {
+    padding-bottom: 80px;
+  }
+  
+  .btn-float.m-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 80px;
+  }
+  .webhook-info {
+    margin-left: 5px;
+    color: #888;
+    cursor: pointer;
+}
+

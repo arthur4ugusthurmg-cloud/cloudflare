@@ -1,0 +1,71 @@
+<div class="modal-header">
+    <h3>Novo Backup</h3>
+</div>
+<div class="modal-body">
+    <br />
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input type="text" ng-model="novoRegistro.cliente" typeahead-show-hint="true" typeahead-min-length="2" uib-typeahead="cliente as cliente.displayName for cliente in getAutocompleteClientes($viewValue)" typeahead-loading="loadingCustomer" class="form-control input-lg">
+                    <label class="fg-label">{{"CLIENTE" | translate}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line fg-toggled">
+                    <select ng-change="onSelectType(true)" class="form-control input-lg select-simples" ng-model="novoRegistro.type">
+                        <option value="CLIENT">{{"CLIENTE" | translate}}</option>
+                        <option value="BOT">Bot</option>
+                        <option value="CONTACT">{{"CONTATO" | translate}}</option>
+                        <option value="PROTOCOL">{{"PROTOCOLO" | translate}}</option>
+                    </select>
+                    <label class="fg-label">{{"TIPO" | translate}}</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12" ng-if="novoRegistro.type === 'BOT' || novoRegistro.type === 'CONTACT'">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <select class="form-control input-lg select-simples" ng-model="novoRegistro.botId">
+                        <option ng-repeat="canal in canais" value="{{canal.botId}}">{{(canal.canal | translate) + ' - ' + canal.numero}}</option>
+                    </select>
+                    <label class="fg-label">{{"CANAL" | translate}}</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12" ng-if="novoRegistro.type === 'CONTACT' || novoRegistro.type === 'PROTOCOL'">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="nome" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.key">
+                    <label class="fg-label">{{novoRegistro.type === 'CONTACT' ? 'Contato' : 'Protocolo'}}</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6" ng-if="novoRegistro.type === 'CLIENT' || novoRegistro.type === 'BOT'">
+            <div class="date-picker dp-blue form-group fg-float m-b-30" ng-class="{'is-opened': startCreatedAtPicker == true}">
+                <div class="fg-line">
+                    <input lta-enter="getContracts()" ng-click="startCreatedAtPicker = true" type="text" class="form-control ng-isolate-scope input-lg" ng-model="novoRegistro.filterCreatedFrom" show-weeks="false" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" on-open-focus="false" model-view-value="true" is-open="startCreatedAtPicker" close-text="Fechar" current-text="Hoje" />
+                    <label class="fg-label">{{"DATA-CRIACAO-DE" | translate }}</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6" ng-if="novoRegistro.type === 'CLIENT' || novoRegistro.type === 'BOT'">
+            <div class="date-picker dp-blue form-group fg-float m-b-30" ng-class="{'is-opened': endCreatedAtPicker == true}">
+                <div class="fg-line">
+                    <input lta-enter="getContracts()" ng-click="endCreatedAtPicker = true" type="text" class="form-control ng-isolate-scope input-lg" ng-model="novoRegistro.filterCreatedTo" show-weeks="false" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" on-open-focus="false" model-view-value="true" is-open="endCreatedAtPicker" close-text="Fechar" current-text="Hoje" />
+                    <label class="fg-label">{{"DATA-CRIACAO-ATE" | translate }}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onModalSalvar()">{{'ENVIAR'|translate}}</button>
+    <button class="btn btn-link" ng-click="onModalClose()">{{'CANCELAR'|translate}}</button>
+</div>

@@ -1,0 +1,32 @@
+<div class="modal-header" ng-if="!registro.id">
+    <h3>Mover arquivo para<small></small></h3>
+</div>
+<div class="modal-body">   
+    <!-- <div class="row" ng-if="loadingFiles == true">
+        <div>{{"CARREGANDO" | translate}}...</div>
+    </div> -->
+    <div class="banco-arquivo-container-mover-pastas-breadcrumb">
+        <span ng-click="clickBreadCrumbModal(-1)">  {{'BANCO-ARQUIVOS-TITULO' | translate}} </span> 
+        <span ng-repeat="item in pastasBreadcrumb track by $index" ng-click="clickBreadCrumbModal($index)"><i class="zmdi zmdi-chevron-right"></i>{{item.fileName}} </span>
+ 
+     </div>
+    <div style="max-height:400px; overflow: auto;" >
+        <div class="modal-banco-arquivo-pastas-container" ng-if="loading === false">
+            <div class="modal-banco-arquivo-pastas-item" ng-click="clickBreadCrumbModal(-2)" ng-if="pastasBreadcrumb != null && pastasBreadcrumb.length > 0">
+                <i class="zmdi zmdi-folder"   style="margin-right: 10px;color: #f7d366;"></i>
+                ..
+            </div>
+            <div class="modal-banco-arquivo-pastas-item" ng-repeat="pasta in pastas"  ng-click="onEntrarPastaModalMover(pasta)" >
+                <i class="zmdi zmdi-folder" style="margin-right: 10px;color: #f7d366;"></i>
+                {{pasta.fileName}}
+            </div>
+        </div>
+    </div>
+    <hr />
+    
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onMoverSelecionados()">{{'CONFIRMAR'|translate}}</button>
+    <button class="btn btn-link" ng-click="onModalMoverArquivoCancelar()">{{'CANCELAR'|translate}}</button>
+</div>

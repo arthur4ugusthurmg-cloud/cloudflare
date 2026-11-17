@@ -1,0 +1,35 @@
+<div class="modal-header">
+    <h3>Informação Obrigatória</h3>
+</div>
+<div class="modal-body">
+    <div class="m-b-30">
+        {{'ATUALIZACAO-EMAIL-USUARIO'|translate}}
+    </div>
+    <div class="row">
+        <div class="col-sm-12 m-b-20 m-t-10">
+            <div class="form-group fg-float">
+                <div class="fg-line">
+                    <input id="input-email-usuario" ng-model="emailUsuario.email" type="email" maxlength="255"
+                        class="form-control fg-input input-lg" autofocus required>
+                    <label class="fg-label">{{'EMAIL'|translate}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group fg-float">
+                <div class="fg-line">
+                    <input id="input-email-confirmacao-usuario" ng-model="emailUsuario.emailConfirm" type="email"
+                        maxlength="255" class="form-control fg-input input-lg" required>
+                    <label class="fg-label">{{'EMAIL-CONFIRM'|translate}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="alert alert-info" role="alert" ng-if="!user.id && !firstEmail">
+        <i class="zmdi zmdi-alert-circle-o zmdi-hc-fw"></i> {{ "DICA-TROCA-EMAIL" | translate }}
+    </div>
+</div>
+<div class="modal-footer">    
+    <button class="btn btn-link" ng-click="onSalvarModalEmail()">{{'ENVIAR'|translate}}</button>
+    <button class="btn btn-link" ng-click="onModalTotpCancel()">{{'CANCELAR'|translate}}</button>
+</div>

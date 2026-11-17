@@ -1,0 +1,62 @@
+<div class="modal-header">
+    <h3>Gerar Json de Exemplo
+        <button ng-if="hasTutorial('102')" ng-click="showTutorial('102')" title="Clique aqui para visualizar o video de explicação." class="btn btn-sm bgm-blue m-l-10 waves-effect">
+            <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+        </button>
+    </h3>
+</div>
+<div class="modal-body">
+    <div class="row p-t-30">
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+
+                <!-- <input ng-model="botEmailSelecionado.imapUser" ng-disabled="botEmailSelecionado.id" type="text" maxlength="255" class="form-control fg-input input-lg" autofocus>
+                    <label class="fg-label">{{'USUARIO'|translate}}</label> -->
+                <div class="fg-line required">
+                    <select class="form-control input-lg select-simples" ng-model="jsonControle.eventJSON">
+                        <option ng-repeat="event in getEventsExampleList()" value="{{event}}">
+                            {{event | translate}}</option>
+                    </select>
+                    <label class="fg-label">Evento</label>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-12 m-b-30">
+            <div class="text-center">
+                <div class="fg-line">
+                    <button ng-click="gerarJSON()" title="Clique aqui para gerar um json de exemplo"
+                        class="btn btn-md bgm-blue  waves-effect">
+                        <i class="zmdi"></i> Gerar JSON
+                    </button>
+                    <div class="m-t-20" ng-if="jsonControle.loadingJSON === true">
+                        <h4>montando json...</h4>
+                    </div>                    
+                    
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12" ng-if="jsonControle.generatedJSON !== '' && jsonControle.loadingJSON === false">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <textarea spellcheck="false" ng-model="jsonControle.generatedJSON" class="form-control fg-input input-lg" readonly
+                        style="height: 250px; font-size: 12px; background-color: rgb(238, 238, 238);"></textarea>
+                    <label class="fg-label">JSON</label>
+                </div>
+                <div class="text-center">
+                    <div class="m-t-20" style="display: flex;align-items: center; justify-content: center;">
+                        <button class="btn bgm-teal" ng-click="copiarJSON()"><i class="zmdi zmdi-copy"></i>
+                            Copiar</button>
+                        <div ng-if="jsonControle.showCopiedMessage === true" class="m-l-10">
+                            <b>JSON copiado com sucesso!</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+
+    <button class="btn btn-link" ng-click="onFecharModalJSON()">{{'FECHAR'|translate}}</button>
+</div>

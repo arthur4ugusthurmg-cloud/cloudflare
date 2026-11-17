@@ -1,0 +1,177 @@
+<div class="container-fluid" data-ng-controller="AtendenteListaController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>
+                {{'ATENDENTES'| translate}}
+                <button ng-if="hasTutorial('027')" ng-click="showTutorial('027')" title="Clique aqui para visualizar o video de explicação." class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                    <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                </button>
+            </h2>
+            <button title="{{ 'ADICIONAR' | translate }}" class="btn bgm-teal btn-float btn-float-2 waves-effect" ng-click="onMostarModalNovoRegistro()"><i class="zmdi zmdi-plus"></i></button>
+            <button class="btn bgm-blue btn-float btn-float-2 waves-effect" ng-click="getAll()"><i class="zmdi zmdi-search"></i></button>
+            <button title="{{ 'DEIXAR-TODOS-OFFLINE' | translate }}" class="btn bgm-red btn-float btn-float-2 waves-effect" ng-click="onAtualizarTodosOffline()"><i class="zmdi zmdi-power"></i></button>
+        </div>
+        <div class="card-body card-padding">
+
+            <br /><br />
+            <div class="row">
+
+                <div class="col-sm-6">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAll()" type="text" class="form-control fg-input input-lg" ng-model="filter.nome" autofocus>
+                            <label class="fg-label">{{ "NOME" | translate }}</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-4">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="getAll()" class="form-control input-lg select-simples" ng-model="filter.departamentoId">
+                                <option value="0">{{'TODOS'|translate}}</option>
+                                <option ng-repeat="departamento in departamentos" value="{{departamento.id}}">{{departamento.nome}}</option>
+                            </select>
+                            <label class="fg-label">{{'DEPARTAMENTO'|translate}}</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-2">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="getAll()" class="form-control input-lg select-simples" ng-model="filter.status">
+                                <option value="ALL">{{ "TODOS" | translate }}</option>
+                                <option value="ACTIVE">{{ "ATIVO" | translate }}</option>
+                                <option value="INACTIVE">{{ "INACTIVE" | translate }}</option>
+                            </select>
+                            <label class="fg-label">{{'STATUS'|translate}}</label>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>{{'CONFIGURACOES'| translate}}</h2>
+        </div>
+        <div class="card-body card-padding">
+            <div class="checkbox checkbox-inline m-b-15 p-l-0" ng-if="(isGestor() || isSupervisorChatbot()) && permissions.permissionSms">
+                <label>
+                    <input type="checkbox" value="" ng-model="configuracoes.smsAtendentesPermitido">
+                    <i class="input-helper"></i>
+                    {{"PERMITIR-SMS-ATENDIMENTO" | translate}}
+                </label> 
+            </div>
+            <div class="checkbox checkbox-inline m-b-15" ng-class="{'p-l-0': !configuracoes.permissionSms}">
+                <label>
+                    <input type="checkbox" value="" ng-model="configuracoes.removerPotencialPermitido" ng-click="onMudarPermissaoGeralPotencial()">
+                    <i class="input-helper"></i>
+                    {{"PERMITIR-REMOVER-CONTATO-POTENCIAIS" | translate}}
+                </label>
+            </div>
+            <div class="checkbox checkbox-inline m-b-15">
+                <label>
+                    <input type="checkbox" value="" ng-model="configuracoes.visualizarAgendaContatosBot">
+                    <i class="input-helper"></i>
+                    {{"VISUALIZAR-AGENDA-CONTATOS" | translate}}
+                </label>
+            </div>
+            <div class="checkbox checkbox-inline m-b-15">
+                <label>
+                    <input type="checkbox" value="" ng-model="configuracoes.criarAtendimentoAtivo">
+                    <i class="input-helper"></i>
+                    {{"CRIAR-ATENDIMENTO-ATIVO" | translate}}
+                </label>
+            </div>
+            <div class="checkbox checkbox-inline m-b-15">
+                <label>
+                    <input type="checkbox" value="" ng-model="configuracoes.reabrirAtendimento">
+                    <i class="input-helper"></i>
+                    {{"REABRIR-ATENDIMENTO" | translate}}
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="registros.length === 0" class="text-center">
+        {{'NENHUM-REGISTRO'| translate}}
+    </div>
+
+    <div class="row" ng-repeat="linha in registros">
+        <div class="col-sm-4" ng-repeat="registro in linha">
+            <div class="card profile-view">
+
+                <div class="pv-header">
+
+                    <ul class="actions pull-right">
+                        <li class="dropdown" uib-dropdown="">
+                            <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                                <i class="zmdi zmdi-more-vert"></i>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li ng-if="registro.online">
+                                    <a ng-click="onAtualizarOffline(registro.id)" href="">{{"DEIXAR-OFFLINE" | translate}}</a>
+                                </li>
+                                <li>
+                                    <a data-ui-sref="cadastros.atendente_edicao({id:{{registro.id}}})">{{'EDITAR'| translate}}</a>
+                                </li>
+                                <li>
+                                    <a ng-click="verificarPendenciasUsuario(registro, 'INATIVAR')" ng-if="registro.ativo" href="">{{'INATIVAR'| translate}}</a>
+                                    <a ng-click="onAtivar(registro)" ng-if="!registro.ativo" href="">{{'ATIVAR'| translate}}</a>
+                                </li>
+                                <li>
+                                    <a ng-click="verificarPendenciasUsuario(registro, 'REMOVER')" href="">{{'REMOVER'| translate}}</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <img data-ui-sref="cadastros.atendente_edicao({id:{{registro.id}}})" ng-src="{{registro.imagem ? registro.imagem : 'img/customerservice10.png'}}" class="pv-main cursor-pointer" alt="">
+                </div>
+
+                <div class="pv-body">
+                    <a href="" data-ui-sref="cadastros.atendente_edicao({id:{{registro.id}}})">
+                        <h2>
+                            <i ng-if="registro.ativo" class="zmdi zmdi-check c-green"></i>
+                            <i ng-if="!registro.ativo" class="zmdi zmdi-block c-red"></i>
+                            {{registro.nome}}
+                        </h2>
+                        <div class="m-t-10" ng-class="{'c-green' : registro.online, 'c-red' : !registro.online}"><b>{{registro.online ? 'ONLINE' : 'OFFLINE'}}</b></div>
+                        <h3>
+                            <span class="zmdi zmdi-star c-yellow"></span> {{registro.avaliacaoAtendimento ? registro.avaliacaoAtendimento : "-"}}
+                        </h3>
+                    </a>
+
+                    <br />
+
+                    <ul class="pv-contact">
+                        <li ng-repeat="departamento in registro.departamentos">{{departamento.nome}}</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div ng-show="tiktok">
+        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@petrielarthur_antonietti/video/7610229319339674888" data-video-id="7610229319339674888" style="max-width: 605px;min-width: 325px;" > <section> <a target="_blank" title="@petrielarthur_antonietti" href="https://www.tiktok.com/@petrielarthur_antonietti?refer=embed">@petrielarthur_antonietti</a> O DIABO KKKKKKKKKKKK <a title="poppy" target="_blank" href="https://www.tiktok.com/tag/poppy?refer=embed">#poppy</a> <a title="prototype" target="_blank" href="https://www.tiktok.com/tag/prototype?refer=embed">#prototype</a> <a title="poppyplaytimechapter5" target="_blank" href="https://www.tiktok.com/tag/poppyplaytimechapter5?refer=embed">#poppyplaytimechapter5</a> <a title="poppyplaytime" target="_blank" href="https://www.tiktok.com/tag/poppyplaytime?refer=embed">#poppyplaytime</a> <a target="_blank" title="♬ som original - petrielarthur_antonietti" href="https://www.tiktok.com/music/som-original-7610229360305408786?refer=embed">♬ som original - petrielarthur_antonietti</a> </section> </blockquote> <script async src="https://www.tiktok.com/embed.js"></script>
+
+    </div>
+
+    <button ng-click="onSalvar()" class="btn btn-float bgm-blue m-btn waves-effect waves-circle"><i class="zmdi zmdi-floppy"></i></button>
+
+
+</div>

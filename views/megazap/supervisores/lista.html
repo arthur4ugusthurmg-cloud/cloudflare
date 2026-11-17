@@ -1,0 +1,172 @@
+<div class="container-fluid" data-ng-controller="SupervisorListaController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>
+                {{"SUPERVISORES" | translate}}
+                <button ng-if="hasTutorial('097')" ng-click="showTutorial('097')" title="Clique aqui para visualizar o video de explicação." class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                    <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                </button>
+            </h2>
+            <button class="btn bgm-blue btn-float btn-float-2 waves-effect" ng-click="getAll()"><i class="zmdi zmdi-search"></i></button>
+            <button title="{{'ADICIONAR'| translate}}" class="btn bgm-teal btn-float btn-float-2 waves-effect" ng-click="onMostarModalNovoRegistro()"><i class="zmdi zmdi-plus"></i></button>
+        </div>
+
+        <div class="card-body card-padding">
+            <br /><br />
+            <div class="row">
+
+                <div ng-class="{'col-sm-6': isGestor(), 'col-sm-10': isRevendedor()}">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAll()" type="text" class="form-control fg-input input-lg" ng-model="filter.nome" autofocus>
+                            <label class="fg-label">{{ "NOME" | translate }}</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-4" ng-if="isGestor()">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="getAll()" class="form-control input-lg select-simples" ng-model="filter.departamentoId">
+                                <option value="0">{{'TODOS'|translate}}</option>
+                                <option ng-repeat="departamento in departamentos" value="{{departamento.id}}">{{departamento.nome}}</option>
+                            </select>
+                            <label class="fg-label">{{'DEPARTAMENTO'|translate}}</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-2">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="getAll()" class="form-control input-lg select-simples" ng-model="filter.status">
+                                <option value="ALL">{{ "TODOS" | translate }}</option>
+                                <option value="ACTIVE">{{ "ATIVO" | translate }}</option>
+                                <option value="INACTIVE">{{ "INACTIVE" | translate }}</option>
+                            </select>
+                            <label class="fg-label">{{'STATUS'|translate}}</label>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <br />
+
+    <div ng-if="registros.length === 0" class="text-center">
+        {{'NENHUM-REGISTRO'| translate}}
+    </div>
+
+    <div class="row" ng-repeat="linha in registros">
+        <div class="col-sm-4" ng-repeat="registro in linha">
+
+            <!-- GESTOR -->
+            <div class="card profile-view" ng-if="isGestor()">
+
+                <div class="pv-header">
+
+                    <ul class="actions pull-right">
+                        <li class="dropdown" uib-dropdown="">
+                            <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                                <i class="zmdi zmdi-more-vert"></i>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a ng-click="onMostarModalEdicao(registro)" href="">{{'EDITAR'| translate}}</a>
+                                </li>
+                                <li ng-if="isRevendedor()">
+                                    <a ng-click="onMostarModalHorarios(registro)" href="">{{'HORARIO-ATENDIMENTO-TITULO'| translate}}</a>
+                                </li>                                
+                                <li class="divider"></li>
+                                <li>
+                                    <a ng-click="onInativar(registro)" ng-if="registro.ativo" href="">{{'INATIVAR'| translate}}</a>
+                                    <a ng-click="onAtivar(registro)" ng-if="!registro.ativo" href="">{{'ATIVAR'| translate}}</a>
+                                </li>
+                                <li>
+                                    <a ng-click="onRemover(registro)" href="">{{'REMOVER'| translate}}</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <img ng-if="isGestor()" ng-click="onMostarModalEdicao(registro)" ng-src="{{registro.imagem ? registro.imagem : 'img/supervisor_empty.png'}}" class="pv-main cursor-pointer" alt="">
+                </div>
+
+                <div class="pv-body">
+                    <a href="" ng-click="onMostarModalEdicao(registro)" href="">
+                        <h2>
+                            <i ng-if="registro.ativo" class="zmdi zmdi-check c-green"></i>
+                            <i ng-if="!registro.ativo" class="zmdi zmdi-block c-red"></i>
+                            {{registro.nome}}
+                        </h2>
+                    </a>
+
+                    <br />
+
+                    <ul class="pv-contact">
+                        <li ng-repeat="departamento in registro.departamentos">{{departamento.nome}}</li>
+                    </ul>
+
+                </div>
+            </div>
+
+            <!-- REVENDEDOR -->
+
+            <div class="card" ng-if="isRevendedor()">
+                <div class="card-header ch-alt">
+                    <h2>
+                        <i ng-if="registro.ativo" class="zmdi zmdi-check c-green"></i>
+                        <i ng-if="!registro.ativo" class="zmdi zmdi-block c-red"></i>
+                        {{registro.nome}}
+                    </h2>
+
+                    <ul class="actions">
+                        <li class="dropdown" uib-dropdown="">
+                            <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                                <i class="zmdi zmdi-more-vert"></i>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a ng-click="onMostarModalEdicao(registro)" href="">{{'EDITAR'| translate}}</a>
+                                    <a ng-click="onMostarModalHorarios(registro)" href="">{{'HORARIO-ATENDIMENTO-TITULO'| translate}}</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a ng-click="onInativar(registro)" ng-if="registro.ativo" href="">{{'INATIVAR'| translate}}</a>
+                                    <a ng-click="onAtivar(registro)" ng-if="!registro.ativo" href="">{{'ATIVAR'| translate}}</a>
+                                </li>
+                                <li>
+                                    <a ng-click="onRemover(registro)" href="">{{'REMOVER'| translate}}</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <div class="card-body card-padding">
+                    <div><b>{{'LOGIN'| translate}}: </b>{{registro.login}}</div>
+                    <n ng-if="registro.permissaoDocumento"><b>Documento do Cliente: </b>{{registro.permissaoDocumento}}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>

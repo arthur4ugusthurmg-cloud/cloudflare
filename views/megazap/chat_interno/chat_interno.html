@@ -1,0 +1,722 @@
+<link href="css/chat-interno.css?VERSION_HASH" rel="stylesheet" />
+<div id="resizable" ng-style="{'width': width + 'px'}" class="chat-interno"
+    ng-class="{'chat-interno-min': viewMode === ViewModeEnum.CLOSED, 'chat-interno-max': viewMode === ViewModeEnum.OPEN}"
+    ng-controller="ChatInternoController" ng-init="onInit()">
+    <div id="resizer" ng-mousedown="startResize($event)"></div>
+    <div class="chat-interno-header" ng-class="{'chat-interno-header-gestor':(isGestor() || isSupervisorChatbot())}"
+        ng-style="{'background-color': customizacao.corPrimaria}">
+        <div class="chat-interno-restore"
+            ng-class="{'chat-interno-restore-gestor':(isGestor() || isSupervisorChatbot())}"
+            ng-click="onToggleViewMode()">
+            <i class="zmdi"
+                ng-class="{'zmdi-comments': viewMode === ViewModeEnum.CLOSED, 'zmdi-square-right': viewMode === ViewModeEnum.OPEN}"></i>
+        </div>
+        <!-- <div>
+            {{"CHAT-INTERNO" | translate}} 
+       </div> -->
+        <div class="icon-close-chat-jadi mobile-display" ng-click="onCloseMobile()">
+            <i class="zmdi zmdi-square-right"></i>
+        </div>
+    </div>
+    <!-- <i class="zmdi zmdi-comments"></i> -->
+
+    <div ng-class="{'chat-interno-none': viewMode === ViewModeEnum.CLOSED}" ng-show="chatSelecionado === null">
+        <div class="chat-interno-tab-container">
+
+            <div class="chat-interno-tab chat-interno-tab-all" ng-click="onChangeTab(TabsEnum.ALL)"
+                ng-class="{'chat-interno-tab-selected': tab === TabsEnum.ALL}"><i class="zmdi zmdi-comments"></i></div>
+            <div class="chat-interno-tab" ng-click="onChangeTab(TabsEnum.CONTACTS)"
+                ng-class="{'chat-interno-tab-selected': tab === TabsEnum.CONTACTS}">{{"CONTATOS" | translate}}</div>
+            <div class="chat-interno-tab" ng-click="onChangeTab(TabsEnum.GROUPS)"
+                ng-class="{'chat-interno-tab-selected': tab === TabsEnum.GROUPS}">{{"GRUPOS" | translate}}</div>
+            <div class="chat-interno-tab" ng-click="onChangeTab(TabsEnum.DEPARTMENTS)"
+                ng-class="{'chat-interno-tab-selected': tab === TabsEnum.DEPARTMENTS}">{{"DEPARTAMENTOS" | translate}}
+            </div>
+
+        </div>
+        <div class="chat-interno-pesquisa-container">
+            <div class="chat-interno-pesquisa">
+                <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="#263238" fill-opacity=".3"
+                        d="M15.009 13.805h-.636l-.22-.219a5.184 5.184 0 0 0 1.256-3.386 5.207 5.207 0 1 0-5.207 5.208 5.183 5.183 0 0 0 3.385-1.255l.221.22v.635l4.004 3.999 1.194-1.195-3.997-4.007zm-4.808 0a3.605 3.605 0 1 1 0-7.21 3.605 3.605 0 0 1 0 7.21z">
+                    </path>
+                </svg>
+                <input type="text" placeholder="{{ 'BUSCAR' | translate }}" ng-model="chatInternoFiltroPesquisar"
+                    ng-model-options="{ debounce: 500 }" />
+                <span title="Criar Grupo" ng-show="tab === TabsEnum.GROUPS" ng-click="onOpenModalNovoGrupo()">
+                    <i class="zmdi zmdi-plus"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- LISTA DE CONTATOS/GRUPOS/DEPTOS -->
+    <div id="chat-interno-lista" class="chat-interno-lista"
+        ng-class="{'chat-interno-lista-closed-rev': viewMode === ViewModeEnum.CLOSED && !isMegaZap(),'chat-interno-lista-closed': viewMode === ViewModeEnum.CLOSED && isMegaZap(),'chat-interno-lista-open': viewMode === ViewModeEnum.OPEN, 'chat-interno-lista-open-gestor': (isGestor() || isSupervisorChatbot()) && viewMode === ViewModeEnum.OPEN, 'chat-interno-lista-closed-gestor': (isGestor() || isSupervisorChatbot()) && viewMode === ViewModeEnum.CLOSED}"
+        ng-show="chatSelecionado === null">
+
+        <!-- JADI -->
+        <div class="chat-interno-contato jadi-icon" ng-click="openJadi()"
+            ng-if="isJadiActive && validateAssistentePermission()">
+            <div class="chat-interno-contato-img" title="JADI">
+                <div class="chat-interno-item-img profile-image"></div>
+            </div>
+            <div class="chat-interno-contato-dados">
+                <div class="chat-interno-contato-dados-nome cut-text-2 text-left" style="width: 220px;">JADI</div>
+                <div ng-if="lastMessageJadi.createdAt" class="chat-interno-contato-dados-datahora">{{
+                    lastMessageJadi.createdAt | date: ('DATE-FORMAT'|translate)}}</div>
+                <div ng-if="lastMessageJadi.sentBy" class="chat-interno-contato-dados-mensagem cut-text-2 text-left"
+                    style="width: 320px;">
+                    <span style="font-weight: 400; letter-spacing:0.5px">{{ lastMessageJadi.usuarioNome }}</span>
+                    <span>{{ lastMessageJadi.mensagem }}</span>
+                </div>
+                <div ng-if="!lastMessageJadi.sentBy" class="chat-interno-contato-dados-mensagem cut-text-2 text-left"
+                    style="width: 320px;">
+                    <span>Clique para iniciar uma conversa com a Jadi</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-interno-contato" ng-repeat="contato in contatos" ng-click="onSelectChat(contato)"
+            ng-if="tab === TabsEnum.CONTACTS">
+            <!-- <div class="chat-interno-contato-tooltip">{{contato.nome}}</div> -->
+            <div class="chat-interno-contato-img" title="{{contato.nome}}">
+                <div class="img-letter" ng-style="calculateColor(contato.nome)"
+                    ng-show="!contato.url || contato.url === ''">{{getFirstLetter(contato.nome)}}</div>
+                <!-- <img ng-show="contato.url && contato.url !== ''" src="{{getUrlImageContato(contato)}}" /> -->
+                <div class="chat-interno-item-img profile-image" ng-show="contato.url && contato.url !== ''"
+                    ng-style="{'background-image': 'url(' + contato.url + ')'}">
+
+                </div>
+                <div class="chat-interno-contato-img-messages" ng-show="contato.naoLidas || isOnline(contato)"
+                    ng-class="{'chat-interno-status-online': isOnline(contato),'--chat-interno-status-offline': !isOnline(contato)}">
+                    <span ng-if="contato.naoLidas > 0">{{contato.naoLidas}}</span>
+                </div>
+            </div>
+            <div class="chat-interno-contato-dados">
+                <div class="chat-interno-contato-dados-nome cut-text-2 text-left" style="width: 220px;">{{contato.nome}}
+                </div>
+                <div class="chat-interno-contato-dados-datahora" ng-show="contato.lastMessageData !== 915156000000">
+                    {{contato.lastMessageData | date: ('DATE-FORMAT'|translate)}}</div>
+                <div class="chat-interno-contato-dados-mensagem cut-text-2 text-left" style="width: 320px;">
+                    <span ng-show="contato.lastMessageUserName"
+                        style="font-weight: 400; letter-spacing:0.5px">{{contato.lastMessageUserName}}:
+                    </span>
+                    <span
+                        ng-show="contato.lastMessageType === 'TEXTO'">{{truncateString(contato.lastMessage,35)}}</span>
+                    <span ng-show="contato.lastMessageType === 'AUDIO'"><i class="zmdi zmdi-audio"></i>Audio</span>
+                </div>
+            </div>
+        </div>
+        <div class="chat-interno-contato" ng-repeat="grupo in grupos" ng-click="onSelectChat(grupo)"
+            ng-if="tab === TabsEnum.GROUPS">
+            <!-- <div class="chat-interno-contato-tooltip">{{grupo.name}}</div> -->
+            <div class="chat-interno-contato-img" title="{{departamento.name}}">
+                <div class="img-letter" ng-style="calculateColor(grupo.name)" ng-show="!grupo.url || grupo.url === ''">
+                    {{getFirstLetter(grupo.name)}}</div>
+                <!-- <img ng-show="grupo.url && grupo.url !== ''" src="{{getUrlImageContato(grupo)}}" /> -->
+                <div class="chat-interno-item-img profile-image" ng-show="grupo.url && grupo.url !== ''"
+                    ng-style="{'background-image': 'url(' + grupo.url + ')'}"></div>
+                <div class="chat-interno-contato-img-messages" ng-show="grupo.naoLidas">{{grupo.naoLidas}}</div>
+            </div>
+            <div class="chat-interno-contato-dados">
+                <div class="chat-interno-contato-dados-nome cut-text-2 text-left" style="width: 220px;">{{grupo.name}}
+                </div>
+                <div class="chat-interno-contato-dados-datahora" ng-show="grupo.lastMessageData !== 915156000000">
+                    {{grupo.lastMessageData | date: ('DATE-FORMAT'|translate)}}</div>
+                <div class="chat-interno-contato-dados-mensagem cut-text-2 text-left" style="width: 320px;">
+                    <span ng-show="grupo.lastMessageUserName"
+                        style="font-weight: 400; letter-spacing:0.5px">{{grupo.lastMessageUserName}}: </span>
+                    <span ng-show="grupo.lastMessageType === 'TEXTO'">{{truncateString(grupo.lastMessage,35)}}</span>
+                    <span ng-show="grupo.lastMessageType === 'AUDIO'"><i class="zmdi zmdi-audio"></i>Audio</span>
+                    <span ng-show="grupo.lastMessageType === 'VIDEO'"><i class="zmdi zmdi-audio"></i>Video</span>
+                </div>
+            </div>
+        </div>
+        <div class="chat-interno-contato" ng-repeat="departamento in departamentos"
+            ng-click="onSelectChat(departamento)" ng-if="tab === TabsEnum.DEPARTMENTS">
+
+            <!-- <div class="chat-interno-contato-tooltip">{{departamento.nome}}</div> -->
+            <div class="chat-interno-contato-img" title="{{departamento.nome}}">
+                <div class="img-letter" ng-style="calculateColor(departamento.nome)"
+                    ng-show="!departamento.url || departamento.url === ''">
+                    {{getFirstLetter(departamento.nome)}}</div>
+                <!-- <img ng-show="departamento.url && departamento.url !== ''"src="{{getUrlImageContato(departamento)}}" /> -->
+                <div class="chat-interno-item-img profile-image" ng-show="departamento.url && departamento.url !== ''"
+                    ng-style="{'background-image': 'url(' + departamento.url + ')'}"></div>
+                <div class="chat-interno-contato-img-messages" ng-show="departamento.naoLidas">{{departamento.naoLidas}}
+                </div>
+            </div>
+            <div class="chat-interno-contato-dados">
+                <div class="chat-interno-contato-dados-nome cut-text-2 text-left" style="width: 220px;">
+                    {{truncateString(departamento.nome,40)}}</div>
+                <div class="chat-interno-contato-dados-datahora"
+                    ng-show="departamento.lastMessageData !== 915156000000">{{departamento.lastMessageData | date:
+                    ('DATE-FORMAT'|translate)}}</div>
+                <div class="chat-interno-contato-dados-mensagem cut-text-2 text-left" style="width: 320px;">
+                    <span ng-show="departamento.lastMessageUserName"
+                        style="font-weight: 400; letter-spacing:0.5px">{{departamento.lastMessageUserName}}: </span>
+                    <span ng-show="departamento.lastMessageType === 'TEXTO'">{{departamento.lastMessage}}</span>
+                    <span ng-show="departamento.lastMessageType === 'AUDIO'"><i class="zmdi zmdi-audio"></i>Audio</span>
+                    <span ng-show="departamento.lastMessageType === 'VIDEO'"><i class="zmdi zmdi-audio"></i>Video</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-interno-contato" ng-repeat="contato in all | orderBy:'-lastMessageData'"
+            ng-click="onSelectChat(contato)" ng-if="tab === TabsEnum.ALL">
+            <!-- <div class="chat-interno-contato-tooltip">{{contato.nome}}</div> -->
+            <div class="chat-interno-contato-img" title="{{contato.nome}}">
+                <div class="img-letter" ng-style="calculateColor(contato.nome)"
+                    ng-show="!contato.url || contato.url === ''">
+                    {{getFirstLetter(contato.nome)}}</div>
+                <!-- <img ng-show="contato.url && contato.url !== ''" src="{{getUrlImageContato(contato)}}" /> -->
+                <div class="chat-interno-item-img profile-image" ng-show="contato.url && contato.url !== ''"
+                    ng-style="{'background-image': 'url(' + contato.url + ')'}"></div>
+                <div class="chat-interno-contato-img-messages"
+                    ng-class="{'chat-interno-status-online': isOnline(contato),'--chat-interno-status-offline': !isOnline(contato) && contato.tab === TabsEnum.CONTACTS}"
+                    ng-show="contato.naoLidas || (contato.tab === TabsEnum.CONTACTS && isOnline(contato))"><span
+                        ng-if="contato.naoLidas > 0">{{contato.naoLidas}}</span></div>
+            </div>
+            <div class="chat-interno-contato-dados">
+                <div class="chat-interno-contato-dados-nome cut-text-2 text-left" style="width: 220px;">
+                    {{truncateString(contato.nome,40)}}</div>
+                <div class="chat-interno-contato-dados-datahora" ng-show="contato.lastMessageData !== 915156000000">
+                    {{contato.lastMessageData | date:
+                    ('DATE-FORMAT'|translate)}}</div>
+                <div class="chat-interno-contato-dados-mensagem cut-text-2 text-left" style="width: 320px;">
+                    <span ng-show="contato.lastMessageUserName"
+                        style="font-weight: 400; letter-spacing:0.5px">{{contato.lastMessageUserName}}: </span>
+                    <span ng-show="contato.lastMessageType === 'TEXTO'">{{contato.lastMessage}}</span>
+                    <span ng-show="contato.lastMessageType === 'AUDIO'"><i class="zmdi zmdi-audio"></i>Audio</span>
+                </div>
+            </div>
+        </div>
+        <div ng-show="controlePaginacao.lista.carregando === true" class="chat-interno-chat-mensagens-loading">
+            <div>{{"CARREGANDO" | translate}}...</div>
+        </div>
+
+    </div>
+    <!-- GRUPO DETALHES/ ADD CONTATO -->
+    <div class="chat-interno-dados-grupo-container" ng-show="viewModeGrupo === ViewModeGrupoEnum.DETAILS">
+        <div class="chat-interno-dados-grupo-header" ng-style="{'background-color': customizacao.corPrimaria}">
+            <div class="chat-interno-dados-grupo-header-background"
+                ng-style="getBackGroundGroupHeader(chatSelecionado)">
+            </div>
+            <div class="chat-interno-dados-grupo-header-back" ng-click="onBackButtonGrupoDetalhes()">
+                <i class="zmdi zmdi-long-arrow-left"></i>
+            </div>
+            <div class="chat-interno-dados-grupo-header-dados">
+                <div class="chat-interno-dados-grupo-header-nome">
+                    {{chatSelecionado.nome?chatSelecionado.nome:chatSelecionado.name}}</div>
+                <div class="chat-interno-dados-grupo-header-createdby"></div>
+                Criado por {{chatSelecionado.createdName}}
+            </div>
+
+        </div>
+        <!-- PESQUISA PARTICIPANTES DO GRUPO -->
+        <div class="chat-interno-pesquisa-container">
+            <div class="chat-interno-pesquisa">
+                <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="#263238" fill-opacity=".3"
+                        d="M15.009 13.805h-.636l-.22-.219a5.184 5.184 0 0 0 1.256-3.386 5.207 5.207 0 1 0-5.207 5.208 5.183 5.183 0 0 0 3.385-1.255l.221.22v.635l4.004 3.999 1.194-1.195-3.997-4.007zm-4.808 0a3.605 3.605 0 1 1 0-7.21 3.605 3.605 0 0 1 0 7.21z">
+                    </path>
+                </svg>
+                <input type="text" placeholder="{{'PESQUISAR'|translate}}"
+                    ng-model="chatInternoFiltroPesquisarParticipante" ng-model-options="{ debounce: 500 }" />
+                <span title="Adicionar participante" ng-show="tab === TabsEnum.GROUPS && chatSelecionado.isAdm === true"
+                    ng-click="onOpenModalNovoParticipante()">
+                    <i class="zmdi zmdi-plus"></i>
+                </span>
+            </div>
+        </div>
+        <div class="chat-interno-grupo-participantes-count">{{participantesGrupo.length}} Participante(s) <span
+                ng-show="chatInternoFiltroPesquisarParticipante !== ''"> - Filtrado</span></div>
+        <div id="chat-interno-grupo-participantes" class="chat-interno-grupo-participantes">
+            <div class="chat-interno-grupo-participantes-item" ng-repeat="participante in participantesGrupo">
+                <div class="chat-interno-grupo-participantes-img">
+                    <!-- <div class="img-letter" ng-style="calculateColor(participante.nomeParticipante)"
+                        ng-show="!participante.url || participante.url === ''">{{getFirstLetter(participante.nomeParticipante)}}</div>
+                    <img ng-show="participante.url && participante.url !== ''" src="{{getUrlImageContato(participante)}}" />      -->
+                    <div class="img-letter" ng-style="calculateColor(participante.nomeParticipante)" ng-show="!participante.url ||
+                    participante.url === ''">
+                        {{getFirstLetter(participante.nomeParticipante)}}</div>
+                    <div class="chat-interno-item-img profile-image" ng-show="participante.url" )
+                        ng-style="{'background-image': 'url(' + getUrlImageContato(participante) + ')'}"></div>
+                </div>
+                <div class="chat-interno-grupo-participante-dados">
+                    <div class="chat-interno-grupo-participante-nome">
+                        {{truncateString(participante.nomeParticipante,40)}}
+                        <span class="chat-interno-grupo-participante-adm" ng-if="participante.isAdm">ADM</span>
+                    </div>
+                    <div class="chat-interno-grupo-participante-menu" ng-if="chatSelecionado.isAdm === true">
+                        <ul class="actions pull-right">
+                            <li class="dropdown" uib-dropdown="">
+                                <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle icone"
+                                    aria-haspopup="true">
+                                    <i class="zmdi zmdi-more-vert"></i>
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                        <a href="" ng-show="tab === TabsEnum.GROUPS && participante.isAdm === false"
+                                            ng-click="onTornarAdm(participante)">{{"TONAR-ADMINISTRADOR" |
+                                            translate}}</a>
+                                        <a href="" ng-show="tab === TabsEnum.GROUPS && participante.isAdm === true"
+                                            ng-click="onRevogarAdm(participante)">{{"REVOGAR-ADMINISTRADOR" |
+                                            translate}}</a>
+                                        <a href="" ng-show="tab === TabsEnum.GROUPS"
+                                            ng-click="onDeletarParticipante(participante)">{{"REMOVER" | translate}}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHAT SELECIONADO  -->
+    <div class="chat-interno-chat-container"
+        ng-show="chatSelecionado !== null && viewModeGrupo !== ViewModeGrupoEnum.DETAILS">
+        <div class="chat-interno-chat-header" ng-style="{'background-color': customizacao.corSecundaria}">
+            <div class="chat-interno-chat-header-back" ng-click="onBackButtonChat()">
+                <i class="zmdi zmdi-long-arrow-left"></i>
+            </div>
+            <div class="chat-interno-chat-header-img">
+                <!-- <img class="img-circle" src="{{getUrlImageContato(chatSelecionado)}}" /> -->
+                <div class="img-letter" ng-style="calculateColor(chatSelecionado.nome)"
+                    ng-show="!chatSelecionado.url || chatSelecionado.url === ''">
+                    {{getFirstLetter(chatSelecionado.nome?chatSelecionado.nome:chatSelecionado.name)}}</div>
+                <div class="chat-interno-item-img profile-image" ng-show="chatSelecionado.url" )
+                    ng-style="{'background-image': 'url(' + getUrlImageContato(chatSelecionado) + ')'}"></div>
+
+            </div>
+            <div class="chat-interno-chat-header-dados">
+                <div class="chat-interno-chat-header-dados-nome">
+                    {{chatSelecionado.nome?chatSelecionado.nome:chatSelecionado.name}}</div>
+                <div class="chat-interno-chat-header-dados-status"><span ng-if="isOnline(chatSelecionado)">Online</span>
+                </div>
+            </div>
+
+            <div class="chat-interno-chat-header-menu">
+                <ul class="actions pull-right" ng-show="tab === TabsEnum.GROUPS">
+                    <li class="dropdown" uib-dropdown="">
+                        <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle icone"
+                            aria-haspopup="true">
+                            <i class="zmdi zmdi-more-vert"></i>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a href="" ng-show="tab === TabsEnum.GROUPS && chatSelecionado.isAdm === true"
+                                    ng-click="onEditarGrupo()">{{"EDITAR" | translate}}</a>
+                                <a href="" ng-show="tab === TabsEnum.GROUPS && chatSelecionado.isAdm === true"
+                                    ng-click="onExcluirGrupo()">{{"EXCLUIR-GRUPO" | translate}}</a>
+                                <a href="" ng-show="tab === TabsEnum.GROUPS"
+                                    ng-click="onMostrarModalParticipantesGrupo()">{{"DADOS-GRUPO" | translate}}</a>
+                                <a href="" ng-show="tab === TabsEnum.GROUPS" ng-click="onSairDoGrupo()">{{"SAIR-GRUPO" |
+                                    translate}}</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- CONTAINER MENSAGENS -->
+        <!-- ng-show="tab === TabsEnum.GROUPS" -->
+        <div class="chat-interno-chat-notificacao" ng-show="uploadingFiles === true">{{"ENVIANDO-ARQUIVOS" |
+            translate}}...</div>
+        <div id="chat-interno-mensagens" class="chat-interno-chat-mensagens" ng-class="{
+            'chat-interno-chat-mensagens-gestor': (isGestor() || isSupervisorChatbot()),
+            'pb-reply-message': messageToReplyInternalChat
+            }">
+
+            <div class="chat-interno-chat-mensagens-container-{{msg.origem === 'ME'? 'me':'contact'}}"
+                ng-class="{'messages-jadi': isJadiOpen}"
+                ng-repeat="msg in mensagens | unique: 'id' | orderBy: 'created_at'" ng-show="loadingMsgs === false"
+                id="mensagem-{{msg.id}}">
+                <div>
+                    <div ng-class="{'highlight': msg.id === mensagemDestacada}">
+                        <div class="chat-interno-chat-mensagens-container-box-{{msg.origem === 'ME'? 'me':'contact'}}">
+                            <!-- ENCAMINHADA POR -->
+                            <div ng-if="msg.encaminhada" class="msg-tag">
+                                <i class="tm-icon fas fa-share m-r-5"></i><i>Encaminhada por {{msg.nome}}</i>
+                            </div>
+                            <!-- REFERENCIA -->
+                            <div ng-click="showReplyMessageInternal(msg)" class="mensagem-referencia"
+                                ng-if="msg.ref.refMensagem || (msg.ref.fileName || msg.ref.fileUrl)">
+                                <span ng-if="msg.ref.refNome">
+                                    <b>{{msg.ref.refNome}}</b>
+                                </span>
+
+                                <hr />
+
+                                <div
+                                    ng-if="msg.ref.refTipoMensagem == 'ARQUIVO' || msg.ref.refTipoMensagem == 'DOCUMENTO'">
+                                    <span class="zmdi zmdi-file"></span> {{ "ARQUIVO" | translate }}
+                                </div>
+
+                                <div class="cut-text-2" ng-if="msg.ref.refTipoMensagem == 'TEXTO'"
+                                    ng-bind-html="tratarTexto(msg.ref.refMensagem, 'REF')"
+                                    style="max-height: 20px; overflow: hidden;"></div>
+
+                                <div ng-if="msg.ref.refTipoMensagem == 'VIDEO'">
+                                    <span class="zmdi zmdi-videocam"></span> {{"VIDEO" | translate}}
+                                </div>
+
+                                <div ng-if="msg.ref.refTipoMensagem == 'GIF'">
+                                    <span class="zmdi zmdi-gif"></span> GIF
+                                </div>
+
+                                <div ng-if="msg.ref.refTipoMensagem == 'AUDIO'">
+                                    <span class="zmdi zmdi-mic-outline"></span> {{"AUDIO" | translate}}
+                                </div>
+
+                                <div ng-if="msg.ref.refTipoMensagem == 'IMAGEM'">
+                                    <span class="zmdi zmdi-image"></span> {{"IMAGEM" | translate}}
+                                </div>
+
+                            </div>
+
+                            <div class="chat-interno-chat-mensagens-container-box-title"
+                                ng-show="msg.featureName && msg.origem == 'ME'">
+                                <i class="fas fa-magic icon-feature-jadi"
+                                    title="Mensagem gerada apartir de uma funcionalidade"></i> {{msg.featureName}}
+                            </div>
+
+                            <div class="chat-interno-chat-mensagens-container-box-title"
+                                ng-if="msg.message !== '' || msg.type !== 'TEXTO'">
+                                <div class="drop-internal-chat"
+                                    style="display: flex; justify-content: space-between; align-items: center; height: 12px; margin-bottom: 10px;">
+                                    <div>
+                                        {{msg.nome}}
+                                    </div>
+                                    <li class="dropdown reply-action ng-scope open" uib-dropdown=""
+                                        dropdown-append-to-body=""
+                                        style="top: -2px; position: relative; margin-left: 8px;">
+                                        <a uib-dropdown-toggle="" style="cursor: pointer;" class="dropdown-toggle"
+                                            aria-haspopup="true" aria-expanded="true">
+                                            <i class="fas fa-angle-down"
+                                                ng-class="{'c-black': msg.origem != 'ME', 'c-white' : msg.origem == 'ME'}"></i>
+                                        </a>
+
+                                        <ul class="dropdown-menu dm-icon" style="min-width: 120px !important;"
+                                            ng-class="{'pull-left': msg.origem != 'ME', 'pull-right' : msg.origem == 'ME'}">
+                                            <li>
+                                                <a href="" class="c-black ng-binding"
+                                                    style="text-decoration: none !important;"
+                                                    ng-click="referenceInternalChatMessage(msg)">{{"RESPONDER" | translate}}</a>
+                                            </li>
+                                            <li ng-if="msg.origem === 'ME' && !msg.deleted">
+                                                <a href="" class="c-red"
+                                                    style="text-decoration: none !important;"
+                                                    ng-click="onApagarMensagemInterno(msg)">{{"APAGAR-MENSAGEM" | translate}}</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </div>
+                            </div>
+
+                            <hr ng-if="!msg.featureName || msg.origem == 'CONTACT'" />
+
+                            <div class="chat-interno-chat-mensagens-container-box-msg"
+                                style="overflow-wrap: break-word; text-align: left; font-style: italic; opacity: 0.85;"
+                                ng-if="msg.deleted">{{msg.message}}
+                            </div>
+
+                            <div class="chat-interno-chat-mensagens-container-box-msg"
+                                style="overflow-wrap: break-word; white-space: pre-wrap; text-align: left;"
+                                ng-if="msg.type == 'TEXTO' && msg.message !== '' && (msg.status != 'PENDING' || msg.origem == 'ME') && !msg.deleted"
+                                ng-bind-html="tratarTexto(msg.message)">
+                            </div>
+                            <div class="chat-interno-chat-mensagens-container-box-msg"
+                                ng-if="msg.type == 'TEXTO' && msg.status == 'PENDING' && msg.origem == 'CONTACT' && !msg.deleted">
+                                <div class="msg-alert-pedding">
+                                    <i class="zmdi zmdi-refresh" ng-click="retryJadiMessage(msg.id)"></i>
+                                    <div>
+                                        Não foi possível receber a resposta. Clique aqui para tentar novamente.
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-if="msg.type == 'ARQUIVO' && !msg.deleted" style="cursor: pointer">
+                                <i class="tm-icon zmdi zmdi-attachment-alt"></i>
+                                <a ng-click="downloadMessageFile(msg.fileUrl, msg.fileName)"
+                                    ng-class="{'chat-interno-msg-white':msg.origem === 'ME'}"
+                                    style="color:grey;text-decoration:underline;font-weight:bold;">{{msg.fileName}}</a>
+                            </div>
+
+                            <div ng-if="msg.type == 'AUDIO' && !msg.deleted">
+                                <audio style="max-width: 100%;" preload="none" width="320" controls>
+                                    <source ng-src="{{msg.fileUrl| trustUrl}}" type="audio/mp3" />
+                                </audio>
+                            </div>
+                            <div ng-if="msg.type == 'VIDEO' && !msg.deleted">
+                                <video style="max-width: 100%;" width="320" height="240" controls>
+                                    <source ng-src="{{msg.fileUrl| trustUrl}}" type="video/mp4">
+                                </video>
+                            </div>
+                            <div ng-if="msg.type == 'IMAGEM' && !msg.deleted">
+                                <img ng-click="onVisualizarImagem(msg.fileUrl)"
+                                    style="max-height: 200px; max-width: 200px; cursor: pointer"
+                                    ng-src="{{msg.fileUrl}}" />
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="chat-interno-chat-mensagens-container-box-dt"
+                        ng-class="{'date-agent': msg.origem === 'ME'}">
+                        <span ng-if="!msg.deleted">{{msg.created_at| date: ('DATE-FORMAT'|translate)}}</span>
+                        <span ng-if="msg.deleted" title="{{'DELETADA' | translate}}{{msg.deletedByName ? ' por ' + msg.deletedByName : ''}}{{msg.deletedAt ? ' em ' + (msg.deletedAt|date:('DATE-FORMAT'|translate)) : ''}}">
+                            <i class="zmdi zmdi-delete m-r-2"></i><span ng-if="msg.deletedAt">{{msg.deletedAt|date:('DATE-FORMAT'|translate)}}</span>
+                        </span>
+                        <i class="zmdi zmdi-check"
+                            ng-show="msg.origem === 'ME' || tab === TabsEnum.GROUPS || tab === TabsEnum.DEPARTMENTS"
+                            ng-click="onOpenModalLeituraMensagem(msg.id)"
+                            ng-if="(msg.lido === false || tab === TabsEnum.GROUPS || tab === TabsEnum.DEPARTMENTS) && !msg.deleted"></i>
+                        <i class="zmdi zmdi-check-all" style="color:#82c8ff;font-size: 16px" ;
+                            ng-show="msg.origem === 'ME'" ng-click="onOpenModalLeituraMensagem(msg.id)"
+                            ng-if="msg.lido === true && !msg.deleted"></i>
+                    </div>
+                </div>
+                <div class="btn-insert-chat-interno-jadi" ng-if="msg.status == 'SUCCESS'"
+                    ng-click="insertChatJadi(msg.message)">
+                    <i class="fas fa-reply"></i>
+                </div>
+            </div>
+            <div class="chat-interno-chat-mensagens-container-contact" ng-if="(enviandoMensagem || jadiPensando)">
+                <div class="chat-interno-chat-mensagens-container-box-contact spinner-container">
+                    <!-- <div class="loading">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div> -->
+                    <!-- <div class="spinner-4"></div> -->
+                    <div class="shapes-7"></div>
+                    <div>Processando...</div>
+                </div>
+            </div>
+            <div ng-show="loadingMsgs === true" class="chat-interno-chat-mensagens-loading">
+                <div>{{"CARREGANDO-MENSAGENS" | translate}}...</div>
+            </div>
+        </div>
+
+        <div id="file-drop-overlay-chat-interno" class="file-drop-overlay-chat-interno">
+            <div id="file-drop-area-chat-interno" class="file-drop-area-chat-interno">
+                <i class="fas fa-file-upload"></i>
+                {{"ARRASTE-ARQUIVOS-AQUI" | translate}}
+            </div>
+        </div>
+
+        <div id="image-preview-chat-interno" ng-show="chatInterno.arquivos.length > 0">
+            <div class="image-preview-toolbar">
+                <div class="left-toolbar">
+                    {{ 'PRE-VISUALIZAR' | translate }}
+                </div>
+            </div>
+            <div class="current-image-preview">
+                <button ng-click="clearFiles()" class="mail-close btn btn-lg waves-effect waves-circle bgm-red">
+                    <i class="zmdi zmdi-close" style="color:#ffffff"></i>
+                </button>
+                <button ng-click="enviarMensagem()" class="mail-send btn btn-lg waves-effect waves-circle bgm-green">
+                    <i class="zmdi zmdi-mail-send" style="color:#ffffff"></i>
+                </button>
+                <button ng-show="!isFirstImage(chatInterno.arquivos, currentImagePreview)" ng-click="nextImage()"
+                    class="btn-previous-image btn btn-lg waves-effect waves-circle"
+                    ng-style="{'background-color': customizacao.corSecundaria}">
+                    <i class="zmdi zmdi-arrow-left" style="color:#ffffff"></i>
+                </button>
+                <div class="file-container" ng-if="currentImagePreview.isImage">
+                    <img ng-src="{{currentImagePreview.url}}">
+                </div>
+                <div style="width: 100%; height: 100%;"
+                    ng-if="currentImagePreview.isPDF && !currentImagePreview.bancoArquivo"
+                    class="file-container file-preview">
+                    <canvas style="max-width: 100%; max-height: 100%; height: 620px;" id="pdfViewer"></canvas>
+                </div>
+                <div ng-if="(!currentImagePreview.isImage && !currentImagePreview.isPDF) || (currentImagePreview.isPDF && currentImagePreview.bancoArquivo)"
+                    class="file-container file-preview">
+                    <i class="zmdi zmdi-file"></i>
+                    <span title="{{currentImagePreview.name}}" class="file-name">
+                        {{currentImagePreview.name}}
+                    </span>
+                </div>
+                <button ng-show="!isLastImage(chatInterno.arquivos, currentImagePreview)" ng-click="previousImage()"
+                    class="btn-next-image btn btn-lg waves-effect waves-circle"
+                    ng-style="{'background-color': customizacao.corSecundaria}">
+                    <i class="zmdi zmdi-arrow-right" style="color:#ffffff"></i>
+                </button>
+            </div>
+            <div id="imageList" class="image-list">
+                <div class="image-thumbs">
+                    <div class="image-thumb-container" ng-repeat="item in chatInterno.arquivos">
+                        <i class="remove-file zmdi zmdi-close" ng-click="removerAnexo($index)"></i>
+                        <div ng-if="item.isImage" ng-click="previewImage(item)" class="image-thumb"
+                            ng-class="{'active': currentImagePreview == item }"
+                            ng-style="{'background-image':'url('+ item.url+')'}"></div>
+                        <div ng-if="item.isPDF" ng-click="previewImage(item)" class="image-thumb thumb-file"
+                            ng-class="{'active': currentImagePreview == item }">
+                            <i class="zmdi zmdi-collection-pdf"></i>
+                        </div>
+                        <div ng-if="!item.isImage && !item.isPDF" ng-click="previewImage(item)"
+                            class="image-thumb thumb-file" ng-class="{'active': currentImagePreview == item }">
+                            <i class="zmdi zmdi-file"></i>
+                        </div>
+                    </div>
+                    <label ng-show="chatInterno.arquivos.length < 15" class="image-thumb add-file"
+                        for="fileInputChatInterno">
+                        <img title="{{ 'ADICIONAR-ARQUIVOS' | translate }}" style="height: 30px;"
+                            src="https://lb-v3d.mz-css.net/f3e20cc46af08abd7d545279593c3491/47eabb1b108890125233bef67ab2833b36f8b1cdc0a03d3ef90ad7ef4514e00e/file-plus-icon.png">
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div id="image-group-preview" ng-show="previewGroupImage.url">
+            <div class="image-preview-toolbar">
+                <div class="left-toolbar">
+                    <div>
+                        <span class="data">{{previewGroupImage.dataCriacao | date:('dd/MM/yyyy HH:mm')}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="current-image-preview">
+                <button ng-click="closeGroupPreview()" class="mail-close btn btn-lg waves-effect waves-circle bgm-red">
+                    <i class="zmdi zmdi-close" style="color:#ffffff"></i>
+                </button>
+                <button ng-show="!isFirstPreviewImage(previewGroup, previewGroupImage)"
+                    ng-click="previousPreviewImage()" class="btn-previous-image btn btn-lg waves-effect waves-circle"
+                    ng-style="{'background-color': customizacao.corSecundaria}">
+                    <i class="zmdi zmdi-arrow-left" style="color:#ffffff"></i>
+                </button>
+                <div class="zoom-container" ng-if="!isAnexoPdf(previewGroupImage)"
+                    ng-class="{'zooming': previewZooming}" ng-click="closePreview()">
+                    <div class="zoom-container-tools">
+                        <div class="zoom-control">
+                            <button ng-click="changeImageZoom($event, -1)">
+                                <i class="fas fa-search-minus"></i>
+                            </button>
+                            {{previewGroupImage.scale * 100 | number :1}}%
+                            <button ng-click="changeImageZoom($event, 1)">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                        </div>
+                        <div class="save-control" ng-click="savePreviewGroupImage($event, previewGroupImage)">
+                            <span>
+                                <i class="fas fa-save"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <img draggable="false" id="previewImage" ng-src="{{previewGroupImage.url}}"
+                        ng-click="openPreview(); $event.stopPropagation();">
+                </div>
+                <div class="zoom-container" ng-if="isAnexoPdf(previewGroupImage)" class="file-container file-preview">
+                    <canvas style="max-width: 100%; max-height: 100%; height: 620px;" id="pdfViewer"></canvas>
+                </div>
+                <button ng-show="!isLastPreviewImage(previewGroup, previewGroupImage)" ng-click="nextPreviewImage()"
+                    class="btn-next-image btn btn-lg waves-effect waves-circle"
+                    ng-style="{'background-color': customizacao.corSecundaria}">
+                    <i class="zmdi zmdi-arrow-right" style="color:#ffffff"></i>
+                </button>
+            </div>
+            <div id="previewList" class="image-list">
+                <div class="image-thumbs">
+                    <div ng-repeat="item in previewGroup">
+                        <div ng-if="!isAnexoPdf(item)" ng-click="viewGroupImage(item)" class="image-thumb"
+                            ng-class="{'active': item.id == previewGroupImage.id }"
+                            ng-style="{'background-image':'url('+ item.url +')'}"></div>
+                        <div ng-if="isAnexoPdf(item)" ng-click="viewGroupImage(item)" class="image-thumb thumb-file"
+                            ng-class="{'active': item.id == previewGroupImage.id }">
+                            <i class="zmdi zmdi-collection-pdf"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-if="messageToReplyInternalChat" class="mensagem-referencia-reply-container-ci">
+            <div class="mensagem-referencia-reply" ng-click="showReplyMessage(messageToReplyInternalChat)">
+                <div><b>{{messageToReplyInternalChat.nome ? messageToReplyInternalChat.nome : 'Contato'}}</b></div>
+
+                <hr />
+
+                <div class="mensagem-referencia-reply-label"
+                    ng-if="messageToReplyInternalChat.tipoMensagem == 'ARQUIVO' || messageToReplyInternalChat.tipoMensagem == 'DOCUMENTO'">
+                    <i class="zmdi zmdi-file"></i> {{ "ARQUIVO" | translate }}
+                </div>
+
+                <div class="mensagem-referencia-reply-label reply-label-text" class="cut-text-2"
+                    ng-if="messageToReplyInternalChat.tipoMensagem == 'TEXTO'"
+                    ng-bind-html="tratarTexto(messageToReplyInternalChat.mensagem)"
+                    style="max-height: 70px; overflow: auto;">
+                </div>
+
+                <div class="mensagem-referencia-reply-label" ng-if="messageToReplyInternalChat.tipoMensagem == 'VIDEO'">
+                    <i class="zmdi zmdi-videocam"></i> Vídeo
+                </div>
+
+                <div class="mensagem-referencia-reply-label" ng-if="messageToReplyInternalChat.tipoMensagem == 'GIF'">
+                    <i class="zmdi zmdi-gif"></i> GIF
+                </div>
+
+                <div class="mensagem-referencia-reply-label" ng-if="messageToReplyInternalChat.tipoMensagem == 'AUDIO'">
+                    <i class="zmdi zmdi-mic-outline"></i> {{ "AUDIO" | translate }}
+                </div>
+
+                <div class="mensagem-referencia-reply-label"
+                    ng-if="messageToReplyInternalChat.tipoMensagem == 'IMAGEM'">
+                    <i class="zmdi zmdi-image"></i> {{ "IMAGEM" | translate }}
+                </div>
+
+                <div class="mensagem-referencia-reply-label"
+                    ng-if="messageToReplyInternalChat.tipoMensagem == 'TEMPLATE'">
+                    <i class="zmdi zmdi-comment-edit"></i> Template
+                </div>
+
+                <div class="mensagem-referencia-reply-label"
+                    ng-if="messageToReplyInternalChat.tipoMensagem == 'CONTATOS'">
+                    <i class="fas fa-address-card"></i> {{ "CONTATO" | translate }}
+                </div>
+
+            </div>
+            <div class="mensagem-referencia-cancelar">
+                <i ng-click="cancelReplyMessage()" class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <div class="processed-container-message" ng-if="(enviandoMensagem || jadiPensando)">
+            <div>
+                Por favor, aguarde enquanto processo sua mensagem.
+            </div>
+        </div>
+
+        <div ng-show="!jadiPensando && !enviandoMensagem" class="chat-interno-chat-controles"
+            ng-keyup="onKeyPressMensagemInterno($event)"
+            ng-class="{'chat-interno-chat-controles-disabled': uploadingFiles === true || disableChatGrupo()}">
+            <div class="chat-interno-chat-controles-audio" ng-click="onMostarModalAudio()" ng-show="!isJadiOpen">
+                <i class="tm-icon zmdi zmdi-mic" style="color: #5E5E5E; margin-top: 2px;"></i>
+            </div>
+            <div class="chat-interno-chat-controles-file" ng-show="!isJadiOpen">
+                <label for="fileInputChatInterno" title="Arquivo"><i class="tm-icon zmdi zmdi-attachment-alt"
+                        style="margin-top: 6px;"></i></label>
+                <input id="fileInputChatInterno" type="file" multiple="true" name="...">
+            </div>
+            <textarea style="background-color: white !important;" ng-disabled="chatjadiDisabled"
+                ng-show="chatInterno.arquivos.length === 0 && !disableChatGrupo() || isJadiOpen"
+                id="chat-interno-chat-controles-input" lta-enter="enviarMensagem()"
+                ng-class="{'chat-jadi-input ': isJadiOpen}" ng-model="chat.mensagem" ng-paste="onPaste($event)"
+                placeholder="{{ 'DIGITE-UMA-MENSAGEM' | translate }}...">
+            </textarea>
+            <div class="chat-interno-chat-only-adm" ng-show="disableChatGrupo()"> {{"APENAS-ADM-ENVIA-MENSAGEM" |
+                translate}}!</div>
+            <div class="chat-interno-chat-controles-send" ng-click="enviarMensagem()">
+                <i class="tm-icon zmdi zmdi-mail-send" style="color: #5E5E5E;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<audio id="notificacaoChatInterno" src="audio/notificacao-chat-interno.mpeg" muted></audio>

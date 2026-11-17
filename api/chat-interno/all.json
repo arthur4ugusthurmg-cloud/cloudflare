@@ -1,0 +1,134 @@
+[
+    {
+        "id": 37156,
+        "nome": "Agendamento Tecnico",
+        "tab": "DEPARTMENTS",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    },
+    {
+        "id": 37046,
+        "nome": "Atendimento",
+        "tab": "DEPARTMENTS",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    },
+    {
+        "id": 245692,
+        "nome": "Boleto",
+        "tab": "DEPARTMENTS",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    },
+    {
+        "id": 37049,
+        "nome": "Cobrança/Negociação",
+        "tab": "DEPARTMENTS",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    },
+    {
+        "id": 37040,
+        "nome": "Financeiro",
+        "tab": "DEPARTMENTS",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    },
+    {
+        "id": 212838,
+        "nome": "Instalar",
+        "tab": "DEPARTMENTS",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    },
+    {
+        "id": 21238,
+        "nome": "LinkFly Internet",
+        "online": false,
+        "tab": "CONTACTS",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    },
+    {
+        "id": 21263,
+        "nome": "Maciel",
+        "online": true,
+        "liveAt": 1643910397202,
+        "tab": "CONTACTS",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    },
+    {
+        "id": 211086,
+        "nome": "Retencao",
+        "tab": "DEPARTMENTS",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    },
+    {
+        "id": 212837,
+        "nome": "Retirar",
+        "tab": "DEPARTMENTS",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    },
+    {
+        "id": 1456311,
+        "nome": "Retorno Cliente",
+        "tab": "DEPARTMENTS",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    },
+    {
+        "id": 45028,
+        "nome": "RH",
+        "tab": "DEPARTMENTS",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    },
+    {
+        "id": 252940,
+        "nome": "rozangela",
+        "online": false,
+        "tab": "CONTACTS",
+        "url": "https://v2-4.mz-css.net/f8fcf79253cba4b975fdd79be5622263/WhatsApp_Image_2022-05-26_at_15.38.16.jpeg",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    },
+    {
+        "id": 37041,
+        "nome": "Suporte Tecnico",
+        "tab": "DEPARTMENTS",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    },
+    {
+        "id": 1455002,
+        "nome": "TORRE",
+        "tab": "DEPARTMENTS",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    },
+    {
+        "id": 37157,
+        "nome": "Trocar de Plano",
+        "tab": "DEPARTMENTS",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    },
+    {
+        "id": 37038,
+        "nome": "Vendas",
+        "tab": "DEPARTMENTS",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    },
+    {
+        "id": 749764,
+        "nome": "Vitoria",
+        "online": true,
+        "tab": "CONTACTS",
+        "naoLidas": 0,
+        "lastMessageData": 915156000000
+    }
+]

@@ -1,0 +1,149 @@
+RewriteEngine On
+
+
+# ==========================================================
+# LOGIN
+# ==========================================================
+RewriteRule ^v2/usuarios/auth_web/?$ https://api.n3bot.com.br/usuarios/auth_web.php [R=307,L,QSA]
+RewriteRule ^clientes/permissions/?$ clientes/permissions.json [END,QSA]
+
+RewriteRule ^bots/fbot/?$ https://api.n3bot.com.br/bots/fbot.php [END,QSA]
+
+# ==========================================================
+# PERFIL DO USUÁRIO
+# ==========================================================
+
+
+
+
+# ==========================================================
+# CONTA SALVA
+# ==========================================================
+RewriteRule ^usuarios/auth_saved_account/?$ /api/usuarios/auth_saved_account.php [L,QSA]
+
+# ==========================================================
+# RESET DE SENHA
+# ==========================================================
+RewriteRule ^usuarios/send-reset-password/?$ /api/usuarios/send-reset-password.json [L,QSA]
+
+# ==========================================================
+# 2FA
+# ==========================================================
+RewriteRule ^usuarios/2fa/enviar/?$ /api/usuarios/2fa/enviar.json [L,QSA]
+RewriteRule ^usuarios/2fa/validar/?$ /api/usuarios/2fa/validar.json [L,QSA]
+
+# ==========================================================
+# CUSTOMIZAÇÃO
+# ==========================================================
+RewriteRule ^revendas/customizacao/publico_v2/?$ /api/revendas/customizacao/publico_v2/publico_v2.json [L,QSA]
+
+RewriteRule ^clientes/telefones/?$ api/clientes.php [QSA,L]
+
+
+# ==========================================================
+# BOTS E GRUPOS DE PERGUNTAS
+# .htaccess localizado dentro de /api/
+# ==========================================================
+
+# GET /api/grupo_perguntas/3
+RewriteCond %{REQUEST_METHOD} ^GET$
+RewriteRule ^grupo_perguntas/([0-9]+)/?$ bots.php?id=$1 [END,QSA]
+
+# GET /api/grupo_perguntas
+RewriteCond %{REQUEST_METHOD} ^GET$
+RewriteRule ^grupo_perguntas/?$ bots.php [END,QSA]
+
+# PUT /api/grupo_perguntas/4/copiar
+RewriteCond %{REQUEST_METHOD} ^PUT$
+RewriteRule ^grupo_perguntas/([0-9]+)/copiar/?$ bots.php?copiar=$1 [END,QSA]
+
+# PUT /api/grupo_perguntas
+RewriteCond %{REQUEST_METHOD} ^PUT$
+RewriteRule ^grupo_perguntas/?$ bots.php [END,QSA]
+
+# PUT /api/grupo_perguntas/6
+RewriteCond %{REQUEST_METHOD} ^PUT$
+RewriteRule ^grupo_perguntas/([0-9]+)/?$ bots.php?id=$1 [END,QSA]
+
+# DELETE /api/grupo_perguntas/6
+RewriteCond %{REQUEST_METHOD} ^DELETE$
+RewriteRule ^grupo_perguntas/([0-9]+)/?$ bots.php?id=$1 [END,QSA]
+
+# GET /api/bots/filter
+RewriteCond %{REQUEST_METHOD} ^GET$
+RewriteRule ^bots/filter/?$ bots.php [END,QSA]
+
+# GET /api/bots
+RewriteCond %{REQUEST_METHOD} ^GET$
+RewriteRule ^bots/?$ bots.php [END,QSA]
+
+
+
+# ==========================================================
+# GRUPO DE PERGUNTAS
+# ==========================================================
+
+# TESTE DELETE
+# ==========================================================
+# DELETE GRUPO DE PERGUNTAS
+# ==========================================================
+
+
+
+# ==========================================================
+# DEPARTAMENTOS
+# ==========================================================
+RewriteRule ^departamentos/simples/?$ /api/departamentos/simples/simples.json [L,QSA]
+
+RewriteRule ^configuracoes/publico?$ /api/configuracoes/publico/public.json 
+
+RewriteRule ^sales/reports/active_customers_without_cliente_op?$ /api/sales/reports/active_customers_without_cliente_op.json
+
+RewriteRule ^tutorial_videos?$ /api/tutorial_videos.json
+
+
+
+# ==========================================================
+# ATENDENTES
+# ==========================================================
+RewriteRule ^atendentes/?$ https://api.n3bot.com.br/atendentes/ate.php [END,QSA]
+
+# ==========================================================
+# CONFIGURAÇÃO DE ATENDENTES DO CLIENTE
+# ==========================================================
+RewriteRule ^clientes/config_atendentes/?$ /api/clientes/config_atendentes/index.php [END,QSA]
+
+RewriteRule ^clientes/bot_sites?$ /api/clientes/bot_sites.json [END,QSA]
+
+RewriteRule ^departamentos/ativos?$ /api/departamentos/ativos.json  [END,QSA]
+
+RewriteRule ^departamentos?$ /api/departamentos/index.php
+RewriteRule ^departamentos/([0-9]+)/?$ departamentos/index.php [QSA,L]
+
+RewriteRule ^usuarios/perfil/header?$ https://api.n3bot.com.br/usuarios/perfil/header.php [END,QSA]
+
+RewriteRule ^sales/invoices/megazap/expired?$ https://api.n3bot.com.br/usuarios/expired.php
+
+RewriteRule ^usuarios/chat-interno?$ https://api.n3bot.com.br/usuarios/chat-interno.php [END,QSA]
+
+RewriteRule ^contato_informacoes?$ https://api.n3bot.com.br/contato_informacoes.php [END,QSA]
+
+
+RewriteRule ^usuarios/perfil/?$ https://api.n3bot.com.br/usuarios/perfil.php [QSA,L]
+RewriteRule ^usuarios/perfil/foto/?$ https://api.n3bot.com.br/usuarios/perfil_foto.php [QSA,L]
+
+RewriteRule ^app-links/reseller?$ https://api.n3bot.com.br/app-links/reseller.json
+
+RewriteRule ^chat-interno/all-minimizado?$ /api/chat-interno/all-minimizado.json
+
+RewriteRule ^chat-interno/all/?$ api/chat-interno/all.php [L,QSA,NC]
+
+RewriteRule ^supervisores?$ https://api.n3bot.com.br/usuarios/supervisores.php [END,QSA]
+
+RewriteRule ^release/releases-activated?$ https://api.n3bot.com.br/releases-activated/releases.php
+
+RewriteRule ^modules/?$ /api/modules/index.php [L,QSA]
+
+RewriteRule ^sales/customers/options/?$ https://api.n3bot.com.br/sales/customers/options/op.php [P,L,QSA]
+
+RewriteRule ^banco-arquivo?$ https://api.n3bot.com.br/banco-arquivo

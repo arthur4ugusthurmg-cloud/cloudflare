@@ -1,0 +1,121 @@
+<div class="container-fluid" data-ng-controller="PerfilController" ng-init="onInitInfo()">
+
+  <div class="block-header">
+    <h2>{{'PERFIL' | translate}}</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-body card-padding">
+
+      <div class="row" ng-if="isGestor()">
+        <br>
+
+        <div class="col-sm-12 text-center">
+          <div id="imagem-input-gestor" class="fileinput">
+
+            <div class="fileinput-preview thumbnail"
+                 style="line-height: 200px">
+              <img
+                ng-src="{{imagemPerfilPreview || registro.imagem || 'img/sem-foto.png'}}"
+                alt="Foto do perfil"
+                style="max-width: 200px; max-height: 200px; object-fit: contain;">
+            </div>
+
+            <div>
+              <label class="btn btn-info btn-file">
+                {{imagemPerfilPreview ? 'ALTERAR IMAGEM' : 'SELECIONAR IMAGEM'}}
+
+                <input
+                  type="file"
+                  name="foto"
+                  accept="image/jpeg,image/png,image/webp"
+                  onchange="angular.element(this).scope().selecionarArquivoPerfil(this)"
+                  style="display: none;">
+              </label>
+
+              <button
+                type="button"
+                class="btn btn-danger"
+                ng-if="imagemPerfilPreview || registro.imagem"
+                ng-click="removerImagemPerfil()">
+                REMOVER
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <br>
+      </div>
+
+      <div class="pmb-block">
+        <div class="pmbb-body">
+          <div class="pmbb-view">
+
+            <dl class="dl-horizontal">
+              <dt>{{'NOME' | translate}}</dt>
+              <dd>{{registro.nome}}</dd>
+            </dl>
+
+            <dl class="dl-horizontal">
+              <dt>{{'LOGIN' | translate}}</dt>
+              <dd>{{registro.login}}</dd>
+            </dl>
+
+            <dl class="dl-horizontal">
+              <dt>{{'PERFIL' | translate}}</dt>
+              <dd>{{registro.perfil}}</dd>
+            </dl>
+
+            <dl class="dl-horizontal" ng-if="registro.emailAtendente">
+              <dt>{{'EMAIL' | translate}}</dt>
+              <dd>
+                {{registro.emailAtendente}}
+                <button
+                  ng-click="onShowModalEditarEmailPrincipal()"
+                  title="Editar"
+                  ng-if="!isAnotherUser()"
+                  class="btn btn-default waves-effect m-l-10">
+                  <i class="zmdi zmdi-edit"></i>
+                </button>
+              </dd>
+            </dl>
+
+            <dl class="dl-horizontal" ng-if="isGestor()">
+              <dt>{{'EMAIL-COMUNICACAO' | translate}}</dt>
+              <dd>
+                {{registro.emailComunicacao}}&nbsp;
+                <button
+                  ng-click="onEditarEmailComunicacao()"
+                  ng-if="!isAnotherUser()"
+                  class="btn btn-default waves-effect">
+                  <i class="zmdi zmdi-edit"></i>
+                </button>
+              </dd>
+            </dl>
+
+            <div
+              class="alert alert-warning"
+              role="alert"
+              ng-if="registro.emailNew != undefined">
+              <i class="zmdi zmdi-alert-circle m-r-5"></i>
+              {{'FOI-ENVIADO-UM-EMAIL' | translate}}:
+              <b>{{registro.emailAtendente}}</b>.
+              {{'CONFIRMACAO-ATUAL-EMAIL' | translate}}:
+              <b>{{registro.emailNew}}.</b>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <button
+    ng-click="onSalvarPerfil()"
+    class="btn btn-float bgm-blue m-btn waves-effect waves-circle">
+    <i class="zmdi zmdi-floppy"></i>
+  </button>
+
+</div>

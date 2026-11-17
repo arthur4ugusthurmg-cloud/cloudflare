@@ -1,0 +1,880 @@
+<div class="container-fluid" data-ng-controller="ClienteListaController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>{{'CLIENTES'| translate}}</h2>
+
+            <button ng-if="isRevendedor()" title="{{'INICIAR-BOTS'| translate}}"
+                class="btn bgm-green btn-float btn-float-four waves-effect" ng-click="onIniciarBots()"><i
+                    class="zmdi zmdi-play"></i></button>
+
+            <button ng-if="isRevendedor()" title="{{'PARAR-BOTS'| translate}}"
+                class="btn bgm-red btn-float btn-float-tree waves-effect" ng-click="onPararBots()"><i
+                    class="zmdi zmdi-stop"></i></button>
+
+
+
+            <button title="{{'BUSCAR'| translate}}" class="btn bgm-blue btn-float-2 btn-float waves-effect"
+                ng-click="onRecuperarClientes()"><i class="zmdi zmdi-search"></i></button>
+
+            <button ng-if="isAdministrador()" title="Baixar Excel"
+                class="btn bgm-teal btn-float-2 btn-float waves-effect" ng-click="onExportarExcel()"><i
+                    class="zmdi zmdi-download"></i></button>
+
+            <button ng-if="!permissions.apenasVisualizacao"
+                class="btn bgm-teal btn-float btn-float-2 btn-float-two waves-effect"
+                ng-click="onMostarModalNovoRegistro()"><i class="zmdi zmdi-plus"></i></button>
+
+        </div>
+
+        <div class="card-body card-padding">
+
+            <div class="row m-t-20 p-t-30">
+
+                <div class="col-sm-2">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="onRecuperarClientes()" type="text" class="form-control fg-input input-lg"
+                                ng-model="filtro.id" autofocus>
+                            <label class="fg-label">ID</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-4">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="onRecuperarClientes()" type="text" class="form-control fg-input input-lg"
+                                ng-model="filtro.cliente" autofocus>
+                            <label class="fg-label">{{'NOME'|translate}}</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-3">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="onRecuperarClientes()" type="text" class="form-control fg-input input-lg"
+                                ng-model="filtro.telefone">
+                            <label class="fg-label">Número</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-3">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <select ng-change="onRecuperarClientes()" class="form-control input-lg select-simples"
+                                ng-model="filtro.statusCliente">
+                                <option value="todos">Todos</option>
+                                <option value="ativos">Ativo</option>
+                                <option value="inativos">Inativo</option>
+                            </select>
+                            <label class="fg-label">Status do Cliente</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-2">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <select ng-change="onRecuperarClientes()" class="form-control input-lg select-simples"
+                                ng-model="filtro.termoUso">
+                                <option value="todos">Todos</option>
+                                <option value="assinado">Assinado</option>
+                                <option value="pendente">Pendente</option>
+                            </select>
+                            <label class="fg-label">Termo de Uso</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-4">
+
+                    <div class="form-group fg-float m-b-30">
+
+                        <div class="fg-line">
+                            <select ng-change="onRecuperarClientes()" class="form-control input-lg select-simples"
+                                ng-model="filtro.modulo">
+                                <option value="ALL">Todos</option>
+                                <option value="HELPDESK">Atendimentos ao Cliente</option>
+                                <option value="AGROCENSO"  ng-if="isAdministrador()">Agrocenso</option>
+                                <option value="DELIVERY">Delivery</option>
+                                <option value="LINKBIO">Gestão de Links</option>
+                                <option value="SMS">SMS</option>
+                                <option value="SAEGA"  ng-if="isAdministrador()">Saega</option>
+                            </select>
+                            <label class="fg-label">Módulo</label>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-sm-3">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <select ng-change="onRecuperarClientes()" class="form-control input-lg select-simples"
+                                ng-model="filtro.statusBot">
+                                <option value="todos">Todos</option>
+                                <option value="BOT-ONLINE">Online</option>
+                                <option value="BOT-OFFLINE">Offline</option>
+                                <option value="BOT-INICIANDO">Offline - Iniciando</option>
+                                <option value="BOT-QRCODE">Offline - QR Code</option>
+                                <option value="BOT-ERRO">Offline - Erro</option>
+                                <option value="BOT-ERRO-2">Offline - Erro (COD-002)</option>
+                                <option ng-if="isAdministrador()" value="BOT-ERRO-3">Erro Técnico</option>
+                            </select>
+                            <label class="fg-label">Status do Bot</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-3">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <select ng-change="onRecuperarClientes()" class="form-control input-lg select-simples"
+                                ng-model="filtro.canal">
+                                <option value="ALL">Todos</option>
+                                <option value="WHATSAPP_OFICIAL">WhatsApp - API Oficial</option>
+                                <option value="WHATSAPP_QRCODE">WhatsApp - QR Code</option>
+                                <option value="INSTAGRAM">Instagram</option>
+                                <option value="FACEBOOK">Facebook</option>
+                                <option value="TELEGRAM">Telegram</option>
+                                <option value="SITE">Site</option>
+                                <option value="EMAIL">Email</option>
+                                <!-- <option value="GOOGLE_BUSINESS_MESSAGES">Google Business Message</option> -->
+                            </select>
+                            <label class="fg-label">Canal</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- <div class="col-sm-12" ng-if="isAdministrador()">
+
+                    <div class="form-group fg-float m-b-30">
+
+                        <div class="fg-line">
+                            <select ng-change="onRecuperarClientes()" class="form-control input-lg select-simples" ng-model="filtro.servidor">
+                                <option value="0">Todos</option>
+                                <option ng-repeat="servidor in servidores" value="{{servidor.id}}">{{servidor.nome}}</option>
+                            </select>
+                            <label class="fg-label">{{'SERVIDOR'|translate}}</label>
+                        </div>
+
+                    </div>
+
+                </div>                 -->
+
+            </div>
+
+        </div>
+
+        <div class="card-header ch-alt">
+            <h2>Financeiro</h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <br />
+            <div class="row ">
+
+                <div class="col-sm-8" ng-if="isAdministrador()">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" ng-model="filtro.salesCustomer" lta-enter="onRecuperarClientes()"
+                                typeahead-on-select="onRecuperarClientes()" typeahead-show-hint="true"
+                                typeahead-min-length="3"
+                                uib-typeahead="customer as customer.displayName for customer in getCustomers($viewValue)"
+                                typeahead-loading="loadingCustomer" class="form-control input-lg">
+                            <label class="fg-label">Nome</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3" ng-if="isRevendedor() || isSupervisorRevenda()">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="onRecuperarClientes()" type="text" class="form-control fg-input input-lg"
+                                ng-model="filtro.documento">
+                            <label class="fg-label">Documento (CPF/CNPJ)</label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-3" ng-if="isRevendedor() || isSupervisorRevenda()">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="onRecuperarClientes()" type="text" class="form-control fg-input input-lg"
+                                ng-model="filtro.nomeFantasia">
+                            <label class="fg-label">Nome Fantasia</label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-3" ng-if="isRevendedor() || isSupervisorRevenda()">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="onRecuperarClientes()" type="text" class="form-control fg-input input-lg"
+                                ng-model="filtro.razaoSocial">
+                            <label class="fg-label">Razão Social</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-2" ng-if="isAdministrador()">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="onRecuperarClientes()" class="form-control input-lg select-simples"
+                                ng-model="filtro.possuiClienteFinanceiro">
+                                <option value="todos">Todos</option>
+                                <option value="true">Sim</option>
+                                <option value="false">Não</option>
+                            </select>
+                            <label class="fg-label">Possui?</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-class="{'col-sm-2': isAdministrador(), 'col-sm-3': isRevendedor() || isSupervisorRevenda()}">
+
+                    <div class="form-group fg-float m-b-30">
+
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="onRecuperarClientes()" class="form-control input-lg select-simples"
+                                ng-model="filtro.bloqueioFinanceiro">
+                                <option value="todos">Todos</option>
+                                <option value="true">Bloqueado</option>
+                                <option value="false">Liberado</option>
+                            </select>
+                            <label class="fg-label">Bloqueio Financeiro</label>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div ng-if="registros.length === 0 && loading === false" class="text-center">
+        {{'NENHUM-REGISTRO'| translate}}
+    </div>
+
+
+    <div ng-if="registros.length > 0 && filtro.modulo !== 'SAEGA' && filtro.modulo !== 'AGROCENSO'" class="row dashboard-indicadores sms-indicadores m-b-25">
+
+        <!--WA MESSANGER-->
+        <div class="col-lg-3 col-md-6">
+            <div class="indicador-item" style="background-color: #0a8081">
+                <div class="indicador-informacoes">
+                    <small>WhatsApp - API Oficial</small>
+                    <h2>{{(totalWhatsAppApiOficial|| 0) | number}}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="indicador-item" style="background-color: #15B1B2">
+                <div class="indicador-informacoes">
+                    <small>WhatsApp - QR Code</small>
+                    <h2>{{(totalWhatsAppQRCode|| 0) | number}}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!--Site-->
+        <div class="col-lg-3 col-md-6">
+            <div class="indicador-item" style="background-color: #999999">
+                <div class="indicador-informacoes">
+                    <small>Site</small>
+                    <h2>{{(totalSite|| 0) | number}}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!--TELEGRAM-->
+        <div class="col-lg-3 col-md-6">
+            <div class="indicador-item" style="background-color: #2da5d9">
+                <div class="indicador-informacoes">
+                    <small>Telegram</small>
+                    <h2>{{(totalTelegram|| 0) | number}}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!--FACEBOOK-->
+        <div class="col-lg-3 col-md-6">
+            <div class="indicador-item" style="background-color: #375691">
+                <div class="indicador-informacoes">
+                    <small>Facebook</small>
+                    <h2>{{(totalFacebook|| 0) | number}}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!--INSTAGRAM-->
+        <div class="col-lg-3 col-md-6">
+            <div class="indicador-item" style="background-color: #a64186">
+                <div class="indicador-informacoes">
+                    <small>Instagram</small>
+                    <h2>{{(totalInstagram|| 0) | number}}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!--GOOGLE BUSINESS-->
+        <!-- <div class="col-lg-3 col-md-6">
+            <div class="indicador-item" style="background-color: #a64141">
+                <div class="indicador-informacoes">
+                    <small>Google Business</small>
+                    <h2>{{(totalGoogleBusiness|| 0) | number}}</h2>
+                </div>
+            </div>
+        </div> -->
+
+        <!--EMAIL-->
+        <div class="col-lg-3 col-md-6">
+            <div class="indicador-item" style="background-color: #94a641">
+                <div class="indicador-informacoes">
+                    <small>Email</small>
+                    <h2>{{(totalEmail|| 0) | number}}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!--CLIENTES-->
+        <div class="col-lg-3 col-md-6">
+            <div class="indicador-item" style="background-color: #3c4146">
+                <div class="indicador-informacoes">
+                    <small>Clientes / Bots</small>
+                    <h2>{{(totalClientes|| 0) | number}} / {{(totalWhatsAppApiOficial + totalWhatsAppQRCode + totalSite
+                        + totalTelegram + totalFacebook + totalInstagram + totalEmail|| 0) | number}}</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div ng-repeat="revendedor in registros">
+
+        <h3 class="m-b-20" ng-if="isAdministrador() && revendedor.nome">{{revendedor.nome}}</h3>
+
+        <div class="row" ng-repeat="linha in revendedor.clientes">
+            <div class="col-sm-4" ng-repeat="registro in linha">
+                <div class="card">
+                    <div class="card-header ch-alt">
+                        <a data-ui-sref="cadastros.cliente_edicao({id:{{registro.id}}})">
+                            <h2>
+                                <i ng-if="registro.ativo" class="zmdi zmdi-check c-green"></i>
+                                <i ng-if="!registro.ativo" class="zmdi zmdi-block c-red"></i>
+                                #{{registro.id}} - {{registro.nome}}
+                            </h2>
+                        </a>
+
+                        <div ng-if="isAdministrador() && !registro.salesCustomer.id">
+                            <div class="bgm-red c-white p-5 m-t-20">
+                                <i class="zmdi zmdi-alert-circle-o"></i> NÃO POSSUI CLIENTE FINANCEIRO!
+                            </div>
+                            <hr />
+                        </div>
+
+                        <div ng-if="isAdministrador() && registro.salesCustomer.id" class="m-t-20">
+                            <b>Cliente Financeiro: </b><a
+                                data-ui-sref="sales.customers_view({id: registro.salesCustomer.id})">{{registro.salesCustomer.displayName}}</a>
+                            <hr />
+                        </div>
+
+                        <div ng-if="!isModuleEnabled(registro, ['SAEGA', 'AGROCENSO'])">
+                            <div class="m-t-20">
+                                <div>
+                                    <div ng-if="registro.documento"><label
+                                            style="margin-right: 5px;">Documento:</label>{{registro.documento}}</div>
+                                    <label style="margin-right: 5px;">Atendentes:</label>{{registro.atendentesCadastrados}}
+                                    / {{registro.limiteAtendentes}}
+                                    <br />
+                                    <label
+                                        style="margin-right: 5px;">Supervisores:</label>{{registro.supervisoresCadastrados}}
+                                    / {{registro.limiteSupervisores}}
+
+
+                                    <br />
+                                    <div ng-if="registro.observacao">
+                                        <label style="margin-right: 5px;">Observação:</label>
+                                        <span style="cursor: pointer" uib-popover="{{registro.observacao}}">
+                                            {{registro.observacao.substr(0, 100)}}
+                                            <span ng-if="registro.observacao.length > 100">...</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div ng-if="termoUsoAtual !== null && !registro.termoUso.dominio" class="m-t-20">
+                                <hr />
+                                <b style="margin-right: 5px;">Termo de Uso:</b>
+                                <span ng-if="termoUsoAtual.termoUsoVersao === registro.termoUso.version"
+                                    style="color:green">Assinado</span>
+                                <p ng-if="termoUsoAtual.termoUsoVersao === registro.termoUso.version"
+                                    style="margin-bottom: 0px;"><b>Assinado em:</b> {{ registro.termoUso.acceptedAt |
+                                    date:'dd/MM/yyyy HH:mm:ss' }}</p>
+                                <span ng-if="termoUsoAtual.termoUsoVersao !== registro.termoUso.version"
+                                    style="color:red">Pendente</span>
+                            </div>
+                        
+                            <div class="m-t-20" ng-if="registro.termoUso.dominio">
+                                <hr />
+                                <b style="margin-right: 5px;">Termo de Uso:</b>
+                                <span style="color:green">Assinado</span>
+                                <p style="margin-bottom: 0px;"><b>Assinado em:</b> {{ registro.termoUso.acceptedAt |
+                                    date:'dd/MM/yyyy HH:mm:ss' }}</p>
+                                <p style="margin-bottom: 0px;"><b>Domínio:</b> {{ registro.termoUso.dominio }}</p>
+                            </div>
+                        </div>
+                        
+                        <div ng-if="isModuleEnabled(registro, 'SAEGA')" class="m-t-10">
+                            <b style="margin-right: 5px;">Módulo:</b>
+                            <span style="background: #EAF3DE; color: #27500A; border: 0.5px solid #97C459; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 500;">
+                                Saega
+                            </span>
+                        </div>
+
+                        <div ng-if="isModuleEnabled(registro, 'AGROCENSO')" class="m-t-10">
+                            <b style="margin-right: 5px;">Módulo:</b>
+                            <span style="background: #E6F1FB; color: #0C447C; border: 0.5px solid #85B7EB; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 500;">
+                                Agrocenso
+                            </span>
+                        </div>
+
+                        <ul class="actions">
+                            <li class="dropdown" uib-dropdown="">
+                                <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle"
+                                    aria-haspopup="true">
+                                    <i class="zmdi zmdi-more-vert"></i>
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                        <a ng-if="!permissions.apenasVisualizacao"
+                                            data-ui-sref="cadastros.cliente_edicao({id:{{registro.id}}})">{{'EDITAR'|
+                                            translate}}</a>
+
+                                        <a ng-if="!permissions.apenasVisualizacao && registro.ativo"
+                                            ng-click="onInativar(registro)" href="">{{'INATIVAR'| translate}}</a>
+
+                                        <a ng-if="!permissions.apenasVisualizacao && !registro.ativo"
+                                            ng-click="onAtivar(registro)" href="">{{'ATIVAR'| translate}}</a>
+
+                                        <a ng-if="!permissions.apenasVisualizacao && !isModuleEnabled(registro, ['SAEGA', 'AGROCENSO'])" ng-click="onRemover(registro)"
+                                            href="">{{'REMOVER'| translate}}</a>
+
+                                        <hr ng-if="!permissions.apenasVisualizacao && !isModuleEnabled(registro, ['SAEGA', 'AGROCENSO'])" />
+
+                                        <a ng-click="visualizarUsuarios(registro)" ng-if="!isModuleEnabled(registro, ['SAEGA', 'AGROCENSO'])" href="">Visualizar Usuários</a>
+
+                                        <a ng-if="!permissions.apenasVisualizacao && !isModuleEnabled(registro, ['SAEGA', 'AGROCENSO'])"
+                                            ng-click="visualizarTermosUso(revendedor.id, registro.id)" href="">Termos de
+                                            Uso</a>
+                        
+                                        <hr ng-if="!isModuleEnabled(registro, ['SAEGA', 'AGROCENSO', 'ADSTRACK'])">
+                                        
+                                        <a ng-if="!permissions.apenasVisualizacao && isAdministrador() && !isModuleEnabled(registro, ['SAEGA', 'AGROCENSO', 'ADSTRACK'])" style="cursor: pointer;" ng-click="showMigratePartner(registro.id)">
+                                            Migrar Cliente
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                    <div class="card-body card-padding">
+
+                        <div class="text-center">
+                            <button ng-click="onRecuperarBots(registro)" ng-if="!registro.telefones && !isModuleEnabled(registro, ['SAEGA', 'AGROCENSO'])"
+                                title="Clique aqui para carregar os bots do cliente"
+                                class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                                <i class="zmdi"></i> Ver Bots
+                            </button>
+                            <button 
+                                ng-click="gerarAcesso(registro, 'SAEGA')" 
+                                ng-if="isModuleEnabled(registro, 'SAEGA')"
+                                class="btn btn-sm bgm-green m-l-10 waves-effect">
+                                <i class="zmdi zmdi-key"></i> Gerar Acesso
+                            </button>
+                        </div>
+                        
+                        <div ng-if="!isModuleEnabled(registro, ['SAEGA', 'AGROCENSO'])">
+                            <!--WHATSAPP-->
+                            <div ng-repeat="telefone in registro.telefones">
+
+                                <ul class="actions pull-right">
+                                    <li class="dropdown" uib-dropdown="">
+                                        <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle"
+                                            aria-haspopup="true">
+                                            <i class="zmdi zmdi-more-vert"></i>
+                                        </a>
+
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li class="title m-b-10">
+                                                <b>{{telefone.localServer ? 'WhatsApp | Local Server' :
+                                                    (telefone.apiWhatsapp ? 'WhatsApp | API Server' : 'WhatsApp | Cloud
+                                                    Server' + ' v' + telefone.botVersion)}}</b>
+                                            </li>
+                                            <hr />
+                                            <li ng-if="telefone.apiWhatsapp">
+                                                <a ng-click="onAtivarApi(telefone)" href="">Ativar</a>
+                                            </li>
+                                            <li ng-if="isAdministrador() && telefone.hasError">
+                                                <a ng-click="showModalErros(telefone.botId)" href="">Visualizar Erros</a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="showMessageQueue('WHATSAPP', telefone.id)" href="">Fila de
+                                                    Mensagens</a>
+                                            </li>
+                                            <li ng-if="!telefone.apiWhatsapp && !telefone.localServer">
+                                                <a ng-click="onReiniciarBot(telefone, true)"
+                                                    href="">{{'REINICIAR-BOT'|translate}}</a>
+                                            </li>
+                                            <li ng-if="!telefone.apiWhatsapp && !telefone.localServer">
+                                                <a ng-click="onPararServico(telefone)" href="">{{'PARAR-BOT'|translate}}</a>
+                                            </li>
+                                            <li ng-if="!telefone.apiWhatsapp && !telefone.localServer">
+                                                <a ng-click="onFazerLogoff(telefone)"
+                                                    href="">{{'FAZER-LOGOFF'|translate}}</a>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                                <ul ng-if="isAdministrador() && !telefone.localServer" class="actions pull-right">
+                                    <li class="dropdown" uib-dropdown="">
+                                        <a ng-click="onGetFullExternalIp(telefone)" title="{{'VISUALIZAR-IP'| translate}}"
+                                            href="">
+                                            <i class="zmdi zmdi-desktop-mac"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <img src="img/atendimento/wa-messenger.png" class="pull-left m-r-10" style="width: 33px" />
+                                <div
+                                    ng-class="{'c-green' : telefone.status === 'ONLINE', 'c-red' : telefone.status === 'OFFLINE'}">
+                                    <b translate="{{telefone.status}}"></b>
+                                </div>
+                                <div>
+                                    <i class="zmdi"
+                                        ng-class="{'zmdi-home': telefone.localServer, 'zmdi-cloud-outline-alt': !telefone.localServer}"></i>
+                                    {{telefone.nome|| telefone.numero}}
+                                    <i ng-if="telefone.hasError && isAdministrador() "
+                                        title="Bot com erro técnico. Entre em contato com o suporte!"
+                                        class="zmdi zmdi-alert-circle c-red m-l-5"></i>
+                                </div>
+
+                                <div
+                                    ng-if="telefone.descricao && !(telefone.apiWhatsapp && telefone.descricao === 'BOT-QRCODE')">
+                                    <br />
+                                    <i class="small" translate="{{telefone.descricao}}"></i>
+                                </div>
+
+                                <hr
+                                    ng-if="$index + 1 < registro.telefones.length || registro.botSites.length || registro.botsFacebook.length  || registro.botsInstagram.length || registro.botsTelegram.length || registro.botsGoogleBusiness.length || registro.botsEmail.length" />
+                            </div>
+                            
+                            <!--SITE-->
+
+                            <div ng-repeat="botSite in registro.botSites">
+
+                                <ul ng-if="isAdministrador()" class="actions pull-right">
+                                    <li class="dropdown" uib-dropdown="">
+                                        <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle"
+                                            aria-haspopup="true">
+                                            <i class="zmdi zmdi-more-vert"></i>
+                                        </a>
+
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li>
+                                                <a ng-click="showMessageQueue('SITE', botSite.id)" href="">Fila de
+                                                    Mensagens</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                                <img src="img/atendimento/site.png" class="pull-left m-r-10" style="width: 33px" />
+                                <div ng-class="{'c-green' : botSite.active, 'c-red' : !botSite.active}"><b
+                                        translate="{{(botSite.active ? 'ONLINE' : 'OFFLINE') | translate}}"></b></div>
+                                <div>
+                                    {{botSite.site}}
+                                    <i ng-if="botSite.hasError && isAdministrador() "
+                                        title="Bot com erro técnico. Entre em contato com o suporte!"
+                                        class="zmdi zmdi-alert-circle c-red m-l-5"></i>
+                                </div>
+
+                                <hr
+                                    ng-if="$index + 1 < registro.botSites.length || registro.botsFacebook.length  || registro.botsInstagram.length || registro.botsTelegram.length || registro.botsGoogleBusiness.length || registro.botsEmail.length" />
+                            </div>
+
+                            <!--FACEBOOK-->
+
+                            <div ng-repeat="botFacebook in registro.botsFacebook">
+                                <ul class="actions pull-right">
+                                    <li class="dropdown" uib-dropdown="">
+                                        <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle"
+                                            aria-haspopup="true">
+                                            <i class="zmdi zmdi-more-vert"></i>
+                                        </a>
+
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li ng-if="isAdministrador()">
+                                                <a ng-click="showMessageQueue('FACEBOOK', botFacebook.id)" href="">Fila de
+                                                    Mensagens</a>
+                                            </li>
+                                            <li ng-if="!botFacebook.active">
+                                                <a ng-click="onIniciarBotFacebook(botFacebook)"
+                                                    href="">{{'INICIAR-BOT'|translate}}</a>
+                                            </li>
+                                            <li ng-if="botFacebook.active">
+                                                <a ng-click="onForceSubscribe(botFacebook)" href="">Forçar Ativação</a>
+                                            </li>
+                                            <li ng-if="botFacebook.active">
+                                                <a ng-click="onPararServicoBotFacebook(botFacebook)"
+                                                    href="">{{'PARAR-BOT'|translate}}</a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="onFazerLogoffBotFacebook(botFacebook)"
+                                                    href="">{{'FAZER-LOGOFF'|translate}}</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                                <img src="img/atendimento/fb-messenger.png" class="pull-left m-r-10" style="width: 33px" />
+                                <div ng-class="{'c-green' : botFacebook.active, 'c-red' : !botFacebook.active}"><b
+                                        translate="{{(botFacebook.active ? 'ONLINE' : 'OFFLINE') | translate}}"></b></div>
+                                <div>
+                                    {{botFacebook.pagina}}
+                                    <i ng-if="botFacebook.hasError && isAdministrador() "
+                                        title="Bot com erro técnico. Entre em contato com o suporte!"
+                                        class="zmdi zmdi-alert-circle c-red m-l-5"></i>
+                                </div>
+
+                                <hr
+                                    ng-if="$index + 1 < registro.botsFacebook.length || registro.botsTelegram.length || registro.botsInstagram.length || registro.botsGoogleBusiness.length || registro.botsEmail.length" />
+                            </div>
+
+                            <!-- INSTAGRAM -->
+
+                            <div ng-repeat="botInstagram in registro.botsInstagram">
+
+                                <ul class="actions pull-right">
+                                    <li class="dropdown" uib-dropdown="">
+                                        <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle"
+                                            aria-haspopup="true">
+                                            <i class="zmdi zmdi-more-vert"></i>
+                                        </a>
+
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li ng-if="isAdministrador()">
+                                                <a ng-click="showMessageQueue('INSTAGRAM', botInstagram.id)" href="">Fila de
+                                                    Mensagens</a>
+                                            </li>
+                                            <li ng-if="!botInstagram.active">
+                                                <a ng-click="onIniciarBotFacebook(botInstagram)"
+                                                    href="">{{'INICIAR-BOT'|translate}}</a>
+                                            </li>
+                                            <li ng-if="botInstagram.active">
+                                                <a ng-click="onForceSubscribe(botInstagram)" href="">Forçar Ativação</a>
+                                            </li>
+                                            <li ng-if="botInstagram.active">
+                                                <a ng-click="onPararServicoBotFacebook(botInstagram)"
+                                                    href="">{{'PARAR-BOT'|translate}}</a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="onFazerLogoffBotFacebook(botInstagram)"
+                                                    href="">{{'FAZER-LOGOFF'|translate}}</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                                <img src="img/atendimento/instagram.png" class="pull-left m-r-10" style="width: 33px" />
+                                <div ng-class="{'c-green' : botInstagram.active, 'c-red' : !botInstagram.active}"><b
+                                        translate="{{(botInstagram.active ? 'ONLINE' : 'OFFLINE') | translate}}"></b></div>
+                                <div>
+                                    {{botInstagram.pagina}}
+                                    <i ng-if="botInstagram.hasError && isAdministrador() "
+                                        title="Bot com erro técnico. Entre em contato com o suporte!"
+                                        class="zmdi zmdi-alert-circle c-red m-l-5"></i>
+                                </div>
+
+                                <hr
+                                    ng-if="$index + 1 < registro.botsInstagram.length || registro.botsTelegram.length || registro.botsGoogleBusiness.length || registro.botsEmail.length" />
+                            </div>
+
+                            <!--TELEGRAM-->
+
+                            <div ng-repeat="botTelegram in registro.botsTelegram">
+                                <ul class="actions pull-right">
+                                    <li class="dropdown" uib-dropdown="">
+                                        <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle"
+                                            aria-haspopup="true">
+                                            <i class="zmdi zmdi-more-vert"></i>
+                                        </a>
+
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li ng-if="isAdministrador()">
+                                                <a ng-click="showMessageQueue('TELEGRAM', botTelegram.id)" href="">Fila de
+                                                    Mensagens</a>
+                                            </li>
+                                            <li ng-if="!botTelegram.active">
+                                                <a ng-click="onIniciarBotTelegram(botTelegram)"
+                                                    href="">{{'INICIAR-BOT'|translate}}</a>
+                                            </li>
+                                            <li ng-if="botTelegram.active">
+                                                <a ng-click="onPararServicoBotTelegram(botTelegram)"
+                                                    href="">{{'PARAR-BOT'|translate}}</a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="onPararServicoBotTelegram(botTelegram, true)"
+                                                    href="">{{'FORCAR-PARAR-BOT'|translate}}</a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="onFazerLogoffBotTelegram(botTelegram)"
+                                                    href="">{{'FAZER-LOGOFF'|translate}}</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                                <img src="img/atendimento/telegram.png" class="pull-left m-r-10" style="width: 33px" />
+                                <div ng-class="{'c-green' : botTelegram.active, 'c-red' : !botTelegram.active}"><b
+                                        translate="{{(botTelegram.active ? 'ONLINE' : 'OFFLINE') | translate}}"></b></div>
+                                <div>
+                                    {{botTelegram.numero}}
+                                    <i ng-if="botTelegram.hasError && isAdministrador() "
+                                        title="Bot com erro técnico. Entre em contato com o suporte!"
+                                        class="zmdi zmdi-alert-circle c-red m-l-5"></i>
+                                </div>
+
+                                <div ng-if="botTelegram.status">
+                                    <br />
+                                    <i class="small" translate="{{botTelegram.status}}"></i>
+                                </div>
+
+                                <hr
+                                    ng-if="$index + 1 < registro.botsTelegram.length || registro.botsGoogleBusiness.length || registro.botsEmail.length" />
+                            </div>
+
+                            <!-- GOOGLE BUSINESS MESSAGES -->
+
+                            <!-- <div ng-repeat="botGbm in registro.botsGoogleBusiness">
+
+                                <ul class="actions pull-right">
+                                    <li class="dropdown" uib-dropdown="">
+                                        <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                                            <i class="zmdi zmdi-more-vert"></i>
+                                        </a>
+
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li ng-if="isAdministrador()">
+                                                <a ng-click="showMessageQueue('GOOGLE_BUSINESS_MESSAGES', botGbm.id)" href="">Fila de Mensagens</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                                <ul class="actions pull-right" ng-if="hasTutorial('094')">
+                                    <li class="dropdown" uib-dropdown="">
+                                        <button ng-click="showTutorial('094')" title="Clique aqui para visualizar o video de explicação." class="btn btn-sm bgm-blue waves-effect">
+                                            <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                                        </button>
+                                    </li>
+                                </ul>
+
+                                <img src="img/atendimento/google-my-business.png" class="pull-left m-r-10" style="width: 33px" />
+                                <div ng-class="{'c-green' : botGbm.active, 'c-red' : !botGbm.active}"><b translate="{{(botGbm.active ? 'ONLINE' : 'OFFLINE') | translate}}"></b></div>
+                                <div>
+                                    {{botGbm.agent}}
+                                    <i ng-if="botGbm.hasError && isAdministrador() " title="Bot com erro técnico. Entre em contato com o suporte!" class="zmdi zmdi-alert-circle c-red m-l-5"></i>
+                                </div>
+
+                                <div ng-if="botGbm.status && botGbm.status !== 'LANCADO'">
+                                    <br />
+                                    <i class="small" translate="{{botGbm.status}}"></i>
+                                </div>
+
+                                <hr ng-if="$index + 1 < registro.botsGoogleBusiness.length || registro.botsEmail.length" />
+                            </div> -->
+
+                            <!--EMAIL-->
+
+                            <div ng-repeat="botEmail in registro.botsEmail">
+                                <ul class="actions pull-right">
+                                    <li class="dropdown" uib-dropdown="">
+                                        <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle"
+                                            aria-haspopup="true">
+                                            <i class="zmdi zmdi-more-vert"></i>
+                                        </a>
+
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li ng-if="isAdministrador()">
+                                                <a ng-click="showMessageQueue('EMAIL', botEmail.id)" href="">Fila de
+                                                    Mensagens</a>
+                                            </li>
+                                            <li ng-if="botEmail.active">
+                                                <a ng-click="onForceActivate(registro.id)" href="">Forçar Ativação</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                                <img src="img/atendimento/email.png" class="pull-left m-r-10" style="width: 33px" />
+                                <div ng-class="{'c-green' : botEmail.active, 'c-red' : !botEmail.active}"><b
+                                        translate="{{(botEmail.active ? 'ONLINE' : 'OFFLINE') | translate}}"></b></div>
+                                <div>
+                                    {{botEmail.imapUser}}@{{botEmail.botEmailAlias}}.email-bot.chat
+                                    <i ng-if="botEmail.hasError && isAdministrador() "
+                                        title="Bot com erro técnico. Entre em contato com o suporte!"
+                                        class="zmdi zmdi-alert-circle c-red m-l-5"></i>
+                                </div>
+
+                                <div ng-if="botEmail.status">
+                                    <br />
+                                    <i class="small" translate="{{botEmail.status}}"></i>
+                                </div>
+
+                                <hr ng-if="$index + 1 < registro.botsEmail.length" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="showMore" class="text-center p-b-30">
+        <button ng-click="onRecuperarClientes(true)" class="btn btn-default waves-effect"><i
+                class="zmdi zmdi-refresh"></i>
+            {{ "MAIS" | translate }}</button>
+    </div>
+</div>

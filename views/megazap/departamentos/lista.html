@@ -1,0 +1,65 @@
+<div class="container-fluid" data-ng-controller="DepartamentoListaController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>
+                {{'DEPARTAMENTOS'| translate}}
+                <button ng-if="hasTutorial('003')" ng-click="showTutorial('003')" title="Clique aqui para visualizar o video de explicação." class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                    <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                </button>
+            </h2>
+
+            <button class="btn bgm-teal btn-float btn-float-2 waves-effect" ng-click="onMostarModalRegistro()"><i class="zmdi zmdi-plus"></i></button>
+        </div>
+    </div>
+
+    <br/>
+
+    <div ng-if="registros.length === 0" class="text-center">
+        {{'NENHUM-REGISTRO'| translate}}
+    </div>
+
+    <div class="row" ng-repeat="linha in registros">
+        <div class="col-sm-4" ng-repeat="registro in linha">
+            <div class="card">
+                <div class="card-header ch-alt">                     
+                    <a data-ui-sref="cadastros.departamento_edicao({id:{{registro.id}}})">
+                        <h2>                            
+                            <i ng-if="registro.ativo" class="zmdi zmdi-check c-green"></i> 
+                            <i ng-if="!registro.ativo" class="zmdi zmdi-block c-red"></i> 
+                            {{registro.numero}} - {{registro.nome}}                            
+                        </h2>
+                    </a>
+
+                    <ul class="actions">
+                        <li class="dropdown" uib-dropdown="">
+                            <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                                <i class="zmdi zmdi-more-vert"></i>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-right">                                
+                                <li>
+                                    <a data-ui-sref="cadastros.departamento_edicao({id:{{registro.id}}})">{{'EDITAR'| translate}}</a>
+                                </li>
+                                <li>
+                                    <a ng-click="verificarPendenciasUsuario(registro, 'INATIVAR')" ng-if="registro.ativo" href="">{{'INATIVAR'| translate}}</a>
+                                    <a ng-click="onAtivar(registro)" ng-if="!registro.ativo" href="">{{'ATIVAR'| translate}}</a>
+                                </li>
+                                <li>
+                                    <a ng-click="verificarPendenciasUsuario(registro, 'REMOVER')" href="">{{'REMOVER'| translate}}</a>
+                                </li>                                
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <div class="card-body card-padding">                                        
+                    <h3><span class="zmdi zmdi-star c-yellow"></span> {{registro.avaliacaoAtendimento ? registro.avaliacaoAtendimento : "-"}}</h3>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

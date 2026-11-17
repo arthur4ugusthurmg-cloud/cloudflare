@@ -1,0 +1,273 @@
+<div class="container-fluid" data-ng-controller="WebhookEdicaoController" ng-init="onInit()">
+
+    <div class="card" style="margin-bottom: 20px;">
+        <div class="card-header ch-alt">
+            <h2>Webhook - {{registro.name}} 
+                <button ng-if="hasTutorial('099')" ng-click="showTutorial('099')" title="Clique aqui para visualizar o video de explicação." class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                    <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                </button>
+            </h2>
+
+            <button ng-click="onRemover(registro)" class="btn bgm-red btn-float waves-effect pull-right"><i class="zmdi zmdi-delete"></i></button>
+        </div>
+
+        <div class="card-body card-padding">
+            <br/>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input name="nome" type="text" class="form-control fg-input input-lg" ng-model="registro.name" autofocus>
+                            <label class="fg-label">Nome</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input class="form-control input-lg" type="text" class="form-control fg-input input-lg" ng-model="registro.endpoint">
+                            <label class="fg-label">URL</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input class="form-control input-lg" type="text" class="form-control fg-input input-lg" ng-model="registro.token">
+                            <label class="fg-label">Token (mz-authorization)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="checkbox p-l-0 m-b-15">
+                        <label>
+                            <input type="checkbox" data-ng-model="registro.agentAllowed">
+                            <i class="input-helper"></i>
+                            Permitir atendente
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 20px;">
+        <div class="card-header ch-alt">
+            <div class="checkbox m-b-0 m-t-0" style="margin-left: 2;">
+                <label style="width: 150px;">
+                    <input type="checkbox" ng-checked="isAllEventsSelected()" ng-click="selectAllEvents()" >
+                    <i class="input-helper"></i>
+                    <h2 style="display:inline-block; width: 400px">
+                        Eventos
+                    </h2>
+                </label>
+            </div>
+        </div>
+
+        <div class="card-body card-padding">           
+            <div class="row webhook-events-row"  style="margin-left:0 !important">
+                <h4>Ação Manual</h4>
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" checklist-model="controle.events" checklist-value="eventEnum.MANUAL_LEAD_ACTION">
+                            <i class="input-helper"></i>
+                            Ação manual para lead
+                        </label>
+                    </div>
+                </div>
+            
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value=""  checklist-model="controle.events" checklist-value="eventEnum.MANUAL_TICKET_ACTION">
+                            <i class="input-helper"></i>
+                            Ação manual para atendimento
+                        </label>
+                    </div>
+                </div>
+            
+            </div>
+            <div class="row webhook-events-row" style="margin-left:0 !important">
+                <h4>Ação para Lead</h4>
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" checklist-model="controle.events" checklist-value="eventEnum.LEAD_CREATED">
+                            <i class="input-helper"></i>
+                            Lead criado
+                        </label>
+                    </div>
+                </div>
+            
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" checklist-model="controle.events" checklist-value="eventEnum.LEAD_UPDATED">
+                            <i class="input-helper"></i>
+                            Lead atualizado
+                        </label>
+                    </div>
+                </div>
+            
+            </div>
+            <div class="row  webhook-events-row" style="margin-left:0 !important">
+                <h4>Ação para Atendimento</h4>
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value=""  checklist-model="controle.events" checklist-value="eventEnum.TICKET_CREATED">
+                            <i class="input-helper"></i>
+                            Atendimento criado
+                        </label>
+                    </div>
+                </div>
+            
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value=""  checklist-model="controle.events" checklist-value="eventEnum.TICKET_STARTED">
+                            <i class="input-helper"></i>
+                            Atendimento iniciado
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value=""  checklist-model="controle.events" checklist-value="eventEnum.TICKET_TRANSFERRED">
+                            <i class="input-helper"></i>
+                            Atendimento transferido
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value=""  checklist-model="controle.events" checklist-value="eventEnum.TICKET_FINISHED">
+                            <i class="input-helper"></i>
+                            Atendimento finalizado
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value=""  checklist-model="controle.events" checklist-value="eventEnum.TICKET_EVALUATED">
+                            <i class="input-helper"></i>
+                            Atendimento avaliado
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <button ng-click="onMostrarModalJSON()" title="Clique aqui para gerar um json de exemplo" ng-disabled="controle.events.length === 0"
+                    class="btn btn-md bgm-blue  waves-effect">
+                    <i class="zmdi zmdi-language-javascript"></i> Gerar JSON de exemplo
+                </button>
+                <button ng-if="!isControllerDepartments" ng-click="toggleDepartmentsController()" ng-disabled="!isActiveEventTicket()" class="btn btn-md bgm-green  waves-effect">
+                    <i class="fas fa-power-off"></i> {{"ACTIVE-DEPARTMENT-CONTROLLER" | translate}}
+                </button>
+
+                <button ng-if="isControllerDepartments" ng-click="toggleDepartmentsController()" ng-disabled="!isActiveEventTicket()" class="btn btn-md bgm-red  waves-effect">
+                    <i class="fas fa-power-off"></i> {{"DESACTIVE-DEPARTMENT-CONTROLLER" | translate}}
+                </button>
+            </div>
+           
+        </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 20px;" ng-show="isActiveEventTicket()" ng-if="isControllerDepartments">
+        <div class="card-header ch-alt">
+            <div class="checkbox m-b-0 m-t-0" style="margin-left: 2;">
+                <label style="width: 150px;">
+                    <input type="checkbox" ng-checked="isAllDepartmentsSelected()" ng-click="selectAllDepartments()">
+                    <i class="input-helper"></i>
+                    <h2 style="display:inline-block;width:400px">
+                        {{"DEPARTAMENTOS" | translate}}
+                    </h2>
+                </label>
+            </div>
+            <div class="alert alert-info" role="alert" style="
+                margin-bottom: 0;
+                margin-top: 15px !important;
+                padding-left: 15px;
+                padding-right: 15px;
+                background: #ffffff7a;
+                color: #353535;
+            ">
+                <i class="zmdi zmdi-alert-circle-o zmdi-hc-fw"></i> <b>{{"OBSERVACAO" | translate}}: </b>
+                <span>{{"OBS-WEBHOOK-DEPARTMENT" | translate}}</span>    
+            </div>
+        </div>
+
+        <div class="card-body card-padding" style="display:flex;flex-wrap: wrap">
+            <div ng-repeat="department in departments | orderBy: 'nome'" style="display:flex;width: 300px;">
+                <div class="checkbox m-b-15" style="width: 300px;">
+                    <label>
+                        <input type="checkbox" value="" checklist-model="controle.departments" checklist-value="department.id">
+                        <i class="input-helper"></i>        
+                        {{department.nome}}
+                    </label>
+                </div>
+            
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 20px;">
+        <div class="card-header ch-alt">
+            <div class="checkbox m-b-0 m-t-0" style="margin-left: 2;">
+                <label style="width: 150px;">
+                    <input type="checkbox" ng-checked="isAllBotsSelected()" ng-click="selectAllBots()" >
+                    <i class="input-helper"></i>
+                    <h2 style="display:inline-block;width:400px">
+                        Bots
+                    </h2>
+                </label>
+            </div>
+        </div>
+
+        <div class="card-body card-padding" style="display:flex;flex-wrap: wrap">
+
+            <div ng-repeat="bot in bots | orderBy: 'displayName'  track by $index" style="display:flex;width: 300px;">
+                <div class="checkbox m-b-15" style="width: 300px;">
+                    <label>
+                        <input type="checkbox" value="" checklist-model="controle.bots" checklist-value="bot.id">
+                        <i class="input-helper"></i>
+                        <img ng-if="bot.displayName.toUpperCase().includes('WHATSAPP')" src="img/atendimento/wa-messenger.png" class="pull-left m-r-10" style="width: 33px;margin-top:-7px !important" />
+                        <img ng-if="bot.displayName.toUpperCase().includes('SITE')" src="img/atendimento/site.png" class="pull-left m-r-10" style="width: 33px;margin-top:-7px !important" />
+                        <img ng-if="bot.displayName.toUpperCase().includes('FACEBOOK')" src="img/atendimento/fb-messenger.png" class="pull-left m-r-10"
+                            style="width: 33px;margin-top:-7px !important" />
+                        <img ng-if="bot.displayName.toUpperCase().includes('INSTAGRAM')" src="img/atendimento/instagram.png" class="pull-left m-r-10"
+                                style="width: 33px;margin-top:-7px !important" />
+                        <img ng-if="bot.displayName.toUpperCase().includes('TELEGRAM')" src="img/atendimento/telegram.png"
+                                    src="img/atendimento/site.png" class="pull-left m-r-10" style="width: 33px;margin-top:-7px !important" />
+                        <img ng-if="bot.displayName.toUpperCase().includes('GOOGLE BUSINESS')" src="img/atendimento/google-my-business.png"
+                                        src="img/atendimento/site.png" class="pull-left m-r-10" style="width: 33px;margin-top:-7px !important" />
+                        <img ng-if="bot.displayName.toUpperCase().includes('EMAIL')" src="img/atendimento/email.png"
+                                            src="img/atendimento/site.png" class="pull-left m-r-10" style="width: 33px;margin-top:-7px !important" />
+
+                                        
+                        {{bot.displayName}}
+                    </label>
+                </div>
+            
+                
+            </div>
+        </div>
+    </div>
+
+    <button ng-click="onSalvar()" class="btn btn-float bgm-blue m-btn waves-effect waves-circle"><i class="zmdi zmdi-floppy"></i></button>
+
+</div>
+
+

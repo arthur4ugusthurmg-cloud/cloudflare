@@ -1,0 +1,94 @@
+
+/* ==========================================================
+   BANCO DE ARQUIVOS
+   ========================================================== */
+
+.banco-arquivo-container {
+    width: 100%;
+    position: relative;
+}
+
+
+/* ==========================================================
+   CABEÇALHO
+   ========================================================== */
+
+.banco-arquivo-container .card {
+    border-radius: 3px;
+    overflow: visible;
+}
+
+.banco-arquivo-container .card-header {
+    position: relative;
+    min-height: 70px;
+}
+
+.banco-arquivo-container .card-header h2 {
+    margin: 0;
+    padding: 5px 0;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 35px;
+}
+
+.banco-arquivo-container .card-header .btn-float {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .20);
+}
+
+
+/* ==========================================================
+   BREADCRUMB
+   ========================================================== */
+
+.banco-arquivo-container-breadcrumb {
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+
+    background: #fff;
+    border-radius: 3px;
+
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
+
+    font-size: 14px;
+    color: #555;
+
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.banco-arquivo-container-breadcrumb span {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+
+    transition: color .2s ease;
+}
+
+.banco-arquivo-container-breadcrumb span:first-child {
+    font-weight: 500;
+}
+
+.banco-arquivo-container-breadcrumb span:hover {
+    color: #2196f3;
+}
+
+.banco-arquivo-container-breadcrumb .zmdi-chevron-right {
+    margin: 0 7px;
+    font-size: 18px;
+    color: #999;
+}
+
+
+/* ==========================================================
+   ÁREA DOS BOTÕES
+   ========================================================== */
+
+.banco-arquivo-container-buttons {
+    width: 100%;
+    min-height: 50px;
+
+    display: flex;
+    align-items: flex-start;
+    j

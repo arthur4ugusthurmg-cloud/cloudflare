@@ -1,0 +1,146 @@
+<div class="container-fluid" data-ng-controller="RelatorioWebhookController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>
+                Webhooks
+                <button ng-if="hasTutorial('103')" ng-click="showTutorial('103')"
+                    title="Clique aqui para visualizar o video de explicação."
+                    class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                    <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                </button>
+                <small>Histórico de execuções dos webhooks.</small>
+            </h2>   
+
+            <button title="{{'BUSCAR'| translate}}" class="btn bgm-blue btn-float btn-float-2 waves-effect" ng-click="getWebhooks()"><i class="zmdi zmdi-search"></i></button>
+
+        </div>
+        <div class="card-body card-padding">
+            <div class="row">  
+                <div class="col-sm-8">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getWebhooks()" name="nome" type="text" class="form-control fg-input input-lg" ng-model="filtro.name">
+                            <label class="fg-label">{{'NOME'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="getWebhooks()" class="form-control input-lg select-simples" ng-model="filtro.event">
+                                <option ng-repeat="event in getEventsList()" value="{{event}}">{{event | translate}}</option>
+                                
+                            </select>
+                            <label class="fg-label">Evento</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="row">       
+
+                <div class="col-sm-6">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getWebhooks()" name="nome" type="text" class="form-control fg-input input-lg" ng-model="filtro.url">
+                            <label class="fg-label">URL</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="getWebhooks()" class="form-control input-lg select-simples" ng-model="filtro.status">
+                                <option value="TODOS">{{'TODOS'|translate}}</option>
+                                <option value="PROCESSED">Processado</option>
+                                <option value="ERROR">Erro</option>
+                                <option value="PENDING">Pendente</option>
+                            </select>
+                            <label class="fg-label">Status</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getWebhooks()" type="text" class="form-control ng-isolate-scope input-lg" data-input-mask="{mask: '00/00/0000'}" maxlength="10" autocomplete="off" ng-model="filtro.dataCriacaoDe">
+                            <label class="fg-label">Data de Criação (de)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getWebhooks()" type="text" class="form-control ng-isolate-scope input-lg" data-input-mask="{mask: '00/00/0000'}" maxlength="10" autocomplete="off" ng-model="filtro.dataCriacaoAte">
+                            <label class="fg-label">Data de Criação (até)</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <br/>
+            <div class="row">    
+
+                <div class="col-sm-12">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getWebhooks()" name="nome" type="text" class="form-control fg-input input-lg" ng-model="filtro.requestPayload">
+                            <label class="fg-label">Payload (Request)</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="registros.length > 0" class="card">
+        <div class="card-body">
+            <div>
+                <table id="content-table" class="table table-striped table-vmiddle">
+                    <thead>
+                        <tr>
+                            <th style="width: 1%">Status</th>
+                            <th>Nome</th>
+                            <th>Evento</th>
+                            <th>URL</th>
+                            <th style="width: 1%;">Data</th>
+                            <th style="width: 1%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="registro in registros">
+                            <td style='white-space: nowrap; text-align: center'>
+                                <div ng-if="registro.status === 'PENDING'" class="status-td bgm-blue c-white">Pendente</div>
+                                <div ng-if="registro.status === 'PROCESSED'" class="status-td bgm-green c-white">Processado</div>
+                                <div ng-if="registro.status === 'ERROR'" class="status-td bgm-red c-white">Erro</div>
+                            </td>
+                            <td>
+                                {{ registro.name}}
+                            </td>
+                             <td>
+                                {{ registro.event | translate}}
+                            </td>
+                            <td>
+                                {{ registro.endpoint}}
+                            </td>
+                           
+                            <td class="text-nowrap" >
+                                {{ registro.createdAt | date:"dd/MM/yyyy HH:mm"}}
+                            </td>
+                            <td class="text-center" style="white-space: nowrap">
+                                <button ng-click="showDetails(registro)" class="btn btn-default waves-effect"><i class="zmdi zmdi-search"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>                        
+        </div>        
+    </div>
+
+    <div ng-if="showMore" class="text-center p-b-30">
+        <button ng-click="getWebhooks(true)" class="btn btn-default waves-effect"><i class="zmdi zmdi-refresh"></i> {{ "MAIS" | translate }}</button>
+    </div>
+
+</div>

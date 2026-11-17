@@ -1,0 +1,83 @@
+<div class="container-fluid" data-ng-controller="LocalizacaoListaController" ng-init="onInit()">
+
+    <div class="card" style="margin-bottom: 5px;">
+        <div class="card-header ch-alt">
+            <h2>{{'LOCALIZACOES'| translate}}</h2>
+
+            <button class="btn bgm-teal btn-float btn-float-2 waves-effect" ng-click="onMostarModalRegistro()"><i class="zmdi zmdi-plus"></i></button>
+        </div>
+
+        <div class="card-body card-padding">
+            <div class="row">
+                <div class="col-sm-6">
+                    <label class="c-gray" style="font-size: 12px;">{{'DEPARTAMENTOS' | translate}}</label>
+                    <div class="fg-line">
+                        <select class="form-control input-lg" ng-model="filtro.departamentoId" ng-change="aplicarFiltros()"
+                            ng-options="dep.id as dep.nome for dep in departamentos">
+                            <option value="">{{'TODOS-DEPARTAMENTOS' | translate}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="c-gray" style="font-size: 12px;">{{'STATUS' | translate}}</label>
+                    <div class="fg-line">
+                        <select class="form-control input-lg" ng-model="filtro.status" ng-change="aplicarFiltros()">
+                            <option value="TODOS">{{'TODOS' | translate}}</option>
+                            <option value="ATIVOS">{{'ATIVOS' | translate}}</option>
+                            <option value="INATIVOS">{{'INATIVOS' | translate}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+
+    <div ng-if="registros.length === 0" class="text-center">
+        {{'NENHUM-REGISTRO'| translate}}
+    </div>
+
+    <div class="row" ng-repeat="linha in registros">
+        <div class="col-sm-4" ng-repeat="registro in linha">
+            <div class="card">
+                <div class="card-header ch-alt">
+                    <a data-ui-sref="cadastros.localizacao_edicao({id:{{registro.id}}})">
+                        <h2>
+                            <i ng-if="registro.ativo" class="zmdi zmdi-check c-green"></i>
+                            <i ng-if="!registro.ativo" class="zmdi zmdi-block c-red"></i>
+                            {{registro.nome}}
+                        </h2>
+                    </a>
+
+                    <ul class="actions">
+                        <li class="dropdown" uib-dropdown="">
+                            <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                                <i class="zmdi zmdi-more-vert"></i>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a data-ui-sref="cadastros.localizacao_edicao({id:{{registro.id}}})">{{'EDITAR'| translate}}</a>
+                                </li>
+                                <li>
+                                    <a ng-click="onRemover(registro)" href="">{{'REMOVER'| translate}}</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card-body card-padding">
+                    <div ng-if="registro.endereco">
+                        <i class="zmdi zmdi-pin c-gray"></i> {{registro.endereco}}
+                    </div>
+                    <div class="c-gray m-t-5" style="font-size: 12px;">
+                        {{registro.latitude}}, {{registro.longitude}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,99 @@
+<div class="mz-sidebar-container mz-sidebar-bg" ng-controller="SidebarController">
+    <div class="mz-sidebar-logo">
+        <img ng-if="customizacao.imagemMenuLateral" ng-src="{{customizacao.imagemMenuLateral}}">
+    </div>
+    <div class="mz-sidebar-list">
+        <a href="" class="mz-sidebar-novo-layout-item" ng-click="abrirNovoLayout()" ng-if="podeUsarNovoLayout()"
+            ng-style="{
+           'background': 'linear-gradient(135deg, ' +
+           (customizacao.corPrimaria || '#4a90d9') + ' 0%, ' +
+           (customizacao.corSecundaria || customizacao.corPrimaria || '#2c5c8f') +
+           ' 100%)'
+       }">
+
+            <div class="mz-sidebar-novo-layout-icon">
+                <i class="fas fa-rocket"></i>
+            </div>
+
+            <div class="mz-sidebar-novo-layout-text">
+                <span class="mz-sidebar-novo-layout-title">
+                    {{'IR-PARA-NOVO-LAYOUT'| translate}}
+                </span>
+
+                <span class="mz-sidebar-novo-layout-badge">
+                    {{'NOVIDADE'| translate}}
+                </span>
+            </div>
+        </a>
+
+        <div ng-repeat="category in sidebarMenu" class="mz-sidebar-category-wrapper">
+            <div class="mz-sidebar-category" ng-if="checkCondition(category)">
+                <div class="mz-sidebar-category-info">
+                    <div class="mz-sidebar-category-name mz-sidebar-category-color">
+                        {{category.name | translate}}
+                    </div>
+                    <!-- <div class="mz-sidebar-category-description">
+                    {{category.description}}
+                </div> -->
+                </div>
+
+                <div ng-repeat="item in category.items">
+                    <div ng-if="!item.type" ng-class="{'emphasis-category': item.emphasis}">
+                        <a ng-if="checkCondition(item)"
+                            ng-click="onClick(item.click); mzTemplate.sidebarMenu.display = false"
+                            class="mz-sidebar-item mz-sidebar-item-color button"
+                            data-ui-sref-active="mz-sidebar-item-active-bg mz-sidebar-item-active-color active"
+                            data-ui-sref="{{item.sref}}">
+                            <div class="mz-sidebar-item-icon">
+                                <i id="{{item.id}}" class="{{item.icon}}"></i>
+                            </div>
+                            <div class="mz-sidebar-item-name">
+                                <span>{{item.name | translate}}</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div ng-if="item.type == 'submenu'">
+                        <a ng-if="checkCondition(item)" ng-click="item.subMenuOpened = !item.subMenuOpened"
+                            class="mz-sidebar-item mz-sidebar-item-color">
+                            <div class="mz-sidebar-item-icon">
+                                <i id="{{item.id}}" class="{{item.icon}}"></i>
+                            </div>
+                            <div class="mz-sidebar-item-name">
+                                <span>{{item.name | translate}}</span>
+                            </div>
+                            <div class="mz-sidebar-item-caret">
+                                <i ng-show="!item.subMenuOpened" class="fas fa-caret-right"></i>
+                                <i ng-show="item.subMenuOpened" class="fas fa-caret-down"></i>
+                            </div>
+                        </a>
+                        <div class="mz-sidebar-submenu" ng-class="{'active': item.subMenuOpened}">
+                            <div ng-repeat="subitem in item.items">
+                                <a ng-if="checkCondition(subitem)" ng-click="onClick(subitem.click)"
+                                    class="mz-sidebar-item mz-sidebar-item-color"
+                                    data-ui-sref-active="mz-sidebar-item-active-bg mz-sidebar-item-active-color"
+                                    data-ui-sref="{{subitem.sref}}">
+                                    <div class="mz-sidebar-item-icon">
+                                        <i id="{{subitem.id}}" class="{{subitem.icon}}"></i>
+                                    </div>
+                                    <div class="mz-sidebar-item-name">
+                                        <span>{{subitem.name | translate}}</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="mz-sidebar-footer">
+        <div ng-if="hasContatosSuporte()" class="mz-sidebar-help mz-sidebar-help-bg mz-sidebar-help-color"
+            ng-click="onShowSupportChannelsModal()">
+            <i class="far fa-question-circle"></i>
+            <span>{{'PRECISA-AJUDA'| translate}}</span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+<link href="css/ai.css?VERSION_HASH" rel="stylesheet" />
+<div class="container-fluid" data-ng-controller="FeaturesAiController" ng-init="getLinkDepartment()">
+    <div class="card m-b-20">
+        <div class="card-header ch-alt" style="border-radius: 8px;">
+            <h2>
+                {{feature.name}}
+                <small>{{feature.description}}</small>
+                <small>{{feature.category}}</small>
+            </h2>
+        </div>
+    </div>
+    <div class="card m-b-20">
+        <div class="card-header ch-alt">
+            <div style="display: flex; gap: 8px;">
+                <label class="checkbox radio-inline" style="padding-left: 0px;">
+                    <input type="checkbox" ng-model="selectAllDepartaments"
+                        ng-change="toggleAllDepartaments(selectAllDepartaments)" style="position: relative;">
+                    <i class="input-helper"></i>
+                </label>
+                <h2>
+                    {{'DEPARTAMENTOS' | translate}}
+                </h2>
+            </div>
+            <div class="m-t-5">
+                <span>Escolha quais departamentos terão acesso a esse assistente.</span>
+            </div>
+        </div>
+        <div class="card-body card-padding" style="padding: 20px;">
+            <div class="row" style="margin-left: -6px; margin-right: -6px;" ng-if="departamentos.length">
+                <div class="col-xs-3" style="padding-left: 7px; padding-right: 7px;"
+                    ng-repeat="departament in departamentos">
+                    <div class="kc-item" style="cursor: pointer;"
+                        ng-click="departament.selected = !departament.selected">
+                        <div class="kc-content">
+                            <h4 class="kc-titulo kc-d">
+                                {{ departament.name }}
+                            </h4>
+                        </div>
+                        <div class="kc-actions">
+                            <label class="checkbox radio-inline" style="padding-left: 0px;">
+                                <input type="checkbox" ng-model="departament.selected" style="position: relative;"
+                                    ng-click="$event.stopPropagation()">
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" ng-if="!departamentos.length">
+                <div class="col-xs-12">
+                    <p class="text-muted text-center m-t-15">{{'NENHUM-REGISTRO'| translate}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button ng-click="updateManagerFeature()" class="btn btn-float bgm-blue m-btn waves-effect waves-circle" style="bottom: 25px; right: 80px;">
+        <i class="zmdi zmdi-floppy"></i>
+    </button>
+</div>

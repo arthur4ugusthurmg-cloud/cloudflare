@@ -1,0 +1,117 @@
+<div class="container-fluid" data-ng-controller="RevendaListaController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>{{'REVENDAS'| translate}}</h2>
+
+            <button class="btn bgm-blue btn-float btn-float-2 waves-effect" ng-click="getRevendedores()"><i class="zmdi zmdi-search"></i></button>
+            <button class="btn bgm-teal btn-float btn-float-2 waves-effect" ng-click="onMostarModalNovoRegistro()"><i class="zmdi zmdi-plus"></i></button>
+
+        </div>
+
+        <div class="card-body card-padding">
+            <br/><br/>
+            <div class="row">
+
+                <div class="col-sm-8">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getRevendedores()" type="text" class="form-control fg-input input-lg" ng-model="filtro.nome" autofocus>
+                            <label class="fg-label">{{'NOME'|translate}}</label>
+                        </div>
+                    </div> 
+
+                </div> 
+
+                <div class="col-sm-2">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="getRevendedores()" class="form-control input-lg select-simples" ng-model="filtro.status">
+                                <option value="todos">Todos</option>
+                                <option value="ativos">Ativo</option>
+                                <option value="inativos">Inativo</option>
+                            </select>
+                            <label class="fg-label">{{'STATUS'|translate}}</label>
+                        </div>
+                    </div> 
+
+                </div> 
+
+                <div class="col-sm-2">
+
+                    <div class="form-group fg-float m-b-30">
+
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="getRevendedores()" class="form-control input-lg select-simples" ng-model="filtro.possuiClienteFinanceiro">
+                                <option value="todos">Todos</option>
+                                <option value="true">Sim</option>
+                                <option value="false">Não</option>
+                            </select>
+                            <label class="fg-label">Possui Cliente Financeiro?</label>
+                        </div>
+
+                    </div> 
+
+                </div>
+
+            </div>                        
+
+        </div>
+
+    </div>
+
+    <br/>
+
+    <div ng-if="registros.length === 0" class="text-center">
+        {{'NENHUM-REGISTRO'| translate}}
+    </div>
+
+    <div class="row" ng-repeat="linha in registros">
+        <div class="col-sm-6" ng-repeat="registro in linha">
+            <div class="card">
+                <div class="card-header ch-alt">                     
+                    <a data-ui-sref="cadastros.revenda_edicao({id:{{registro.id}}})">
+                        <h2>                            
+                            <i ng-if="registro.ativo" class="zmdi zmdi-check c-green"></i> 
+                            <i ng-if="!registro.ativo" class="zmdi zmdi-block c-red"></i> 
+                            {{registro.id}} - {{registro.nome}}
+                        </h2>
+                    </a>
+
+                    <ul class="actions">
+                        <li class="dropdown" uib-dropdown="">
+                            <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                                <i class="zmdi zmdi-more-vert"></i>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-right">                                
+                                <li>
+                                    <a data-ui-sref="cadastros.revenda_edicao({id:{{registro.id}}})">{{'EDITAR'| translate}}</a>
+                                    <a ng-click="onInativar(registro)" ng-if="registro.ativo" href="">{{'INATIVAR'| translate}}</a>
+                                    <a ng-click="onAtivar(registro)" ng-if="!registro.ativo" href="">{{'ATIVAR'| translate}}</a>
+                                    <a ng-click="onRemover(registro)" href="">{{'REMOVER'| translate}}</a>
+                                </li>                                
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="card-body card-padding">  
+                    <div class="bgm-red c-white p-5" ng-if="!registro.salesCustomer.id">
+                        <i class="zmdi zmdi-alert-circle-o"></i> NÃO POSSUI CLIENTE FINANCEIRO!
+                    </div>
+                    <div ng-if="registro.salesCustomer.id">
+                        <b>Cliente Financeiro: </b><a data-ui-sref="sales.customers_view({id: registro.salesCustomer.id})">{{registro.salesCustomer.displayName}}</a>
+                        <hr/>
+                        {{registro.documento}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

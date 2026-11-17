@@ -1,0 +1,53 @@
+<link href="css/ai.css?VERSION_HASH" rel="stylesheet" />
+<div class="container-fluid" data-ng-controller="AIIntegrationsController" ng-init="onInit()">
+    <div class="mini-charts">
+        <div class="card m-b-20">
+            <div class="card-header ch-alt" style="border-radius: 8px;">
+                <h2>
+                    {{'AI-CONFIG' | translate}}
+                    <button ng-if="hasTutorial('165')" ng-click="showTutorial('165')"
+                        title="Clique aqui para visualizar o video de explicação."
+                        class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                        <i class="zmdi zmdi-videocam m-r-5"></i>
+                        {{'TUTORIAL'|translate}}
+                    </button>
+                </h2>
+            </div>
+
+            <div class="card-body card-padding">
+                <div class="row">
+                    <div class="col-md-12" ng-if="showClients">
+                        <div class="form-group fg-float m-b-10 m-t-10">
+                            <div class="fg-line">
+                                <input type="text" ng-model="filtro.client" lta-enter="getAll()"
+                                    typeahead-on-select="getAll()" typeahead-show-hint="true" typeahead-min-length="3"
+                                    uib-typeahead="client as client.nome for client in getClientsByName($viewValue)"
+                                    typeahead-loading="loadingCustomer" class="form-control input-lg">
+                                <label class="fg-label">{{'CLIENTES'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" ng-if="!showClients || filtro.client.id != undefined">
+            <div class="col-sm-3" ng-repeat="item in aisList">
+                <div class="card">
+                    <div class="content-ias">
+                        <img ng-src="{{item.logoUrl}}" class="pv-main" alt="">
+                        <span>{{item.name}}</span>
+                        <div class="description">{{'REALIZAR_CONFIGURACAO_NECESSARIA_IA' | translate}}</div>
+                    </div>
+                    <hr style="margin: 0 20px;">
+                    <div class="footer-ias">
+                        <a href="https://openai.com/api/pricing/" target="_blank">{{'VER_VALORES' | translate}}</a>
+                        <button ng-click="openModalConfigAI(item)" class="btn btn-link">
+                            {{item.clientAI.active ? ('CONFIGURAR' | translate) : ('INICIAR_CONFIGURACAO' | translate)}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,115 @@
+[
+    {
+        "id": 37156,
+        "tab": "DEPARTMENTS",
+        "nome": "Agendamento Tecnico",
+        "naoLidas": 999999999
+    },
+    {
+        "id": 37046,
+        "tab": "DEPARTMENTS",
+        "nome": "Atendimento",
+        "naoLidas": 0
+    },
+    {
+        "id": 245692,
+        "tab": "DEPARTMENTS",
+        "nome": "Boleto",
+        "naoLidas": 0
+    },
+    {
+        "id": 37049,
+        "tab": "DEPARTMENTS",
+        "nome": "Cobrança/Negociação",
+        "naoLidas": 0
+    },
+    {
+        "id": 37040,
+        "tab": "DEPARTMENTS",
+        "nome": "Financeiro",
+        "naoLidas": 0
+    },
+    {
+        "id": 212838,
+        "tab": "DEPARTMENTS",
+        "nome": "Instalar",
+        "naoLidas": 0
+    },
+    {
+        "id": 21238,
+        "tab": "CONTACTS",
+        "nome": "LinkFly Internet",
+        "online": false,
+        "naoLidas": 0
+    },
+    {
+        "id": 21263,
+        "tab": "CONTACTS",
+        "nome": "Maciel",
+        "online": true,
+        "naoLidas": 0
+    },
+    {
+        "id": 211086,
+        "tab": "DEPARTMENTS",
+        "nome": "Retencao",
+        "naoLidas": 0
+    },
+    {
+        "id": 212837,
+        "tab": "DEPARTMENTS",
+        "nome": "Retirar",
+        "naoLidas": 0
+    },
+    {
+        "id": 1456311,
+        "tab": "DEPARTMENTS",
+        "nome": "Retorno Cliente",
+        "naoLidas": 0
+    },
+    {
+        "id": 45028,
+        "tab": "DEPARTMENTS",
+        "nome": "RH",
+        "naoLidas": 0
+    },
+    {
+        "id": 252940,
+        "tab": "CONTACTS",
+        "nome": "rozangela",
+        "online": false,
+        "url": "https://v2-4.mz-css.net/f8fcf79253cba4b975fdd79be5622263/WhatsApp_Image_2022-05-26_at_15.38.16.jpeg",
+        "naoLidas": 0
+    },
+    {
+        "id": 37041,
+        "tab": "DEPARTMENTS",
+        "nome": "Suporte Tecnico",
+        "naoLidas": 0
+    },
+    {
+        "id": 1455002,
+        "tab": "DEPARTMENTS",
+        "nome": "TORRE",
+        "naoLidas": 0
+    },
+    {
+        "id": 37157,
+        "tab": "DEPARTMENTS",
+        "nome": "Trocar de Plano",
+        "naoLidas": 0
+    },
+    {
+        "id": 37038,
+        "tab": "DEPARTMENTS",
+        "nome": "Vendas",
+        "naoLidas": 0
+    },
+    {
+        "id": 749764,
+        "tab": "CONTACTS",
+        "nome": "Vitoria",
+        "online": true,
+        "naoLidas": 0
+    }
+]

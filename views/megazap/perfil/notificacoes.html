@@ -1,0 +1,40 @@
+<div class="container-fluid" data-ng-controller="PerfilController" ng-init="onInitInfo()">
+
+  <div class="block-header">
+    <h2>{{'NOTIFICATIONS'|translate}}</h2>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-4" ng-if="!confNotification.type.startsWith('APP_')" ng-repeat="confNotification in registro.usuarioNotificacoes">
+      <div class="card">
+        <div class="card-header ch-alt">
+          <h2>{{confNotification.type|translate}}</h2>
+        </div>
+        <div class="card-body card-padding">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="toggle-switch m-r-20 pull-left">
+                <input id="{{confNotification.type}}-notification-switch" type="checkbox" hidden="hidden" ng-model="confNotification.notification" />
+                <label for="{{confNotification.type}}-notification-switch" class="ts-helper"></label>
+              </div>
+              {{'NOTIFICACAO'|translate}}
+            </div>
+          </div>
+          <div class="row m-t-10">
+            <div class="col-sm-12">
+              <div class="toggle-switch m-r-20 pull-left">
+                <input id="{{confNotification.type}}-sound-switch" type="checkbox" hidden="hidden" ng-model="confNotification.sound" />
+                <label for="{{confNotification.type}}-sound-switch" class="ts-helper"></label>
+              </div>
+              {{'SOM'|translate}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button ng-click="onSalvarNotificacao()" class="btn btn-float bgm-blue m-btn waves-effect waves-circle">
+    <i class="zmdi zmdi-floppy"></i>
+  </button>
+</div>

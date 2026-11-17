@@ -1,0 +1,39 @@
+<div class="modal-header">
+    <h3>{{'NOVO-ATENDENTE'|translate}}<small>{{'NOVO-REGISTRO-DESCRICAO'|translate}}</small></h3>
+</div>
+<div class="modal-body">
+    <br/>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="nome" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.nome" autofocus>
+                    <label class="fg-label">{{'NOME'|translate}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="login" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.login">
+                    <label class="fg-label">{{'LOGIN'|translate}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="email" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.emailAtendente">
+                    <label class="fg-label">{{'EMAIL'|translate}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="alert alert-info" role="alert">
+        <i class="zmdi zmdi-alert-circle-o zmdi-hc-fw"></i> {{"AVISO-EMAIL-SENHA" | translate}}
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onModalInserir()">{{'ENVIAR'|translate}}</button>
+    <button class="btn btn-link" ng-click="onModalCancelar()">{{'CANCELAR'|translate}}</button>
+</div>

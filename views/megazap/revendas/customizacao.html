@@ -1,0 +1,1897 @@
+<div class="container-fluid" data-ng-controller="RevendaCustomizacaoController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>Domínios</h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <table class="table table-no-header">
+                <tr ng-repeat="dominio in dominios">
+                    <td style="vertical-align: middle">{{dominio.nome}}</td>
+                    <td style="vertical-align: middle">{{dominio.dominio}}</td>
+                    <td style="vertical-align: middle">{{dominio.tipo|translate}}</td>
+                    <td class="actions">
+                        <div class="dropdown" uib-dropdown>
+                            <a href="" uib-dropdown-toggle="" aria-expanded="false" aria-haspopup="true"
+                                class="btn btn-default btn-icon waves-effect waves-circle" style="box-shadow: none;align-items: center;justify-content: center;display: flex;">
+                                <i class="zmdi zmdi-more-vert"></i>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a href="" ng-click="onSelecionarDominio(dominio)">{{'EDITAR'| translate}}</a>
+                                </li>
+                                <li ng-if="dominio.tipo === 'WORKSPACE_PAINEL'">
+                                    <a data-ui-sref="cadastros.customizacao_tutoriais({id: dominio.id})">Tutoriais</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!--PAINEL WORKSPACE-->
+
+    <div id="div_WORKSPACE_PAINEL" class="card m-b-0" style="border-radius: 0;"
+        ng-show="registro.dominio && registro.tipo === 'WORKSPACE_PAINEL'">
+        <div class="card-header ch-alt">
+            <h2>{{registro.dominio}}<small>Painel Workspace</small></h2>
+        </div>
+
+        <br />
+
+        <div class="card-body card-padding">
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" ng-model="registro.nome">
+                            <label class="fg-label">{{'NOME'| translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="registro.solicitarEmailCliente">
+                            <i class="input-helper"></i>
+                            Solicitar email do cliente
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- IA JADI -->
+        <div class="card-header ch-alt" style="border-radius: 0;">
+            <h2>Exibição da IA</h2>
+        </div>
+        <div class="card-body card-padding">
+            <br />
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="checkbox checkbox-inline m-b-15 p-l-0">
+                        <label>
+                            <input type="checkbox" data-ng-model="registro.permissionAis">
+                            <i class="input-helper"></i>
+                            Deixar IA visível para clientes
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--2FA PAINEL WORKSPACE-->
+        <div class="card-header ch-alt" style="border-radius: 0;">
+            <h2>Obrigar Autenticação 2 Fatores</h2>
+        </div>
+        <div class="card-body card-padding">
+            <br />
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="checkbox checkbox-inline m-b-15 p-l-0">
+                        <label>
+                            <input type="checkbox" data-ng-model="registro.gestor2fa">
+                            <i class="input-helper"></i>
+                            {{'Gestores'|translate}}
+                        </label>
+                    </div>
+
+                    <div class="checkbox checkbox-inline m-b-15">
+                        <label>
+                            <input type="checkbox" data-ng-model="registro.supervisor2fa">
+                            <i class="input-helper"></i>
+                            {{'Supervisores'|translate}}
+                        </label>
+                    </div>
+
+                    <div class="checkbox checkbox-inline m-b-15">
+                        <label>
+                            <input type="checkbox" data-ng-model="registro.atendente2fa">
+                            <i class="input-helper"></i>
+                            {{'Atendentes'|translate}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-header ch-alt" style="border-radius: 0;">
+            <h2>Notificação</h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <br />
+            <div class="row">
+                <div class="col-sm-9">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="255"
+                                ng-model="registro.notificacao.mensagem">
+                            <label class="fg-label">Mensagem</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="cp-container">
+                        <div class="input-group form-group fg-float">
+                            <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                            <div class="fg-line dropdown" uib-dropdown>
+                                <input type="text" class="form-control cp-value m-t-5"
+                                    ng-model="registro.notificacao.cor" uib-dropdown-toggle>
+
+                                <div class="dropdown-menu">
+                                    <ng-farbtastic ng-model="registro.notificacao.cor"></ng-farbtastic>
+                                </div>
+
+                                <i class="cp-value m-t-5" style="background-color: {{ registro.notificacao.cor}}"></i>
+                                <label class="fg-label ng-binding">Cor</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="50"
+                                ng-model="registro.notificacao.textoBotao">
+                            <label class="fg-label">Texto do Botão</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="255"
+                                ng-model="registro.notificacao.linkBotao">
+                            <label class="fg-label">Link do Botão</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="checkbox m-b-15">
+                <label>
+                    <input type="checkbox" value="" ng-model="registro.notificacao.ativo">
+                    <i class="input-helper"></i>
+                    Ativo
+                </label>
+            </div>
+        </div>
+
+        <div class="card-header ch-alt" style="border-radius: 0;">
+            <h2>Configurações de Email</h2>
+        </div>
+
+        <!--SendGrid-->
+        <div class="card-body card-padding">
+            <br />
+            <div class="row">
+
+                <div class="col-sm-4">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" ng-model="registro.smtpHost">
+                            <label class="fg-label">Domínio</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" ng-model="registro.smtpEmail">
+                            <label class="fg-label">E-mail do remetente</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <button ng-click="onRegisterDomain(registro)" class="btn btn-default waves-effect m-r-10"
+                        title="Registar domínio">
+                        <i class="fas fa-at m-r-5"></i> Registrar
+                    </button>
+                    <button ng-click="onValidateDomain(registro)" class=" btn btn-default waves-effect"
+                        title="Validar domínio">
+                        <i class="zmdi zmdi-check m-r-5"></i>Validar
+                    </button>
+                </div>
+
+            </div>
+            <div ng-show="registro.dominio && registro.sendGridDetails.id != null" class="m-t-15">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="input-group fg-float m-b-15">
+                            <span title="Validado"
+                                ng-show="registro.dominio && registro.sendGridDetails.dns.mail_cname.valid"
+                                class="input-group-addon"><i style="color: #2b9119;"
+                                    class="zmdi zmdi-check-circle"></i></span>
+                            <span title="Com Problemas"
+                                ng-show="registro.dominio && !registro.sendGridDetails.dns.mail_cname.valid && registro.sendGridDetails.dns.mail_cname.reason"
+                                class="input-group-addon"><i style="color: #ff0000;"
+                                    class="zmdi zmdi-alert-circle"></i></span>
+                            <span title="Aguardando Validação"
+                                ng-show="registro.dominio && !registro.sendGridDetails.dns.mail_cname.valid && !registro.sendGridDetails.dns.mail_cname.reason"
+                                class="input-group-addon"><i style="color: #757575;"
+                                    class="zmdi zmdi-alert-circle"></i></span>
+                            <span class="input-group-addon"><i class="zmdi zmdi-inbox"></i></span>
+                            <div class="fg-line">
+
+                                <input type="text" class="form-control fg-input input-lg" maxlength="50"
+                                    ng-model="registro.sendGridDetails.dns.mail_cname.type" readonly>
+                                <label class="fg-label">Tipo</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="input-group fg-float m-b-15">
+                            <span class="input-group-addon"><i class="fg-label"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control fg-input input-lg" maxlength="150"
+                                    ng-model="registro.sendGridDetails.dns.mail_cname.host" readonly>
+                                <label class="fg-label">Host</label>
+                            </div>
+                            <span class="input-group-addon"
+                                ng-click="copyToClipboard(registro.sendGridDetails.dns.mail_cname.host)"
+                                style="cursor: pointer;"><i class="zmdi zmdi-copy"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="input-group fg-float m-b-15">
+                            <span class="input-group-addon"><i class="fg-label"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control fg-input input-lg" maxlength="150"
+                                    ng-model="registro.sendGridDetails.dns.mail_cname.data" readonly>
+                                <label class="fg-label">Valor</label>
+                            </div>
+                            <span class="input-group-addon"
+                                ng-click="copyToClipboard(registro.sendGridDetails.dns.mail_cname.data)"
+                                style="cursor: pointer;"><i class="zmdi zmdi-copy"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row"
+                    ng-show="registro.dominio && !registro.sendGridDetails.dns.mail_cname.valid && registro.sendGridDetails.dns.mail_cname.reason">
+                    <div class="col-sm-12">
+                        <i class="zmdi zmdi-arrow-right" style="padding-left: 60px; color: #ff0000;"></i>
+                        <label class="fg-label"
+                            style="padding-left: 5px; color: #ff0000;">{{registro.sendGridDetails.dns.mail_cname.reason}}</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="input-group fg-float m-b-15">
+                            <span title="Validado"
+                                ng-show="registro.dominio && registro.sendGridDetails.dns.dkim1.valid"
+                                class="input-group-addon"><i style="color: #2b9119;"
+                                    class="zmdi zmdi-check-circle"></i></span>
+                            <span title="Com Problemas"
+                                ng-show="registro.dominio && !registro.sendGridDetails.dns.dkim1.valid && registro.sendGridDetails.dns.dkim1.reason"
+                                class="input-group-addon"><i style="color: #ff0000;"
+                                    class="zmdi zmdi-alert-circle"></i></span>
+                            <span title="Aguardando Validação"
+                                ng-show="registro.dominio && !registro.sendGridDetails.dns.dkim1.valid && !registro.sendGridDetails.dns.dkim1.reason"
+                                class="input-group-addon"><i style="color: #757575;"
+                                    class="zmdi zmdi-alert-circle"></i></span>
+                            <span class="input-group-addon"><i class="zmdi zmdi-inbox"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control fg-input input-lg" maxlength="50"
+                                    ng-model="registro.sendGridDetails.dns.dkim1.type" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="input-group fg-float m-b-15">
+                            <span class="input-group-addon"><i class="fg-label"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control fg-input input-lg" maxlength="150"
+                                    ng-model="registro.sendGridDetails.dns.dkim1.host" readonly>
+                            </div>
+                            <span class="input-group-addon"
+                                ng-click="copyToClipboard(registro.sendGridDetails.dns.dkim1.host)"
+                                style="cursor: pointer;"><i class="zmdi zmdi-copy"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="input-group fg-float m-b-15">
+                            <span class="input-group-addon"><i class="fg-label"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control fg-input input-lg" maxlength="150"
+                                    ng-model="registro.sendGridDetails.dns.dkim1.data" readonly>
+                            </div>
+                            <span class="input-group-addon"
+                                ng-click="copyToClipboard(registro.sendGridDetails.dns.dkim1.data)"
+                                style="cursor: pointer;"><i class="zmdi zmdi-copy"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row"
+                    ng-show="registro.dominio && !registro.sendGridDetails.dns.dkim1.valid && registro.sendGridDetails.dns.dkim1.reason">
+                    <div class="col-sm-12">
+                        <i class="zmdi zmdi-arrow-right" style="padding-left: 60px; color: #ff0000;"></i>
+                        <label class="fg-label"
+                            style="padding-left: 5px; color: #ff0000;">{{registro.sendGridDetails.dns.dkim1.reason}}</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="input-group fg-float m-b-15">
+                            <span title="Validado"
+                                ng-show="registro.dominio && registro.sendGridDetails.dns.dkim2.valid"
+                                class="input-group-addon"><i style="color: #2b9119;"
+                                    class="zmdi zmdi-check-circle"></i></span>
+                            <span title="Com Problemas"
+                                ng-show="registro.dominio && !registro.sendGridDetails.dns.dkim2.valid && registro.sendGridDetails.dns.dkim2.reason"
+                                class="input-group-addon"><i style="color: #ff0000;"
+                                    class="zmdi zmdi-alert-circle"></i></span>
+                            <span title="Aguardando Validação"
+                                ng-show="registro.dominio && !registro.sendGridDetails.dns.dkim2.valid && !registro.sendGridDetails.dns.dkim2.reason"
+                                class="input-group-addon"><i style="color: #757575;"
+                                    class="zmdi zmdi-alert-circle"></i></span>
+                            <span class="input-group-addon"><i class="zmdi zmdi-inbox"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control fg-input input-lg" maxlength="50"
+                                    ng-model="registro.sendGridDetails.dns.dkim2.type" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="input-group fg-float m-b-15">
+                            <span class="input-group-addon"><i class="fg-label"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control fg-input input-lg" maxlength="150"
+                                    ng-model="registro.sendGridDetails.dns.dkim2.host" readonly>
+                            </div>
+                            <span class="input-group-addon"
+                                ng-click="copyToClipboard(registro.sendGridDetails.dns.dkim2.host)"
+                                style="cursor: pointer;"><i class="zmdi zmdi-copy"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="input-group fg-float m-b-15">
+                            <span class="input-group-addon"><i class="fg-label"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control fg-input input-lg" maxlength="150"
+                                    ng-model="registro.sendGridDetails.dns.dkim2.data" readonly>
+                            </div>
+                            <span class="input-group-addon"
+                                ng-click="copyToClipboard(registro.sendGridDetails.dns.dkim2.data)"
+                                style="cursor: pointer;"><i class="zmdi zmdi-copy"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row"
+                    ng-show="registro.dominio && !registro.sendGridDetails.dns.dkim2.valid && registro.sendGridDetails.dns.dkim2.reason">
+                    <div class="col-sm-12">
+                        <i class="zmdi zmdi-arrow-right" style="padding-left: 60px; color: #ff0000;"></i>
+                        <label class="fg-label"
+                            style="padding-left: 5px; color: #ff0000;">{{registro.sendGridDetails.dns.dkim2.reason}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-header ch-alt" style="border-radius: 0;">
+            <h2>Contatos</h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <br />
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fab fa-facebook"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="100"
+                                ng-model="registro.contatoFacebook">
+                            <label class="fg-label">Facebook</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fab fa-telegram"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="100"
+                                ng-model="registro.contatoTelegram">
+                            <label class="fg-label">Telegram</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fab fa-skype"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="100"
+                                ng-model="registro.contatoSkype">
+                            <label class="fg-label">Skype</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fas fa-envelope"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="100"
+                                ng-model="registro.contatoEmail">
+                            <label class="fg-label">Email</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fas fa-phone"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="100"
+                                ng-model="registro.contatoTelefone1">
+                            <label class="fg-label">Telefone 1</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fas fa-phone"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="100"
+                                ng-model="registro.contatoTelefone2">
+                            <label class="fg-label">Telefone 2</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fas fa-phone"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="100"
+                                ng-model="registro.contatoTelefone3">
+                            <label class="fg-label">Telefone 3</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-header ch-alt" style="border-radius: 0;">
+            <h2>
+                <div class="checkbox checkbox-inline p-l-0">
+                    <label>
+                        <input type="checkbox" data-ng-model="registro.appLinkPage">
+                        <i class="input-helper"></i>
+                        Links de Aplicativos
+                    </label>
+                </div>
+            </h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                        <span class="btn btn-primary btn-file m-r-10 waves-effect">
+                            <span class="fileinput-new">Selecionar</span>
+                            <span class="fileinput-exists">Trocar</span>
+                            <input id="desktopAppFile" type="file" class="form-control fg-input input-lg" />
+                            <label class="fg-label">Painel (Windows)</label>
+                        </span>
+                        <span class="fileinput-filename"></span>
+                        <a href="#" class="close fileinput-exists" data-dismiss="fileinput">×</a>
+                    </div>
+                    <div>
+                        <input type="text" class="form-control fg-input input-lg" ng-model="registro.appLinkDesktop" />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                        <span class="btn btn-primary btn-file m-r-10 waves-effect">
+                            <span class="fileinput-new">Selecionar</span>
+                            <span class="fileinput-exists">Trocar</span>
+                            <input id="pdvPrinterFile" type="file" class="form-control fg-input input-lg" />
+                            <label class="fg-label">Impressora (Windows)</label>
+                        </span>
+                        <span class="fileinput-filename"></span>
+                        <a href="#" class="close fileinput-exists" data-dismiss="fileinput">×</a>
+                    </div>
+                    <div>
+                        <input type="text" class="form-control fg-input input-lg" ng-model="registro.appLinkPrinter" />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                        <span class="btn btn-primary btn-file m-r-10 waves-effect">
+                            <span class="fileinput-new">Selecionar</span>
+                            <span class="fileinput-exists">Trocar</span>
+                            <input id="pdvPrinterFileLinuxDeb" type="file" class="form-control fg-input input-lg" />
+                            <label class="fg-label">Impressora (Linux)</label>
+                        </span>
+                        <span class="fileinput-filename"></span>
+                        <a href="#" class="close fileinput-exists" data-dismiss="fileinput">×</a>
+                    </div>
+                    <div>
+                        <input type="text" class="form-control fg-input input-lg"
+                            ng-model="registro.appLinkPrinterLinuxDeb" />
+                    </div>
+                </div>
+            </div>
+            <div class="row m-t-30">
+                <div class="col-sm-6">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg"
+                                ng-model="registro.appLinkAndroid" />
+                            <label class="fg-label">Painel (Android)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" ng-model="registro.appLinkIos" />
+                            <label class="fg-label">Painel (iOS)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg"
+                                ng-model="registro.appLinkDeliveryAndroid" />
+                            <label class="fg-label">Entregador (Android)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg"
+                                ng-model="registro.appLinkDeliveryIos" />
+                            <label class="fg-label">Entregador (iOS)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-header ch-alt" style="border-radius: 0;">
+            <h2>Termo de Uso</h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="registro.assinarTermoUso">
+                            <i class="input-helper"></i>
+                            Solicitar assinatura para utilizar o sistema
+                        </label>
+                        <br />
+                        <i>* Caso as configurações de email estejam preenchidas e a solicitação do email do cliente
+                            ativada, será enviada a confirmação da assinatura para o cliente.</i>
+                    </div>
+
+                    <a ng-if="registro.termoUso" href="{{registro.termoUso}}" class="btn bgm-teal m-r-5"
+                        target="_blank"><i class="zmdi zmdi-download"></i> Baixar</a>
+
+                    <div class="fileinput fileinput-new" id="controle-termo-uso" data-provides="fileinput">
+                        <span class="btn btn-primary btn-file m-r-10 waves-effect">
+                            <span class="fileinput-new">Selecionar</span>
+                            <span class="fileinput-exists">Trocar</span>
+                            <input type="file" id="termoUso" />
+                        </span>
+                        <span class="fileinput-filename"></span>
+                        <a href="#" class="close fileinput-exists" data-dismiss="fileinput">×</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-header ch-alt" style="border-radius: 0;">
+            <h2>Login</h2>
+        </div>
+
+        <div class="card-body card-padding">
+
+            <br />
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <select ng-change="getAtendentes()" class="form-control input-lg select-simples"
+                                ng-model="registro.layout">
+                                <option value="left">Formulário na Esquerda</option>
+                                <option value="center">Formulário no Centro</option>
+                                <option value="right">Formulário na Direita</option>
+                            </select>
+                            <label class="fg-label">Layout</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12" ng-show="registro.layout !== 'center'">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg"
+                                ng-model="registro.tituloContainer">
+                            <label class="fg-label">Título</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12" ng-show="registro.layout !== 'center'">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg"
+                                ng-model="registro.descricaoContainer">
+                            <label class="fg-label">Descrição</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+
+                <br />
+
+                <div class="col-sm-4 text-center" ng-class="{
+                        'col-sm-4': registro.layout !== 'center', 'col-sm-6': registro.layout === 'center'}">
+                    <label class="fg-label ng-binding">Fundo</label>
+                    <div><i>Resolução ideal: 1920x1080.</i></div>
+                    <div class="card-body card-padding">
+                        <div id="imagem-input-background-container" class="fileinput fileinput-new"
+                            data-provides="fileinput">
+                            <div class="fileinput-preview thumbnail" data-trigger="fileinput"
+                                style="line-height: 200px;">
+                                <img />
+                            </div>
+                            <div>
+                                <span class="btn btn-block btn-info btn-file">
+                                    <span class="fileinput-new">{{'SELECIONAR-IMAGEM'|translate}}</span>
+                                    <span class="fileinput-exists">{{'ALTERAR'|translate}}</span>
+                                    <input type="file" name="...">
+                                </span>
+                                <a href="#" class="btn btn-block btn-danger fileinput-exists"
+                                    data-dismiss="fileinput">{{'REMOVER'|translate}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4 text-center" ng-class="{
+                        'col-sm-4': registro.layout !== 'center', 'col-sm-6': registro.layout === 'center'}">
+                    <label class="fg-label ng-binding">Logo do Formulário</label>
+                    <div><i>Resolução ideal: 250x250.</i></div>
+                    <div class="card-body card-padding">
+                        <div id="imagem-input-login" class="fileinput fileinput-new" data-provides="fileinput">
+                            <div class="fileinput-preview thumbnail" data-trigger="fileinput"
+                                style="line-height: 200px;">
+                                <img />
+                            </div>
+                            <div>
+                                <span class="btn btn-block btn-info btn-file">
+                                    <span class="fileinput-new">{{'SELECIONAR-IMAGEM'|translate}}</span>
+                                    <span class="fileinput-exists">{{'ALTERAR'|translate}}</span>
+                                    <input type="file" name="...">
+                                </span>
+                                <a href="#" class="btn btn-block btn-danger fileinput-exists"
+                                    data-dismiss="fileinput">{{'REMOVER'|translate}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4 text-center" ng-show="registro.layout !== 'center'">
+                    <label class="fg-label ng-binding">Logo da Descrição</label>
+                    <div><i>Resolução ideal: 250x250.</i></div>
+                    <div class="card-body card-padding">
+                        <div id="imagem-input-logo-container" class="fileinput fileinput-new" data-provides="fileinput">
+                            <div class="fileinput-preview thumbnail" data-trigger="fileinput"
+                                style="line-height: 200px;">
+                                <img />
+                            </div>
+                            <div>
+                                <span class="btn btn-block btn-info btn-file">
+                                    <span class="fileinput-new">{{'SELECIONAR-IMAGEM'|translate}}</span>
+                                    <span class="fileinput-exists">{{'ALTERAR'|translate}}</span>
+                                    <input type="file" name="...">
+                                </span>
+                                <a href="#" class="btn btn-block btn-danger fileinput-exists"
+                                    data-dismiss="fileinput">{{'REMOVER'|translate}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card-header ch-alt" style="border-radius: 0;" ng-if="jwt.usuarioId = (1175 || 218285 || 8073 || 1486)">
+            <h2>Aplicativo Meta<small>Facebook, Instagram e WhatsApp API Oficial</small></h2>
+        </div>
+
+        <div class="card-body card-padding" ng-if="jwt.usuarioId = (1175 || 218285 || 8073 || 1486)">
+            <div class="alert alert-info" style="margin-bottom: 30px;">
+                Preencha os dados abaixo para que as ativações de Facebook, Instagram e WhatsApp API Oficial
+                dos seus clientes usem o <b>seu</b> aplicativo na Meta. Deixando os campos em branco, as ativações
+                continuam usando o aplicativo padrão da plataforma.
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fab fa-facebook"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" ng-model="registro.metaAppId">
+                            <label class="fg-label">ID do Aplicativo</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="zmdi zmdi-key"></i></span>
+                        <div class="fg-line">
+                            <input type="password" class="form-control fg-input input-lg"
+                                ng-model="registro.metaAppSecret">
+                            <label class="fg-label">Chave Secreta do Aplicativo</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fab fa-whatsapp"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg"
+                                ng-model="registro.metaWaConfigId">
+                            <label class="fg-label">ID da Configuração do Embedded Signup</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="zmdi zmdi-shield-check"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg"
+                                ng-model="registro.metaWebhookVerifyToken">
+                            <label class="fg-label">Token de Verificação dos Webhooks</label>
+                        </div>
+                        <span class="input-group-addon" style="cursor: pointer"
+                            ng-click="onGerarMetaWebhookVerifyToken(registro)" title="Gerar token">
+                            <i class="zmdi zmdi-refresh"></i>
+                        </span>
+                        <span class="input-group-addon" style="cursor: pointer"
+                            ng-click="copyToClipboard(registro.metaWebhookVerifyToken)" title="Copiar token">
+                            <i class="zmdi zmdi-copy"></i>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row" ng-show="registro.metaAppId">
+                <div class="col-sm-12">
+                    <b>URLs de callback para configurar nos webhooks do seu aplicativo:</b>
+                    <table class="table table-no-header m-t-10">
+                        <tr ng-repeat="webhook in metaWebhooks">
+                            <td style="width: 1%; white-space: nowrap; vertical-align: middle">
+                                <b>{{webhook.produto}}</b>
+                            </td>
+                            <td style="vertical-align: middle">{{registro.dominio}}/api{{webhook.url}}</td>
+                            <td class="actions">
+                                <button ng-click="copyToClipboard(webhook.url)"
+                                    class="btn btn-default btn-icon waves-effect waves-circle" title="Copiar URL">
+                                    <i class="zmdi zmdi-copy"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-header ch-alt" style="border-radius: 0;">
+            <h2>Integrações e APIs</h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" ng-model="registro.urlDocApi">
+                            <label class="fg-label">URl da Documentação</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-header ch-alt" style="border-radius: 0;">
+            <h2>Chat de Suporte</h2>
+        </div>
+
+        <div class="card-body card-padding" style="border-radius: 0; padding-top: 0;">
+            <br />
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" ng-model="registro.chatSuporteAtivo">
+                            <i class="input-helper"></i>
+                            Habilitar chat de suporte
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-show="registro.chatSuporteAtivo">
+                <div class="col-sm-12">
+                    <div class="form-group fg-float m-b-30 m-t-20">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg"
+                                ng-model="registro.chatSuporteToken">
+                            <label class="fg-label">Token do chat de suporte</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row m-l-0 m-r-0" style="display: flex;"
+        ng-show="registro.dominio && registro.tipo === 'WORKSPACE_PAINEL'">
+        <div class="card" style="flex: 1">
+            <div class="card-header ch-alt" style="border-radius: 0;">
+                <h2>Cores Principais</h2>
+            </div>
+
+            <br />
+
+            <div class="card-body card-padding">
+                <div class="row" style="display: flex; flex-direction: column; gap: 6px;">
+                    <div class="col-sm-12">
+                        <div class="cp-container">
+                            <div class="input-group form-group fg-float">
+                                <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                                <div class="fg-line dropdown" uib-dropdown>
+                                    <input type="text" class="form-control cp-value m-t-5"
+                                        ng-model="registro.corPrimaria" uib-dropdown-toggle>
+
+                                    <div class="dropdown-menu">
+                                        <ng-farbtastic ng-change="mudarCorPrimaria()"
+                                            ng-model="registro.corPrimaria"></ng-farbtastic>
+                                    </div>
+
+                                    <i class="cp-value m-t-5" style="background-color: {{ registro.corPrimaria}}"></i>
+                                    <label class="fg-label ng-binding">Cor Primária</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="cp-container">
+                            <div class="input-group form-group fg-float">
+                                <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                                <div class="fg-line dropdown" uib-dropdown>
+                                    <input type="text" class="form-control cp-value m-t-5"
+                                        ng-model="registro.corSecundaria" uib-dropdown-toggle>
+
+                                    <div class="dropdown-menu">
+                                        <ng-farbtastic ng-change="mudarCorSecundaria()"
+                                            ng-model="registro.corSecundaria"></ng-farbtastic>
+                                    </div>
+
+                                    <i class="cp-value m-t-5" style="background-color: {{ registro.corSecundaria}}"></i>
+                                    <label class="fg-label ng-binding">Cor Secundária</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="flex: 1">
+            <div class="card-header ch-alt" style="border-radius: 0;">
+                <h2>Customização do Menu Lateral</h2>
+            </div>
+
+            <br />
+
+            <div class="card-body card-padding">
+                <div class="row" style="display: flex; flex-direction: column; gap: 6px;">
+                    <div class="col-sm-12 text-center">
+                        <label class="fg-label ng-binding">Logo</label>
+                        <div><i>Resolução ideal: 50x50.</i></div>
+                        <div class="card-body card-padding">
+                            <div id="imagem-input-menu-lateral" class="fileinput fileinput-new"
+                                data-provides="fileinput">
+                                <div class="fileinput-preview thumbnail" data-trigger="fileinput"
+                                    style="line-height: 200px;">
+                                    <img />
+                                </div>
+                                <div>
+                                    <span class="btn btn-block btn-info btn-file">
+                                        <span class="fileinput-new">{{'SELECIONAR-IMAGEM'|translate}}</span>
+                                        <span class="fileinput-exists">{{'ALTERAR'|translate}}</span>
+                                        <input type="file" name="...">
+                                    </span>
+                                    <a href="#" class="btn btn-block btn-danger fileinput-exists"
+                                        data-dismiss="fileinput">{{'REMOVER'|translate}}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="cp-container">
+                            <div class="input-group form-group fg-float">
+                                <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                                <div class="fg-line dropdown" uib-dropdown>
+                                    <input type="text" class="form-control cp-value m-t-5"
+                                        ng-model="registro.sidebarColor" uib-dropdown-toggle>
+
+                                    <div class="dropdown-menu">
+                                        <ng-farbtastic ng-change="updateColors()"
+                                            ng-model="registro.sidebarColor"></ng-farbtastic>
+                                    </div>
+
+                                    <i class="cp-value m-t-5" style="background-color: {{ registro.sidebarColor}}"></i>
+                                    <label class="fg-label ng-binding">Cor de Fundo</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="cp-container">
+                            <div class="input-group form-group fg-float">
+                                <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                                <div class="fg-line dropdown" uib-dropdown>
+                                    <input type="text" class="form-control cp-value m-t-5"
+                                        ng-model="registro.sidebarCategoryTextColor" uib-dropdown-toggle>
+
+                                    <div class="dropdown-menu">
+                                        <ng-farbtastic ng-change="updateColors()"
+                                            ng-model="registro.sidebarCategoryTextColor"></ng-farbtastic>
+                                    </div>
+
+                                    <i class="cp-value m-t-5"
+                                        style="background-color: {{ registro.sidebarCategoryTextColor}}"></i>
+                                    <label class="fg-label ng-binding">Categoria (Texto)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="cp-container">
+                            <div class="input-group form-group fg-float">
+                                <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                                <div class="fg-line dropdown" uib-dropdown>
+                                    <input type="text" class="form-control cp-value m-t-5"
+                                        ng-model="registro.sidebarItemTextColor" uib-dropdown-toggle>
+
+                                    <div class="dropdown-menu">
+                                        <ng-farbtastic ng-change="updateColors()"
+                                            ng-model="registro.sidebarItemTextColor"></ng-farbtastic>
+                                    </div>
+
+                                    <i class="cp-value m-t-5"
+                                        style="background-color: {{ registro.sidebarItemTextColor}}"></i>
+                                    <label class="fg-label ng-binding">Item (Texto)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="cp-container">
+                            <div class="input-group form-group fg-float">
+                                <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                                <div class="fg-line dropdown" uib-dropdown>
+                                    <input type="text" class="form-control cp-value m-t-5"
+                                        ng-model="registro.sidebarItemActiveBackgroundColor" uib-dropdown-toggle>
+
+                                    <div class="dropdown-menu">
+                                        <ng-farbtastic ng-change="updateColors()"
+                                            ng-model="registro.sidebarItemActiveBackgroundColor"></ng-farbtastic>
+                                    </div>
+
+                                    <i class="cp-value m-t-5"
+                                        style="background-color: {{ registro.sidebarItemActiveBackgroundColor}}"></i>
+                                    <label class="fg-label ng-binding">Item Selecionado (Background)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="cp-container">
+                            <div class="input-group form-group fg-float">
+                                <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                                <div class="fg-line dropdown" uib-dropdown>
+                                    <input type="text" class="form-control cp-value m-t-5"
+                                        ng-model="registro.sidebarItemActiveTextColor" uib-dropdown-toggle>
+
+                                    <div class="dropdown-menu">
+                                        <ng-farbtastic ng-change="updateColors()"
+                                            ng-model="registro.sidebarItemActiveTextColor"></ng-farbtastic>
+                                    </div>
+
+                                    <i class="cp-value m-t-5"
+                                        style="background-color: {{ registro.sidebarItemActiveTextColor}}"></i>
+                                    <label class="fg-label ng-binding">Item Selecionado (Texto)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="cp-container">
+                            <div class="input-group form-group fg-float">
+                                <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                                <div class="fg-line dropdown" uib-dropdown>
+                                    <input type="text" class="form-control cp-value m-t-5"
+                                        ng-model="registro.sidebarHelpButtonBackgroundColor" uib-dropdown-toggle>
+
+                                    <div class="dropdown-menu">
+                                        <ng-farbtastic ng-change="updateColors()"
+                                            ng-model="registro.sidebarHelpButtonBackgroundColor"></ng-farbtastic>
+                                    </div>
+
+                                    <i class="cp-value m-t-5"
+                                        style="background-color: {{ registro.sidebarHelpButtonBackgroundColor}}"></i>
+                                    <label class="fg-label ng-binding">Botão de Ajuda (Background)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="cp-container">
+                            <div class="input-group form-group fg-float">
+                                <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                                <div class="fg-line dropdown" uib-dropdown>
+                                    <input type="text" class="form-control cp-value m-t-5"
+                                        ng-model="registro.sidebarHelpButtonTextColor" uib-dropdown-toggle>
+
+                                    <div class="dropdown-menu">
+                                        <ng-farbtastic ng-change="updateColors()"
+                                            ng-model="registro.sidebarHelpButtonTextColor"></ng-farbtastic>
+                                    </div>
+
+                                    <i class="cp-value m-t-5"
+                                        style="background-color: {{ registro.sidebarHelpButtonTextColor}}"></i>
+                                    <label class="fg-label ng-binding">Botão de Ajuda (Texto)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="flex: 1">
+            <div class="card-header ch-alt" style="border-radius: 0;">
+                <h2>Cores do Chat</h2>
+            </div>
+
+            <br />
+
+            <div class="card-body card-padding">
+                <div class="row" style="display: flex; flex-direction: column; gap: 6px;">
+
+                    <div class="col-sm-12">
+                        <div class="cp-container">
+                            <div class="input-group form-group fg-float">
+                                <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                                <div class="fg-line dropdown" uib-dropdown>
+                                    <input type="text" class="form-control cp-value m-t-5"
+                                        ng-model="registro.chatAttendantBackgroundColor" uib-dropdown-toggle>
+
+                                    <div class="dropdown-menu">
+                                        <ng-farbtastic ng-change="updateColors()"
+                                            ng-model="registro.chatAttendantBackgroundColor"></ng-farbtastic>
+                                    </div>
+
+                                    <i class="cp-value m-t-5"
+                                        style="background-color: {{ registro.chatAttendantBackgroundColor}}"></i>
+                                    <label class="fg-label ng-binding">Atendente (Background)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="cp-container">
+                            <div class="input-group form-group fg-float">
+                                <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                                <div class="fg-line dropdown" uib-dropdown>
+                                    <input type="text" class="form-control cp-value m-t-5"
+                                        ng-model="registro.chatAttendantTextColor" uib-dropdown-toggle>
+
+                                    <div class="dropdown-menu">
+                                        <ng-farbtastic ng-change="updateColors()"
+                                            ng-model="registro.chatAttendantTextColor"></ng-farbtastic>
+                                    </div>
+
+                                    <i class="cp-value m-t-5"
+                                        style="background-color: {{ registro.chatAttendantTextColor}}"></i>
+                                    <label class="fg-label ng-binding">Atendente (Texto)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="cp-container">
+                            <div class="input-group form-group fg-float">
+                                <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                                <div class="fg-line dropdown" uib-dropdown>
+                                    <input type="text" class="form-control cp-value m-t-5"
+                                        ng-model="registro.chatContactBackgroundColor" uib-dropdown-toggle>
+
+                                    <div class="dropdown-menu">
+                                        <ng-farbtastic ng-change="updateColors()"
+                                            ng-model="registro.chatContactBackgroundColor"></ng-farbtastic>
+                                    </div>
+
+                                    <i class="cp-value m-t-5"
+                                        style="background-color: {{ registro.chatContactBackgroundColor}}"></i>
+                                    <label class="fg-label ng-binding">Contato (Background)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="cp-container">
+                            <div class="input-group form-group fg-float">
+                                <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                                <div class="fg-line dropdown" uib-dropdown>
+                                    <input type="text" class="form-control cp-value m-t-5"
+                                        ng-model="registro.chatContactTextColor" uib-dropdown-toggle>
+
+                                    <div class="dropdown-menu">
+                                        <ng-farbtastic ng-change="updateColors()"
+                                            ng-model="registro.chatContactTextColor"></ng-farbtastic>
+                                    </div>
+
+                                    <i class="cp-value m-t-5"
+                                        style="background-color: {{ registro.chatContactTextColor}}"></i>
+                                    <label class="fg-label ng-binding">Contato (Texto)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="cp-container">
+                            <div class="input-group form-group fg-float">
+                                <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                                <div class="fg-line dropdown" uib-dropdown>
+                                    <input type="text" class="form-control cp-value m-t-5"
+                                        ng-model="registro.chatPrivateMessageBackgroundColor" uib-dropdown-toggle>
+
+                                    <div class="dropdown-menu">
+                                        <ng-farbtastic ng-change="updateColors()"
+                                            ng-model="registro.chatPrivateMessageBackgroundColor"></ng-farbtastic>
+                                    </div>
+
+                                    <i class="cp-value m-t-5"
+                                        style="background-color: {{ registro.chatPrivateMessageBackgroundColor}}"></i>
+                                    <label class="fg-label ng-binding">Mensagem Anônima (Background)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="cp-container">
+                            <div class="input-group form-group fg-float">
+                                <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                                <div class="fg-line dropdown" uib-dropdown>
+                                    <input type="text" class="form-control cp-value m-t-5"
+                                        ng-model="registro.chatPrivateMessageTextColor" uib-dropdown-toggle>
+
+                                    <div class="dropdown-menu">
+                                        <ng-farbtastic ng-change="updateColors()"
+                                            ng-model="registro.chatPrivateMessageTextColor"></ng-farbtastic>
+                                    </div>
+
+                                    <i class="cp-value m-t-5"
+                                        style="background-color: {{ registro.chatPrivateMessageTextColor}}"></i>
+                                    <label class="fg-label ng-binding">Mensagem Anônima (Texto)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--WA CHATBOT-->
+
+    <div id="div_WA_CHATBOT" class="card" ng-show="registro.tipo === 'WA_CHATBOT'">
+        <div class="card-header ch-alt">
+            <h2>{{registro.dominio}}<small>WA Chabot</small></h2>
+        </div>
+
+        <br />
+
+        <div class="card-body card-padding">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" ng-model="registro.nome">
+                            <label class="fg-label">{{'NOME'| translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="cp-container">
+                        <div class="input-group form-group fg-float">
+                            <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                            <div class="fg-line dropdown" uib-dropdown>
+                                <input type="text" class="form-control cp-value m-t-5" ng-model="registro.corPrimaria"
+                                    uib-dropdown-toggle>
+
+                                <div class="dropdown-menu">
+                                    <ng-farbtastic ng-change="mudarCorPrimaria()"
+                                        ng-model="registro.corPrimaria"></ng-farbtastic>
+                                </div>
+
+                                <i class="cp-value m-t-5" style="background-color: {{ registro.corPrimaria}}"></i>
+                                <label class="fg-label ng-binding">Cor Primária</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="cp-container">
+                        <div class="input-group form-group fg-float">
+                            <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                            <div class="fg-line dropdown" uib-dropdown>
+                                <input type="text" class="form-control cp-value m-t-5" ng-model="registro.corSecundaria"
+                                    uib-dropdown-toggle>
+
+                                <div class="dropdown-menu">
+                                    <ng-farbtastic ng-change="mudarCorSecundaria()"
+                                        ng-model="registro.corSecundaria"></ng-farbtastic>
+                                </div>
+
+                                <i class="cp-value m-t-5" style="background-color: {{ registro.corSecundaria}}"></i>
+                                <label class="fg-label ng-binding">Cor Secundária</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+
+                <br />
+
+                <div class="col-sm-12 text-center">
+                    <label class="fg-label ng-binding">Logo</label>
+                    <div class="card-body card-padding">
+                        <div id="imagem-input-login-wa" class="fileinput fileinput-new" data-provides="fileinput">
+                            <div class="fileinput-preview thumbnail" data-trigger="fileinput"
+                                style="line-height: 200px;">
+                                <img />
+                            </div>
+                            <div>
+                                <span class="btn btn-block btn-info btn-file">
+                                    <span class="fileinput-new">{{'SELECIONAR-IMAGEM'|translate}}</span>
+                                    <span class="fileinput-exists">{{'ALTERAR'|translate}}</span>
+                                    <input type="file" name="...">
+                                </span>
+                                <a href="#" class="btn btn-block btn-danger fileinput-exists"
+                                    data-dismiss="fileinput">{{'REMOVER'|translate}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card-header ch-alt">
+            <h2>Contatos</h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <br />
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fas fa-globe"></i></span>
+                        <div class="fg-line">
+                            <input name="nome" type="text" class="form-control fg-input input-lg"
+                                ng-model="registro.deliverySite">
+                            <label class="fg-label">Site</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fab fa-facebook"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="100"
+                                ng-model="registro.contatoFacebook">
+                            <label class="fg-label">Facebook</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fab fa-telegram"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="100"
+                                ng-model="registro.contatoTelegram">
+                            <label class="fg-label">Telegram</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fab fa-skype"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="100"
+                                ng-model="registro.contatoSkype">
+                            <label class="fg-label">Skype</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fas fa-envelope"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="100"
+                                ng-model="registro.contatoEmail">
+                            <label class="fg-label">Email</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fas fa-phone"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="100"
+                                ng-model="registro.contatoTelefone1">
+                            <label class="fg-label">Telefone 1</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fas fa-phone"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="100"
+                                ng-model="registro.contatoTelefone2">
+                            <label class="fg-label">Telefone 2</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fas fa-phone"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="100"
+                                ng-model="registro.contatoTelefone3">
+                            <label class="fg-label">Telefone 3</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-header ch-alt">
+            <h2>Termo de Uso</h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <div class="row">
+                <div class="col-sm-12">
+                    <a ng-if="registro.termoUso" href="{{registro.termoUso}}" class="btn bgm-teal m-b-15"
+                        target="_blank"><i class="zmdi zmdi-download"></i> Baixar</a>
+                    <input type="file" id="termoUso" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--SITE DELIVERY-->
+
+    <div id="div_DELIVERY_SITE" class="card" ng-show="registro.dominio && registro.tipo === 'DELIVERY_SITE'">
+        <div class="card-header ch-alt">
+            <h2>{{registro.dominio}}<small>Site Delivery</small></h2>
+        </div>
+
+        <br />
+
+        <div class="card-body card-padding">
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" ng-model="registro.nome">
+                            <label class="fg-label">{{'NOME'| translate}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="text-center">
+                <label class="fg-label ng-binding">Logo</label>
+                <div><i>Resolução ideal: 480x480.</i></div>
+                <div class="card-body card-padding">
+                    <div id="image-input-logo" class="fileinput fileinput-new" data-provides="fileinput">
+                        <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="line-height: 200px;">
+                            <img />
+                        </div>
+                        <div>
+                            <span class="btn btn-block btn-info btn-file">
+                                <span class="fileinput-new">{{'SELECIONAR-IMAGEM'|translate}}</span>
+                                <span class="fileinput-exists">{{'ALTERAR'|translate}}</span>
+                                <input type="file" name="...">
+                            </span>
+                            <a href="#" class="btn btn-block btn-danger fileinput-exists"
+                                data-dismiss="fileinput">{{'REMOVER'|translate}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!--2FA DELIVERY-->
+        <div class="card-header ch-alt" style="border-radius: 0;">
+            <h2>Obrigar Autenticação 2 Fatores</h2>
+        </div>
+        <div class="card-body card-padding">
+            <br />
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="checkbox checkbox-inline m-b-15 p-l-0">
+                        <label>
+                            <input type="checkbox" data-ng-model="registro.gestor2fa">
+                            <i class="input-helper"></i>
+                            {{'Gestores'|translate}}
+                        </label>
+                    </div>
+
+                    <div class="checkbox checkbox-inline m-b-15">
+                        <label>
+                            <input type="checkbox" data-ng-model="registro.supervisor2fa">
+                            <i class="input-helper"></i>
+                            {{'Supervisores'|translate}}
+                        </label>
+                    </div>
+
+                    <div class="checkbox checkbox-inline m-b-15">
+                        <label>
+                            <input type="checkbox" data-ng-model="registro.atendente2fa">
+                            <i class="input-helper"></i>
+                            {{'Atendentes'|translate}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-header ch-alt">
+            <h2>Login com o Facebook (OAuth2)</h2>
+        </div>
+        <div class="card-body card-padding">
+            <br />
+            <div class="row">
+
+                <div class="col-sm-12">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fab fa-facebook"></i></span>
+                        <div class="fg-line">
+                            <input name="nome" type="text" class="form-control fg-input input-lg"
+                                ng-model="registro.facebookAppId">
+                            <label class="fg-label">App Id</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fab fa-facebook"></i></span>
+                        <div class="fg-line">
+                            <input name="nome" type="password" class="form-control fg-input input-lg"
+                                ng-model="registro.facebookSecretKey">
+                            <label class="fg-label">Secret Key</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="input-group fg-float m-b-30">
+                        <span class="input-group-addon"><i class="fab fa-facebook"></i></span>
+                        <div class="fg-line">
+                            <input name="nome" type="text" class="form-control fg-input input-lg"
+                                ng-model="registro.facebookClientToken">
+                            <label class="fg-label">Client Token</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header ch-alt">
+                <h2>Configurações de Email</h2>
+            </div>
+
+            <!-- SendGrid -->
+            <div class="card-body card-padding">
+                <br />
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        <div class="form-group fg-float m-b-30">
+                            <div class="fg-line">
+                                <input type="text" class="form-control fg-input input-lg" ng-model="registro.smtpHost"
+                                    ng-readonly="registro.sendGridDetails.id != null">
+                                <label class="fg-label">Domínio</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+                        <div class="form-group fg-float m-b-30">
+                            <div class="fg-line">
+                                <input type="text" class="form-control fg-input input-lg" ng-model="registro.smtpEmail">
+                                <label class="fg-label">E-mail do remetente</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <button ng-click="onRegisterDomain(registro)"
+                            class="btn btn-default btn-icon waves-effect waves-circle" title="Registar domínio">
+                            <i class="zmdi zmdi-floppy"></i>
+                        </button>
+                        <button ng-click="onValidateDomain(registro)"
+                            class=" btn btn-default btn-icon waves-effect waves-circle m-l-20" title="Validar domínio">
+                            <i class="zmdi zmdi-key"></i>
+                        </button>
+                    </div>
+
+                </div>
+                <div ng-show="registro.dominio && registro.sendGridDetails.id != null">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="input-group fg-float m-b-15">
+                                <span ng-show="registro.dominio && registro.sendGridDetails.dns.mail_cname.valid"
+                                    class="input-group-addon"><i style="color: #2b9119;"
+                                        class="zmdi zmdi-check-circle"></i></span>
+                                <span
+                                    ng-show="registro.dominio && !registro.sendGridDetails.dns.mail_cname.valid && registro.sendGridDetails.dns.mail_cname.reason"
+                                    class="input-group-addon"><i style="color: #ff0000;"
+                                        class="zmdi zmdi-close-circle"></i></span>
+                                <span
+                                    ng-show="registro.dominio && !registro.sendGridDetails.dns.mail_cname.valid && !registro.sendGridDetails.dns.mail_cname.reason"
+                                    class="input-group-addon"><i style="color: #757575;"
+                                        class="zmdi zmdi-minus-circle"></i></span>
+                                <span class="input-group-addon"><i class="zmdi zmdi-inbox"></i></span>
+                                <div class="fg-line">
+
+                                    <input type="text" class="form-control fg-input input-lg" maxlength="50"
+                                        ng-model="registro.sendGridDetails.dns.mail_cname.type" readonly>
+                                    <label class="fg-label">Tipo</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group fg-float m-b-15">
+                                <span class="input-group-addon"><i class="fg-label"></i></span>
+                                <div class="fg-line">
+                                    <input type="text" class="form-control fg-input input-lg" maxlength="150"
+                                        ng-model="registro.sendGridDetails.dns.mail_cname.host" readonly>
+                                    <label class="fg-label">Host</label>
+                                </div>
+                                <span class="input-group-addon"
+                                    ng-click="copyToClipboard(registro.sendGridDetails.dns.mail_cname.host)"
+                                    style="cursor: pointer;"><i class="zmdi zmdi-copy"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group fg-float m-b-15">
+                                <span class="input-group-addon"><i class="fg-label"></i></span>
+                                <div class="fg-line">
+                                    <input type="text" class="form-control fg-input input-lg" maxlength="150"
+                                        ng-model="registro.sendGridDetails.dns.mail_cname.data" readonly>
+                                    <label class="fg-label">Valor</label>
+                                </div>
+                                <span class="input-group-addon"
+                                    ng-click="copyToClipboard(registro.sendGridDetails.dns.mail_cname.data)"
+                                    style="cursor: pointer;"><i class="zmdi zmdi-copy"></i></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row"
+                        ng-show="registro.dominio && !registro.sendGridDetails.dns.mail_cname.valid && registro.sendGridDetails.dns.mail_cname.reason">
+                        <div class="col-sm-8">
+                            <i class="zmdi zmdi-arrow-right" style="padding-left: 60px; color: #ff0000;"></i>
+                            <label class="fg-label"
+                                style="padding-left: 5px; color: #ff0000;">{{registro.sendGridDetails.dns.mail_cname.reason}}</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="input-group fg-float m-b-15">
+                                <span ng-show="registro.dominio && registro.sendGridDetails.dns.dkim1.valid"
+                                    class="input-group-addon"><i style="color: #2b9119;"
+                                        class="zmdi zmdi-check-circle"></i></span>
+                                <span
+                                    ng-show="registro.dominio && !registro.sendGridDetails.dns.dkim1.valid && registro.sendGridDetails.dns.dkim1.reason"
+                                    class="input-group-addon"><i style="color: #ff0000;"
+                                        class="zmdi zmdi-close-circle"></i></span>
+                                <span
+                                    ng-show="registro.dominio && !registro.sendGridDetails.dns.dkim1.valid && !registro.sendGridDetails.dns.dkim1.reason"
+                                    class="input-group-addon"><i style="color: #757575;"
+                                        class="zmdi zmdi-minus-circle"></i></span>
+                                <span class="input-group-addon"><i class="zmdi zmdi-inbox"></i></span>
+                                <div class="fg-line">
+                                    <input type="text" class="form-control fg-input input-lg" maxlength="50"
+                                        ng-model="registro.sendGridDetails.dns.dkim1.type" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group fg-float m-b-15">
+                                <span class="input-group-addon"><i class="fg-label"></i></span>
+                                <div class="fg-line">
+                                    <input type="text" class="form-control fg-input input-lg" maxlength="150"
+                                        ng-model="registro.sendGridDetails.dns.dkim1.host" readonly>
+                                </div>
+                                <span class="input-group-addon"
+                                    ng-click="copyToClipboard(registro.sendGridDetails.dns.dkim1.host)"
+                                    style="cursor: pointer;"><i class="zmdi zmdi-copy"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group fg-float m-b-15">
+                                <span class="input-group-addon"><i class="fg-label"></i></span>
+                                <div class="fg-line">
+                                    <input type="text" class="form-control fg-input input-lg" maxlength="150"
+                                        ng-model="registro.sendGridDetails.dns.dkim1.data" readonly>
+                                </div>
+                                <span class="input-group-addon"
+                                    ng-click="copyToClipboard(registro.sendGridDetails.dns.dkim1.data)"
+                                    style="cursor: pointer;"><i class="zmdi zmdi-copy"></i></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row"
+                        ng-show="registro.dominio && !registro.sendGridDetails.dns.dkim1.valid && registro.sendGridDetails.dns.dkim1.reason">
+                        <div class="col-sm-8">
+                            <i class="zmdi zmdi-arrow-right" style="padding-left: 60px; color: #ff0000;"></i>
+                            <label class="fg-label"
+                                style="padding-left: 5px; color: #ff0000;">{{registro.sendGridDetails.dns.dkim1.reason}}</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="input-group fg-float m-b-15">
+                                <span ng-show="registro.dominio && registro.sendGridDetails.dns.dkim2.valid"
+                                    class="input-group-addon"><i style="color: #2b9119;"
+                                        class="zmdi zmdi-check-circle"></i></span>
+                                <span
+                                    ng-show="registro.dominio && !registro.sendGridDetails.dns.dkim2.valid && registro.sendGridDetails.dns.dkim2.reason"
+                                    class="input-group-addon"><i style="color: #ff0000;"
+                                        class="zmdi zmdi-close-circle"></i></span>
+                                <span
+                                    ng-show="registro.dominio && !registro.sendGridDetails.dns.dkim2.valid && !registro.sendGridDetails.dns.dkim2.reason"
+                                    class="input-group-addon"><i style="color: #757575;"
+                                        class="zmdi zmdi-minus-circle"></i></span>
+                                <span class="input-group-addon"><i class="zmdi zmdi-inbox"></i></span>
+                                <div class="fg-line">
+                                    <input type="text" class="form-control fg-input input-lg" maxlength="50"
+                                        ng-model="registro.sendGridDetails.dns.dkim2.type" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group fg-float m-b-15">
+                                <span class="input-group-addon"><i class="fg-label"></i></span>
+                                <div class="fg-line">
+                                    <input type="text" class="form-control fg-input input-lg" maxlength="150"
+                                        ng-model="registro.sendGridDetails.dns.dkim2.host" readonly>
+                                </div>
+                                <span class="input-group-addon"
+                                    ng-click="copyToClipboard(registro.sendGridDetails.dns.dkim2.host)"
+                                    style="cursor: pointer;"><i class="zmdi zmdi-copy"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group fg-float m-b-15">
+                                <span class="input-group-addon"><i class="fg-label"></i></span>
+                                <div class="fg-line">
+                                    <input type="text" class="form-control fg-input input-lg" maxlength="150"
+                                        ng-model="registro.sendGridDetails.dns.dkim2.data" readonly>
+                                </div>
+                                <span class="input-group-addon"
+                                    ng-click="copyToClipboard(registro.sendGridDetails.dns.dkim2.data)"
+                                    style="cursor: pointer;"><i class="zmdi zmdi-copy"></i></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row"
+                        ng-show="registro.dominio && !registro.sendGridDetails.dns.dkim2.valid && registro.sendGridDetails.dns.dkim2.reason">
+                        <div class="col-sm-8">
+                            <i class="zmdi zmdi-arrow-right" style="padding-left: 60px; color: #ff0000;"></i>
+                            <label class="fg-label"
+                                style="padding-left: 5px; color: #ff0000;">{{registro.sendGridDetails.dns.dkim2.reason}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-header ch-alt">
+                <h2>Contatos</h2>
+            </div>
+            <div class="card-body card-padding">
+                <br />
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="input-group fg-float m-b-30">
+                            <span class="input-group-addon"><i class="fas fa-globe"></i></span>
+                            <div class="fg-line">
+                                <input name="nome" type="text" class="form-control fg-input input-lg"
+                                    ng-model="registro.deliverySite">
+                                <label class="fg-label">Site</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="input-group fg-float m-b-30">
+                            <span class="input-group-addon"><i class="fas fa-envelope"></i></span>
+                            <div class="fg-line">
+                                <input name="nome" type="text" class="form-control fg-input input-lg"
+                                    ng-model="registro.deliveryEmail">
+                                <label class="fg-label">Email</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="input-group fg-float m-b-30">
+                            <span class="input-group-addon"><i class="fab fa-whatsapp"></i></span>
+                            <div class="fg-line">
+                                <input name="nome" type="text" class="form-control fg-input input-lg"
+                                    ng-model="registro.deliveryWhatsapp">
+                                <label class="fg-label">Whatsapp</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="input-group fg-float m-b-30">
+                            <span class="input-group-addon"><i class="fab fa-facebook"></i></span>
+                            <div class="fg-line">
+                                <input name="nome" type="text" class="form-control fg-input input-lg"
+                                    ng-model="registro.deliveryFacebook">
+                                <label class="fg-label">Facebook</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="input-group fg-float m-b-30">
+                            <span class="input-group-addon"><i class="fab fa-telegram"></i></span>
+                            <div class="fg-line">
+                                <input name="nome" type="text" class="form-control fg-input input-lg"
+                                    ng-model="registro.deliveryTelegram">
+                                <label class="fg-label">Telegram</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="input-group fg-float m-b-30">
+                            <span class="input-group-addon"><i class="fab fa-instagram"></i></span>
+                            <div class="fg-line">
+                                <input name="nome" type="text" class="form-control fg-input input-lg"
+                                    ng-model="registro.deliveryInstagram">
+                                <label class="fg-label">Instagram</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="input-group fg-float m-b-30">
+                            <span class="input-group-addon"><i class="fas fa-phone"></i></span>
+                            <div class="fg-line">
+                                <input name="nome" type="text" class="form-control fg-input input-lg"
+                                    ng-model="registro.deliveryPhone">
+                                <label class="fg-label">Telefone</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="input-group fg-float m-b-30">
+                            <span class="input-group-addon"><i class="fab fa-youtube"></i></span>
+                            <div class="fg-line">
+                                <input name="nome" type="text" class="form-control fg-input input-lg"
+                                    ng-model="registro.deliveryYoutube">
+                                <label class="fg-label">YouTube</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <button ng-click="onSalvar()" class="btn btn-float bgm-blue m-btn waves-effect waves-circle"><i
+            class="zmdi zmdi-floppy"></i></button>
+
+</div>

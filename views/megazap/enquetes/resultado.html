@@ -1,0 +1,47 @@
+<div class="container-fluid" data-ng-controller="EnqueteEdicaoController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>{{'ENQUETE'|translate}}</h2>        
+        </div>
+
+        <div class="card-body card-padding">
+            <br/>
+            <div class="form-group m-b-30">
+                <label>{{'TEXTO'|translate}}</label>
+                <div>{{registro.texto}}</div>
+            </div>
+            <br/>
+            <div class="form-group m-b-30">
+                <label>{{'QUANTIDADE-VOTOS'|translate}}</label>
+                <div>{{registro.quantidadeVotos}}</div>
+            </div>
+        </div>
+    </div>           
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <a href=""><h2>{{'RESULTADO'|translate}}</h2></a>
+        </div>
+    </div>
+
+    <div>
+        <ul class="main-menu perguntas-menu">
+            <li class="sub-menu" ng-repeat="opcao in registro.opcoes">
+                <div class="card" toggle-submenu>
+
+                    <span ng-if="opcao.quantidadeVotos === 0"><b>{{'NENHUM_VOTO'|translate}}</b></span>
+                    <span ng-if="opcao.quantidadeVotos === 1"><b>{{opcao.quantidadeVotos}} {{'VOTO'|translate}}</b></span>
+                    <span ng-if="opcao.quantidadeVotos > 1"><b>{{opcao.quantidadeVotos}} {{'VOTOS'|translate}}</b></span>
+
+                    <br/><br/>
+                    <span>{{opcao.texto}}</span>
+                </div>
+            <uib-progressbar value="((opcao.quantidadeVotos / registro.quantidadeVotos) * 100)" type="success"></uib-progressbar>
+            </li>            
+        </ul>
+    </div>
+
+</div>
+
+

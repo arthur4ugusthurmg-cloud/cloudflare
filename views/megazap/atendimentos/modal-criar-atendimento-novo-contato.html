@@ -1,0 +1,132 @@
+<div class="modal-header">
+    <h3>{{ "CHAT-CRIAR-ATENDIMENTO" | translate }}</h3>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-sm-12 m-t-20">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <select class="form-control input-lg select-simples"
+                        ng-model="novoAtendimentoNovoContato.canalChave" required=""
+                        ng-change="selectChannelNewTicket()">
+                        <option ng-repeat="canal in canais" value="{{canal.chave}}">
+                            {{ (canal.canal | translate)
+                            + (canal.apelido ? ' - ' + canal.apelido : '')
+                            + ' - ' + canal.numero }}
+                        </option>
+                    </select>
+                    <label class="fg-label">{{'CANAL'|translate}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-show="novoAtendimentoNovoContato.canal" style="display: flex; flex-flow: column;">
+        <div class="col-sm-12" style="margin-bottom: 40px; display: flex; gap: 20px;">
+            <button ng-click="onSearchAgendaNovoAtendimento()" title="{{'BUSCAR-CONTATO-DESC'|translate}}"
+                class="btn bgm-blue waves-effect"
+                style="gap: 5px; display: flex; font-size: 12px; align-items: center; justify-content: center;">
+                <i class="zmdi zmdi-search"></i> {{ "AGENDA" | translate }}
+            </button>
+
+            <button ng-if="permissions.permissionCrm" ng-click="openAgendaClientNovoAtendimento()"
+                title="{{'BUSCAR-CONTATO-DESC-CLIENTE'|translate}}" class="btn bgm-blue waves-effect"
+                style="gap: 5px; display: flex; font-size: 12px; align-items: center; justify-content: center;">
+                <i class="zmdi zmdi-search"></i> {{ "AGENDA-CLIENTE" | translate }}
+            </button>
+
+            <button
+                ng-show="novoAtendimentoNovoContato.canal.canal === 'WA-MESSENGER' || novoAtendimentoNovoContato.canal.canal === 'EMAIL' || novoAtendimentoNovoContato.canal.canal === 'TELEGRAM'"
+                ng-click="showModalCarteiraContatosNovoAtendimento(novoAtendimentoNovoContato.canal.canal)"
+                class="btn bgm-blue waves-effect"
+                style="gap: 5px; display: flex; font-size: 12px; align-items: center; justify-content: center;">
+                <i class="zmdi zmdi-search"></i> {{ "CARTEIRA-CONTATOS" | translate }}
+            </button>
+        </div>
+
+        <div class="col-sm-12"
+            ng-show="novoAtendimentoNovoContato.canal.canal === 'WA-MESSENGER' || novoAtendimentoNovoContato.canal.canal === 'TELEGRAM'">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input id="novoAtendimentoNovoContatoTelefone" name="telefone" type="text"
+                        class="form-control fg-input input-lg" tabindex="1" ng-blur="buscarContato()">
+                    <label class="fg-label fg-label-special">{{'NUMERO'|translate}}</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12" ng-if="novoAtendimentoNovoContato.canal.canal === 'EMAIL'">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="telefone" type="text" class="form-control fg-input input-lg"
+                        ng-model="novoAtendimentoNovoContato.telefone" tabindex="1" ng-blur="buscarContato()">
+                    <label class="fg-label">Email</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="nome" type="text" class="form-control fg-input input-lg"
+                        ng-model="novoAtendimentoNovoContato.nome" tabindex="2" autofocus>
+                    <label class="fg-label">{{'NOME'|translate}}</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12" ng-if="novoAtendimentoNovoContato.canal.canal === 'EMAIL'">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="nome" type="text" class="form-control fg-input input-lg"
+                        ng-model="novoAtendimentoNovoContato.assuntoEmail" tabindex="3">
+                    <label class="fg-label">{{"ASSUNTO" | translate}}</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12" ng-if="novoAtendimentoNovoContato.canal.canal === 'EMAIL'">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="cc" type="text" class="form-control fg-input input-lg" input-multi-append="email"
+                        ng-model="novoAtendimentoNovoContato.ccAux" tabindex="4">
+                    <label for="cc" class="fg-label">CC</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-if="novoAtendimentoNovoContato.canalChave">
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <select class="form-control input-lg select-simples"
+                        ng-model="departamentoSelecionado.departamentoId" ng-change="onSelecionarDepartamento()">
+                        <option ng-selected="departamento.id == departamentoSelecionado.departamentoId"
+                            ng-repeat="departamento in departamentosUsuario" value="{{departamento.id}}">
+                            {{departamento.nome}}</option>
+                    </select>
+                    <label class="fg-label">{{'DEPARTAMENTO'|translate}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-if="novoAtendimentoNovoContato.canalChave">
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <select class="form-control input-lg select-simples" ng-model="departamentoSelecionado.atendenteId">
+                        <option value="0"></option>
+                        <option ng-repeat="atendente in departamentoSelecionado.atendentes" value="{{atendente.id}}">
+                            {{atendente.nome}}</option>
+                    </select>
+                    <label class="fg-label">{{'ATENDENTE'|translate}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="m-b-15" ng-if="novoAtendimentoNovoContato.canal.canal === 'WA-MESSENGER'" ng-bind-html="'CHAT-EXPLICATIVO-CONTATO' | translate"></div> -->
+    <div class="alert alert-warning" role="alert">{{ 'CHAT-EXPLICATIVO-CONTATO-SPAM' | translate }}</div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onModalCriarAtendimentoNovoContato()">{{'ENVIAR'|translate}}</button>
+    <button class="btn btn-link" ng-click="onFecharModalCriarAtendimentoNovoContato()">{{'CANCELAR'|translate}}</button>
+</div>

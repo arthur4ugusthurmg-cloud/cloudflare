@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html data-ng-app="materialAdmin" data-ng-controller="loginController" ng-init="onInit()">
+
+<script>
+    if (top.location != self.location) {
+        self.location = "about:blank";
+    }
+</script>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+
+    <link rel="icon" href="img/favicon-empty.png" type="image/png">
+
+    <!-- Vendor CSS -->
+
+    <link href="bower_components/material-design-iconic-font/dist/css/material-design-iconic-font.min.css" rel="stylesheet">
+    <link href="bower_components/bootstrap-sweetalert/dist/sweetalert.css" rel="stylesheet">
+    <link href="" rel="stylesheet">
+    <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" data-auto-replace-svg="nest"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <!-- CSS -->
+    <link href="css/app.min.1.css?e4041a2b" rel="stylesheet">
+    <link href="css/app.min.2.css?e4041a2b" rel="stylesheet">
+    <link href="css/login.css?e4041a2b" rel="stylesheet">
+
+    <!--Manifest-->
+    <link rel="manifest" href="manifest.json?e4041a2b">
+
+    <!--Jquery JS-->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-177161969-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'UA-177161969-1');
+    </script>
+
+    <script>
+        if (window.location.origin === 'http://fbot.chat' || window.location.origin === 'http://www.fbot.chat' || window.location.origin === 'http://megazap.chat' || window.location.origin === 'http://www.megazap.chat') {
+            location.href = location.href.replace("http://", "https://");
+        }
+    </script>
+
+   <script
+    src="https://www.google.com/recaptcha/api.js?render=explicit&hl=pt-BR"
+    async
+    defer>
+</script>
+
+</head>
+
+<body>
+
+    <!-- Facebook Pixel Code -->
+
+
+    <!--LEFT-->
+    <div ng-if="customizacao.layout === 'left'" class="login-container login-left" style="display: none">
+
+        <div class="login">
+
+            <div class="login-form-container">
+
+                <div class="login-form">
+
+                    <div class="logo m-b-30">
+                        <img src="{{customizacao.imagemLogin}}">
+                    </div>
+
+                    <div class="row">
+                        <div ng-show="!controle.esqueceuSenha">
+
+                            <form>
+
+                                <!-- LOGINS SALVOS -->
+                                <div ng-show="!controle.loginUsuarioSenha" class="login-user-selection-container m-b-20" click-outside-login='controle.listaUsuariosAberta = false'>
+                                    <div class="login-user-selection m-t-20" ng-click="controle.listaUsuariosAberta = !controle.listaUsuariosAberta">
+                                        <span class="label">{{'ENTRAR-COMO' | translate}}</span>
+                                        <div style="display: flex; align-items: center;">
+                                            <img class="profile-picture img-circle" ng-if="controle.usuarioSelecionado.image" ng-src="{{controle.usuarioSelecionado.image}}">
+                                            <div class="profile-picture img-circle" style="background-color: {{customizacao.corPrimaria}} !important" ng-if="!controle.usuarioSelecionado.image">{{controle.usuarioSelecionado.name | limitTo:1}}</div>
+                                            <div>{{controle.usuarioSelecionado.name}} ({{controle.usuarioSelecionado.profile | translate}})</div>
+                                        </div>
+                                        <i class="fas fa-chevron-down" ng-if="!controle.listaUsuariosAberta && controle.listaUsuariosLogin.length > 1"></i>
+                                        <i class="fas fa-chevron-up" ng-if="controle.listaUsuariosAberta && controle.listaUsuariosLogin.length > 1"></i>
+                                        <i class="fas fa-trash" ng-if="controle.listaUsuariosLogin.length == 1" ng-click="removeCurrentUser($event)"></i>
+                                    </div>
+                                    <div class="login-user-list" ng-show="controle.listaUsuariosAberta && controle.listaUsuariosLogin.length > 1">
+                                        <div ng-click="controle.usuarioSelecionado = usuario; controle.listaUsuariosAberta = false" class="login-user-list-item" ng-repeat="usuario in controle.listaUsuariosLogin | orderBy:'name'">
+                                            <img class="profile-picture img-circle" ng-if="usuario.image" ng-src="{{usuario.image}}">
+                                            <div class="profile-picture img-circle" style="background-color: {{customizacao.corPrimaria}} !important" ng-if="!usuario.image">{{usuario.name | limitTo:1}}</div>
+                                            <div>{{usuario.name}} ({{usuario.profile | translate}})</div>
+                                            <i class="fas fa-trash login-user-list-btn-remove" ng-click="removeSavedUser($index, $event)"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- USUARIO E SENHA -->
+                                <div ng-show="controle.loginUsuarioSenha">
+                                    <div class="input-group form-group fg-float m-b-20 m-t-20">
+                                        <div class="fg-line fg-toggled has-nothing">
+                                            <input id="email" type="text" class="form-control" ng-model="registro.login" autofocus>
+                                            <label class="fg-label">{{'LOGIN'|translate}}</label>
+                                        </div>
+                                        <span class="input-group-addon last"><i class="zmdi zmdi-email"></i></span>
+                                    </div>
+
+                                    <div class="input-group form-group fg-float m-t-30 m-b-20">
+                                        <div class="fg-line fg-toggled has-nothing">
+                                            <input id="password" type="password" class="form-control" ng-model="registro.senha">
+                                            <label class="fg-label">{{'SENHA'|translate}}</label>
+                                        </div>
+                                        <span ng-if="!viewPassword" ng-click="changeViewPassword(true)" class="input-group-addon last cursor-pointer"><i class="zmdi zmdi-eye-off"></i></span>
+                                        <span ng-if="viewPassword" ng-click="changeViewPassword(false)" class="input-group-addon last cursor-pointer"><i class="zmdi zmdi-eye"></i></span>
+                                    </div>
+
+                                    <div class="checkbox m-b-10 m-t-5 m-l-5 pull-right">
+                                        <label>
+                                            <input type="checkbox" value="" ng-model="controle.lembrarUsuario">
+                                            <i class="input-helper"></i>
+                                            {{"LEMBRAR-DE-MIM" | translate}}
+                                        </label>
+                                    </div>
+
+
+<div
+    ng-class="getRecaptchaClass()"
+    style="display: flex; justify-content: center; margin-bottom: 10px; margin-top: 65px;"
+>
+    <div id="recaptcha-container"></div>
+</div>
+
+                                </div>
+
+                                <div class="text-center">
+                                    <button ng-disabled="controle.loginUsuarioSenha && (!registro.recaptchaToken || !registro.login || !registro.senha)" ng-click="onLogin()" class="btn btn-lg btn-block m-t-5 bgm-black waves-effect" style="background-color: {{customizacao.corPrimaria}} !important"><i class="zmdi zmdi-arrow-forward"></i> {{'ENTRAR'|translate}}</button>
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                        <!-- ESQUECEU A SENHA -->
+                        <div ng-show="controle.esqueceuSenha">
+                            <form>
+                                <div class="input-group form-group fg-float m-b-20 m-t-20">
+                                    <div class="fg-line fg-toggled has-nothing">
+                                        <input id="email-forgot" type="text" class="form-control" ng-model="registro.email" autofocus>
+                                        <label class="fg-label">{{'ENDERECO-EMAIL'|translate}}</label>
+                                    </div>
+                                    <span class="input-group-addon last"><i class="zmdi zmdi-email"></i></span>
+                                </div>
+
+<div
+    ng-class="getRecaptchaClass()"
+    style="display: flex; justify-content: center; margin-bottom: 10px; margin-top: 65px;"
+>
+    <div id="recaptcha-container"></div>
+</div>
+
+                                <div class="text-center">
+                                    <button ng-disabled="!registro.recaptchaToken || !registro.email" ng-click="sendEmailResetPassword()" class="btn btn-lg btn-block m-t-5 bgm-black waves-effect" style="background-color: {{customizacao.corPrimaria}} !important"><i class="zmdi zmdi-arrow-forward"></i> {{'SEND_EMAIL'|translate}}</button>
+                                </div>
+
+                                <a class="m-t-20" style="cursor: pointer; display: flex; place-content: center;" ng-click="cancelForgotPassword()">{{'CANCELAR' | translate}}</a>
+                            </form>
+                        </div>
+
+                        <div style="display: flex; place-content: space-between;">
+                            <a ng-if="!controle.loginUsuarioSenha && !controle.esqueceuSenha" class="m-t-20" style="cursor: pointer; display: flex; place-content: left;" ng-click="showUserPassword()">{{'ENTRAR-OUTRO-USUARIO' | translate}}</a>
+                            <a ng-if="controle.loginUsuarioSenha && !controle.esqueceuSenha && controle.listaUsuariosLogin.length > 0" class="m-t-20" style="cursor: pointer; display: flex; place-content: left;" ng-click="showUserList()">{{'LISTAR-USUARIOS-SALVOS' | translate}}</a>
+                            <a ng-if="customizacao.isValidEmailDomain && !controle.esqueceuSenha" class="m-t-20" style="cursor: pointer; display: flex; place-content: right;" ng-click="showForgotPassword()">{{'ESQUECI-SENHA' | translate}}</a>
+                        </div>
+                    </div>
+
+                    <hr class="m-t-30 m-b-30" />
+
+                    <div class="text-center m-b-10">
+                        <img ng-click="trocarIdioma('pt-BR')" title="{{'LANG-PT-BR'| translate}}" class="icon-idioma m-r-30" src="img/language/pt-br.png" alt="">
+                        <img ng-click="trocarIdioma('en-US')" title="{{'LANG-EN'| translate}}" class="icon-idioma m-r-30" src="img/language/en.png" alt="">
+                        <img ng-click="trocarIdioma('es-ES')" title="{{'LANG-ES'| translate}}" class="icon-idioma m-r-30" src="img/language/es.png" alt="">
+                        <img ng-click="trocarIdioma('zh-CN')" title="{{'LANG-CN'| translate}}" class="icon-idioma" src="img/language/cn.png" alt="">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="login-intro" ng-style="{'background-color': customizacao.corSecundaria, 'background-image': isVideoBackground() ? 'none' : 'url(' + customizacao.imagemBackgroundContainer + ')'}" style="position: relative; overflow: hidden;">
+                <video ng-if="isVideoBackground()" ng-attr-src="{{trustedVideoUrl()}}" autoplay muted loop playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:0;"></video>
+                <div style="position: relative; z-index: 1;">
+                    <img ng-if="customizacao.imagemLogoContainer" class="mb-5" src="{{customizacao.imagemLogoContainer}}">
+                    <h1 class="mb-3">{{customizacao.tituloContainer}}</h1>
+                    <p>
+                        {{customizacao.descricaoContainer}}
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!--CENTER-->
+    <div ng-if="customizacao.layout === 'center'" class="login-center" style="display: none" id="l-login" data-cor-secundaria="{{customizacao.corSecundaria}}">
+
+        <video ng-if="isVideoBackground()" ng-attr-src="{{trustedVideoUrl()}}" autoplay muted loop playsinline style="position:fixed;top:0;left:0;width:100%;height:50%;object-fit:cover;z-index:0;"></video>
+
+        <div class="login" ng-style="{'position': isVideoBackground() ? 'relative' : '', 'z-index': isVideoBackground() ? 1 : ''}">
+
+            <div class="login-form-container">
+
+                <div class="login-form">
+
+                    <div class="logo m-b-30 m-t-20">
+                        <img src="{{customizacao.imagemLogin}}">
+                    </div>
+
+
+                    <div class="row">
+                        <div ng-show="!controle.esqueceuSenha">
+
+                            <form>
+
+                                <!-- LOGINS SALVOS -->
+                                <div ng-show="!controle.loginUsuarioSenha" class="login-user-selection-container m-b-20" click-outside-login='controle.listaUsuariosAberta = false'>
+                                    <div class="login-user-selection m-t-20" ng-click="controle.listaUsuariosAberta = !controle.listaUsuariosAberta">
+                                        <span class="label">{{'ENTRAR-COMO' | translate}}</span>
+                                        <div style="display: flex; align-items: center;">
+                                            <img class="profile-picture img-circle" ng-if="controle.usuarioSelecionado.image" ng-src="{{controle.usuarioSelecionado.image}}">
+                                            <div class="profile-picture img-circle" style="background-color: {{customizacao.corPrimaria}} !important" ng-if="!controle.usuarioSelecionado.image">{{controle.usuarioSelecionado.name | limitTo:1}}</div>
+                                            <div>{{controle.usuarioSelecionado.name}} ({{controle.usuarioSelecionado.profile | translate}})</div>
+                                        </div>
+                                        <i class="fas fa-chevron-down" ng-if="!controle.listaUsuariosAberta && controle.listaUsuariosLogin.length > 1"></i>
+                                        <i class="fas fa-chevron-up" ng-if="controle.listaUsuariosAberta && controle.listaUsuariosLogin.length > 1"></i>
+                                        <i class="fas fa-trash" ng-if="controle.listaUsuariosLogin.length == 1" ng-click="removeCurrentUser($event)"></i>
+                                    </div>
+                                    <div class="login-user-list" ng-show="controle.listaUsuariosAberta && controle.listaUsuariosLogin.length > 1">
+                                        <div ng-click="controle.usuarioSelecionado = usuario; controle.listaUsuariosAberta = false" class="login-user-list-item" ng-repeat="usuario in controle.listaUsuariosLogin | orderBy:'name'">
+                                            <img class="profile-picture img-circle" ng-if="usuario.image" ng-src="{{usuario.image}}">
+                                            <div class="profile-picture img-circle" style="background-color: {{customizacao.corPrimaria}} !important" ng-if="!usuario.image">{{usuario.name | limitTo:1}}</div>
+                                            <div>{{usuario.name}} ({{usuario.profile | translate}})</div>
+                                            <i class="fas fa-trash login-user-list-btn-remove" ng-click="removeSavedUser($index, $event)"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- USUARIO E SENHA -->
+                                <div ng-show="controle.loginUsuarioSenha">
+                                    <div class="input-group form-group fg-float m-b-20 m-t-20">
+                                        <div class="fg-line fg-toggled has-nothing">
+                                            <input id="email" type="text" class="form-control" ng-model="registro.login" autofocus>
+                                            <label class="fg-label">{{'LOGIN'|translate}}</label>
+                                        </div>
+                                        <span class="input-group-addon last"><i class="zmdi zmdi-email"></i></span>
+                                    </div>
+
+                                    <div class="input-group form-group fg-float m-t-30 m-b-20">
+                                        <div class="fg-line fg-toggled has-nothing">
+                                            <input id="password" type="password" class="form-control" ng-model="registro.senha">
+                                            <label class="fg-label">{{'SENHA'|translate}}</label>
+                                        </div>
+                                        <span ng-if="!viewPassword" ng-click="changeViewPassword(true)" class="input-group-addon last cursor-pointer"><i class="zmdi zmdi-eye-off"></i></span>
+                                        <span ng-if="viewPassword" ng-click="changeViewPassword(false)" class="input-group-addon last cursor-pointer"><i class="zmdi zmdi-eye"></i></span>
+                                    </div>
+
+                                    <div class="checkbox m-b-10 m-t-5 m-l-5 pull-right">
+                                        <label>
+                                            <input type="checkbox" value="" ng-model="controle.lembrarUsuario">
+                                            <i class="input-helper"></i>
+                                            {{"LEMBRAR-DE-MIM" | translate}}
+                                        </label>
+                                    </div>
+
+<div
+    ng-class="getRecaptchaClass()"
+    style="display: flex; justify-content: center; margin-bottom: 10px; margin-top: 65px;"
+>
+    <div id="recaptcha-container"></div>
+</div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button ng-disabled="controle.loginUsuarioSenha && (!registro.recaptchaToken || !registro.login || !registro.senha)" ng-click="onLogin()" class="btn btn-lg btn-block m-t-5 bgm-black waves-effect" style="background-color: {{customizacao.corPrimaria}} !important"><i class="zmdi zmdi-arrow-forward"></i> {{'ENTRAR'|translate}}</button>
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                        <!-- ESQUECEU A SENHA -->
+                        <div ng-show="controle.esqueceuSenha">
+                            <form>
+                                <div class="input-group form-group fg-float m-b-20 m-t-20">
+                                    <div class="fg-line fg-toggled has-nothing">
+                                        <input id="email-forgot" type="text" class="form-control" ng-model="registro.email" autofocus>
+                                        <label class="fg-label">{{'ENDERECO-EMAIL'|translate}}</label>
+                                    </div>
+                                    <span class="input-group-addon last"><i class="zmdi zmdi-email"></i></span>
+                                </div>
+
+<div
+    ng-class="getRecaptchaClass()"
+    style="display: flex; justify-content: center; margin-bottom: 10px; margin-top: 65px;"
+>
+    <div id="recaptcha-container"></div>
+</div>
+
+                                <div class="text-center">
+                                    <button ng-disabled="!registro.recaptchaToken || !registro.email" ng-click="sendEmailResetPassword()" class="btn btn-lg btn-block m-t-5 bgm-black waves-effect" style="background-color: {{customizacao.corPrimaria}} !important"><i class="zmdi zmdi-arrow-forward"></i> {{'SEND_EMAIL'|translate}}</button>
+                                </div>
+
+                                <a class="m-t-20" style="cursor: pointer; display: flex; place-content: center;" ng-click="cancelForgotPassword()">{{'CANCELAR' | translate}}</a>
+                            </form>
+                        </div>
+
+                        <div style="display: flex; place-content: space-between;">
+                            <a ng-if="!controle.loginUsuarioSenha && !controle.esqueceuSenha" class="m-t-20" style="cursor: pointer; display: flex; place-content: left;" ng-click="showUserPassword()">{{'ENTRAR-OUTRO-USUARIO' | translate}}</a>
+                            <a ng-if="controle.loginUsuarioSenha && !controle.esqueceuSenha && controle.listaUsuariosLogin.length > 0" class="m-t-20" style="cursor: pointer; display: flex; place-content: left;" ng-click="showUserList()">{{'LISTAR-USUARIOS-SALVOS' | translate}}</a>
+                            <a ng-if="customizacao.isValidEmailDomain && !controle.esqueceuSenha" class="m-t-20" style="cursor: pointer; display: flex; place-content: right;" ng-click="showForgotPassword()">{{'ESQUECI-SENHA' | translate}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center m-t-20">
+                <img ng-click="trocarIdioma('pt-BR')" title="{{'LANG-PT-BR'| translate}}" class="icon-idioma m-r-30" src="img/language/pt-br.png" alt="">
+                <img ng-click="trocarIdioma('en-US')" title="{{'LANG-EN'| translate}}" class="icon-idioma m-r-30" src="img/language/en.png" alt="">
+                <img ng-click="trocarIdioma('es-ES')" title="{{'LANG-ES'| translate}}" class="icon-idioma m-r-30" src="img/language/es.png" alt="">
+                <img ng-click="trocarIdioma('zh-CN')" title="{{'LANG-CN'| translate}}" class="icon-idioma" src="img/language/cn.png" alt="">
+            </div>
+
+        </div>
+
+    </div>
+
+    <!--RIGHT-->
+    <div ng-if="customizacao.layout === 'right'" class="login-container login-right" style="display: none">
+
+        <div class="login">
+            <div class="login-intro" ng-style="{'background-color': customizacao.corSecundaria, 'background-image': isVideoBackground() ? 'none' : 'url(' + customizacao.imagemBackgroundContainer + ')'}" style="position: relative; overflow: hidden;">
+                <video ng-if="isVideoBackground()" ng-attr-src="{{trustedVideoUrl()}}" autoplay muted loop playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:0;"></video>
+                <div style="position: relative; z-index: 1;">
+                    <img ng-if="customizacao.imagemLogoContainer" class="mb-5" src="{{customizacao.imagemLogoContainer}}">
+                    <h1 class="mb-3">{{customizacao.tituloContainer}}</h1>
+                    <p>
+                        {{customizacao.descricaoContainer}}
+                    </p>
+                </div>
+            </div>
+
+            <div class="login-form-container">
+
+                <div class="login-form">
+
+                    <div class="logo m-b-30">
+                        <img src="{{customizacao.imagemLogin}}">
+                    </div>
+
+                    <div class="row">
+                        <div ng-show="!controle.esqueceuSenha">
+
+                            <form>
+
+                                <!-- LOGINS SALVOS -->
+                                <div ng-show="!controle.loginUsuarioSenha" class="login-user-selection-container m-b-20" click-outside-login='controle.listaUsuariosAberta = false'>
+                                    <div class="login-user-selection m-t-20" ng-click="controle.listaUsuariosAberta = !controle.listaUsuariosAberta">
+                                        <span class="label">{{'ENTRAR-COMO' | translate}}</span>
+                                        <div style="display: flex; align-items: center;">
+                                            <img class="profile-picture img-circle" ng-if="controle.usuarioSelecionado.image" ng-src="{{controle.usuarioSelecionado.image}}">
+                                            <div class="profile-picture img-circle" style="background-color: {{customizacao.corPrimaria}} !important" ng-if="!controle.usuarioSelecionado.image">{{controle.usuarioSelecionado.name | limitTo:1}}</div>
+                                            <div>{{controle.usuarioSelecionado.name}} ({{controle.usuarioSelecionado.profile | translate}})</div>
+                                        </div>
+                                        <i class="fas fa-chevron-down" ng-if="!controle.listaUsuariosAberta && controle.listaUsuariosLogin.length > 1"></i>
+                                        <i class="fas fa-chevron-up" ng-if="controle.listaUsuariosAberta && controle.listaUsuariosLogin.length > 1"></i>
+                                        <i class="fas fa-trash" ng-if="controle.listaUsuariosLogin.length == 1" ng-click="removeCurrentUser($event)"></i>
+                                    </div>
+                                    <div class="login-user-list" ng-show="controle.listaUsuariosAberta && controle.listaUsuariosLogin.length > 1">
+                                        <div ng-click="controle.usuarioSelecionado = usuario; controle.listaUsuariosAberta = false" class="login-user-list-item" ng-repeat="usuario in controle.listaUsuariosLogin | orderBy:'name'">
+                                            <img class="profile-picture img-circle" ng-if="usuario.image" ng-src="{{usuario.image}}">
+                                            <div class="profile-picture img-circle" style="background-color: {{customizacao.corPrimaria}} !important" ng-if="!usuario.image">{{usuario.name | limitTo:1}}</div>
+                                            <div>{{usuario.name}} ({{usuario.profile | translate}})</div>
+                                            <i class="fas fa-trash login-user-list-btn-remove" ng-click="removeSavedUser($index, $event)"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- USUARIO E SENHA -->
+                                <div ng-show="controle.loginUsuarioSenha">
+                                    <div class="input-group form-group fg-float m-b-20 m-t-20">
+                                        <div class="fg-line fg-toggled has-nothing">
+                                            <input id="email" type="text" class="form-control" ng-model="registro.login" autofocus>
+                                            <label class="fg-label">{{'LOGIN'|translate}}</label>
+                                        </div>
+                                        <span class="input-group-addon last"><i class="zmdi zmdi-email"></i></span>
+                                    </div>
+
+                                    <div class="input-group form-group fg-float m-t-30 m-b-20">
+                                        <div class="fg-line fg-toggled has-nothing">
+                                            <input id="password" type="password" class="form-control" ng-model="registro.senha">
+                                            <label class="fg-label">{{'SENHA'|translate}}</label>
+                                        </div>
+                                        <span ng-if="!viewPassword" ng-click="changeViewPassword(true)" class="input-group-addon last cursor-pointer"><i class="zmdi zmdi-eye-off"></i></span>
+                                        <span ng-if="viewPassword" ng-click="changeViewPassword(false)" class="input-group-addon last cursor-pointer"><i class="zmdi zmdi-eye"></i></span>
+                                    </div>
+
+                                    <div class="checkbox m-b-10 m-t-5 m-l-5 pull-right">
+                                        <label>
+                                            <input type="checkbox" value="" ng-model="controle.lembrarUsuario">
+                                            <i class="input-helper"></i>
+                                            {{"LEMBRAR-DE-MIM" | translate}}
+                                        </label>
+                                    </div>
+
+
+<div
+    ng-class="getRecaptchaClass()"
+    style="display: flex; justify-content: center; margin-bottom: 10px; margin-top: 65px;"
+>
+    <div id="recaptcha-right"></div>
+</div>
+                       </div>
+
+                                <div class="text-center">
+                                    <button ng-disabled="controle.loginUsuarioSenha && (!registro.recaptchaToken || !registro.login || !registro.senha)" ng-click="onLogin()" class="btn btn-lg btn-block m-t-5 bgm-black waves-effect" style="background-color: {{customizacao.corPrimaria}} !important"><i class="zmdi zmdi-arrow-forward"></i> {{'ENTRAR'|translate}}</button>
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                        <!-- ESQUECEU A SENHA -->
+                        <div ng-show="controle.esqueceuSenha">
+                            <form>
+                                <div class="input-group form-group fg-float m-b-20 m-t-20">
+                                    <div class="fg-line fg-toggled has-nothing">
+                                        <input id="email-forgot" type="text" class="form-control" ng-model="registro.email" autofocus>
+                                        <label class="fg-label">{{'ENDERECO-EMAIL'|translate}}</label>
+                                    </div>
+                                    <span class="input-group-addon last"><i class="zmdi zmdi-email"></i></span>
+                                </div>
+
+
+<div
+    ng-class="getRecaptchaClass()"
+    style="display: flex; justify-content: center; margin-bottom: 10px; margin-top: 65px;"
+>
+    <div id="esqueci-recaptcha-right"></div>
+</div>
+
+
+                                <div class="text-center">
+                                    <button ng-disabled="!registro.recaptchaToken || !registro.email" ng-click="sendEmailResetPassword()" class="btn btn-lg btn-block m-t-5 bgm-black waves-effect" style="background-color: {{customizacao.corPrimaria}} !important"><i class="zmdi zmdi-arrow-forward"></i> {{'SEND_EMAIL'|translate}}</button>
+                                </div>
+
+                                <a class="m-t-20" style="cursor: pointer; display: flex; place-content: center;" ng-click="cancelForgotPassword()">{{'CANCELAR' | translate}}</a>
+                            </form>
+                        </div>
+
+                        <div style="display: flex; place-content: space-between;">
+                            <a ng-if="!controle.loginUsuarioSenha && !controle.esqueceuSenha" class="m-t-20" style="cursor: pointer; display: flex; place-content: left;" ng-click="showUserPassword()">{{'ENTRAR-OUTRO-USUARIO' | translate}}</a>
+                            <a ng-if="controle.loginUsuarioSenha && !controle.esqueceuSenha && controle.listaUsuariosLogin.length > 0" class="m-t-20" style="cursor: pointer; display: flex; place-content: left;" ng-click="showUserList()">{{'LISTAR-USUARIOS-SALVOS' | translate}}</a>
+                            <a ng-if="customizacao.isValidEmailDomain && !controle.esqueceuSenha" class="m-t-20" style="cursor: pointer; display: flex; place-content: right;" ng-click="showForgotPassword()">{{'ESQUECI-SENHA' | translate}}</a>
+                        </div>
+                    </div>
+
+                    <hr class="m-t-30 m-b-30" />
+
+                    <div class="text-center m-b-10">
+                        <img ng-click="trocarIdioma('pt-BR')" title="{{'LANG-PT-BR'| translate}}" class="icon-idioma m-r-30" src="img/language/pt-br.png" alt="">
+                        <img ng-click="trocarIdioma('en-US')" title="{{'LANG-EN'| translate}}" class="icon-idioma m-r-30" src="img/language/en.png" alt="">
+                        <img ng-click="trocarIdioma('es-ES')" title="{{'LANG-ES'| translate}}" class="icon-idioma m-r-30" src="img/language/es.png" alt="">
+                        <img ng-click="trocarIdioma('zh-CN')" title="{{'LANG-CN'| translate}}" class="icon-idioma" src="img/language/cn.png" alt="">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</body>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script src="bower_components/angular/angular.min.js"></script>
+
+<script src="https://smsolucoesdigital.online/vendors/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+
+    <script src="vendors/bower_components/oclazyload/dist/ocLazyLoad.min.js"></script>
+<script src="vendors/bower_components/angula-resource/js.js"></script>
+
+<script src="bower_components/ngstorage/ngStorage.min.js"></script>
+
+<script src="bower_components/angular-ui-bootstrap/ui-bootstrap-tpls.min.js"></script>
+
+<script src="bower_components/angular-translate/angular-translate.min.js"></script>
+
+<script src="jwt-decode/build/jwt-decode.min.js"></script>
+
+<!-- Carregue o aplicativo apenas uma vez -->
+<script src="dist/js/app.js?ad09e9de"></script>
+
+</body>
+
+</html>

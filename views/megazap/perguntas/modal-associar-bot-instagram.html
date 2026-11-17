@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <h3>{{"ASSOCIAR-INSTAGRAM" | translate}}
+        <small ng-if="!isFbot()">{{"ATIVACAO-PAGINA-INSTAGRAM" | translate}} <a href="https://fbot.chat/">https://fbot.chat/</a>.<br>{{"ATIVACAO-INFORMACAO-CUSTO" | translate}}.</small>
+    </h3>
+</div>
+<div class="modal-body">
+    <br/>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line fg-toggled">
+                    <div class="select">
+                        <select class="form-control input-lg select-simples" ng-model="novoBotFacebook.id" autofocus>
+                            <option ng-repeat="botFacebook in botsInstagram" value="{{botFacebook.id}}">{{botFacebook.pagina}}</option>
+                        </select>
+                        <label class="fg-label">{{ "PERFIL" | translate }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onModalBotFacebookInserir()">{{'ENVIAR'|translate}}</button>
+    <button class="btn btn-link" ng-click="onModalBotFacebookCancelar()">{{'CANCELAR'|translate}}</button>
+</div>

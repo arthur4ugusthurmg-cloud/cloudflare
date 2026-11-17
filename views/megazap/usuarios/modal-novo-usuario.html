@@ -1,0 +1,111 @@
+<div class="modal-header">
+    <h3>{{'NOVO-USUARIO'|translate}}<small>{{'NOVO-REGISTRO-DESCRICAO'|translate}}</small></h3>
+</div>
+<div class="modal-body">
+    <br />
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <select class="form-control input-lg select-simples" ng-model="novoRegistro.perfil">
+                        <option value="SUPORTE">Suporte</option>
+                        <option value="LIDER_SUPORTE">Lider de Suporte</option>
+                        <option value="LIDER_VENDAS">Lider de Vendas</option>
+                        <option ng-if="podeAtribuirVendedor" value="VENDEDOR">Vendedor</option>
+                        <option value="GESTOR">Gestor</option>
+                        <option value="GESTOR_MASTER">Gestor Master</option>
+                        <option value="SUPORTE_SAEGA">Suporte Saega</option>
+                    </select>
+                    <label class="fg-label">Perfil</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12" ng-if="novoRegistro.perfil == 'SUPORTE_SAEGA'">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <select class="form-control input-lg select-simples" ng-model="novoRegistro.professionalType">
+                        <option value="ZOOTECNICIAN">Zootecnista</option>
+                        <option value="VETERINARIAN">Veterinário</option>
+                    </select>
+                    <label class="fg-label">{{'WORK'|translate}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="nome" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.nome"
+                        autofocus>
+                    <label class="fg-label">{{'NOME'|translate}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="nome" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.login"
+                        autofocus>
+                    <label class="fg-label">{{'LOGIN'|translate}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="email" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.emailAtendente">
+                    <label class="fg-label">{{'EMAIL'|translate}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12" ng-if="novoRegistro.perfil == 'GESTOR'">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input type="text" ng-model="novoRegistro.cliente" typeahead-show-hint="true" typeahead-min-length="3"
+                        uib-typeahead="data as data.id + ' - ' + data.nome for data in getAutocompleteCliente($viewValue)"
+                        typeahead-loading="loadingCustomer" class="form-control input-lg">
+                    <label class="fg-label">Cliente</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12" ng-if="novoRegistro.perfil == 'GESTOR_MASTER'">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input type="text" ng-model="novoRegistro.cliente" lta-enter="onInit()"
+                        typeahead-on-select="onSelecionarCliente()" typeahead-show-hint="true" typeahead-min-length="3"
+                        uib-typeahead="data as data.id + ' - ' + data.nome for data in getAutocompleteCliente($viewValue)"
+                        typeahead-loading="loadingCustomer" class="form-control input-lg">
+                    <label class="fg-label">Cliente</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 table-responsive"
+            ng-if="novoRegistro.usuarioClientes && novoRegistro.usuarioClientes.length > 0">
+            <table id="content-table" class="table table-vmiddle">
+                <thead>
+                    <tr>
+                        <th style="width: 99%">{{'CLIENTE'|translate}}</th>
+                        <th style="width: 1%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="cliente in novoRegistro.usuarioClientes">
+                        <td>
+                            {{ cliente.clienteId }} - {{ cliente.nome }}
+                        </td>
+                        <td style="white-space: nowrap">
+                            <button ng-click="onRemoverCliente(cliente)" title="{{ 'EXCLUIR' | translate }}"
+                                class="btn btn-danger waves-effect"><i class="zmdi zmdi-delete"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="alert alert-info" role="alert">
+        <i class="zmdi zmdi-alert-circle-o zmdi-hc-fw"></i> {{"AVISO-EMAIL-SENHA" | translate}}
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onModalInserir()">{{'ENVIAR'|translate}}</button>
+    <button class="btn btn-link" ng-click="onModalCancelar()">{{'CANCELAR'|translate}}</button>
+</div>

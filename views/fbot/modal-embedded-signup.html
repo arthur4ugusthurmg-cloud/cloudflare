@@ -1,0 +1,97 @@
+<div class="modal-header">
+    <h3>Configurações de Ativação <a href="https://developers.facebook.com/docs/whatsapp/embedded-signup/custom-flows/onboarding-business-app-users" target="_blank"><span class="bg-new m-l-5" style="float: right">BETA</span></a></h3>
+</div>
+<div class="modal-body">
+    <div class="row">
+
+        <div class="col-sm-12">
+            <div>
+                <label style="font-size: 13px" class="fg-label fg-radio">Você deseja sincronizar os contatos do celular com a agenda da plataforma?</label>
+                <div class="radio m-b-15 m-r-20" style="display: inline-block">
+                    <label>
+                        <input type="radio" name="activationImportContacts" value="true" ng-model="activationImportContacts" ng-change="setActivationImportContacts('true')">
+                        <i class="input-helper"></i>
+                        Sim
+                    </label>
+                </div>
+                <div class="radio m-b-15 m-r-20" style="display: inline-block">
+                    <label>
+                        <input type="radio" name="activationImportContacts" value="false" ng-model="activationImportContacts" ng-change="setActivationImportContacts('false')">
+                        <i class="input-helper"></i>
+                        Não
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12" ng-show="activationImportContacts">
+            <label style="font-size: 13px" class="fg-label fg-radio">Você deseja importar o backup de conversar do seu celular na plataforma?</label>
+            <div class="radio m-b-15 m-r-20" style="display: inline-block">
+                <label>
+                    <input type="radio" name="activationImportChat" value="true" ng-model="activationImportChat" ng-change="setActivationImportChat('true')">
+                    <i class="input-helper"></i>
+                    Sim
+                </label>
+            </div>
+            <div class="radio m-b-15 m-r-20" style="display: inline-block">
+                <label>
+                    <input type="radio" name="activationImportChat" value="false" ng-model="activationImportChat" ng-change="setActivationImportChat('false')">
+                    <i class="input-helper"></i>
+                    Não
+                </label>
+            </div>
+        </div>
+
+        <div class="col-sm-12" ng-show="activationImportChat == 'true'">
+            <label style="font-size: 13px" class="fg-label fg-radio">Qual a ação para as mensagens importadas?</label>
+            <div class="radio m-b-15 m-r-20" style="display: inline-block">
+                <label>
+                    <input type="radio" name="action_type" value="NONE" ng-model="activationHistoryAction" ng-change="setActivationHistoryAction('NONE')">
+                    <i class="input-helper"></i>
+                    Nenhuma
+                </label>
+            </div>
+            <div class="radio m-b-15 m-r-20" style="display: inline-block">
+                <label>
+                    <input type="radio" name="action_type" value="CREATE_TICKET" ng-model="activationHistoryAction" ng-change="setActivationHistoryAction('CREATE_TICKET')">
+                    <i class="input-helper"></i>
+                    Criar Atendimento
+                </label>
+            </div>
+            <div class="radio m-b-15 m-r-20" style="display: inline-block">
+                <label>
+                    <input type="radio" name="action_type" value="CREATE_LEAD" ng-model="activationHistoryAction" ng-change="setActivationHistoryAction('CREATE_LEAD')">
+                    <i class="input-helper"></i>
+                    Criar Lead
+                </label>
+            </div>
+        </div>
+
+        <div class="col-sm-12 m-t-30" ng-show="activationHistoryAction == 'CREATE_TICKET'">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <select class="form-control input-lg select-simples" ng-model="departamentoSelecionado.departamentoId" ng-change="onSelecionarDepartamento()" required="">
+                        <option ng-repeat="departamento in departamentos" value="{{departamento.id}}">{{departamento.nome}}</option>
+                    </select>
+                    <label class="fg-label">{{'DEPARTAMENTO'}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12" ng-show="activationHistoryAction == 'CREATE_TICKET' && departamentoSelecionado.departamentoId">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line fg-toggled">
+                    <select class="form-control input-lg select-simples" ng-model="departamentoSelecionado.atendenteId">
+                        <option value="0">Nenhum</option>
+                        <option ng-repeat="atendente in departamentoSelecionado.atendentes" value="{{atendente.id}}">{{atendente.nome}}</option>
+                    </select>
+                    <label class="fg-label">{{'ATENDENTE'}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="closeModalAtivacaoWhatsAppApi()">{{'CANCELAR'}}</button>
+    <button class="btn btn-link" ng-disabled="!isModalAtivacaoWhatsAppApiValid()" ng-click="register()">{{'ENVIAR'}}</button>
+</div>

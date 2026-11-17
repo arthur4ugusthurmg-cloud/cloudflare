@@ -1,0 +1,106 @@
+<html data-ng-app="materialAdmin" data-ng-controller="materialadminCtrl as mactrl">
+
+<script>
+    if (top.location != self.location) {
+        self.location = "about:blank";
+    }
+</script>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="description" content="Portal do Cliente">
+    <title>Portal do Cliente</title>
+
+    <link rel="icon" href="img/favicon-empty.png" type="image/png">
+
+    <script src="bower_components/angular/angular.min.js"></script>
+
+
+        <link href="bower_components/material-design-iconic-font/dist/css/material-design-iconic-font.min.css" rel="stylesheet">
+    <link href="bower_components/bootstrap-sweetalert/dist/sweetalert.css" rel="stylesheet">
+    <script src="vendors/bower_components/oclazyload/dist/ocLazyLoad.min.js"></script>
+<script src="vendors/bower_components/angula-resource/js.js"></script>
+    <link href="" rel="stylesheet">
+    <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" data-auto-replace-svg="nest"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+
+
+    <script src="jwt-decode/build/jwt-decode.min.js"></script>
+
+    <link href="css/mz-emojis.css" rel="stylesheet">
+
+    <link href="css/app.min.1.css?e4041a2b" rel="stylesheet" id="app-level">
+    <link href="css/app.min.2.css?e4041a2b" rel="stylesheet">
+    <link href="css/mz-template.css?e4041a2b" rel="stylesheet">
+    <link href="css/demo.css?e4041a2b" rel="stylesheet">
+    <link href="css/material-icons.css?e4041a2b" rel="stylesheet">
+    <link href="css/wa-emojis.css?e4041a2b" rel="stylesheet">
+    <link href="css/delivery.css?e4041a2b" rel="stylesheet">
+    <link href="css/cleanslate.css?e4041a2b" rel="stylesheet">
+    <link rel="stylesheet" href="lib/sweetalert/sweet-alert.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/atendimento.css">
+    
+
+    <!-- Incluir AngularJS via CDN -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-177161969-1', { 'send_page_view': false });
+    </script>
+</head>
+
+<body data-ng-class="{ 'sw-toggled': mactrl.layoutType === '1' && !isFbot()}">
+    <script>
+        if (window.location.origin === 'http://fbot.chat' || window.location.origin === 'http://www.fbot.chat' || window.location.origin === 'http://megazap.chat' || window.location.origin === 'http://www.megazap.chat') {
+            location.href = location.href.replace("http://", "https://");
+        }
+    </script>
+
+    <div id="fb-root"></div>
+
+
+
+
+<div data-ui-view></div>
+
+<script src="vendors/fileinput/fileinput.min.js"></script>
+
+
+        <script src="vendors/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+
+
+
+    <!-- ========================================= -->
+    <!-- NG STORAGE                               -->
+    <!-- ========================================= -->
+
+    <script src="bower_components/ngstorage/ngStorage.min.js"></script>
+
+
+    <!-- ========================================= -->
+    <!-- UI BOOTSTRAP                             -->
+    <!-- ========================================= -->
+
+    <script src="bower_components/angular-ui-bootstrap/ui-bootstrap-tpls.min.js"></script>
+
+
+    <!-- ========================================= -->
+    <!-- ANGULAR TRANSLATE                        -->
+    <!-- ========================================= -->
+
+    <script src="bower_components/angular-translate/angular-translate.min.js"></script>
+
+<script src="lib/sweetalert/sweet-alert.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+<script src="dist/js/app.js?e4041a2b" data-auto-replace-svg="nest"></script>
+</body>
+
+</html>

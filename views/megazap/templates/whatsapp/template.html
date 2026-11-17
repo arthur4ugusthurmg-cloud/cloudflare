@@ -1,0 +1,1147 @@
+<link href="css/crm.css?VERSION_HASH" rel="stylesheet" />
+<link href="css/template.css?VERSION_HASH" rel="stylesheet" />
+<div class="container-fluid wa-template-page" data-ng-controller="TemplatesWhatsAppController" ng-init="getConfig()">
+
+    <div class="page-header-wa m-b-20">
+        <div class="page-header-content">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button ng-click="goBack()" class="btn btn-link btn-back">
+                    <i class="zmdi zmdi-arrow-left"></i>
+                </button>
+                <div class="page-title">
+                    <h2 ng-if="!template.id">
+                        Novo Template
+                    </h2>
+                    <div ng-if="template.id" style="display: flex;gap: 8px;align-items: center;">
+                        <h2>Editar {{template.name}}</h2>
+                        <span class="label"
+                            style="line-height: 2;display: flex;align-items: center;justify-content: center;padding: 0px 8px;font-size: 11px;border-radius: 5px;"
+                            ng-class="{
+                            'label-success': template.status === 'APPROVED',
+                            'label-warning': template.status === 'PENDING',
+                            'label-danger': template.status === 'REJECTED'
+                        }">
+                            <span ng-if="template.status === 'APPROVED'">Aprovado</span>
+                            <span ng-if="template.status === 'PENDING'">Pendente</span>
+                            <span ng-if="template.status === 'REJECTED'">Rejeitado</span>
+                        </span>
+                    </div>
+                    <small class="text-muted">Configure as informações do seu template de mensagem</small>
+                </div>
+            </div>
+            <button ng-if="hasTutorial('171')" ng-click="showTutorial('171')"
+                title="Clique aqui para visualizar o video de explicação."
+                class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card m-b-20">
+                <div class="card-header ch-alt">
+                    <h2><i class="zmdi zmdi-info-outline m-r-10 size-20"></i>Informações Básicas</h2>
+                </div>
+                <div class="card-body card-padding" style="padding-bottom: 13px;">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group fg-float m-b-30 m-t-15">
+                                <div class="fg-line required">
+                                    <input type="text" class="form-control fg-input input-lg" ng-model="template.name"
+                                        required>
+                                    <label class="fg-label">{{"NOME" | translate}}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6" ng-if="template.templateType !== 'INTERACTIVE'">
+                            <div class="form-group fg-float m-b-30 m-t-15">
+                                <div class="fg-line required">
+                                    <input type="text" class="form-control fg-input input-lg"
+                                        ng-model="template.whatsappName" ng-disabled="template.id" required>
+                                    <label class="fg-label">Nome WhatsApp</label>
+                                </div>
+                                <small class="text-muted help-text" ng-if="!template.id">
+                                    <i class="zmdi zmdi-help-outline"></i> Apenas letras minúsculas e underscore (_)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fg-float"
+                                ng-class="{'m-t-15': template.templateType === 'INTERACTIVE'}">
+                                <div class="fg-line required">
+                                    <select class="form-control fg-input input-lg" ng-model="template.language"
+                                        ng-disabled="template.id" required>
+                                        <option ng-repeat="lang in languages" value="{{lang.name}}">{{lang.fullName}}
+                                        </option>
+                                    </select>
+                                    <label class="fg-label">{{"IDIOMA" | translate}}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6" ng-if="template.templateType !== 'INTERACTIVE'">
+                            <div class="form-group fg-float">
+                                <div class="fg-line required">
+                                    <select class="form-control fg-input input-lg" ng-model="template.category"
+                                        ng-change="onChangeCategory()" ng-disabled="template.id" required>
+                                        <option value="MARKETING">{{"TEMPLATE-MARKETING" | translate}}</option>
+                                        <option value="UTILITY">{{"TEMPLATE-UTILITY" | translate}}</option>
+                                        <option value="AUTHENTICATION" ng-if="template.templateType === 'HSM'">
+                                            {{"TEMPLATE-AUTHENTICATION" | translate}}</option>
+                                    </select>
+                                    <label class="fg-label">{{"CATEGORIA" | translate}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group fg-float"
+                                ng-class="{'m-t-25': template.templateType !== 'INTERACTIVE', 'm-t-10': template.templateType === 'INTERACTIVE'}">
+                                <div class="fg-line required">
+                                    <select class="form-control fg-input input-lg" ng-disabled="template.id"
+                                        ng-model="template.templateType" ng-change="onChangeTemplateType()" required>
+                                        <option value="HSM">Template HSM (API Oficial)</option>
+                                        <!-- <option value="INTERACTIVE">Template Interativo</option>
+                                        <option value="ORDER_DETAILS">Template de Cobrança</option> -->
+                                    </select>
+                                    <label class="fg-label">Tipo do Template</label>
+                                </div>
+                                <small class="text-muted help-text">
+                                    <a href="javascript:;" ng-click="showTemplateTypeInfo()" class="info-link-inline">
+                                        <i class="zmdi zmdi-help-outline"></i> Qual a diferença entre os tipos?
+                                    </a>
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fg-float"  ng-class="{'m-t-25': template.templateType !== 'INTERACTIVE', 'm-t-10': template.templateType === 'INTERACTIVE'}">
+                                <div class="fg-line">
+                                    <select class="form-control fg-input input-lg" ng-model="template.module">
+                                        <option value="HELPDESK">Atendimento</option>
+                                        <option value="AUTOMATION">Automação</option>
+                                    </select>
+                                    <label class="fg-label">Módulo</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fg-float"
+                                ng-class="{'m-t-25': template.templateType !== 'INTERACTIVE', 'm-t-10': template.templateType === 'INTERACTIVE'}">
+                                <div class="fg-line">
+                                    <input type="text" class="form-control fg-input input-lg"
+                                        ng-model="template.description">
+                                    <label class="fg-label">{{"DESCRICAO" | translate}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group fg-float m-t-25">
+                                <div class="fg-line">
+                                    <input type="text" class="form-control fg-input input-lg" ng-model="template.description">
+                                    <label class="fg-label">{{"DESCRICAO" | translate}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card m-b-20">
+                <div class="card-header ch-alt"
+                    ng-class="{'rounded-xl': template.isPublic === 'true', 'p-b-10': template.isPublic === 'false'}">
+                    <div class="departments-toggle">
+                        <div class="toggle-label">
+                            <i class="zmdi zmdi-accounts m-r-10 size-20"></i>
+                            <span>{{"TODOS-DEPARTAMENTOS"|translate}}?</span>
+                        </div>
+                        <div class="toggle-options">
+                            <label class="toggle-option" ng-class="{active: template.isPublic === 'true'}">
+                                <input type="radio" name="isPublic" ng-model="template.isPublic" value="true">
+                                <span>{{"SIM"|translate}}</span>
+                            </label>
+                            <label class="toggle-option" ng-class="{active: template.isPublic === 'false'}">
+                                <input type="radio" name="isPublic" ng-model="template.isPublic" value="false">
+                                <span>{{"NAO"|translate}}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="template.isPublic === 'false'">
+                    <div class="card-header ch-alt"
+                        style="border-radius: 0; padding-top: 0; display: flex; gap: 10px; align-items: center;">
+                        <label class="checkbox-custom">
+                            <input type="checkbox" ng-model="selectAllDepartments"
+                                ng-change="toggleAllDepartments(selectAllDepartments)">
+                            <span class="checkmark"></span>
+                        </label>
+                        <div class="header-with-checkbox">
+                            <h2>{{"DEPARTAMENTOS" | translate}}</h2>
+                            <small class="text-muted">Escolha quais departamentos terão acesso a esse template.</small>
+                        </div>
+                    </div>
+                    <div class="card-body card-padding">
+                        <div class="departments-grid" ng-if="template.departments && template.departments.length">
+                            <div class="department-item" title="{{ dept.name }}"
+                                ng-repeat="dept in template.departments" ng-click="dept.selected = !dept.selected"
+                                ng-class="{selected: dept.selected}">
+                                <span class="dept-name">{{ dept.name }}</span>
+                                <i class="zmdi zmdi-check check-icon"></i>
+                            </div>
+                        </div>
+                        <div ng-if="!template.departments || !template.departments.length" class="empty-state">
+                            <i class="zmdi zmdi-accounts-outline"></i>
+                            <p>{{"NENHUM-REGISTRO"| translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card m-b-20" ng-if="template.id && template.status !== 'REJECTED'">
+                <div class="card-header ch-alt">
+                    <h2><i class="zmdi zmdi-globe-alt m-r-10 size-20"></i>Webchat</h2>
+                    <small class="text-muted">{{"TEMPLATE-WEBCHAT-CONVERSATION-COMPATIVEL-HINT" | translate}}</small>
+                </div>
+                <div class="card-body card-padding p-t-10">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" ng-model="template.webchatConversationCompativel"
+                                ng-change="toggleWebchatConversationCompativel()">
+                            <i class="input-helper"></i>
+                            {{"TEMPLATE-WEBCHAT-CONVERSATION-COMPATIVEL" | translate}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-9">
+            <div class="card m-b-20"
+                ng-if="template.category !== 'AUTHENTICATION' && template.templateType !== 'ORDER_DETAILS'">
+                <div class="card-header ch-alt">
+                    <h2><i class="zmdi zmdi-format-size m-r-10 size-20"></i>Cabeçalho<span
+                            class="badge-optional">Opcional</span></h2>
+                    <small class="text-muted">Adicione um título ou escolha qual tipo de mídia você usará para esse
+                        cabeçalho.</small>
+                </div>
+                <div class="card-body card-padding" style="display: flex;">
+                    <div class="col-sm-12" style="padding-left: 0; padding-right: 0;"
+                        ng-class="{'col-sm-4': template.components[0].format === 'TEXT'}">
+                        <div class="form-group fg-float m-t-15 m-b-5">
+                            <div class="fg-line">
+                                <select class="form-control fg-input input-lg" ng-model="template.components[0].format"
+                                    ng-change="onChangeHeaderFormat()" ng-disabled="template.id">
+                                    <option value="NONE">{{"NENHUM" | translate}}</option>
+                                    <option value="TEXT">{{"TEXTO" | translate}}</option>
+                                    <option value="IMAGE">{{"IMAGEM" | translate}}</option>
+                                    <option value="VIDEO">{{"VIDEO" | translate}}</option>
+                                    <option value="DOCUMENT">Documento</option>
+                                </select>
+                                <label class="fg-label">{{"TIPO" | translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8" ng-if="template.components[0].format === 'TEXT'">
+                        <div class="form-group fg-float m-t-15 m-b-5">
+                            <div class="fg-line">
+                                <input type="text" class="form-control fg-input input-lg"
+                                    ng-model="template.components[0].text" maxlength="60" ng-disabled="template.id">
+                                <label class="fg-label">{{"TEXTO-CABECALHO" | translate}}</label>
+                            </div>
+                            <div class="field-footer">
+                                <small class="char-count">{{template.components[0].text.length || 0}}/60</small>
+                                <button type="button" class="btn btn-link btn-sm btn-add-var"
+                                    ng-click="addVariable(template.components[0])" ng-if="!template.id"><i
+                                        class="zmdi zmdi-plus"></i> Variável</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card m-b-20">
+                <div class="card-header ch-alt">
+                    <h2><i class="zmdi zmdi-comment-text m-r-10 size-20"></i>Corpo da Mensagem</h2>
+                    <small class="text-muted">Insira o texto da sua mensagem.</small>
+                    <div ng-if="template.category === 'AUTHENTICATION'" class="m-t-10">
+                        <label class="checkbox-custom inline">
+                            <input type="checkbox" ng-model="template.components[2].add_security_recommendation"
+                                ng-change="onChangeSecurityRecommendation()">
+                            <span class="checkmark"></span>
+                            <span class="label-text">{{"SECURY-RECOMMENDATION" | translate}}</span>
+                        </label>
+                    </div>
+                    <!-- <div ng-if="template.module === 'HELPDESK'" class="alert alert-info m-t-15" style="padding: 12px 15px; font-size: 13px; background: #00000005; margin-bottom: 2px;">
+                        <i class="zmdi zmdi-info-outline m-r-5" style="color: #616161;"></i>
+                        <strong style="color: #616161;">Variáveis disponíveis para Atendimento:</strong>
+                        <div ng-non-bindable style="margin-top: 8px; line-height: 2;">
+                            <code>{{nome_atendente}}</code>
+                            <code>{{protocolo_atendimento}}</code>
+                        </div>
+                        <small class="text-muted" style="display: block; margin-top: 6px;">Essas variáveis serão preenchidas automaticamente no momento do envio.</small>
+                    </div> -->
+                    <div ng-if="template.module === 'AUTOMATION'" class="alert alert-info m-t-15"
+                        style="padding: 12px 15px; font-size: 13px; background: #00000005; margin-bottom: 2px;">
+                        <i class="zmdi zmdi-info-outline m-r-5" style="color: #616161;"></i>
+                        <strong style="color: #616161;">Variáveis disponíveis para Automação:</strong>
+                        <div ng-non-bindable style="margin-top: 8px; line-height: 2;">
+                            <code>{{nome_contato}}</code>
+                        </div>
+                        <small class="text-muted" style="display: block; margin-top: 6px;">Essa variável será preenchida
+                            automaticamente no momento do envio.</small>
+                    </div>
+                </div>
+                <div class="card-body card-padding" style="padding-top: 8px;">
+                    <div class="form-group fg-float m-b-0">
+                        <div class="fg-line required">
+                            <textarea class="form-control input-lg" rows="5" ng-model="template.components[1].text"
+                                maxlength="1024"
+                                ng-disabled="(template.id && template.templateType !== 'INTERACTIVE')"></textarea>
+                        </div>
+                        <div class="field-footer">
+                            <small class="char-count">{{template.components[1].text.length || 0}}/1024</small>
+                            <button type="button" class="btn btn-link btn-sm btn-add-var"
+                                ng-click="addVariable(template.components[1])"
+                                ng-if="!template.id && template.category !== 'AUTHENTICATION'"><i
+                                    class="zmdi zmdi-plus"></i> Variável</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card m-b-20">
+                <div class="card-header ch-alt">
+                    <h2><i class="zmdi zmdi-format-valign-bottom m-r-10 size-20"></i>Rodapé <span
+                            class="badge-optional">Opcional</span></h2>
+                    <small class="text-muted" ng-if="template.category !== 'AUTHENTICATION'">Adicione uma pequena linha
+                        de texto na parte inferior do seu modelo de mensagem.</small>
+                    <small class="text-muted" ng-if="template.category === 'AUTHENTICATION'">Adicione em minutos o tempo
+                        de expiração do código.</small>
+                </div>
+                <div class="card-body card-padding" style="padding-bottom: 8px;">
+                    <div class="form-group fg-float m-t-15">
+                        <div class="fg-line">
+                            <input type="text" ng-if="template.category !== 'AUTHENTICATION'"
+                                class="form-control fg-input input-lg" ng-model="template.components[2].text"
+                                maxlength="60" ng-disabled="template.id">
+                            <input type="number" ng-if="template.category === 'AUTHENTICATION'"
+                                class="form-control fg-input input-lg" ng-model="template.components[2].text"
+                                ng-disabled="template.id" min="1">
+                            <label class="fg-label">{{"RODAPE" | translate}}</label>
+                        </div>
+                        <div class="field-footer" ng-if="template.category !== 'AUTHENTICATION'">
+                            <small class="char-count">{{template.components[2].text.length || 0}}/60</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card m-b-20" ng-if="template.templateType !== 'ORDER_DETAILS'">
+                <div class="card-header ch-alt">
+                    <h2 ng-if="template.templateType !== 'INTERACTIVE'"><i
+                            class="zmdi zmdi-dialpad m-r-10 size-20"></i>Botões<span
+                            class="badge-optional">Opcional</span></h2>
+                    <h2 ng-if="template.templateType === 'INTERACTIVE'"><i
+                            class="zmdi zmdi-view-list m-r-10 size-20"></i>Lista de Opções<span
+                            class="badge-optional">Opcional</span></h2>
+                    <small class="text-muted" ng-if="template.templateType !== 'INTERACTIVE'">Crie botões que permitem
+                        que os clientes respondam à sua mensagem ou
+                        executem alguma ação.</small>
+                    <small class="text-muted" ng-if="template.templateType === 'INTERACTIVE'">Crie uma lista de opções
+                        que o cliente poderá escolher. Cada opção pode ter um título e uma descrição.</small>
+                </div>
+                <div class="card-body card-padding" style="padding-bottom: 15px;">
+                    <div class="row">
+                        <div
+                            ng-class="template.components[3].buttonFormat === 'NONE' || template.components[3].buttonFormat === 'CALL_PERMISSION_REQUEST' || template.components[3].buttonFormat === 'COPY_CODE' || (template.components[3].buttonFormat === 'QUICK_REPLY' && !canAddMoreButtons()) ? 'col-sm-12' : 'col-sm-10'">
+                            <div class="form-group fg-float m-b-10 m-t-15">
+                                <div class="fg-line">
+                                    <select class="form-control fg-input input-lg"
+                                        ng-model="template.components[3].buttonFormat"
+                                        ng-change="onChangeButtonFormat()" ng-disabled="template.id"
+                                        ng-if="template.category !== 'AUTHENTICATION' && template.templateType !== 'INTERACTIVE'">
+                                        <option value="NONE">{{"NENHUM" | translate}}</option>
+                                        <option value="CALL_TO_ACTION">Chamada para ação</option>
+                                        <option value="QUICK_REPLY">Resposta rápida</option>
+                                        <option value="CALL_PERMISSION_REQUEST"
+                                            ng-if="template.components[0].format === 'NONE'">Permissão para ligação
+                                        </option>
+                                    </select>
+                                    <select class="form-control fg-input input-lg"
+                                        ng-model="template.components[3].buttonFormat"
+                                        ng-change="onChangeButtonFormat()" ng-disabled="template.id"
+                                        ng-if="template.category !== 'AUTHENTICATION' && template.templateType === 'INTERACTIVE'">
+                                        <option value="NONE">{{"NENHUM" | translate}}</option>
+                                        <option value="QUICK_REPLY">Lista de opções</option>
+                                    </select>
+                                    <select class="form-control fg-input input-lg"
+                                        ng-model="template.components[3].buttonFormat"
+                                        ng-change="onChangeButtonFormat()" ng-disabled="template.id"
+                                        ng-if="template.category === 'AUTHENTICATION'">
+                                        <option value="NONE">{{"NENHUM" | translate}}</option>
+                                        <option value="COPY_CODE">Copiar Código</option>
+                                    </select>
+                                    <label class="fg-label">{{"TIPO" | translate}}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2" ng-if="canAddMoreButtons()">
+                            <button type="button" class="btn btn-primary btn-add-button" ng-click="addButton()"
+                                ng-disabled="template.id">
+                                <i class="zmdi zmdi-plus"></i> <span
+                                    ng-if="template.templateType !== 'INTERACTIVE'">Adicionar botão</span><span
+                                    ng-if="template.templateType === 'INTERACTIVE'">Adicionar opção</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="buttons-list" ng-if="template.components[3].buttonFormat === 'CALL_TO_ACTION'">
+                        <div class="button-item" ng-repeat="button in template.components[3].buttons track by $index">
+                            <div class="button-item-header">
+                                <span class="button-number">Botão {{$index + 1}}</span>
+                                <button type="button" class="btn btn-link btn-remove" ng-click="removeButton($index)"
+                                    ng-if="!template.id && template.components[3].buttons.length > 1">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group fg-float m-b-5 m-t-15">
+                                        <div class="fg-line">
+                                            <select class="form-control fg-input" ng-model="button.type"
+                                                ng-disabled="template.id" style="font-size: 17px;">
+                                                <option
+                                                    ng-if="button.type === 'PHONE_NUMBER' || getButtonCount('PHONE_NUMBER') < 1"
+                                                    value="PHONE_NUMBER">Ligar</option>
+                                                <option ng-if="button.type === 'URL' || getButtonCount('URL') < 2"
+                                                    value="URL">Acessar Site</option>
+                                            </select>
+                                            <label class="fg-label">Tipo</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group fg-float m-b-5 m-t-15">
+                                        <div class="fg-line">
+                                            <input type="text" class="form-control fg-input" ng-model="button.text"
+                                                maxlength="25" ng-disabled="template.id" style="font-size: 17px;">
+                                            <label class="fg-label">Texto</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2" ng-if="button.type === 'URL'">
+                                    <div class="form-group fg-float m-b-5 m-t-15">
+                                        <div class="fg-line">
+                                            <select class="form-control fg-input" ng-model="button.urlType"
+                                                ng-disabled="template.id" style="font-size: 17px;">
+                                                <option value="FIXED">Fixa</option>
+                                                <option value="DYNAMIC">Dinâmica</option>
+                                            </select>
+                                            <label class="fg-label">URL</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    ng-class="{'col-sm-4': button.type === 'URL', 'col-sm-6': button.type === 'PHONE_NUMBER'}">
+                                    <div class="form-group fg-float m-b-5 m-t-15" ng-if="button.type === 'URL'">
+                                        <div class="fg-line">
+                                            <input type="text" class="form-control fg-input" ng-model="button.url"
+                                                maxlength="2000" ng-disabled="template.id" style="font-size: 17px;">
+                                            <label class="fg-label">URL</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group fg-float m-b-5 m-t-15"
+                                        ng-if="button.type === 'PHONE_NUMBER'">
+                                        <div class="fg-line">
+                                            <input type="text" class="form-control fg-input"
+                                                ng-model="button.phoneNumber" maxlength="20" ng-disabled="template.id"
+                                                style="font-size: 17px;">
+                                            <label class="fg-label">Telefone</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="buttons-list" ng-if="template.components[3].buttonFormat === 'QUICK_REPLY'">
+                        <small class="text-muted help-text" ng-if="template.templateType === 'INTERACTIVE'"
+                            style="display: block; margin-bottom: 10px;">
+                            <i class="zmdi zmdi-info-outline"></i> Até 3 opções sem descrição são enviadas como
+                            <b>botões</b> (toque único). Com descrição ou mais de 3 opções, viram uma <b>lista</b>.
+                        </small>
+                        <div class="button-item" ng-repeat="button in template.components[3].buttons track by $index">
+                            <div class="button-item-header">
+                                <span class="button-number" ng-if="template.templateType !== 'INTERACTIVE'">Botão
+                                    {{$index + 1}}</span>
+                                <span class="button-number" ng-if="template.templateType === 'INTERACTIVE'">Opção
+                                    {{$index + 1}}</span>
+                                <button type="button" class="btn btn-link btn-remove" ng-click="removeButton($index)"
+                                    ng-if="!template.id && template.components[3].buttons.length > 1">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                            </div>
+                            <div class="row">
+                                <div ng-class="template.templateType === 'INTERACTIVE' ? 'col-sm-4' : 'col-sm-12'">
+                                    <div class="form-group fg-float m-b-5 m-t-15">
+                                        <div class="fg-line">
+                                            <input type="text" style="font-size: 17px;" class="form-control fg-input"
+                                                ng-model="button.text" maxlength="25" ng-disabled="template.id">
+                                            <label class="fg-label"
+                                                ng-if="template.templateType !== 'INTERACTIVE'">Texto do botão</label>
+                                            <label class="fg-label"
+                                                ng-if="template.templateType === 'INTERACTIVE'">Título da opção</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8" ng-if="template.templateType === 'INTERACTIVE'">
+                                    <div class="form-group fg-float m-b-5 m-t-15">
+                                        <div class="fg-line">
+                                            <input type="text" style="font-size: 17px;" class="form-control fg-input"
+                                                ng-model="button.description" maxlength="72" ng-disabled="template.id">
+                                            <label class="fg-label">Descrição (exibida no menu)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="buttons-list" ng-if="template.components[3].buttonFormat === 'COPY_CODE'">
+                        <div class="button-item">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group fg-float m-b-10 m-t-20">
+                                        <div class="fg-line">
+                                            <input type="text" class="form-control fg-input"
+                                                ng-model="template.components[3].buttons[0].text" maxlength="25"
+                                                ng-disabled="template.id" style="font-size: 17px;">
+                                            <label class="fg-label">Texto do botão</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card m-b-20" ng-if="template.templateType === 'ORDER_DETAILS'">
+                <div class="card-header ch-alt">
+                    <h2><i class="zmdi zmdi-dialpad m-r-10 size-20"></i>Botão de Pagamento</h2>
+                    <small class="text-muted">O botão de pagamento é automaticamente adicionado aos templates de
+                        cobrança.</small>
+                </div>
+                <div class="card-body card-padding" style="padding-bottom: 15px;">
+                    <div class="alert alert-info" style="padding: 10px 15px; font-size: 13px; margin-bottom: 15px;">
+                        <i class="zmdi zmdi-info-outline m-r-5"></i>
+                        Templates de Pagamento incluem automaticamente o botão <strong>"Copiar código Pix"</strong> ou
+                        <strong>"Copiar código do boleto"</strong> dependendo do método de pagamento usado no envio.
+                    </div>
+
+                    <div class="buttons-list">
+                        <div class="button-item">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group m-b-10">
+                                        <label style="font-weight: 500; margin-bottom: 10px;">Botão padrão:</label>
+                                        <div
+                                            style="background: #f5f5f5; padding: 12px; border-radius: 6px; display: flex; align-items: center;">
+                                            <i class="zmdi zmdi-copy" style="margin-right: 10px; font-size: 18px;"></i>
+                                            <span style="font-size: 15px;">Copiar código Pix</span>
+                                        </div>
+                                        <small class="text-muted" style="display: block; margin-top: 8px;">
+                                            Este texto é fixo e não pode ser alterado. É traduzido automaticamente para
+                                            o idioma do destinatário.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card m-b-20" ng-if="template.templateType === 'ORDER_DETAILS'">
+                <div class="card-header ch-alt">
+                    <h2><i class="zmdi zmdi-money m-r-10 size-20"></i>Informações de Exemplo</h2>
+                    <small class="text-muted">Estes dados são apenas para visualização da prévia. Os dados reais de
+                        pagamento serão enviados no momento do disparo da mensagem.</small>
+                    <div class="alert alert-info m-t-15 m-b-0" style="padding: 10px 15px; font-size: 13px;">
+                        <i class="zmdi zmdi-info-outline m-r-5"></i>
+                        <strong>Atenção:</strong> Templates de cobrança precisam ser aprovados pela Meta antes de serem
+                        utilizados.
+                        O processo de aprovação pode levar algumas horas. Os dados de pagamento (PIX/Boleto) devem ser
+                        fornecidos apenas no envio da mensagem, não na criação do template.
+                    </div>
+                </div>
+                <div class="card-body card-padding">
+                    <div class="alert alert-warning" style="padding: 12px 15px; font-size: 14px; margin-bottom: 20px;">
+                        <i class="zmdi zmdi-info m-r-5"></i>
+                        <strong>Como funciona:</strong> Você está criando apenas a estrutura do template (corpo da
+                        mensagem, rodapé e botão).
+                        Os dados de pagamento reais (valores, chave PIX, código, itens) serão preenchidos quando você
+                        enviar a mensagem para um cliente específico.
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4 style="margin-bottom: 15px; font-weight: 500;">Dados de Exemplo (apenas para prévia)
+                            </h4>
+                            <small class="text-muted">Preencha estes campos apenas para visualizar como ficará a
+                                mensagem. Eles não serão salvos no template.</small>
+                        </div>
+                    </div>
+
+                    <div class="row m-t-15">
+                        <div class="col-sm-6">
+                            <div class="form-group fg-float m-t-15">
+                                <div class="fg-line">
+                                    <input type="text" class="form-control fg-input input-lg"
+                                        ng-model="template.orderDetails.referenceId">
+                                    <label class="fg-label">ID de Referência (exemplo)</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fg-float m-t-15">
+                                <div class="fg-line">
+                                    <input type="number" class="form-control fg-input input-lg"
+                                        ng-model="template.orderDetails.totalAmount" min="0.01" step="0.01">
+                                    <label class="fg-label">Valor Total (exemplo)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="payment-type-toggle"
+                                style="display: flex; gap: 15px; margin-bottom: 20px; margin-top: 15px;">
+                                <label class="payment-option"
+                                    ng-class="{active: template.orderDetails.paymentMethod === 'pix'}">
+                                    <input type="radio" name="paymentMethod"
+                                        ng-model="template.orderDetails.paymentMethod" value="pix">
+                                    <div class="payment-option-content">
+                                        <i class="fas fa-qrcode"></i>
+                                        <span>PIX (prévia)</span>
+                                    </div>
+                                </label>
+                                <label class="payment-option"
+                                    ng-class="{active: template.orderDetails.paymentMethod === 'boleto'}">
+                                    <input type="radio" name="paymentMethod"
+                                        ng-model="template.orderDetails.paymentMethod" value="boleto">
+                                    <div class="payment-option-content">
+                                        <i class="fas fa-barcode"></i>
+                                        <span>Boleto (prévia)</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card m-b-20"
+                ng-if="!template.id && getTemplateParameters() > 0 && template.templateType !== 'ORDER_DETAILS'">
+                <div class="card-header ch-alt">
+                    <h2><i class="zmdi zmdi-collection-text m-r-10 size-20"></i>Exemplos</h2>
+                    <small class="text-muted">Para nos ajudar a entender que tipo de mensagem você deseja enviar,
+                        forneça exemplos de conteúdo para as variáveis.</small>
+                </div>
+                <div class="card-body card-padding" style="padding: 14px 25px;">
+                    <div ng-if="template.components[0].format === 'TEXT' && getAllStringParameters(template.components[0].text) > 0"
+                        class="example-section">
+                        <h5 class="example-title">Cabeçalho</h5>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group fg-float m-b-10 m-t-20">
+                                    <div class="fg-line">
+                                        <input type="text" class="form-control fg-input input-lg"
+                                            ng-model="template.components[0].example.headerText[0]"
+                                            style="font-size: 17px;">
+                                        <label class="fg-label">Exemplo para [[1]]</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="template.components[0].format === 'IMAGE' || template.components[0].format === 'VIDEO' || template.components[0].format === 'DOCUMENT'"
+                        class="example-section">
+                        <h5 class="example-title">Cabeçalho (Mídia)</h5>
+                        <div class="alert alert-info" style="padding: 10px 15px; font-size: 13px; margin-bottom: 15px; margin-top: 10px;">
+                            <i class="zmdi zmdi-info-outline m-r-5"></i>
+                            Esta mídia é apenas um <strong>exemplo para aprovação do WhatsApp</strong> e não será preenchida automaticamente no momento do envio.
+                            Caso deseje que uma mídia padrão já apareça inserida no template ao enviar, volte para editar o template após a criação e adicione a mídia na seção <strong>"Configuração dos Parâmetros"</strong>.
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div id="example-header-file" class="fileinput fileinput-new" data-provides="fileinput">
+                                    <span class="btn btn-info btn-file">
+                                        <span class="fileinput-new">{{"SELECIONAR"|translate}}</span>
+                                        <span class="fileinput-exists">{{"ALTERAR"|translate}}</span>
+                                        <input type="file" on-file-change="uploadExampleFile"
+                                            accept="{{template.components[0].format === 'IMAGE' ? 'image/*' : template.components[0].format === 'VIDEO' ? 'video/*' : '*/*'}}">
+                                    </span>
+                                    <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput"
+                                        ng-click="removeMediaPreview()">{{"REMOVER"|translate}}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="getAllStringParameters(template.components[1].text) > 0" class="example-section">
+                        <h5 class="example-title">Corpo</h5>
+                        <div class="row">
+                            <div class="col-sm-12"
+                                ng-repeat="i in getParameterArray(template.components[1].text) track by $index">
+                                <div class="form-group fg-float m-b-10 m-t-20">
+                                    <div class="fg-line">
+                                        <input type="text" class="form-control fg-input input-lg"
+                                            ng-model="template.components[1].example.bodyText[0][$index]"
+                                            style="font-size: 17px;">
+                                        <label class="fg-label">Exemplo para {{i}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="hasButtonExample()" class="example-section">
+                        <h5 class="example-title">Botões</h5>
+                        <div ng-repeat="button in template.components[3].buttons"
+                            ng-if="button.type === 'URL' && button.urlType === 'DYNAMIC'">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group fg-float m-b-10 m-t-20">
+                                        <div class="fg-line">
+                                            <input type="text" class="form-control fg-input input-lg"
+                                                ng-model="button.example[0]" style="font-size: 17px;">
+                                            <label class="fg-label">URL completa de exemplo para
+                                                "{{button.text}}"</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card m-b-20"
+                ng-if="template.id && ((template.components[0].parameters && template.components[0].parameters.length > 0 && template.components[0].format === 'TEXT') || (template.components[0].format === 'IMAGE' || template.components[0].format === 'VIDEO' || template.components[0].format === 'DOCUMENT') || (template.components[1].parameters && template.components[1].parameters.length > 0))">
+                <div class="card-header ch-alt">
+                    <h2><i class="zmdi zmdi-accounts-alt m-r-10 size-20"></i>Configuração dos Parâmetros</h2>
+                    <small class="text-muted">Configure o tipo de cada parâmetro. Parâmetros do tipo "Informação do
+                        Cliente" serão preenchidos automaticamente com os dados do contato.</small>
+                </div>
+                <div class="card-body card-padding" style="padding: 14px 25px;">
+                    <div ng-if="template.components[0].format === 'IMAGE' || template.components[0].format === 'VIDEO' || template.components[0].format === 'DOCUMENT'"
+                        class="example-section">
+                        <h5 class="example-title">Cabeçalho (Mídia)</h5>
+
+                        <div class="row" ng-if="getExampleHeaderHandle()">
+                            <div class="col-sm-12">
+                                <div style="background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                        <i class="zmdi zmdi-whatsapp m-r-5" style="color: #25D366; font-size: 18px;"></i>
+                                        <strong style="font-size: 13px;">Mídia  de exemplo (enviada ao WhatsApp)</strong>
+                                    </div>
+                                    <img ng-if="template.components[0].format === 'IMAGE'" ng-src="{{getExampleHeaderHandle()}}"
+                                        style="max-height: 250px; border-radius: 6px; object-fit: cover; border: 1px solid #ddd;">
+                                    <video ng-if="template.components[0].format === 'VIDEO'" ng-src="{{trustSrc(getExampleHeaderHandle())}}"
+                                        style="max-height: 250px; border-radius: 6px;" controls></video>
+                                    <div ng-if="template.components[0].format === 'DOCUMENT'"
+                                        style="padding: 10px; background: #fff; border-radius: 6px; display: inline-block; border: 1px solid #ddd;">
+                                        <i class="zmdi zmdi-file" style="font-size: 28px;"></i>
+                                    </div>
+                                    <small class="text-muted" style="display: block; margin-top: 8px;">
+                                        Esta mídia foi enviada apenas para aprovação do template pelo WhatsApp. Ela <strong>não será exibida</strong> no envio da mensagem.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div style="background: #f0f7ff; border: 1px solid #b3d4fc; border-radius: 8px; padding: 15px;">
+                                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                        <i class="zmdi zmdi-mail-send m-r-5" style="color: #2196F3; font-size: 18px;"></i>
+                                        <strong style="font-size: 13px;">Mídia padrão para envio</strong>
+                                    </div>
+                                    <small class="text-muted" style="display: block; margin-bottom: 12px;">
+                                        Esta mídia será <strong>preenchida automaticamente</strong> quando o atendente for enviar este template.
+                                    </small>
+                                    <div class="media-current-preview m-b-15" ng-if="mediaPreview">
+                                        <img ng-if="template.components[0].format === 'IMAGE'" ng-src="{{mediaPreview}}"
+                                            style="max-height: 250px; border-radius: 8px; object-fit: cover;">
+                                        <video ng-if="template.components[0].format === 'VIDEO'" ng-src="{{trustSrc(mediaPreview)}}"
+                                            style="max-height: 250px; border-radius: 8px;" controls></video>
+                                        <div ng-if="template.components[0].format === 'DOCUMENT'"
+                                            style="padding: 15px; background: #fff; border-radius: 8px; display: inline-block; border: 1px solid #ddd;">
+                                            <i class="zmdi zmdi-file" style="font-size: 32px;"></i>
+                                            <span ng-if="mediaFile" style="display: block; margin-top: 5px;">{{mediaFile.name}}</span>
+                                        </div>
+                                    </div>
+                                    <div ng-if="!mediaPreview" class="alert alert-warning" style="padding: 8px 12px; font-size: 12px; margin-bottom: 12px;">
+                                        <i class="zmdi zmdi-alert-triangle m-r-5"></i>
+                                        Nenhuma mídia padrão configurada. O atendente precisará selecionar uma mídia manualmente a cada envio.
+                                    </div>
+                                    <div id="example-header-file-edit" class="fileinput fileinput-new" data-provides="fileinput">
+                                        <span class="btn btn-info btn-file">
+                                            <span class="fileinput-new">{{mediaPreview ? ('ALTERAR'|translate) : ('SELECIONAR'|translate)}}</span>
+                                            <span class="fileinput-exists">{{"ALTERAR"|translate}}</span>
+                                            <input type="file" on-file-change="uploadExampleFile"
+                                                accept="{{template.components[0].format === 'IMAGE' ? 'image/*' : template.components[0].format === 'VIDEO' ? 'video/*' : '*/*'}}">
+                                        </span>
+                                        <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput"
+                                            ng-click="removeMediaPreview()">{{"REMOVER"|translate}}</a>
+                                        <a href="javascript:;" ng-if="mediaPreview && !mediaFile" class="btn btn-danger m-l-5"
+                                            ng-click="removeMediaPreview()">{{"REMOVER"|translate}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        ng-if="template.components[0].parameters && template.components[0].parameters.length > 0 && template.components[0].format === 'TEXT'">
+                        <h5 class="example-title">{{"TEXTO-CABECALHO" | translate}}</h5>
+                        <div class="row" ng-repeat="parameter in template.components[0].parameters">
+                            <div class="col-sm-3">
+                                <div class="form-group fg-float m-b-15 m-t-15">
+                                    <div class="fg-line">
+                                        <select class="form-control input-lg select-simples" ng-model="parameter.type">
+                                            <option value="TEXTO">{{"TEXTO" | translate}}</option>
+                                            <option value="CONTATO_INFORMACAO">{{"INFORMACAO-CLIENTE" | translate}}
+                                            </option>
+                                        </select>
+                                        <label class="fg-label">{{"TIPO-PARAMETRO" | translate}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="form-group fg-float m-b-15 m-t-15"
+                                    ng-if="parameter.type == 'CONTATO_INFORMACAO'">
+                                    <div class="fg-line">
+                                        <select class="form-control input-lg select-simples"
+                                            ng-model="parameter.contatoInformacaoId">
+                                            <option ng-repeat="campo in departamentoCampoSegmentacao.camposSegmentacao"
+                                                value="{{campo.id}}">{{campo.nome}}</option>
+                                        </select>
+                                        <label class="fg-label">{{"PARAMETRO" | translate}} {{'\{\{' +
+                                            parameter.parameter + '\}\}'}}</label>
+                                    </div>
+                                </div>
+                                <div class="form-group fg-float m-b-15 m-t-15"
+                                    ng-if="parameter.type != 'CONTATO_INFORMACAO'">
+                                    <div class="fg-line">
+                                        <input type="text" ng-model="parameter.text"
+                                            class="form-control fg-input input-lg" style="font-size: 17px;">
+                                        <label class="fg-label">{{"PARAMETRO" | translate}} {{'\{\{' +
+                                            parameter.parameter + '\}\}'}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="template.components[1].parameters && template.components[1].parameters.length > 0">
+                        <h5 class="example-title">{{"CORPO-MENSAGEM" | translate}}</h5>
+                        <div class="row" ng-repeat="parameter in template.components[1].parameters">
+                            <div class="col-sm-3">
+                                <div class="form-group fg-float m-b-15 m-t-15">
+                                    <div class="fg-line">
+                                        <select class="form-control input-lg select-simples" ng-model="parameter.type">
+                                            <option value="TEXTO">{{"TEXTO" | translate}}</option>
+                                            <option value="CONTATO_INFORMACAO">{{"INFORMACAO-CLIENTE" | translate}}
+                                            </option>
+                                        </select>
+                                        <label class="fg-label">{{"TIPO-PARAMETRO" | translate}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="form-group fg-float m-b-15 m-t-15"
+                                    ng-if="parameter.type == 'CONTATO_INFORMACAO'">
+                                    <div class="fg-line">
+                                        <select class="form-control input-lg select-simples"
+                                            ng-model="parameter.contatoInformacaoId">
+                                            <option ng-repeat="campo in departamentoCampoSegmentacao.camposSegmentacao"
+                                                value="{{campo.id}}">{{campo.nome}}</option>
+                                        </select>
+                                        <label class="fg-label">{{"PARAMETRO" | translate}} {{'\{\{' +
+                                            parameter.parameter + '\}\}'}}</label>
+                                    </div>
+                                </div>
+                                <div class="form-group fg-float m-b-15 m-t-15"
+                                    ng-if="parameter.type != 'CONTATO_INFORMACAO'">
+                                    <div class="fg-line">
+                                        <input type="text" ng-model="parameter.text"
+                                            class="form-control fg-input input-lg" style="font-size: 17px;">
+                                        <label class="fg-label">{{"PARAMETRO" | translate}} {{'\{\{' +
+                                            parameter.parameter + '\}\}'}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card m-b-20" ng-if="template.templateType === 'ORDER_DETAILS' && template.components[1].example.body_text_named_params.length > 0">
+                <div class="card-header ch-alt">
+                    <h2><i class="zmdi zmdi-collection-text m-r-10 size-20"></i>Exemplos</h2>
+                    <small class="text-muted" ng-if="!template.id">Para nos ajudar a entender que tipo de mensagem você deseja enviar,
+                        forneça exemplos de conteúdo para as variáveis.</small>
+                    <small class="text-muted" ng-if="template.id">Valores de exemplo das variáveis do template.</small>
+                </div>
+                <div class="card-body card-padding" style="padding: 14px 25px;">
+                    <div class="example-section">
+                        <h5 class="example-title">Corpo</h5>
+                        <div class="row">
+                            <div class="col-sm-12"
+                                ng-repeat="param in template.components[1].example.body_text_named_params track by $index">
+                                <div class="form-group fg-float m-b-10 m-t-20">
+                                    <div class="fg-line">
+                                        <input type="text" class="form-control fg-input input-lg"
+                                            ng-model="param.example"
+                                            ng-disabled="template.id"
+                                            style="font-size: 17px;">
+                                        <label class="fg-label">Exemplo para {{param.param_name}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3" style="padding-left: 4px;">
+            <div class="preview-sticky">
+                <div class="card preview-card" style="margin-bottom: 20px;">
+                    <div class="card-header ch-alt">
+                        <div class="preview-header-content">
+                            <div>
+                                <h2>Prévia da Mensagem</h2>
+                                <small>Prévia de como vai chegar o template para o contato</small>
+                            </div>
+                            <button class="btn-reset-chat" ng-if="sentMessage" ng-click="clearSentMessage()"
+                                title="Limpar conversa">
+                                <i class="zmdi zmdi-refresh"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body card-padding p-0">
+                        <div class="whatsapp-chat-bg">
+                            <div class="wa-message-bubble wa-bubble-received wa-order-bubble"
+                                ng-if="template.templateType === 'ORDER_DETAILS'">
+                                <div class="container-order-invoice">
+                                    <div class="wa-order-header">
+                                        <div class="wa-order-title">
+                                            <span class="wa-order-id" ng-if="template.orderDetails.referenceId">Nº da
+                                                cobrança: {{template.orderDetails.referenceId}}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="wa-order-items" ng-if="template.components[0].format === 'IMAGE'">
+                                        <div class="wa-order-item">
+                                            <div class="wa-order-icon" ng-if="!getOrderDetailsHeaderImage()">
+                                                P
+                                            </div>
+                                            <img ng-if="getOrderDetailsHeaderImage()" ng-src="{{getOrderDetailsHeaderImage()}}" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover;">
+                                            <div class="wa-item-info">
+                                                <div class="wa-item-name">Produto Exemplo</div>
+                                                <div class="wa-item-details">
+                                                    <span>Quantidade: 1</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="container-order-pagaments">
+                                        <div class="info-list-pagaments">
+                                            Pagar com
+                                        </div>
+                                        <div class="icon-order-pagaments">
+                                            <img ng-if="template.orderDetails.paymentMethod === 'pix'"
+                                                src="https://v4d.mz-css.net/6ba28581c77fb8ea60a52685c95579dd/65dcd96d3258016f41da1002f76753d8/pix.png"
+                                                alt="PIX">
+                                            <img ng-if="template.orderDetails.paymentMethod === 'boleto'"
+                                                src="https://v4d.mz-css.net/6ba28581c77fb8ea60a52685c95579dd/2199cf79db914aa774c984a8a8d8938a/image.png"
+                                                alt="Boleto" style="padding: 3px;">
+                                        </div>
+                                    </div>
+                                    <div class="wa-payment-amount">
+                                        <div class="wa-amount-label">Total</div>
+                                        <div class="wa-amount-value">R$ {{(template.orderDetails.totalAmount || 0) |
+                                            number:2}}</div>
+                                    </div>
+                                </div>
+
+                                <div class="wa-msg-body" ng-if="template.components[1].text" style="white-space: pre-line;">
+                                    <span ng-bind-html="getPreviewText()"></span>
+                                </div>
+
+                                <div class="wa-msg-footer" ng-if="template.components[2].text">
+                                    {{template.components[2].text}}
+                                </div>
+
+                                <div class="wa-msg-time">
+                                    12:00
+                                </div>
+
+                                <div class="wa-msg-buttons">
+                                    <a class="wa-btn wa-btn-pay" href="javascript:;">
+                                        <i class="zmdi zmdi-copy"></i>
+                                        {{template.orderDetails.paymentMethod === 'pix' ? 'Copiar código Pix' : 'Copiar código do boleto'}}
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="wa-message-bubble"
+                                ng-class="{'wa-bubble-received': template.components[1].text}"
+                                ng-if="template.templateType !== 'ORDER_DETAILS'">
+                                <div ng-if="template.components[0].format === 'TEXT' && template.components[0].text"
+                                    class="wa-msg-header">
+                                    <div ng-bind-html="renderText(template.components[0].text)"></div>
+                                </div>
+                                <div ng-if="template.components[0].format === 'IMAGE'" class="wa-msg-media">
+                                    <img ng-if="mediaPreview" ng-src="{{mediaPreview}}" class="media-preview-img"
+                                        style="width: 100%; border-radius: 8px;">
+                                    <div class="media-placeholder" ng-if="!mediaPreview">
+                                        <i class="zmdi zmdi-image"></i>
+                                        <span>Imagem</span>
+                                    </div>
+                                </div>
+                                <div ng-if="template.components[0].format === 'VIDEO'" class="wa-msg-media">
+                                    <video ng-if="mediaPreview" ng-src="{{trustSrc(mediaPreview)}}"
+                                        class="media-preview-video" style="width: 100%; border-radius: 8px;"
+                                        controls></video>
+                                    <div class="media-placeholder" ng-if="!mediaPreview">
+                                        <i class="zmdi zmdi-play-circle"></i>
+                                        <span>Video</span>
+                                    </div>
+                                </div>
+                                <div ng-if="template.components[0].format === 'DOCUMENT'" class="wa-msg-media doc">
+                                    <div ng-if="mediaPreview" class="media-preview-doc"
+                                        style="padding: 15px; text-align: center;">
+                                        <i class="zmdi zmdi-file" style="font-size: 32px;"></i>
+                                        <span style="display: block; margin-top: 5px;">{{mediaFile.name}}</span>
+                                    </div>
+                                    <div class="media-placeholder" ng-if="!mediaPreview">
+                                        <i class="zmdi zmdi-file"></i>
+                                        <span>Documento</span>
+                                    </div>
+                                </div>
+
+                                <div class="wa-msg-body" ng-if="template.components[1].text"><span
+                                        ng-bind-html="getPreviewText()"></span><span class="wa-read-more"
+                                        ng-if="shouldShowReadMore()" ng-click="expandPreview()">Ler mais</span></div>
+
+                                <div class="wa-msg-footer"
+                                    ng-if="template.components[2].text && template.category !== 'AUTHENTICATION'">
+                                    {{template.components[2].text}}
+                                </div>
+                                <div class="wa-msg-footer"
+                                    ng-if="template.components[2].text && template.category === 'AUTHENTICATION'">
+                                    Este código expira em {{template.components[2].text}} minutos.
+                                </div>
+
+                                <div class="wa-msg-time" ng-if="template.components[1].text"
+                                    ng-class="{'mt-n-14': template.components[1].text.length > 30 && !shouldShowReadMore()}">
+                                    12:00
+                                </div>
+
+                                <div class="wa-msg-buttons"
+                                    ng-if="template.components[3].buttons && template.components[3].buttons.length > 0 && !hasButtonDescriptions()">
+                                    <a class="wa-btn" ng-repeat="button in template.components[3].buttons"
+                                        href="javascript:;" ng-click="sendButtonMessage(button)">
+                                        <i class="zmdi zmdi-phone" ng-if="button.type === 'PHONE_NUMBER'"></i>
+                                        <i class="zmdi zmdi-open-in-new" ng-if="button.type === 'URL'"></i>
+                                        <i class="zmdi zmdi-copy"
+                                            ng-if="button.type === 'COPY_CODE' || template.components[3].buttonFormat === 'COPY_CODE'"></i>
+                                        <img style="width: 14px; height: 11px; margin-bottom: 2px;"
+                                            src="https://v4d.mz-css.net/7c942a2b2e05561e014b2b6055b785a2/ffd55876e72394a2df1b765c5242b09e/seta.png"
+                                            ng-if="button.type === 'QUICK_REPLY'">
+                                        {{button.text || 'Botão'}}
+                                    </a>
+                                </div>
+
+                                <div class="wa-msg-buttons wa-list-mode"
+                                    ng-if="template.components[3].buttons && template.components[3].buttons.length > 0 && hasButtonDescriptions()">
+                                    <a class="wa-btn wa-btn-list" href="javascript:;" ng-click="toggleOptionsModal()">
+                                        <i class="fas fa-list-ul"></i>
+                                        Ver opções
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="wa-message-bubble wa-bubble-sent" ng-if="sentMessage">
+                                <div class="wa-msg-body">{{sentMessage}}</div>
+                                <div class="wa-msg-time">
+                                    12:01 <i class="zmdi zmdi-check-all"></i>
+                                </div>
+                            </div>
+
+                            <div class="wa-options-modal-overlay" ng-if="showOptionsModal"
+                                ng-click="toggleOptionsModal()">
+                                <div class="wa-options-modal" ng-click="$event.stopPropagation()">
+                                    <div class="line-center">
+                                        <div class="risco"></div>
+                                    </div>
+                                    <div class="wa-options-modal-header">
+                                        <button class="btn-close-modal" ng-click="toggleOptionsModal()">
+                                            <i class="zmdi zmdi-close"></i>
+                                        </button>
+                                        <span>Ver opções</span>
+                                    </div>
+                                    <div class="wa-options-modal-body">
+                                        <div class="wa-option-item" ng-repeat="button in template.components[3].buttons"
+                                            ng-click="selectOption($index, button)">
+                                            <div class="wa-option-content">
+                                                <div class="wa-option-text">{{button.text || 'Opção'}}</div>
+                                                <div class="wa-option-description" ng-if="button.description">
+                                                    {{button.description}}</div>
+                                            </div>
+                                            <label class="wa-option-checkbox" ng-click="$event.stopPropagation()">
+                                                <input type="checkbox" ng-model="button.selected"
+                                                    ng-change="onOptionCheckChange()">
+                                                <span class="wa-option-checkmark"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="wa-options-modal-footer" ng-if="hasSelectedOption()">
+                                        <button class="wa-btn-send" ng-click="sendSelectedOption()">
+                                            Enviar
+                                        </button>
+                                    </div>
+                                    <div class="wa-option-description alert-click" ng-if="!hasSelectedOption()">Toque
+                                        para selecionar um item.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-links">
+                    <a href="https://developers.facebook.com/docs/whatsapp/pricing?locale=pt_BR" target="_blank"
+                        class="info-link">
+                        <i class="zmdi zmdi-money"></i> Informações sobre preços
+                    </a>
+                    <a href="https://developers.facebook.com/docs/whatsapp/updates-to-pricing/new-template-guidelines"
+                        target="_blank" class="info-link">
+                        <i class="zmdi zmdi-bookmark"></i> Diretrizes de categorias
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button ng-disabled="btnSaveDisabled" ng-click="onSave()"
+        class="btn btn-float bgm-blue m-btn waves-effect waves-circle" style="bottom: 17px;right: 70px !important;">
+        <i class="zmdi zmdi-floppy"></i>
+    </button>
+</div>

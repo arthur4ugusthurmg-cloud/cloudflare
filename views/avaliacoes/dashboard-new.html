@@ -1,0 +1,1369 @@
+<style>
+  /* ---------- Filtros ---------- */
+  .ad-filtro-linha {
+    margin-bottom: 18px;
+  }
+
+  .ad-combo {
+    position: relative;
+  }
+
+  /* Label sempre flutuando: o campo nunca fica "vazio" (mostra o selecionado), mas garante contra o toggle do tema. */
+  .ad-combo .fg-float .fg-label,
+  .ad-combo .fg-float .fg-toggled .fg-label {
+    top: -20px;
+    font-size: 11px;
+  }
+
+  .ad-combo-lista {
+    position: absolute;
+    z-index: 50;
+    left: 0;
+    right: 0;
+    top: 100%;
+    max-height: 280px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 4px 0;
+    list-style: none;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    
+  }
+
+  .ad-combo-lista li {
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ad-combo-lista li.ativo {
+    background: #e3f2fd;
+  }
+
+  .ad-combo-lista li.selecionado {
+    font-weight: bold;
+    color: #0288D1;
+  }
+
+  .ad-combo-lista li.vazio {
+    color: #999;
+    cursor: default;
+  }
+
+  .ad-combo-lista li.fixo {
+    border-bottom: 1px solid #eceff1;
+  }
+
+  /* Lista mais larga que o campo (nomes de usuário + cliente não cabem na coluna). */
+  .ad-combo-lista.ad-combo-larga {
+    right: auto;
+    min-width: 100%;
+    width: 380px;
+    max-width: 80vw;
+  }
+
+  .ad-combo-lista li .ad-combo-detalhe {
+    color: #90a4ae;
+    font-size: 11px;
+    margin-left: 4px;
+  }
+
+  .ad-dica {
+    font-size: 11px;
+    color: #90a4ae;
+    margin-top: 6px;
+  }
+
+  .ad-dica .zmdi {
+    margin-right: 3px;
+  }
+
+  .ad-comentario.ad-clicavel {
+    cursor: pointer;
+  }
+
+  .ad-comentario.ad-clicavel:hover {
+    background-color: #f1f8fe;
+  }
+
+  .ad-filtro-erro {
+    margin: -6px 0 10px;
+    font-size: 12px;
+    color: #c62828;
+  }
+
+  .ad-filtro-acoes {
+    font-size: 12px;
+    color: #607d8b;
+    margin-top: -6px;
+  }
+
+  .ad-filtro-acoes a {
+    cursor: pointer;
+  }
+
+  /* ---------- Informações da avaliação ---------- */
+  .ad-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    font-size: 13px;
+    color: #37474f;
+  }
+
+  .ad-info-item small {
+    display: block;
+    text-transform: uppercase;
+    color: #90a4ae;
+    font-size: 10px;
+    letter-spacing: 0.3px;
+  }
+
+  .ad-descricao {
+    color: #607d8b;
+    font-size: 13px;
+    margin: 6px 0 14px;
+    white-space: pre-line;
+  }
+
+  .ad-chip {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 10px;
+    background: #eceff1;
+    color: #546e7a;
+    margin: 2px 4px 2px 0;
+  }
+
+  .ad-chip.ad-on {
+    background: #e3f2fd;
+    color: #0277bd;
+  }
+
+  .ad-chip.ad-off {
+    background: #f5f5f5;
+    color: #9e9e9e;
+    text-decoration: line-through;
+  }
+
+  .ad-chip.ad-chip-total {
+    background: #263238;
+    color: #fff;
+  }
+
+  .ad-chip.ad-ativa {
+    background: #e8f5e9;
+    color: #1b8f5a;
+  }
+
+  .ad-chip.ad-inativa {
+    background: #ffebee;
+    color: #c62828;
+  }
+
+  .ad-chip .zmdi {
+    margin-right: 4px;
+  }
+
+  /* ---------- Cards ---------- */
+  .ad-cards {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .ad-cards-sec {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  @media (max-width: 1199px) {
+    .ad-cards, .ad-cards-sec {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 767px) {
+    .ad-cards, .ad-cards-sec {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .ad-cards .indicador-item {
+    margin: 0;
+    min-height: 150px;
+    max-height: none;
+  }
+
+  .ad-cards .indicador-item .indicador-informacoes h2 {
+    margin-top: 10px;
+    font-size: 34px;
+    line-height: 1.1;
+  }
+
+  .ad-cards .indicador-item .ad-delta {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .ad-cards .indicador-item .ad-delta-contexto {
+    font-size: 11px;
+    color: #fff;
+    opacity: 0.75;
+    display: block;
+    font-weight: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ad-card-sec {
+    background: #fff;
+    border-radius: 8px;
+    padding: 14px 16px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    min-height: 104px;
+  }
+
+  .ad-card-sec small {
+    text-transform: uppercase;
+    color: #90a4ae;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+  }
+
+  .ad-card-sec .ad-valor {
+    font-size: 24px;
+    color: #263238;
+    margin-top: 6px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ad-card-sec .ad-detalhe {
+    font-size: 12px;
+    color: #607d8b;
+    margin-top: 4px;
+  }
+
+  /* Valor clicável dentro de card/tabela (aplica o item ao filtro). */
+  .ad-clicavel-valor {
+    cursor: pointer;
+    color: #0288D1;
+    text-decoration: none;
+  }
+
+  .ad-clicavel-valor:hover {
+    text-decoration: underline;
+  }
+
+  .ad-tabela a {
+    cursor: pointer;
+  }
+
+  .ad-nps-clicavel {
+    cursor: pointer;
+  }
+
+  .ad-nps-clicavel .zmdi-info-outline {
+    font-size: 0.6em;
+    opacity: 0.7;
+    vertical-align: middle;
+  }
+
+  .ad-nps-clicavel:hover .zmdi-info-outline {
+    opacity: 1;
+  }
+
+  a.ad-nps-clicavel {
+    color: inherit;
+  }
+
+  .ad-pos { color: #1b8f5a; }
+  .ad-neg { color: #c62828; }
+  .ad-neutro { color: #78909c; }
+
+  /* ---------- Gráficos ---------- */
+  .ad-chart-box {
+    position: relative;
+    height: 300px;
+  }
+
+  .ad-chart-box.ad-curto {
+    height: 220px;
+  }
+
+  .ad-chart-box.ad-alto {
+    height: 360px;
+  }
+
+  .ad-bloco {
+    transition: opacity 0.2s ease;
+  }
+
+  .ad-recarregando {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .ad-bloco-titulo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 24px 0 12px;
+  }
+
+  .ad-bloco-titulo h3 {
+    margin: 0;
+    font-size: 17px;
+    color: #37474f;
+  }
+
+  .ad-estado {
+    padding: 40px 20px;
+    text-align: center;
+    color: #90a4ae;
+  }
+
+  .ad-estado.ad-erro {
+    color: #c62828;
+  }
+
+  .ad-nota {
+    font-size: 12px;
+    color: #607d8b;
+    margin-top: 8px;
+  }
+
+  .ad-nota a {
+    cursor: pointer;
+  }
+
+  .card-header small.ad-sub {
+    display: block;
+    color: #90a4ae;
+    margin-top: 2px;
+  }
+
+  @media (min-width: 992px) {
+    .ad-row-igual {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .ad-row-igual > [class*="col-"] {
+      display: flex;
+    }
+
+    .ad-row-igual > [class*="col-"] > .card {
+      width: 100%;
+    }
+  }
+
+  /* ---------- Perguntas ---------- */
+  .ad-pergunta .ad-pergunta-header {
+    cursor: pointer;
+    user-select: none;
+    padding-right: 60px;
+    transition: background-color 0.15s;
+  }
+
+  .ad-pergunta .ad-pergunta-header:hover {
+    background-color: #f1f5f8;
+  }
+
+  .ad-pergunta:not(.ad-expandida) {
+    margin-bottom: 12px;
+  }
+
+  .ad-pergunta-toggle {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 45%;
+  }
+
+  .ad-pergunta-toggle .zmdi {
+    font-size: 24px;
+    color: #90a4ae;
+    transition: color 0.15s;
+  }
+
+  .ad-pergunta-header:hover .ad-pergunta-toggle .zmdi {
+    color: #0288D1;
+  }
+
+  .ad-pergunta-resumo {
+    font-size: 12px;
+    color: #546e7a;
+    background: #eceff1;
+    border-radius: 10px;
+    padding: 2px 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media (max-width: 767px) {
+    .ad-pergunta-resumo {
+      display: none;
+    }
+  }
+
+  .ad-pergunta-ordem {
+    display: inline-block;
+    min-width: 26px;
+    height: 26px;
+    line-height: 26px;
+    text-align: center;
+    border-radius: 13px;
+    background: #0288D1;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    margin-right: 8px;
+  }
+
+  .ad-pergunta-ajuda {
+    font-size: 12px;
+    color: #90a4ae;
+    font-style: italic;
+  }
+
+  .ad-pergunta-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  @media (max-width: 991px) {
+    .ad-pergunta-stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .ad-stat {
+    border: 1px solid #eceff1;
+    border-radius: 6px;
+    padding: 10px 12px;
+    background: #fafbfc;
+  }
+
+  .ad-stat small {
+    display: block;
+    text-transform: uppercase;
+    color: #90a4ae;
+    font-size: 10px;
+    letter-spacing: 0.3px;
+  }
+
+  .ad-stat .ad-stat-valor {
+    font-size: 22px;
+    color: #263238;
+    line-height: 1.2;
+    margin-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ad-stat .ad-stat-detalhe {
+    font-size: 11px;
+    color: #607d8b;
+    margin-top: 2px;
+  }
+
+  .ad-stat.ad-stat-heroi {
+    color: #fff;
+    border: 0;
+  }
+
+  .ad-stat.ad-stat-heroi small,
+  .ad-stat.ad-stat-heroi .ad-stat-valor,
+  .ad-stat.ad-stat-heroi .ad-stat-detalhe {
+    color: #fff;
+  }
+
+  .ad-stat.ad-stat-heroi small,
+  .ad-stat.ad-stat-heroi .ad-stat-detalhe {
+    opacity: 0.85;
+  }
+
+  .ad-estrelas .zmdi {
+    font-size: 18px;
+    color: #cfd8dc;
+  }
+
+  .ad-estrelas .zmdi.ad-cheia {
+    color: #eda100;
+  }
+
+  .ad-seg-tabela {
+    font-size: 12px;
+    margin: 0;
+  }
+
+  .ad-seg-tabela th {
+    color: #90a4ae;
+    font-weight: normal;
+    text-transform: uppercase;
+    font-size: 10px;
+    border-top: 0 !important;
+  }
+
+  .ad-seg-tabela td.ad-num,
+  .ad-seg-tabela th.ad-num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ad-seg-cor {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  /* ---------- Comentários ---------- */
+  .ad-comentario {
+    border-left: 3px solid #0288D1;
+    padding: 10px 15px;
+    margin-bottom: 12px;
+    background-color: #fafafa;
+    border-radius: 0 6px 6px 0;
+    white-space: pre-line;
+  }
+
+  .ad-comentario-meta {
+    font-size: 11px;
+    color: #999;
+    margin-top: 6px;
+    white-space: normal;
+  }
+
+  /* ---------- Tabela ---------- */
+  .ad-tabela-wrap {
+    overflow: auto;
+    max-height: 72vh;
+    border: 1px solid #eceff1;
+    border-radius: 4px;
+  }
+
+  .ad-tabela {
+    margin: 0;
+    font-size: 12px;
+    min-width: 1100px;
+  }
+
+  .ad-tabela th {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: #f5f7f8;
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+    border-bottom: 1px solid #cfd8dc !important;
+  }
+
+  .ad-tabela th.ad-th-pergunta {
+    cursor: default;
+    max-width: 220px;
+    min-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ad-tabela th.ad-th-pergunta.ad-ordenavel {
+    cursor: pointer;
+  }
+
+  .ad-tabela th .zmdi {
+    margin-left: 4px;
+    color: #0288D1;
+  }
+
+  .ad-tabela td.ad-resposta {
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ad-tabela td.ad-nowrap {
+    white-space: nowrap;
+  }
+
+  .ad-situacao {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 8px;
+    border-radius: 8px;
+    text-transform: uppercase;
+  }
+
+  .ad-situacao.ad-respondida { background: #e8f5e9; color: #1b8f5a; }
+  .ad-situacao.ad-dispensada { background: #fff3e0; color: #e65100; }
+  .ad-situacao.ad-sem { background: #f5f5f5; color: #9e9e9e; }
+
+  .ad-paginacao {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: #607d8b;
+  }
+
+  .ad-paginacao .btn {
+    padding: 4px 10px;
+    font-size: 12px;
+  }
+
+  .ad-paginacao .btn.ativo {
+    background: #0288D1;
+    color: #fff;
+  }
+</style>
+
+<div class="container-fluid" id="ad-topo" data-ng-controller="AvaliacoesDashboardNewController" ng-init="onInit()">
+
+  <!-- ===================== Filtros ===================== -->
+  <div class="card m-b-20">
+    <div class="card-header ch-alt">
+      <h2>{{"AVALIACAOES" | translate}} - Dashboard</h2>
+      <small class="ad-sub" ng-if="avaliacao">{{avaliacao.titulo}} · {{filter.revendedorNome}}<span ng-if="filter.clienteId !== 'TODOS'"> · {{filter.clienteNome}}</span><span ng-if="filter.usuarioId !== 'TODOS'"> · {{filter.usuarioNome}}</span> · {{periodoLabel()}} · {{fmt(filtrados.length)}} usuário(s) no filtro</small>
+
+      <button title="Exportar CSV" class="btn bgm-teal btn-float btn-float-2 waves-effect" ng-click="exportarCsv()"
+        ng-disabled="!tabela.linhas.length">
+        <i class="zmdi zmdi-download"></i>
+      </button>
+
+      <button title="Limpar filtros" class="btn bgm-bluegray btn-float btn-float-2 waves-effect"
+        ng-click="limparFiltros()">
+        <i class="zmdi zmdi-format-clear"></i>
+      </button>
+
+      <button title="{{'PESQUISAR' | translate}}" class="btn bgm-blue btn-float btn-float-2 waves-effect"
+        ng-click="getData()">
+        <i class="zmdi zmdi-search"></i>
+      </button>
+    </div>
+
+    <div class="card-body card-padding">
+      <br />
+      <div class="row ad-filtro-linha">
+        <div class="col-sm-4">
+          <div class="ad-combo">
+            <div class="form-group fg-float m-b-20">
+              <div class="fg-line fg-toggled">
+                <input type="text" class="form-control input-lg" autocomplete="off" ng-model="comboAvaliacao.busca"
+                  ng-focus="abrirCombo(comboAvaliacao)" ng-click="abrirCombo(comboAvaliacao)" ng-blur="fecharCombo(comboAvaliacao)"
+                  ng-keydown="tecladoCombo(comboAvaliacao, $event)" />
+                <label class="fg-label">Avaliação</label>
+              </div>
+            </div>
+            <ul class="ad-combo-lista" ng-show="comboAvaliacao.aberto">
+              <li ng-repeat="o in opcoesFiltradas(comboAvaliacao) track by o.id"
+                ng-class="{'ativo': $index === comboAvaliacao.destaque, 'selecionado': o.id === filter.avaliacaoId, 'fixo': o.id === 'TODOS'}"
+                ng-mousedown="$event.preventDefault(); selecionarOpcao(comboAvaliacao, o)" title="{{o.nome}}">
+                {{o.nome}}
+              </li>
+              <li class="vazio" ng-if="opcoesFiltradas(comboAvaliacao).length === 0">Nenhuma avaliação encontrada</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-sm-4">
+          <div class="ad-combo">
+            <div class="form-group fg-float m-b-20">
+              <div class="fg-line fg-toggled">
+                <input type="text" class="form-control input-lg" autocomplete="off" ng-model="comboRevendedor.busca"
+                  ng-focus="abrirCombo(comboRevendedor)" ng-click="abrirCombo(comboRevendedor)" ng-blur="fecharCombo(comboRevendedor)"
+                  ng-keydown="tecladoCombo(comboRevendedor, $event)" />
+                <label class="fg-label">{{'REVENDEDOR' | translate}}</label>
+              </div>
+            </div>
+            <ul class="ad-combo-lista" ng-show="comboRevendedor.aberto">
+              <li ng-repeat="o in opcoesFiltradas(comboRevendedor) track by o.id"
+                ng-class="{'ativo': $index === comboRevendedor.destaque, 'selecionado': o.id === filter.revendedorId, 'fixo': o.id === 'TODOS'}"
+                ng-mousedown="$event.preventDefault(); selecionarOpcao(comboRevendedor, o)" title="{{o.nome}}">
+                {{o.nome}}
+              </li>
+              <li class="vazio" ng-if="opcoesFiltradas(comboRevendedor).length === 0">Nenhum revendedor encontrado</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-sm-4">
+          <div class="ad-combo">
+            <div class="form-group fg-float m-b-20">
+              <div class="fg-line fg-toggled">
+                <input type="text" class="form-control input-lg" autocomplete="off" ng-model="comboCliente.busca"
+                  ng-focus="abrirCombo(comboCliente)" ng-click="abrirCombo(comboCliente)" ng-blur="fecharCombo(comboCliente)"
+                  ng-keydown="tecladoCombo(comboCliente, $event)" />
+                <label class="fg-label">Cliente</label>
+              </div>
+            </div>
+            <ul class="ad-combo-lista" ng-show="comboCliente.aberto">
+              <li ng-repeat="o in opcoesFiltradas(comboCliente) track by o.id"
+                ng-class="{'ativo': $index === comboCliente.destaque, 'selecionado': o.id === filter.clienteId, 'fixo': o.id === 'TODOS'}"
+                ng-mousedown="$event.preventDefault(); selecionarOpcao(comboCliente, o)" title="{{o.nome}}{{o.detalhe ? ' · ' + o.detalhe : ''}}">
+                {{o.nome}} <small class="ad-combo-detalhe" ng-if="o.detalhe">{{o.detalhe}}</small>
+              </li>
+              <li class="vazio" ng-if="opcoesFiltradas(comboCliente).length === 0">Nenhum cliente encontrado</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="ad-combo">
+            <div class="form-group fg-float m-b-20">
+              <div class="fg-line fg-toggled">
+                <input type="text" class="form-control input-lg" autocomplete="off" ng-model="comboUsuario.busca"
+                  ng-focus="abrirCombo(comboUsuario)" ng-click="abrirCombo(comboUsuario)" ng-blur="fecharCombo(comboUsuario)"
+                  ng-keydown="tecladoCombo(comboUsuario, $event)" />
+                <label class="fg-label">Usuário</label>
+              </div>
+            </div>
+            <ul class="ad-combo-lista ad-combo-larga" ng-show="comboUsuario.aberto">
+              <li ng-repeat="o in opcoesFiltradas(comboUsuario) track by o.id"
+                ng-class="{'ativo': $index === comboUsuario.destaque, 'selecionado': o.id === filter.usuarioId, 'fixo': o.id === 'TODOS'}"
+                ng-mousedown="$event.preventDefault(); selecionarOpcao(comboUsuario, o)" title="{{o.nome}}{{o.detalhe ? ' · ' + o.detalhe : ''}}">
+                {{o.nome}} <small class="ad-combo-detalhe" ng-if="o.detalhe">{{o.detalhe}}</small>
+              </li>
+              <li class="vazio" ng-if="opcoesFiltradas(comboUsuario).length === 0">Nenhum usuário encontrado</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-sm-3">
+          <div class="ad-combo">
+            <div class="form-group fg-float m-b-20">
+              <div class="fg-line fg-toggled">
+                <input type="text" class="form-control input-lg" autocomplete="off" ng-model="comboPerfil.busca"
+                  ng-focus="abrirCombo(comboPerfil)" ng-click="abrirCombo(comboPerfil)" ng-blur="fecharCombo(comboPerfil)"
+                  ng-keydown="tecladoCombo(comboPerfil, $event)" />
+                <label class="fg-label">Perfil</label>
+              </div>
+            </div>
+            <ul class="ad-combo-lista" ng-show="comboPerfil.aberto">
+              <li ng-repeat="o in opcoesFiltradas(comboPerfil) track by o.id"
+                ng-class="{'ativo': $index === comboPerfil.destaque, 'selecionado': o.id === filter.perfil, 'fixo': o.id === 'TODOS'}"
+                ng-mousedown="$event.preventDefault(); selecionarOpcao(comboPerfil, o)" title="{{o.nome}}">
+                {{o.nome}}
+              </li>
+              <li class="vazio" ng-if="opcoesFiltradas(comboPerfil).length === 0">Nenhum perfil encontrado</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-sm-3">
+          <div class="date-picker dp-blue form-group fg-float m-b-20" ng-class="{'is-opened': dataDeOpened == true}">
+            <div class="fg-line fg-toggled">
+              <input ng-click="dataDeOpened = true" type="text" style="cursor: pointer;" class="form-control input-lg"
+                show-weeks="false" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" on-open-focus="false"
+                model-view-value="true" is-open="dataDeOpened" close-text="Fechar" current-text="Hoje"
+                ng-model="filter.dataDe" ng-change="aplicarFiltros()" />
+              <label class="fg-label">{{'DATA-DE' | translate}}</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-3">
+          <div class="date-picker dp-blue form-group fg-float m-b-20" ng-class="{'is-opened': dataAteOpened == true}">
+            <div class="fg-line fg-toggled">
+              <input ng-click="dataAteOpened = true" type="text" style="cursor: pointer;" class="form-control input-lg"
+                show-weeks="false" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" on-open-focus="false"
+                model-view-value="true" is-open="dataAteOpened" close-text="Fechar" current-text="Hoje"
+                ng-model="filter.dataAte" ng-change="aplicarFiltros()" />
+              <label class="fg-label">{{'DATA-ATE' | translate}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ad-filtro-erro" ng-if="filtroErro">
+        <i class="zmdi zmdi-alert-circle-o"></i> {{filtroErro}}
+      </div>
+      <div class="ad-dica" style="margin-top: -6px;"><i class="zmdi zmdi-mouse"></i>Clique em revendedor, cliente, usuário, perfil ou data nos indicadores, gráficos e tabela para aplicá-los ao filtro.</div>
+    </div>
+  </div>
+
+  <!-- ===================== Estados ===================== -->
+  <div class="card" ng-if="estado.erro">
+    <div class="card-body card-padding ad-estado ad-erro">
+      <i class="zmdi zmdi-alert-circle-o"></i> Não foi possível carregar o dashboard da avaliação. Tente novamente.
+    </div>
+  </div>
+
+  <div class="card" ng-if="estado.carregando && !avaliacao">
+    <div class="card-body card-padding ad-estado">
+      <i class="zmdi zmdi-refresh zmdi-hc-spin"></i> Carregando avaliação…
+    </div>
+  </div>
+
+  <div class="card" ng-if="!estado.erro && !estado.carregando && !avaliacoesSimples.length">
+    <div class="card-body card-padding ad-estado">Nenhuma avaliação cadastrada.</div>
+  </div>
+
+  <div class="ad-bloco" ng-class="{'ad-recarregando': estado.carregando}" ng-if="!estado.erro && avaliacao">
+
+    <!-- ===================== Informações da avaliação ===================== -->
+    <div class="card m-b-20">
+      <div class="card-header ch-alt">
+        <h2>{{avaliacao.titulo}}</h2>
+        <small class="ad-sub">Informações da avaliação selecionada</small>
+      </div>
+      <div class="card-body card-padding">
+        <div class="ad-descricao" ng-if="avaliacao.descricao">{{avaliacao.descricao}}</div>
+
+        <div class="ad-info m-b-15">
+          <div class="ad-info-item">
+            <small>Situação</small>
+            <span class="ad-chip" ng-class="avaliacao.ativo ? 'ad-ativa' : 'ad-inativa'">
+              <i class="zmdi" ng-class="avaliacao.ativo ? 'zmdi-check-circle' : 'zmdi-minus-circle'"></i>{{avaliacao.ativo ? 'Ativa' : 'Inativa'}}
+            </span>
+          </div>
+          <div class="ad-info-item">
+            <small>Início</small>
+            {{fmtData(avaliacao.dataInicio)}}
+            <span class="ad-neutro" ng-if="diasAtiva() !== null">· há {{fmt(diasAtiva())}} dia(s)</span>
+          </div>
+          <div class="ad-info-item">
+            <small>Criada em</small>
+            {{fmtDataHora(avaliacao.dataCriacao)}}
+          </div>
+          <div class="ad-info-item">
+            <small>Perguntas</small>
+            <span class="ad-chip ad-chip-total"><i class="zmdi zmdi-format-list-numbered"></i>{{fmt(avaliacao.perguntas.length)}} no total</span>
+            <span class="ad-chip ad-on" ng-repeat="t in resumoTipos track by t.tipo" title="{{t.total}} pergunta(s) do tipo {{t.nome}}">
+              <i class="zmdi {{tipoIcone(t.tipo)}}"></i>{{t.total}} {{t.nome}}
+            </span>
+          </div>
+          <div class="ad-info-item">
+            <small>Configurações</small>
+            <span class="ad-chip" ng-class="avaliacao.anonima ? 'ad-on' : 'ad-off'"><i class="zmdi zmdi-account-o"></i>Anônima</span>
+            <span class="ad-chip" ng-class="avaliacao.permiteDispensar ? 'ad-on' : 'ad-off'"><i class="zmdi zmdi-close-circle-o"></i>Permite dispensar</span>
+            <span class="ad-chip" ng-class="avaliacao.exibirModal ? 'ad-on' : 'ad-off'"><i class="zmdi zmdi-window-maximize"></i>Exibe em modal</span>
+          </div>
+        </div>
+
+        <div class="ad-descricao" ng-if="avaliacao.mensagemFinal" style="margin-bottom: 0;">
+          <small class="ad-neutro" style="text-transform: uppercase; font-size: 10px;">Mensagem final</small><br />
+          {{avaliacao.mensagemFinal}}
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== Sem respostas ===================== -->
+    <div class="card" ng-if="!cards && !estado.carregando">
+      <div class="card-body card-padding ad-estado">
+        Nenhuma resposta para os filtros selecionados ({{periodoLabel()}}).
+      </div>
+    </div>
+
+    <div ng-if="cards">
+
+      <!-- ===================== Indicadores gerais ===================== -->
+      <div class="ad-cards m-b-20">
+        <div class="indicador-item" style="background-color: #0288D1">
+          <i class="fas fa-clipboard-check"></i>
+          <div class="indicador-informacoes">
+            <small>Respostas</small>
+            <h2>{{fmt(cards.respondidas)}}</h2>
+            <span class="ad-delta">
+              {{fmt(cards.clientes)}} cliente(s) · {{fmt(cards.revendedores)}} revendedor(es)
+              <span class="ad-delta-contexto">usuários que responderam ao menos uma pergunta</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="indicador-item" ng-style="{'background-color': cards.dispensadas ? '#eb6834' : '#607D8B'}">
+          <i class="fas fa-user-times"></i>
+          <div class="indicador-informacoes">
+            <small>Dispensadas</small>
+            <h2>{{fmt(cards.dispensadas)}}</h2>
+            <span class="ad-delta">
+              {{fmtPct(cards.taxaDispensa)}} de dispensa
+              <span class="ad-delta-contexto">sobre {{fmt(filtrados.length)}} usuário(s) alcançado(s)</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="indicador-item" ng-if="cards.nps" ng-style="{'background-color': corNps(cards.nps.score)}">
+          <i class="fas fa-star"></i>
+          <div class="indicador-informacoes">
+            <small>NPS · {{classificacaoNps(cards.nps.score)}}</small>
+            <h2 class="ad-nps-clicavel" ng-click="explicarNpsCard()" title="Clique para ver como o NPS é calculado">{{cards.nps.score}} <i class="zmdi zmdi-info-outline"></i></h2>
+            <span class="ad-delta" title="NPS = % promotores (9-10) − % detratores (0-6)">
+              {{fmtPct(cards.nps.pctPromotores)}} promotores − {{fmtPct(cards.nps.pctDetratores)}} detratores
+              <span class="ad-delta-contexto" title="{{cards.nps.enunciado}}">{{fmt(cards.nps.segmentos.promotores)}} promotores · {{fmt(cards.nps.segmentos.neutros)}} neutros · {{fmt(cards.nps.segmentos.detratores)}} detratores · {{fmt(cards.nps.total)}} nota(s)</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="indicador-item" ng-if="cards.estrelas" ng-style="{'background-color': corEstrelas(cards.estrelas.media)}">
+          <i class="fas fa-star-half-alt"></i>
+          <div class="indicador-informacoes">
+            <small>Estrelas · média</small>
+            <h2>{{fmtDec(cards.estrelas.media)}} <span style="font-size: 16px; opacity: 0.75;">/ 5</span></h2>
+            <span class="ad-delta">
+              {{fmt(cards.estrelas.total)}} nota(s)
+              <span class="ad-delta-contexto" title="{{cards.estrelas.enunciado}}">{{cards.estrelas.enunciado}}</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="indicador-item" style="background-color: #7D67DA">
+          <i class="fas fa-tasks"></i>
+          <div class="indicador-informacoes">
+            <small>Completude</small>
+            <h2>{{fmtPct(cards.completude)}}</h2>
+            <span class="ad-delta">
+              perguntas respondidas por resposta
+              <span class="ad-delta-contexto">100% = todas as {{fmt(avaliacao.perguntas.length)}} perguntas respondidas</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="indicador-item" style="background-color: #00897B" ng-if="!cards.nps || !cards.estrelas">
+          <i class="fas fa-comment-dots"></i>
+          <div class="indicador-informacoes">
+            <small>Comentários</small>
+            <h2>{{fmt(cards.comentarios)}}</h2>
+            <span class="ad-delta">
+              respostas de texto livre
+              <span class="ad-delta-contexto">preenchidas (em branco não contam)</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Faixa 2 — ritmo e concentração -->
+      <div class="ad-cards ad-cards-sec m-b-20">
+        <div class="ad-card-sec">
+          <small>Período das respostas</small>
+          <div class="ad-valor">
+            <a class="ad-clicavel-valor" ng-if="cards.primeira" ng-click="filtrarIntervalo(cards.primeira, cards.ultima)"
+              title="Aplicar este intervalo ao filtro de datas">{{fmtData(cards.primeira)}} → {{fmtData(cards.ultima)}}</a>
+            <span ng-if="!cards.primeira">—</span>
+          </div>
+          <div class="ad-detalhe">{{fmt(cards.dias)}} dia(s) entre a primeira e a última resposta</div>
+        </div>
+
+        <div class="ad-card-sec">
+          <small>Ritmo</small>
+          <div class="ad-valor">{{fmtDec(cards.mediaDiaria)}} <span style="font-size: 14px; color: #607d8b;">respostas/dia</span></div>
+          <div class="ad-detalhe" ng-if="cards.melhorDia">pico em
+            <a class="ad-clicavel-valor" ng-click="filtrarPeriodo(cards.melhorDia.data, false)" title="Filtrar por este dia">{{fmtDia(cards.melhorDia.data)}}</a>
+            com {{fmt(cards.melhorDia.total)}} resposta(s)</div>
+          <div class="ad-detalhe" ng-if="!cards.melhorDia">sem respostas datadas</div>
+        </div>
+
+        <div class="ad-card-sec">
+          <small>Perfil predominante</small>
+          <div class="ad-valor" ng-if="cards.perfilPredominante">
+            <a class="ad-clicavel-valor" ng-click="aplicarPerfil(cards.perfilPredominante.chave, cards.perfilPredominante.nome)"
+              title="Aplicar ao filtro de perfil">{{cards.perfilPredominante.nome}}</a>
+          </div>
+          <div class="ad-valor" ng-if="!cards.perfilPredominante">—</div>
+          <div class="ad-detalhe" ng-if="cards.perfilPredominante">{{fmt(cards.perfilPredominante.total)}} resposta(s) · {{fmtPct(cards.perfilPredominante.pct)}} do total</div>
+        </div>
+
+        <div class="ad-card-sec">
+          <small>Cliente que mais respondeu</small>
+          <div class="ad-valor" ng-if="cards.clientePredominante" title="{{cards.clientePredominante.nome}}">
+            <a class="ad-clicavel-valor" ng-click="aplicarCliente(cards.clientePredominante.chave, cards.clientePredominante.nome)"
+              title="Aplicar ao filtro de cliente">{{cards.clientePredominante.nome}}</a>
+          </div>
+          <div class="ad-valor" ng-if="!cards.clientePredominante">—</div>
+          <div class="ad-detalhe" ng-if="cards.clientePredominante">{{fmt(cards.clientePredominante.total)}} resposta(s) · {{fmtPct(cards.clientePredominante.pct)}} do total</div>
+        </div>
+      </div>
+
+      <!-- ===================== Gráficos gerais ===================== -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header ch-alt">
+              <h2>Evolução das respostas</h2>
+              <small class="ad-sub">Respondidas e dispensadas {{graficosGerais.evolucao.porMes ? 'por mês' : 'por dia'}}, da primeira à última resposta do filtro. Clique em {{graficosGerais.evolucao.porMes ? 'um mês' : 'um dia'}} para filtrar o período.</small>
+            </div>
+            <div class="card-body card-padding">
+              <div class="ad-chart-box">
+                <canvas id="gEvolucao"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row ad-row-igual">
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header ch-alt">
+              <h2>Respostas por perfil</h2>
+              <small class="ad-sub">Percentual sobre o total de respostas. Clique para filtrar pelo perfil.</small>
+            </div>
+            <div class="card-body card-padding">
+              <div class="ad-chart-box ad-curto">
+                <canvas id="gPerfis"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header ch-alt">
+              <h2>Top 10 revendedores</h2>
+              <small class="ad-sub">Respostas por revendedor. Clique para filtrar pelo revendedor.</small>
+            </div>
+            <div class="card-body card-padding">
+              <div class="ad-chart-box ad-curto">
+                <canvas id="gRevendedores"></canvas>
+              </div>
+              <div class="ad-nota" ng-if="graficosGerais.revendedores.outros">
+                + outros {{fmt(graficosGerais.revendedores.outros.quantidade)}} revendedor(es): {{fmt(graficosGerais.revendedores.outros.total)}} resposta(s)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header ch-alt">
+              <h2>Top 10 clientes</h2>
+              <small class="ad-sub">Clientes com mais usuários respondendo. Clique para filtrar pelo cliente.</small>
+            </div>
+            <div class="card-body card-padding">
+              <div class="ad-chart-box ad-curto">
+                <canvas id="gClientes"></canvas>
+              </div>
+              <div class="ad-nota" ng-if="graficosGerais.clientes.outros">
+                + outros {{fmt(graficosGerais.clientes.outros.quantidade)}} cliente(s): {{fmt(graficosGerais.clientes.outros.total)}} resposta(s)
+                — <a ng-click="rolarPara('ad-tabela')">ver todos na tabela</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== Resultado por pergunta ===================== -->
+      <div class="ad-bloco-titulo">
+        <h3>Resultado por pergunta</h3>
+        <span class="ad-chip">{{fmt(perguntas.length)}} pergunta(s)</span>
+        <span class="ad-nota" style="margin: 0;">
+          <a ng-click="expandirTodas(true)" ng-if="!todasExpandidas()"><i class="zmdi zmdi-unfold-more"></i> expandir todas</a>
+          <a ng-click="expandirTodas(false)" ng-if="todasExpandidas()"><i class="zmdi zmdi-unfold-less"></i> retrair todas</a>
+        </span>
+      </div>
+
+      <div class="card ad-pergunta" ng-repeat="q in perguntas track by q.id" ng-class="{'ad-expandida': expandidas[q.id]}">
+        <div class="card-header ch-alt ad-pergunta-header" ng-click="alternarPergunta(q)"
+          title="{{expandidas[q.id] ? 'Retrair' : 'Expandir'}}">
+          <h2>
+            <span class="ad-pergunta-ordem">{{q.ordem + 1}}</span>{{q.enunciado}}
+          </h2>
+          <small class="ad-sub">
+            <i class="zmdi {{q.tipoIcone}}"></i> {{q.tipoNome}}
+            · {{q.obrigatoria ? 'obrigatória' : 'opcional'}}
+            · {{fmt(q.total)}} resposta(s) ({{fmtPct(q.cobertura)}} de quem respondeu)
+            <span class="ad-pergunta-ajuda" ng-if="q.ajuda"> · ajuda: "{{q.ajuda}}"</span>
+          </small>
+          <div class="ad-pergunta-toggle">
+            <span class="ad-pergunta-resumo" ng-if="!expandidas[q.id] && q.resumo">{{q.resumo}}</span>
+            <i class="zmdi" ng-class="expandidas[q.id] ? 'zmdi-chevron-up' : 'zmdi-chevron-down'"></i>
+          </div>
+        </div>
+
+        <div class="card-body card-padding" ng-if="expandidas[q.id]">
+          <div class="ad-estado" ng-if="!q.total">Nenhuma resposta para esta pergunta no filtro.</div>
+
+          <!-- Escolha única / múltipla -->
+          <div ng-if="q.total && (q.tipo === 'ESCOLHA_UNICA' || q.tipo === 'ESCOLHA_MULTIPLA')">
+            <div class="ad-pergunta-stats">
+              <div class="ad-stat">
+                <small>Mais escolhida</small>
+                <div class="ad-stat-valor" title="{{q.maisEscolhida.descricao}}">{{q.maisEscolhida ? q.maisEscolhida.descricao : '—'}}</div>
+                <div class="ad-stat-detalhe" ng-if="q.maisEscolhida">{{fmt(q.maisEscolhida.total)}} resposta(s) · {{fmtPct(q.maisEscolhida.pct)}}</div>
+              </div>
+              <div class="ad-stat">
+                <small>Opções</small>
+                <div class="ad-stat-valor">{{fmt(q.opcoes.length)}}</div>
+                <div class="ad-stat-detalhe">{{q.semVotos ? fmt(q.semVotos) + ' sem nenhuma escolha' : 'todas foram escolhidas'}}</div>
+              </div>
+              <div class="ad-stat" ng-if="q.tipo === 'ESCOLHA_MULTIPLA'">
+                <small>Marcadas por resposta</small>
+                <div class="ad-stat-valor">{{fmtDec(q.mediaMarcadas)}}</div>
+                <div class="ad-stat-detalhe">média de opções marcadas · % abaixo é sobre respostas, não soma 100</div>
+              </div>
+              <div class="ad-stat">
+                <small>Respostas</small>
+                <div class="ad-stat-valor">{{fmt(q.total)}}</div>
+                <div class="ad-stat-detalhe">{{fmtPct(q.cobertura)}} de quem respondeu a avaliação</div>
+              </div>
+            </div>
+            <div class="ad-chart-box" ng-style="{'height': (60 + q.opcoes.length * 34) + 'px'}">
+              <canvas id="pq_{{q.id}}"></canvas>
+            </div>
+            <div class="ad-dica"><i class="zmdi zmdi-mouse"></i>Clique em uma barra para ver quem escolheu a opção.</div>
+          </div>
+
+          <!-- NPS -->
+          <div ng-if="q.total && q.tipo === 'NPS'">
+            <div class="ad-pergunta-stats">
+              <div class="ad-stat ad-stat-heroi ad-nps-clicavel" ng-style="{'background-color': corNps(q.score)}" ng-click="explicarNpsPergunta(q)" title="Clique para ver como o NPS é calculado">
+                <small>NPS <i class="zmdi zmdi-info-outline"></i></small>
+                <div class="ad-stat-valor">{{q.score}}</div>
+                <div class="ad-stat-detalhe">{{q.classificacao}} · {{fmtPct(q.pctPromotores)}} promotores − {{fmtPct(q.pctDetratores)}} detratores</div>
+              </div>
+              <div class="ad-stat">
+                <small>Média das notas</small>
+                <div class="ad-stat-valor">{{fmtDec(q.media)}} <span style="font-size: 13px; color: #607d8b;">/ 10</span></div>
+                <div class="ad-stat-detalhe">{{fmt(q.total)}} nota(s)</div>
+              </div>
+              <div class="ad-stat">
+                <small>Promotores (9-10)</small>
+                <div class="ad-stat-valor ad-pos">{{fmtPct(q.pctPromotores)}}</div>
+                <div class="ad-stat-detalhe">{{fmt(q.segmentos.promotores)}} resposta(s)</div>
+              </div>
+              <div class="ad-stat">
+                <small>Detratores (0-6)</small>
+                <div class="ad-stat-valor ad-neg">{{fmtPct(q.pctDetratores)}}</div>
+                <div class="ad-stat-detalhe">{{fmt(q.segmentos.detratores)}} resposta(s) · neutros: {{fmtPct(q.pctNeutros)}}</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-7">
+                <div class="ad-chart-box ad-curto">
+                  <canvas id="pq_{{q.id}}"></canvas>
+                </div>
+                <div class="ad-nota">Notas por valor · <span class="ad-seg-cor" style="background: #c62828"></span>detratores <span class="ad-seg-cor" style="background: #eda100"></span>neutros <span class="ad-seg-cor" style="background: #1b8f5a"></span>promotores</div>
+                <div class="ad-dica"><i class="zmdi zmdi-mouse"></i>Clique em uma nota ou em um segmento para ver quem respondeu.</div>
+              </div>
+              <div class="col-md-5">
+                <div class="ad-chart-box ad-curto">
+                  <canvas id="pq_{{q.id}}_seg"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="m-t-15" ng-if="q.porPerfil.length > 1">
+              <table class="table table-condensed ad-seg-tabela">
+                <thead>
+                  <tr>
+                    <th>NPS por perfil</th>
+                    <th class="ad-num">Notas</th>
+                    <th class="ad-num">Média</th>
+                    <th class="ad-num">NPS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="s in q.porPerfil">
+                    <td>{{s.nome}}</td>
+                    <td class="ad-num">{{fmt(s.total)}}</td>
+                    <td class="ad-num">{{fmtDec(s.media)}}</td>
+                    <td class="ad-num"><a class="ad-nps-clicavel" ng-click="explicarNpsPerfil(q, s)" title="Clique para ver como o NPS é calculado"><span class="ad-seg-cor" ng-style="{'background-color': corNps(s.score)}"></span>{{s.score}} · {{classificacaoNps(s.score)}} <i class="zmdi zmdi-info-outline"></i></a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Estrelas -->
+          <div ng-if="q.total && q.tipo === 'ESTRELAS'">
+            <div class="ad-pergunta-stats">
+              <div class="ad-stat ad-stat-heroi" ng-style="{'background-color': corEstrelas(q.media)}">
+                <small>Média</small>
+                <div class="ad-stat-valor">{{fmtDec(q.media)}} <span style="font-size: 13px; opacity: 0.8;">/ 5</span></div>
+                <div class="ad-stat-detalhe">{{fmt(q.total)}} nota(s)</div>
+              </div>
+              <div class="ad-stat">
+                <small>Visual</small>
+                <div class="ad-stat-valor ad-estrelas">
+                  <i class="zmdi zmdi-star" ng-repeat="cheia in estrelasDe(q.media) track by $index" ng-class="{'ad-cheia': cheia}"></i>
+                </div>
+                <div class="ad-stat-detalhe">arredondado para a estrela mais próxima</div>
+              </div>
+              <div class="ad-stat">
+                <small>Satisfeitos (4-5)</small>
+                <div class="ad-stat-valor ad-pos">{{fmtPct(q.pctSatisfeitos)}}</div>
+                <div class="ad-stat-detalhe">{{fmt(q.satisfeitos)}} resposta(s)</div>
+              </div>
+              <div class="ad-stat">
+                <small>Insatisfeitos (0-2)</small>
+                <div class="ad-stat-valor ad-neg">{{fmtPct(q.pctInsatisfeitos)}}</div>
+                <div class="ad-stat-detalhe">{{fmt(q.insatisfeitos)}} resposta(s) · 3 estrelas: {{fmt(q.distribuicao[3])}}</div>
+              </div>
+            </div>
+            <div class="ad-chart-box ad-curto">
+              <canvas id="pq_{{q.id}}"></canvas>
+            </div>
+            <div class="ad-nota">Notas por valor · <span class="ad-seg-cor" style="background: #c62828"></span>0 a 2 <span class="ad-seg-cor" style="background: #eda100"></span>3 <span class="ad-seg-cor" style="background: #1b8f5a"></span>4 e 5</div>
+            <div class="ad-dica"><i class="zmdi zmdi-mouse"></i>Clique em uma nota para ver quem respondeu.</div>
+          </div>
+
+          <!-- Texto livre -->
+          <div ng-if="q.total && q.tipo === 'TEXTO'">
+            <div class="ad-pergunta-stats">
+              <div class="ad-stat">
+                <small>Comentários</small>
+                <div class="ad-stat-valor">{{fmt(q.totalComentarios)}}</div>
+                <div class="ad-stat-detalhe">respostas em branco não contam</div>
+              </div>
+              <div class="ad-stat">
+                <small>Tamanho médio</small>
+                <div class="ad-stat-valor">{{fmt(q.mediaCaracteres)}} <span style="font-size: 13px; color: #607d8b;">caracteres</span></div>
+                <div class="ad-stat-detalhe">por comentário</div>
+              </div>
+              <div class="ad-stat" style="grid-column: span 2;">
+                <small>Buscar comentário (texto, usuário ou cliente)</small>
+                <div class="form-group fg-float" style="margin: 4px 0 0;">
+                  <div class="fg-line fg-toggled">
+                    <input type="text" class="form-control" ng-model="q.busca" ng-change="buscarComentarios(q)" ng-model-options="{ debounce: 200 }" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div ng-repeat="c in comentariosVisiveis(q) track by $index" class="ad-comentario ad-clicavel" ng-click="abrirDetalheComentario(q, c)" title="Ver detalhes de quem respondeu">{{c.texto}}<div class="ad-comentario-meta">
+                <span>{{c.usuarioNome}} · </span>
+                <span>{{c.clienteNome}} · </span>
+                <span ng-if="graficosGerais.multiRevendedor">{{c.revendedorNome}} · </span>
+                <span>{{c.perfilNome}} · </span>
+                <span>{{fmtDataHora(c.data)}}</span>
+              </div>
+            </div>
+
+            <div class="ad-estado" ng-if="q.totalFiltrados === 0" style="padding: 20px;">Nenhum comentário encontrado para "{{q.busca}}".</div>
+
+            <div class="text-center m-t-10" ng-if="q.totalFiltrados > q.limite">
+              <button class="btn btn-default btn-sm waves-effect" ng-click="verMaisComentarios(q)">
+                <i class="zmdi zmdi-chevron-down"></i> Carregar mais 5
+              </button>
+              <div class="ad-nota">Exibindo {{fmt(q.limite)}} de {{fmt(q.totalFiltrados)}} comentário(s), do mais recente para o mais antigo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== Tabela de respondentes ===================== -->
+      <div class="card" id="ad-tabela">
+        <div class="card-header ch-alt">
+          <h2>Detalhamento por usuário</h2>
+          <small class="ad-sub">Uma linha por usuário alcançado, com a resposta de cada pergunta · {{fmt(tabela.linhas.length)}} linha(s) · clique em usuário, cliente, revendedor ou perfil para filtrar</small>
+        </div>
+        <div class="card-body card-padding">
+          <div class="row">
+            <div class="col-sm-5">
+              <div class="form-group fg-float m-b-20">
+                <div class="fg-line fg-toggled">
+                  <input type="text" class="form-control" ng-model="tabela.busca" ng-change="onBuscarTabela()"
+                    ng-model-options="{ debounce: 200 }" />
+                  <label class="fg-label">Buscar usuário, cliente ou revendedor</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-7 text-right" style="padding-top: 8px;">
+              <button class="btn btn-default btn-sm waves-effect" ng-click="exportarCsv()" ng-disabled="!tabela.filtradas.length">
+                <i class="zmdi zmdi-download"></i> Exportar CSV ({{fmt(tabela.filtradas.length)}} linhas)
+              </button>
+            </div>
+          </div>
+
+          <div class="ad-tabela-wrap" ng-if="tabela.linhas.length">
+            <table class="table table-hover table-condensed ad-tabela">
+              <thead>
+                <tr>
+                  <th ng-click="ordenarPor('usuarioNome')">Usuário
+                    <i class="zmdi" ng-if="tabela.ordem === 'usuarioNome'" ng-class="tabela.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                  </th>
+                  <th ng-click="ordenarPor('clienteNome')">Cliente
+                    <i class="zmdi" ng-if="tabela.ordem === 'clienteNome'" ng-class="tabela.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                  </th>
+                  <th ng-click="ordenarPor('revendedorNome')">Revendedor
+                    <i class="zmdi" ng-if="tabela.ordem === 'revendedorNome'" ng-class="tabela.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                  </th>
+                  <th ng-click="ordenarPor('perfilNome')">Perfil
+                    <i class="zmdi" ng-if="tabela.ordem === 'perfilNome'" ng-class="tabela.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                  </th>
+                  <th ng-click="ordenarPor('data')">Data
+                    <i class="zmdi" ng-if="tabela.ordem === 'data'" ng-class="tabela.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                  </th>
+                  <th ng-click="ordenarPor('situacao')">Situação
+                    <i class="zmdi" ng-if="tabela.ordem === 'situacao'" ng-class="tabela.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                  </th>
+                  <th class="ad-th-pergunta" ng-class="{'ad-ordenavel': c.ordenavel}" ng-repeat="c in tabela.colunasPerguntas track by c.id"
+                    title="{{c.titulo}}{{c.ordenavel ? ' · clique para ordenar pela nota' : ''}}" ng-click="c.ordenavel && ordenarPor(c.chaveOrdem)">
+                    <span class="ad-pergunta-ordem" style="min-width: 20px; height: 20px; line-height: 20px; font-size: 10px;">{{$index + 1}}</span><i class="zmdi" style="margin: 0 4px 0 0;" ng-if="c.ordenavel && tabela.ordem === c.chaveOrdem" ng-class="tabela.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>{{c.titulo}}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="l in tabela.pagina">
+                  <td class="ad-nowrap"><a ng-click="aplicarUsuario(l.usuarioId, l.usuarioNome)" title="Aplicar ao filtro de usuário">{{l.usuarioNome}}</a></td>
+                  <td class="ad-nowrap" title="{{l.clienteNome}}"><a ng-click="aplicarCliente(l.clienteId, l.clienteNome)" title="Aplicar ao filtro de cliente">{{l.clienteNome}}</a></td>
+                  <td class="ad-nowrap"><a ng-click="aplicarRevendedor(l.revendedorId, l.revendedorNome)" title="Aplicar ao filtro de revendedor">{{l.revendedorNome}}</a></td>
+                  <td class="ad-nowrap"><a ng-click="aplicarPerfil(l.perfil, l.perfilNome)" title="Aplicar ao filtro de perfil">{{l.perfilNome}}</a></td>
+                  <td class="ad-nowrap">
+                    <a ng-if="l.data" ng-click="filtrarDia(l.data)" title="Filtrar por este dia">{{fmtDataHora(l.data)}}</a>
+                    <span ng-if="!l.data">—</span>
+                  </td>
+                  <td class="ad-nowrap">
+                    <span class="ad-situacao" ng-class="{'ad-respondida': l.situacao === 'Respondida', 'ad-dispensada': l.situacao === 'Dispensada', 'ad-sem': l.situacao === 'Sem resposta'}">{{l.situacao}}</span>
+                  </td>
+                  <td class="ad-resposta" ng-repeat="c in tabela.colunasPerguntas track by c.id" title="{{l.respostas[c.id]}}">{{l.respostas[c.id] || '—'}}</td>
+                </tr>
+                <tr ng-if="!tabela.pagina.length">
+                  <td colspan="20" class="text-center" style="color: #90a4ae;">Nenhum registro encontrado para "{{tabela.busca}}".</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="ad-paginacao" ng-if="tabela.filtradas.length > tabela.porPagina">
+            <span>
+              Exibindo {{fmt((tabela.paginaAtual - 1) * tabela.porPagina + 1)}}–{{fmt((tabela.paginaAtual - 1) * tabela.porPagina + tabela.pagina.length)}}
+              de {{fmt(tabela.filtradas.length)}}
+            </span>
+            <span>
+              <button class="btn btn-default" ng-click="irParaPagina(1)" ng-disabled="tabela.paginaAtual === 1"><i class="zmdi zmdi-skip-previous"></i></button>
+              <button class="btn btn-default" ng-click="irParaPagina(tabela.paginaAtual - 1)" ng-disabled="tabela.paginaAtual === 1"><i class="zmdi zmdi-chevron-left"></i></button>
+              <button class="btn btn-default" ng-repeat="p in paginasVisiveis()" ng-class="{'ativo': p === tabela.paginaAtual}" ng-click="irParaPagina(p)">{{p}}</button>
+              <button class="btn btn-default" ng-click="irParaPagina(tabela.paginaAtual + 1)" ng-disabled="tabela.paginaAtual === tabela.totalPaginas"><i class="zmdi zmdi-chevron-right"></i></button>
+              <button class="btn btn-default" ng-click="irParaPagina(tabela.totalPaginas)" ng-disabled="tabela.paginaAtual === tabela.totalPaginas"><i class="zmdi zmdi-skip-next"></i></button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

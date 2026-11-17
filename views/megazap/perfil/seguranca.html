@@ -1,0 +1,167 @@
+<div class="container-fluid" ng-controller="PerfilController" ng-init="onInitSecurity()">
+
+
+<div class="text-center">
+
+    <button
+        ng-click="onGerarCodigoSuporte()"
+        class="btn btn-info waves-effect">
+        <i class="zmdi zmdi-lock m-r-5"></i>
+        Gerar código de suporte
+    </button>
+
+    <button
+        ng-click="onRedirectToChangePasswordPage()"
+        class="m-l-10 btn btn-default waves-effect m-r-5">
+        <i class="zmdi zmdi-key"></i>
+        Trocar senha
+    </button>
+
+    <button
+        ng-click="onModalSelectAuthType()"
+        title="Gerar QR Code Authenticator"
+        class="m-l-10 btn bgm-green waves-effect">
+        <i class="zmdi zmdi-shield-security m-r-5"></i>
+        Dupla autenticação
+    </button>
+
+</div>
+
+
+<!-- SESSÕES ATIVAS -->
+<div>
+
+    <h4>Sessões ativas</h4>
+
+    <br>
+
+    <div class="row">
+
+        <div
+            class="col-sm-3"
+            ng-repeat="session in registro.activeSessions | filter:{data:{tokenType:'SESSION'}}">
+
+            <div class="card">
+
+                <div class="card-body card-padding">
+
+                    <h3>{{session.data.userAgent}}</h3>
+
+                    <span
+                        ng-if="session.data.tokenOrigin == 'MASTER_SESSION'"
+                        class="badge bgm-red">
+                        Master
+                    </span>
+
+                    <span
+                        ng-if="session.data.tokenOrigin == 'SUPPORT_SESSION'"
+                        class="badge bgm-blue">
+                        Suporte
+                    </span>
+
+                    <span
+                        ng-if="session.data.tokenOrigin == 'USER_SESSION' || session.data.tokenOrigin == 'LOCAL_STORAGE'"
+                        class="badge bgm-green">
+                        Normal
+                    </span>
+
+                    <br>
+                    <br>
+
+                    <b>IP:</b>
+                    {{session.data.ip}}
+
+                    <br>
+
+                    <b>Data de criação:</b>
+                    {{session.createdAt | date:'dd/MM/yyyy HH:mm'}}
+
+                    <br>
+
+                    <b>Última atividade:</b>
+                    {{session.lastAccessAt | date:'dd/MM/yyyy HH:mm'}}
+
+                    <br>
+
+                    <b>Expiração:</b>
+                    {{session.expiredAt | date:'dd/MM/yyyy HH:mm'}}
+
+                    <br>
+                    <br>
+
+                    <div class="text-right">
+
+                        <button
+                            ng-click="finalizarSessao(session.id)"
+                            class="btn btn-danger waves-effect">
+                            Finalizar
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SESSÕES SALVAS -->
+
+<div ng-if="(registro.activeSessions | filter:{data:{tokenType:'LOCAL_STORAGE'}}).length">
+
+    <h4>Sessões salvas</h4>
+
+    <br>
+
+    <div class="row">
+
+        <div
+            class="col-sm-3"
+            ng-repeat="session in registro.activeSessions | filter:{data:{tokenType:'LOCAL_STORAGE'}}">
+
+            <div class="card">
+
+                <div class="card-body card-padding">
+
+                    <h3>{{session.data.userAgent}}</h3>
+
+                    <br>
+
+                    <b>IP:</b>
+                    {{session.data.ip}}
+
+                    <br>
+
+                    <b>Data de criação:</b>
+                    {{session.createdAt | date:'dd/MM/yyyy HH:mm'}}
+
+                    <br>
+                    <br>
+
+                    <div class="text-right">
+
+                        <button
+                            ng-click="finalizarSessao(session.id)"
+                            class="btn btn-danger waves-effect">
+                            Finalizar
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</div>

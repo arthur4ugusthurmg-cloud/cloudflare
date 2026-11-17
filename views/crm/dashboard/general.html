@@ -1,0 +1,385 @@
+<link href="css/crm.css?VERSION_HASH" rel="stylesheet" />
+<div class="container-fluid" data-ng-controller="CrmDashboardGeneralController" ng-init="onInit()">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <div class="card" style="margin-bottom: 22px; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
+        <div class="card-header ch-alt">
+            <h2>{{'GERAL'|translate}}
+                <button ng-if="hasTutorial('158')" ng-click="showTutorial('158')"
+                    title="Clique aqui para visualizar o video de explicação."
+                    class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                    <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                </button>
+            </h2>
+            <button ng-click="downloadPDF()" title="{{'BAIXAR'|translate}}" class="btn bgm-teal btn-float btn-float-2 waves-effect">
+                <i class="zmdi fas fa-file-download"></i>
+            </button>
+            <button title="{{'PESQUISAR'|translate}}" class="btn bgm-blue btn-float btn-float-2 waves-effect" ng-click="getData()">
+                <i class="zmdi zmdi-search"></i>
+            </button>
+        </div>
+
+        <!-- FILTRO -->
+
+        <div class="card-body card-padding">
+            <br />
+            <div class="row">
+
+                <div ng-class="{'col-sm-4': isGestor() || isSupervisorChatbot(), 'col-sm-8': isAtendente()}">
+                    <div class="form-group fg-float m-b-20">
+                        <div class="fg-line fg-toggled">
+                            <div class="select">
+                                <select class="form-control input-lg select-simples" ng-model="filter.crmBoardId" ng-change="getData()">
+                                    <option value="{{board.id}}" ng-repeat="board in boards">{{board.name}}</option>
+                                </select>
+                                <label class="fg-label">{{'FLUXO'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4" ng-if="isGestor() || isSupervisorChatbot()">
+                    <div class="form-group fg-float m-b-20">
+                        <div class="fg-line fg-toggled">
+                            <div class="select">
+                                <select class="form-control fg-input input-lg" ng-model="filter.confUsuarioId" ng-change="getData()">
+                                    <option value="0">{{'TODOS'|translate}}</option>
+                                    <option value="{{user.id}}" ng-repeat="user in users">{{user.nome}}</option>
+                                </select>
+                                <label class="fg-label">{{'USUARIO'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="date-picker dp-blue form-group fg-float m-b-20" ng-class="{'is-opened': startDatePicker == true}">
+                        <div class="fg-line fg-toggled">
+                            <input lta-enter="getData()" ng-click="startDatePicker = true" type="text" class="form-control input-lg" show-weeks="false" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" on-open-focus="false" model-view-value="true" is-open="startDatePicker" close-text="Fechar" current-text="Hoje" ng-model="filter.dateFromAux">
+                            <label class="fg-label">{{'DATA-DE'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="date-picker dp-blue form-group fg-float m-b-20" ng-class="{'is-opened': endDatePicker == true}">
+                        <div class="fg-line fg-toggled">
+                            <input lta-enter="getData()" ng-click="endDatePicker = true" type="text" class="form-control input-lg" show-weeks="false" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" on-open-focus="false" model-view-value="true" is-open="endDatePicker" close-text="Fechar" current-text="Hoje" ng-model="filter.dateUntilAux">
+                            <label class="fg-label">{{'DATA-ATE'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PIPELINE -->
+
+    <div class="block-header m-t-20" style="margin-left: 7px; margin-bottom: 15px;">
+        <h2>
+            Pipeline
+            <small>{{'INFO-TEMPO-REAL'|translate}}</small>
+        </h2>
+    </div>
+
+    <div style="margin-left: -8px; margin-right: -8px;">
+        <div class="col-md-12">
+
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="card-body" style="padding: 0px;">
+                    <div class="container-crm-pipeline" style="border-radius: 8px;">
+                        <div class="deal-stage-pipeline arrow-border" ng-repeat="list in pipeline">
+
+                            <div class="pipeline-subhead" title="{{list.name}}">{{list.name}}</div>
+                            <div class="pipeline-title">{{list.countCards}}</div>
+                            <div class="pipeline-recorrencia">
+
+                                <div class="recorrencia-unico" title="{{'SINGLE'|translate}}">
+                                    <div class="recorrencia-item">
+                                        <i class="fas fa-circle"></i>
+                                        <div>{{list.totalSinglePrice || 0 | currency: ''}}</div>
+                                    </div>
+                                </div>
+
+                                <div class="recorrencia-recorrente" title="{{'RECURRENT'|translate}}">
+                                    <div class="recorrencia-item">
+                                        <i class="fas fa-circle"></i>
+                                        <div>{{list.totalRecurrentPrice || 0 | currency: ''}}</div>
+                                    </div>
+                                </div>
+
+                                <div class="recorrencia-recorrente" title="{{'TOTAL'|translate}}">
+                                    <div class="recorrencia-item">
+                                        <i class="fas fa-circle"></i>
+                                        <div>{{(list.totalSinglePrice + list.totalRecurrentPrice) || 0 | currency: ''}}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KPI: CARDS -->
+
+    <div class="title-card-dashboard" style="margin-left: 7px;">
+        <h2>{{'QUANTIDADES'|translate}}</h2>
+    </div>
+
+    <div class="dashboard-indicadores m-b-20">
+
+        <div class="row" style="margin-left: -7px; margin-right: -7px;">
+
+            <!-- TOTAL DE CARDS -->
+
+            <div class="col-md-4">
+                <div class="indicador-item" style="background-color: #7D67DA; max-height: none !important">
+                    <i class="fas fa-clipboard-list"></i>
+
+                    <div class="indicador-informacoes">
+                        <small>{{'CREATED'|translate}}</small>
+                        <br/>
+                        <i>{{'COM-BASE-CRIACAO'|translate}}</i>
+                        <h2>{{((quantityKpi.created.countCards) || 0) | number}}</h2>
+                    </div>
+
+                    <hr />
+
+                    <div class="indicador-informacoes" style="padding: 15px 12px 15px 12px !important;">
+                        <div>{{'VALOR-UNICO'|translate}}: <b>{{(quantityKpi.created.totalSinglePrice || 0) | currency: ''}}</b></div>
+                        <div>{{'VALOR-RECORRENTE'|translate}}: <b>{{(quantityKpi.created.totalRecurrentPrice || 0) | currency: ''}}</b>
+                        </div>
+                        <div>{{'TOTAL-VALOR'|translate}}: <b>{{(quantityKpi.created.totalSinglePrice +
+                                quantityKpi.created.totalRecurrentPrice || 0) | currency: ''}}</b></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TOTAL DE CARDS AGUARDANDO -->
+
+            <div class="col-md-4">
+                <div class="indicador-item" style="background-color: #0288D1; max-height: none !important">
+                    <i class="fas fa-user-clock"></i>
+
+                    <div class="indicador-informacoes">
+                        <small>{{'AGUARDANDO'|translate}}</small>
+                        <br/>
+                        <i>{{'COM-BASE-CRIACAO'|translate}}</i>
+                        <h2>{{((quantityKpi.waiting.countCards) || 0) | number}}</h2>
+                    </div>
+
+                    <hr />
+
+                    <div class="indicador-informacoes" style="padding: 15px 12px 15px 12px !important;">
+                        <div>{{'VALOR-UNICO'|translate}}: <b>{{(quantityKpi.waiting.totalSinglePrice || 0) | currency: ''}}</b></div>
+                        <div>{{'VALOR-RECORRENTE'|translate}}: <b>{{(quantityKpi.waiting.totalRecurrentPrice || 0) | currency: ''}}</b>
+                        </div>
+                        <div>{{'TOTAL-VALOR'|translate}}: <b>{{(quantityKpi.waiting.totalSinglePrice +
+                                quantityKpi.waiting.totalRecurrentPrice || 0) | currency: ''}}</b></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TOTAL DE CARDS FINALIZADOS -->
+
+            <div class="col-md-4">
+                <div class="indicador-item" style="background-color: #555555; max-height: none !important">
+                    <i class="fas fa-check"></i>
+
+                    <div class="indicador-informacoes">
+                        <small>{{'FINALIZADOS'|translate}}</small>
+                        <br/>
+                        <i>{{'COM-BASE-FLUXO-FINALIZADO'|translate}}</i>
+                        <h2>{{((quantityKpi.closed.countCards) || 0) | number}}</h2>
+                    </div>
+
+                    <hr />
+
+                    <div class="indicador-informacoes" style="padding: 15px 12px 15px 12px !important;">
+                        <div>{{'VALOR-UNICO'|translate}}: <b>{{(quantityKpi.closed.totalSinglePrice || 0) | currency: ''}}</b></div>
+                        <div>{{'VALOR-RECORRENTE'|translate}}: <b>{{(quantityKpi.closed.totalRecurrentPrice || 0) | currency: ''}}</b>
+                        </div>
+                        <div>{{'TOTAL-VALOR'|translate}}: <b>{{(quantityKpi.closed.totalSinglePrice + quantityKpi.closed.totalRecurrentPrice
+                                || 0) | currency: ''}}</b></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOTAL DE CARDS ACEITOS -->
+
+            <div class="col-md-6">
+                <div class="indicador-item" style="background-color: #0097A7; max-height: none !important">
+                    <i class="far fa-thumbs-up"></i>
+
+                    <div class="indicador-informacoes">
+                        <small>{{'ACCEPT'|translate}}</small>
+                        <br/>
+                        <i>{{'COM-BASE-FLUXO-ACEITO'|translate}}</i>
+                        <h2>{{((quantityKpi.accept.countCards) || 0) | number}}</h2>
+                    </div>
+
+                    <hr />
+
+                    <div class="indicador-informacoes" style="padding: 15px 12px 15px 12px !important;">
+                        <div>{{'VALOR-UNICO'|translate}}: <b>{{(quantityKpi.accept.totalSinglePrice || 0) | currency: ''}}</b></div>
+                        <div>{{'VALOR-RECORRENTE'|translate}}: <b>{{(quantityKpi.accept.totalRecurrentPrice || 0) | currency: ''}}</b>
+                        </div>
+                        <div>{{'TOTAL-VALOR'|translate}}: <b>{{(quantityKpi.accept.totalSinglePrice +
+                                quantityKpi.accept.totalRecurrentPrice || 0) | currency: ''}}</b></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOTAL DE CARDS PERDIDOS -->
+
+            <div class="col-md-6">
+                <div class="indicador-item" style="background-color: #d96565; max-height: none !important">
+                    <i class="far fa-thumbs-down"></i>
+
+                    <div class="indicador-informacoes">
+                        <small>{{'LOST'|translate}}s</small>
+                        <br/>
+                        <i>{{'COM-BASE-FLUXO-PERDIDO'|translate}}</i>
+                        <h2>{{((quantityKpi.lost.countCards) || 0) | number}}</h2>
+                    </div>
+
+                    <hr />
+
+                    <div class="indicador-informacoes" style="padding: 15px 12px 15px 12px !important;">
+                        <div>{{'VALOR-UNICO'|translate}}: <b>{{(quantityKpi.lost.totalSinglePrice || 0) | currency: ''}}</b></div>
+                        <div>{{'VALOR-RECORRENTE'|translate}}: <b>{{(quantityKpi.lost.totalRecurrentPrice || 0) | currency: ''}}</b>
+                        </div>
+                        <div>{{'TOTAL-VALOR'|translate}}: <b>{{(quantityKpi.lost.totalSinglePrice + quantityKpi.lost.totalRecurrentPrice
+                                || 0) | currency: ''}}</b></div>
+                    </div>
+                </div>
+            </div>            
+
+        </div>
+
+    </div>
+
+    <!-- GRÁFICO POR DIA -->
+
+    <div class="row" style="margin-left: -7px; margin-right: -7px;">
+        <div class="col-sm-12">
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="card-body" style="padding: 20px;">
+                    <canvas id="quantityPerDay" height="300"></canvas>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- KPI: CARDS -->
+
+    <!-- <div class="block-header" style="margin-left: 7px; margin-bottom: 15px;">
+        <h2>Valores</h2>
+    </div> -->
+
+    <!-- <div class="card" style="margin-bottom: 20px; margin-left: 8px; margin-right: 8px; margin-top: 10px;">
+
+        <div class="card-body card-padding">
+            <br />
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group fg-float m-b-20 text-center" style="line-height: 40px;">
+                        <div class="fg-line fg-toggled">
+                            <select class="form-control input-lg select-simples" ng-model="filter.crmCardAcceptStatus"
+                                ng-change="getPriceData()">
+                                <option value="WIN">{{'WIN'|translate}}</option>
+                                <option value="PENDING">{{'PENDING'|translate}}</option>
+                                <option value="LOST">{{'LOST'|translate}}s</option>
+                            </select>
+                            <label class="fg-label">{{'STATUS'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group fg-float m-b-20 text-center" style="line-height: 40px;">
+                        <div class="fg-line fg-toggled">
+                            <select class="form-control input-lg select-simples" ng-model="filter.crmCardPriceType"
+                                ng-change="getPriceData()">
+                                <option value="ALL">{{'TODOS'|translate}}</option>
+                                <option value="SINGLE">{{'SINGLE'|translate}}</option>
+                                <option value="RECURRENT">{{'RECURRENT'|translate}}</option>
+                            </select>
+                            <label class="fg-label">Tipo de Valor</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div> -->
+
+    <!-- <div class="dashboard-indicadores m-b-20" style="margin-left: 8px; margin-right: 8px;">
+
+        <div class="row">
+
+            <div class="col-lg-4 col-md-12">
+                <div class="indicador-item" style="background-color: #0288D1">
+                    <i class="fas fa-boxes"></i>
+
+                    <div class="indicador-informacoes">
+                        <small>{{'QUANTIDADE'|translate}}</small>
+                        <h2>{{(priceKpi.countCards || 0) | number}}</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-12">
+                <div class="indicador-item" style="background-color: #15B1B2">
+                    <i class="fas fa-wallet"></i>
+
+                    <div class="indicador-informacoes">
+                        <small>{{'TOTAL-VALOR'|translate}}</small>
+                        <h2>{{(priceKpi.totalPrice || 0) | currency: ''}}</h2>
+                        <br>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-12">
+                <div class="indicador-item" style="background-color: #78909C">
+                    <i class="fas fa-ticket-alt"></i>
+
+                    <div class="indicador-informacoes">
+                        <small>Ticket Médio</small>
+                        <h2>{{(priceKpi.totalPrice / priceKpi.countCards || 0) | currency: ''}}</h2>
+                        <br>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div> -->
+
+    <!-- GRÁFICO POR DIA -->
+
+    <!-- <div class="row" style="margin-left: -7px; margin-right: -7px;">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Valores por Dia</h2>
+                </div>
+                <div class="card-body" style="padding: 20px;">
+                    <canvas id="pricePerDay" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+</div>

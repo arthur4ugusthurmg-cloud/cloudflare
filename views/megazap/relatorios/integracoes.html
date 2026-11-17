@@ -1,0 +1,136 @@
+<div class="container-fluid" data-ng-controller="RelatorioIntegracoesController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>
+                {{"INTEGRACOES" | translate}}
+                <button ng-if="hasTutorial('093')" ng-click="showTutorial('093')"
+                    title="Clique aqui para visualizar o video de explicação."
+                    class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                    <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                </button>
+                <small>{{"RELATORIO-INTEGRACOES-DESC" | translate}}.</small>
+            </h2>   
+
+            <button title="{{'BUSCAR'| translate}}" class="btn bgm-blue btn-float btn-float-2 waves-effect" ng-click="getIntegracoes()"><i class="zmdi zmdi-search"></i></button>
+
+        </div>
+        <div class="card-body card-padding">
+            <br/>
+            <div class="row">       
+
+                <div class="col-sm-4">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getIntegracoes()" name="nome" type="text" class="form-control fg-input input-lg" ng-model="filtro.url">
+                            <label class="fg-label">URL</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="getIntegracoes()" class="form-control input-lg select-simples" ng-model="filtro.status">
+                                <option value="TODOS">{{"TODOS" | translate}}</option>
+                                <option value="SUCCESS">{{"SUCESSO" | translate}}</option>
+                                <option value="ERROR">{{"ERRO" | translate}}</option>
+                            </select>
+                            <label class="fg-label">{{ "STATUS" | translate }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="getIntegracoes()" class="form-control input-lg select-simples" ng-model="filtro.origin">
+                                <option value="TODOS">{{"TODOS" | translate}}</option>
+                                <option value="MENU">Menu</option>
+                                <option value="JADI">Jadi</option>
+                                <!-- <option value="WEBHOOK">Webhook</option> -->
+                                <option value="SCHEDULED_MESSAGE">{{"MENSAGENS-PROGRAMADAS" | translate}}</option>
+                            </select>
+                            <label class="fg-label">{{ "ORIGEM" | translate }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getIntegracoes()" type="text" class="form-control ng-isolate-scope input-lg" data-input-mask="{mask: '00/00/0000'}" maxlength="10" autocomplete="off" ng-model="filtro.dataCriacaoDe">
+                            <label class="fg-label">{{"DATA-CRIACAO-DE" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getIntegracoes()" type="text" class="form-control ng-isolate-scope input-lg" data-input-mask="{mask: '00/00/0000'}" maxlength="10" autocomplete="off" ng-model="filtro.dataCriacaoAte">
+                            <label class="fg-label">{{"DATA-CRIACAO-ATE" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <br/>
+            <div class="row">    
+
+                <div class="col-sm-12">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getIntegracoes()" name="nome" type="text" class="form-control fg-input input-lg" ng-model="filtro.requestPayload">
+                            <label class="fg-label">Payload (Request)</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="registros.length > 0" class="card">
+        <div class="card-body">
+            <div>
+                <table id="content-table" class="table table-striped table-vmiddle">
+                    <thead>
+                        <tr>
+                            <th style="width: 1%">Status</th>
+                            <th>URL</th>
+                            <th>Origem</th>
+                            <th>{{"MENSAGEM" | translate}}</th>
+                            <th style="width: 1%;">{{"DATA" | translate}}</th>
+                            <th style="width: 1%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="registro in registros">
+                            <td style='white-space: nowrap; text-align: center'>
+                                <div ng-if="registro.status === 'SUCCESS'" class="status-td bgm-green c-white">{{"SUCESSO" | translate}}</div>
+                                <div ng-if="registro.status === 'ERROR'" class="status-td bgm-red c-white">{{"ERRO" | translate}}</div>
+                            </td>
+                            <td style="word-break: break-all">
+                                {{ registro.url}}
+                            </td>
+                            <td style="text-transform: uppercase;">
+                                {{ registro.origin | translate}}
+                            </td>
+                            <td>
+                                {{ registro.error}}
+                            </td>
+                            <td class="text-nowrap" >
+                                {{ registro.createdAt | date:"dd/MM/yyyy HH:mm"}}
+                            </td>
+                            <td class="text-center" style="white-space: nowrap">
+                                <button ng-click="showDetails(registro)" class="btn btn-default waves-effect"><i class="zmdi zmdi-search"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>                        
+        </div>        
+    </div>
+
+    <div ng-if="showMore" class="text-center p-b-30">
+        <button ng-click="getIntegracoes(true)" class="btn btn-default waves-effect"><i class="zmdi zmdi-refresh"></i> {{"MAIS" | translate}}</button>
+    </div>
+
+</div>

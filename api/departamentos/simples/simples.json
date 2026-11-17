@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "nome": "Comercial",
+    "status": "ACTIVE"
+  },
+  {
+    "id": 2,
+    "nome": "Suporte",
+    "status": "ACTIVE"
+  },
+  {
+    "id": 3,
+    "nome": "Financeiro",
+    "status": "ACTIVE"
+  },
+  {
+    "id": 4,
+    "nome": "Atendimento",
+    "status": "ACTIVE"
+  },
+  {
+    "id": 5,
+    "nome": "Administrativo",
+    "status": "ACTIVE"
+  }
+]

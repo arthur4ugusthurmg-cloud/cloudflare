@@ -1,0 +1,332 @@
+<div class="container-fluid" data-ng-controller="GrupoPerguntaDepartamentosController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>{{canal.grupoPerguntaNome}} - {{'DEPARTAMENTOS'|translate}}</h2>
+
+            <br />
+
+            <img ng-if="canal.tipo == 'SITE'" class="m-r-10" style="width: 33px" src="img/atendimento/site.png" />
+            <img ng-if="canal.tipo == 'FACEBOOK'" class="m-r-10" style="width: 33px" src="img/atendimento/fb-messenger.png" />
+            <img ng-if="canal.tipo == 'WHATSAPP'" class="m-r-10" style="width: 33px" src="img/atendimento/wa-messenger.png" />
+            <img ng-if="canal.tipo == 'TELEGRAM'" class="m-r-10" style="width: 33px" src="img/atendimento/telegram.png" />
+            <img ng-if="canal.tipo == 'EMAIL'" class="m-r-10" style="width: 33px" src="img/atendimento/email.png" />
+
+            <span>{{canal.descricao}}</span>
+
+            <button ng-click="onSelecionarTodosDepartamentos(true)" class="btn bgm-green btn-float btn-float-two waves-effect pull-right"><i class="zmdi zmdi-check-square"></i></button>
+            <button ng-click="onSelecionarTodosDepartamentos(false)" class="btn bgm-red btn-float waves-effect pull-right"><i class="zmdi zmdi-minus-square"></i></button>
+        </div>
+
+        <div class="card-body card-padding">
+
+            <div class="row m-t-30">
+
+                <div class="col-sm-6">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input ng-keyup="onFiltrar()" type="text" class="form-control fg-input input-lg" ng-model="filtro.departamento" autofocus>
+                            <label class="fg-label">{{'DEPARTAMENTO'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input ng-keyup="onFiltrar()" type="text" class="form-control fg-input input-lg" ng-model="filtro.atendente" autofocus>
+                            <label class="fg-label">{{'ATENDENTE'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-t-15">
+
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <select ng-change="onFiltrar()" class="form-control input-lg select-simples" ng-model="filtro.checkDepartamento">
+                                <option value="TODOS">{{"TODOS" | translate}}</option>
+                                <option value="true">{{"SIM" | translate}}</option>
+                                <option value="false">{{"NAO" | translate}}</option>
+                            </select>
+                            <label class="fg-label">{{"VISIBILIDADE-DEPARTAMENTOS" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <select ng-change="onFiltrar()" class="form-control input-lg select-simples" ng-model="filtro.checkAtendente">
+                                <option value="TODOS">{{"TODOS" | translate}}</option>
+                                <option value="true">{{"SIM" | translate}}</option>
+                                <option value="false">{{"NAO" | translate}}</option>
+                            </select>
+                            <label class="fg-label">{{"VISIBILIDADE-ATENDENTES" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2" ng-if="canal.tipo != 'EMAIL'">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <select ng-change="onFiltrar()" class="form-control input-lg select-simples" ng-model="filtro.checkPotenciais">
+                                <option value="TODOS">{{"TODOS" | translate}}</option>
+                                <option value="true">{{"SIM" | translate}}</option>
+                                <option value="false">{{"NAO" | translate}}</option>
+                            </select>
+                            <label class="fg-label">{{"CHAT-POTENCIAIS" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2" ng-if="canal.tipo == 'WHATSAPP'">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <select ng-change="onFiltrar()" class="form-control input-lg select-simples" ng-model="filtro.checkRetornos">
+                                <option value="TODOS">{{"TODOS" | translate}}</option>
+                                <option value="true">{{"SIM" | translate}}</option>
+                                <option value="false">{{"NAO" | translate}}</option>
+                            </select>
+                            <label class="fg-label">{{"RETORNOS" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <select ng-change="onFiltrar()" class="form-control input-lg select-simples" ng-model="filtro.checkParticipantes">
+                                <option value="TODOS">{{"TODOS" | translate}}</option>
+                                <option value="true">{{"SIM" | translate}}</option>
+                                <option value="false">{{"NAO" | translate}}</option>
+                            </select>
+                            <label class="fg-label">{{"PARTICIPANTES" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2" ng-if="canal.tipo == 'WHATSAPP'">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <select ng-change="onFiltrar()" class="form-control input-lg select-simples" ng-model="filtro.checkMensagensProgramadas">
+                                <option value="TODOS">{{"TODOS" | translate}}</option>
+                                <option value="true">{{"SIM" | translate}}</option>
+                                <option value="false">{{"NAO" | translate}}</option>
+                            </select>
+                            <label class="fg-label">{{"MENSAGENS-PROGRAMADAS" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div ng-repeat="departamento in departamentos" ng-show="departamento.visivel">
+        <div class="card">
+            <div class="card-header ch-alt">
+
+                <div class="m-b-30">
+                    <h2>{{departamento.departamentoNome}}</h2>
+                </div>
+
+                <!-- VISIVEL-BOT -->
+
+                <div class="checkbox m-t-15" ng-if="canal.tipo !== 'EMAIL'">
+                    <label>
+                        <input type="checkbox" data-ng-model="departamento.grupoPerguntaDepartamentoDisponivel">
+                        <i class="input-helper"></i>
+                        <span>{{"VISIVEL-BOT" | translate}}</span>
+                    </label>
+                </div>
+
+                <!-- DISTRIBUIR-ATENDIMENTOS -->
+
+                <div class="checkbox m-t-15">
+                    <label>
+                        <input type="checkbox" data-ng-model="departamento.grupoPerguntaDepartamentoDistribuirAtendimentos" ng-change="updateDistribuirAtendimento(departamento)">
+                        <i class="input-helper"></i>
+                        <span>{{'DISTRIBUIR-ATENDIMENTOS' | translate}}</span>
+                    </label>
+                </div>
+
+                <div class="form-group fg-float m-t-35" ng-if="departamento.grupoPerguntaDepartamentoDistribuirAtendimentos">
+
+                    <div class="fg-line">
+                        <select class="form-control input-lg select-simples" ng-model="departamento.grupoPerguntaDepartamentoDistribuirAtendimentosRegra">
+                            <option value="TODOS">{{'ATENDENTES-ONLINE-OFFLINE' | translate}}</option>
+                            <option value="ONLINE">{{"APENAS-ATENDENTES-ONLINE" | translate}}</option>
+                        </select>
+                        <label class="fg-label">{{'REGRA-DISTRIBUICAO' | translate}}</label>
+                    </div>
+
+                </div>
+
+                <div class="form-group fg-float m-t-35" ng-if="departamento.grupoPerguntaDepartamentoDistribuirAtendimentos && departamento.grupoPerguntaDepartamentoDistribuirAtendimentosRegra == 'ONLINE'">
+
+                    <div class="fg-line">
+                        <select class="form-control input-lg select-simples" ng-model="departamento.grupoPerguntaDepartamentoDistribuirAtendimentosRegraOnline">
+                            <option value="TODOS">{{"DISTRIBUIR-NORMALMENTE" | translate}}</option>
+                            <option value="DEPARTAMENTO">{{"DISTRIBUIR-DEPARTAMENTO" | translate}}</option>
+                        </select>
+                        <label class="fg-label">{{"DISTRIBUIR-CASO-ATENDENTES-OFFLINE" | translate}}</label>
+                    </div>
+
+                </div>
+
+                <!-- CARTEIRA-CONTATOS -->
+
+                <div class="checkbox m-t-15" ng-class="{'m-t-30': departamento.grupoPerguntaDepartamentoDistribuirAtendimentos}">
+                    <label>
+                        <input type="checkbox" data-ng-model="departamento.grupoPerguntaDepartamentoCarteiraContatos">
+                        <i class="input-helper"></i>
+                        <span>{{'CARTEIRA-CONTATOS' | translate}}</span>
+                    </label>
+                </div>
+
+                <div class="form-group fg-float m-t-35" ng-if="departamento.grupoPerguntaDepartamentoCarteiraContatos">
+                    <div class="fg-line">
+                        <select class="form-control input-lg select-simples" ng-model="departamento.grupoPerguntaDepartamentoCarteiraContatosRegraOffline">
+                            <option value="ATENDENTE">{{"PERMANECER-COM-ATENDENTE" | translate}}</option>
+                            <option value="DEPARTAMENTO">{{"DISTRIBUIR-DEPARTAMENTO" | translate}}</option>
+                            <option ng-if="departamento.grupoPerguntaDepartamentoDistribuirAtendimentos" value="DISTRIBUICAO">Seguir a regra de distribuição de atendimentos</option>
+                        </select>
+                        <label class="fg-label">{{"CARTEIRA-CASO-ATENDENTE-OFFLINE" | translate}}</label>
+                    </div>
+
+                </div>
+
+                <div class="form-group fg-float m-t-35" ng-if="departamento.grupoPerguntaDepartamentoCarteiraContatos">
+                    <div class="fg-line">
+                        <select class="form-control input-lg select-simples" ng-model="departamento.grupoPerguntaDepartamentoCarteiraContatosRegraInativo">
+                            <option value="ATENDENTE">{{"PERMANECER-COM-ATENDENTE-RESPONSAVEL" | translate}}</option>
+                            <option value="DEPARTAMENTO">{{"DISTRIBUIR-DEPARTAMENTO" | translate}}</option>
+                            <option ng-if="departamento.grupoPerguntaDepartamentoDistribuirAtendimentos" value="DISTRIBUICAO">Seguir a regra de distribuição de atendimentos</option>
+                        </select>
+                        <label class="fg-label">{{"CARTEIRA-CASO-ATENDENTE-INATIVO" | translate}}</label>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card-body">
+
+                <table class="table table-striped">
+
+                    <thead>
+                        <tr>
+                            <th style="width: 50%; padding-left: 23px;">
+                                <div class="checkbox">
+                                    <label>
+                                        <input ng-change="onSelecionarTodosAtendentes(departamento)" type="checkbox" data-ng-model="departamento.algumAtendenteSelecionado">
+                                        <i class="input-helper"></i>
+                                        <b>Atendente</b>
+                                    </label>
+                                </div>
+                            </th>
+                            <th ng-if="canal.tipo != 'EMAIL'" class="text-center" style="width: 10%">
+                                <label class="cursor-pointer" for="checkPotenciais">Potenciais</label>
+                                <div class="checkbox" style="display: flex; justify-content: center;">
+                                    <label>
+                                        <input id="checkPotenciais" ng-change="onSelecionarTodosPotenciais(departamento)" type="checkbox" data-ng-model="departamento.algumPotencialSelecionado">
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                            </th>
+                            <th ng-if="canal.tipo == 'WHATSAPP'" class="text-center" style="width: 10%">
+                                <label class="cursor-pointer" for="checkRetornos">Retornos</label>
+                                <div class="checkbox" style="display: flex; justify-content: center;">
+                                    <label>
+                                        <input id="checkRetornos" ng-change="onSelecionarTodosRetornos(departamento)" type="checkbox" data-ng-model="departamento.algumRetornoSelecionado">
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                            </th>
+                            <th class="text-center" style="width: 10%">
+                                <label class="cursor-pointer" for="checkParticipantes">Participantes</label>
+                                <div class="checkbox" style="display: flex; justify-content: center;">
+                                    <label> <input id="checkParticipantes" ng-change="onSelecionarTodosParticipantes(departamento)" type="checkbox" data-ng-model="departamento.algumParticipanteSelecionado">
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                            </th>
+                            <th ng-if="canal.tipo == 'WHATSAPP'" class="text-center" style="width: 20%">
+                                <label class="cursor-pointer" for="checkMensagensProgramadas">Mensagens Programadas</label>
+                                <div class="checkbox" style="display: flex; justify-content: center;">
+                                    <label>
+                                        <input id="checkMensagensProgramadas" ng-change="onSelecionarTodasMensagensProgramadas(departamento)" type="checkbox" data-ng-model="departamento.algumMensagemProgramadaSelecionado">
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr ng-repeat="atendente in departamento.atendentes" ng-show="atendente.visivel">
+                            <td style="padding-left: 23px;">
+                                <div class="checkbox">
+                                    <label>
+                                        <input ng-click="onSelecionarAtendente(departamento, atendente)" type="checkbox" data-ng-model="atendente.selecionado">
+                                        <i class="input-helper"></i>
+                                        <span>
+                                            {{atendente.nome}}
+                                            <i title="É o próximo da fila de atendimentos" ng-if="departamento.grupoPerguntaDepartamentoDistribuirAtendimentos && atendente.proximoAtendimento" class="zmdi zmdi-alarm-check m-l-5" style="font-size: 14px;"></i>
+                                        </span>
+                                    </label>
+                                </div>
+                            </td>
+                            <td ng-if="canal.tipo != 'EMAIL'">
+                                <div class="checkbox" style="display: flex; justify-content: center;">
+                                    <label>
+                                        <input type="checkbox" ng-click="atualizarFlags(departamento)" data-ng-model="atendente.potenciais">
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                            </td>
+                            <td ng-if="canal.tipo == 'WHATSAPP'">
+                                <div class="checkbox" style="display: flex; justify-content: center;">
+                                    <label>
+                                        <input type="checkbox" ng-click="atualizarFlags(departamento)" data-ng-model="atendente.retornos">
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="checkbox" style="display: flex; justify-content: center;">
+                                    <label>
+                                        <input type="checkbox" ng-click="atualizarFlags(departamento)" data-ng-model="atendente.participantesAtendimento">
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                            </td>
+                            <td ng-if="canal.tipo == 'WHATSAPP'">
+                                <div class="checkbox" style="display: flex; justify-content: center;">
+                                    <label>
+                                        <input type="checkbox" ng-click="atualizarFlags(departamento)" data-ng-model="atendente.mensagensProgramadas">
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+
+            </div>
+        </div>
+
+    </div>
+
+    <button ng-click="onSalvar()" class="btn btn-float bgm-blue m-btn waves-effect waves-circle"><i class="zmdi zmdi-floppy"></i></button>
+
+</div>

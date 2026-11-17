@@ -1,0 +1,36 @@
+<div class="modal-header" ng-init="onInit()">
+    <h3>
+        {{'CANAIS-SUPORTE'}}
+        <small>{{'CANAIS-SUPORTE-DESCRICAO'}}</small>
+    </h3>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-sm-12">
+            <div style="font-size: 46px; margin-bottom: 15px; padding: 0 30px;;">
+                <a ng-style="{'color': customizacao.corPrimaria}" style="display: block;" ng-if="customizacao.contatoFacebook" href="{{customizacao.contatoFacebook}}">
+                    <i class="fab fa-facebook-messenger"></i>
+                    <span ng-style="{'color': customizacao.corPrimaria}" style="font-size: 20px; vertical-align: middle;">{{customizacao.contatoFacebook}}</span>
+                </a>
+                <a ng-style="{'color': customizacao.corPrimaria}" style="display: block;" ng-if="customizacao.contatoTelegram" href="{{customizacao.contatoTelegram}}">
+                    <i class="fab fa-telegram"></i>
+                    <span ng-style="{'color': customizacao.corPrimaria}" style="font-size: 20px; vertical-align: middle;">{{customizacao.contatoTelegram}}</span>
+                </a>
+                <a ng-style="{'color': customizacao.corPrimaria}" style="display: block;" ng-if="customizacao.contatoSkype" href="{{customizacao.contatoSkype}}">
+                    <i class="fab fa-skype"></i>
+                    <span ng-style="{'color': customizacao.corPrimaria}" style="font-size: 20px; vertical-align: middle;">{{customizacao.contatoSkype}}</span>
+                </a>
+                <span ng-style="{'color': customizacao.corPrimaria}" style="display: block;" ng-if="customizacao.contatoTelefone1 || customizacao.contatoTelefone2 || customizacao.contatoTelefone3">
+                    <i class="fas fa-phone-alt" style="text-align: center; margin-bottom: 10px"></i>
+                    <a ng-style="{'color': customizacao.corPrimaria}" ng-if="customizacao.contatoTelefone1" style="font-size: 20px; vertical-align: middle;" href="tel:{{customizacao.contatoTelefone1}}">{{customizacao.contatoTelefone1}}</a>
+                    <a ng-style="{'color': customizacao.corPrimaria}" ng-if="customizacao.contatoTelefone2" style="font-size: 20px; vertical-align: middle;" href="tel:{{customizacao.contatoTelefone2}}">{{customizacao.contatoTelefone2}}</a>
+                    <a ng-style="{'color': customizacao.corPrimaria}" ng-if="customizacao.contatoTelefone3" style="font-size: 20px; vertical-align: middle;" href="tel:{{customizacao.contatoTelefone3}}">{{customizacao.contatoTelefone3}}</a>
+                </span>
+                <a ng-style="{'color': customizacao.corPrimaria}" style="display: block;" ng-if="customizacao.contatoEmail" ng-href="mailto:{{customizacao.contatoEmail}}">
+                    <i class="fas fa-envelope"></i>
+                    <span style="font-size: 20px; vertical-align: middle;">{{customizacao.contatoEmail}}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

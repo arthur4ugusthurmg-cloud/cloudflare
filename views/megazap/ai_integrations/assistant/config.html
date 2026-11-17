@@ -1,0 +1,997 @@
+<link href="css/ai.css?VERSION_HASH" rel="stylesheet" />
+<div class="container-fluid" data-ng-controller="AiAssistantController" ng-init="getAssistantById()">
+    <div class="card m-b-20">
+        <div class="card-header ch-alt">
+            <h2>{{ 'INFORMACOES' | translate }}
+                <button ng-if="hasTutorial('167')" ng-click="showTutorial('167')"
+                    title="Clique aqui para visualizar o video de explicação."
+                    class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                    <i class="zmdi zmdi-videocam m-r-5"></i>
+                    {{'TUTORIAL'|translate}}
+                </button>
+            </h2>
+
+            <div class="m-t-5">
+                <span>{{ 'PREENCHA-CAMPOS-INFORMACOES-ASSISTENTE' | translate }}</span>
+            </div>
+        </div>
+        <div class="card-body card-padding">
+            <div class="row m-t-10 d-flex flex-wrap align-items-center">
+                <div class="col-sm-3">
+                    <div class="form-group fg-float m-b-20">
+                        <div class="fg-line required">
+                            <select ng-disabled="assistant.id != 0 && assistant.id != undefined && assistant.id != null"
+                                class="form-control fg-input input-lg" ng-model="assistant.type">
+                                <option value="COPILOT">Copilot</option>
+                                <option value="BOT">Bot</option>
+                            </select>
+                            <label class="fg-label">{{'TIPO' | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group fg-float m-b-20">
+                        <div class="fg-line required">
+                            <select class="form-control fg-input input-lg" ng-model="assistant.clientAiId">
+                                <option value="" ng-show="!assistant.clientAiId"></option>
+                                <option ng-repeat="ai in dataAi" value="{{ai.clientAiId}}">{{ai.name}}</option>
+                            </select>
+                            <label class="fg-label">{{ 'EMPRESA_MOTOR_IA' | translate }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group fg-float m-b-20">
+                        <div class="fg-line required">
+                            <select name="model" class="form-control input-lg select-simples" ng-model="assistant.model"
+                                ng-required="true">
+                                <option ng-repeat="model in aiModels" ng-if="model.type === 'TEXT'"
+                                    value="{{model.model}}">
+                                    {{model.model}}{{model.advantages ? ' - ' + model.advantages : ''}}
+                                </option>
+                            </select>
+                            <label class="fg-label">{{'MODELS' | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2" style="display: flex; margin-bottom: 10px;">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" ng-change="getModels()" ng-model="filtroModels.all">
+                            <i class="input-helper"></i>
+                            {{ 'MOSTRAR_TODOS_MODELOS' | translate }}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="form-group fg-float m-b-20 m-t-20">
+                        <div class="fg-line required">
+                            <input type="text" class="form-control fg-input input-lg" ng-model="assistant.name"
+                                maxlength="250" required>
+                            <label class="fg-label">{{'NOME' | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="form-group fg-float m-b-20 m-t-20">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" ng-model="assistant.description"
+                                maxlength="250">
+                            <label class="fg-label">{{'DESCRICAO' | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="container-services">
+            <div class="col-sm-12">
+                <div class="card m-b-20">
+                    <div class="card-header ch-alt">
+                        <h2>{{ 'CONFIGURACAO_TEMPERATURA_TOP_P' | translate }}</h2>
+                        <div class="m-t-5">{{ 'DESCRICAO_CONFIGURACAO_TEMPERATURA_TOP_P' | translate }}</div>
+                        <button title="{{ 'EDITAR' | translate }}"
+                            class="btn bgm-blue btn-float btn-float-2 waves-effect"
+                            ng-click="openTemperatureTopPModal()">
+                            <i class="zmdi zmdi-edit"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="temp-topp-config-parent">
+                            <div class="temp-topp-item">
+                                <div class="item-label">
+                                    {{ matchTemperatureTopP(assistant.temperature, assistant.topP).label }}
+                                </div>
+                                <div class="item-descricao">
+                                    {{ matchTemperatureTopP(assistant.temperature, assistant.topP).descricao }}
+                                </div>
+                            </div>
+
+                            <div class="sliders">
+                                <div class="form-group">
+                                    <label for="temperatureRange" class="form-label d-block">
+                                        {{ 'TEMPERATURA' | translate }}: <strong>{{ assistant.temperature }}</strong> |
+                                        <small class="form-text text-muted">{{ 'DESCRICAO-TEMPERATURA' | translate
+                                            }}</small>
+                                    </label>
+                                    <input type="range" class="form-range" min="0.01" max="1" step="0.01" value="1"
+                                        id="temperatureRange" ng-model="assistant.temperature">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="topPRange" class="form-label d-block">
+                                        {{ 'TOP-P' | translate }}: <strong>{{ assistant.topP }}</strong> |
+                                        <small class="form-text text-muted">{{ 'DESCRICAO-TOP-P' | translate }}</small>
+                                    </label>
+                                    <input type="range" class="form-range" min="0.01" max="1" step="0.01" value="0.9"
+                                        id="topPRange" ng-model="assistant.topP">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="background-color: #F7F7F7;"
+        ng-class="{'m-b-10': assistant.isPublic === 'false', 'm-b-20': assistant.isPublic === 'true'}"
+        ng-if="assistant.type === 'COPILOT'">
+        <div class="card-body card-padding" style="padding: 10px 0 0px;">
+            <div class="row" style="margin-left: -6px; margin-right: -6px;">
+                <div class="col-sm-12 text-center">
+                    <div class="form-group fg-float">
+                        <div style="color: #595959; font-size: 15px;">{{'TODOS-DEPARTAMENTOS' | translate}}?</div>
+                        <div class="options-public-crm" style="justify-content: center;">
+                            <label class="label-options-crm">
+                                <input type="radio" name="isPublic" ng-model="assistant.isPublic" value="true"
+                                    ng-required="true">
+                                <div style="padding-top: 4px; font-size: 14px;">{{'SIM' | translate}}</div>
+                            </label>
+                            <label class="label-options-crm">
+                                <input type="radio" name="isPublic" ng-model="assistant.isPublic" value="false">
+                                <div style="padding-top: 4px; font-size: 14px;">{{'NAO' | translate}}</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card m-b-20" ng-if="assistant.type === 'COPILOT' && assistant.isPublic === 'false'">
+        <div class="card-header ch-alt">
+            <div style="display: flex; gap: 8px;">
+                <label class="checkbox radio-inline" style="padding-left: 0px;">
+                    <input type="checkbox" ng-model="selectAllDepartaments"
+                        ng-change="toggleAllDepartaments(selectAllDepartaments)" style="position: relative;">
+                    <i class="input-helper"></i>
+                </label>
+                <h2>
+                    {{'DEPARTAMENTOS' | translate}}
+                    <span style="color: red;">*</span>
+                </h2>
+            </div>
+            <div class="m-t-5">
+                <span>{{ 'ESCOLHER_DEPARTAMENTOS_IA' | translate }}</span>
+            </div>
+        </div>
+        <div class="card-body card-padding" style="padding: 20px;">
+            <div class="row" style="margin-left: -6px; margin-right: -6px;" ng-if="assistant.departaments.length">
+                <div class="col-xs-3" style="padding-left: 7px; padding-right: 7px;"
+                    ng-repeat="departament in assistant.departaments">
+                    <div class="kc-item" style="cursor: pointer;"
+                        ng-click="departament.selected = !departament.selected">
+                        <div class="kc-content">
+                            <h4 class="kc-titulo kc-d">
+                                {{ departament.name }}
+                            </h4>
+                        </div>
+                        <div class="kc-actions">
+                            <label class="checkbox radio-inline" style="padding-left: 0px;">
+                                <input type="checkbox" ng-model="departament.selected" style="position: relative;"
+                                    ng-click="$event.stopPropagation()">
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" ng-if="!assistant.departaments.length">
+                <div class="col-xs-12">
+                    <p class="text-muted text-center m-t-15">{{'NENHUM-REGISTRO'| translate}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card m-b-20" ng-if="assistant.type === 'BOT'">
+        <div class="card-header ch-alt">
+            <h2>Coleta de Campos de Segmentação</h2>
+            <div class="m-t-5">
+                <span>Configure quais campos o assistente deve coletar do contato antes de iniciar o atendimento.</span>
+            </div>
+            <button title="{{ 'ADICIONAR' | translate }}" class="btn bgm-teal btn-float btn-float-2 waves-effect"
+                ng-click="openModalCollectionField()">
+                <i class="zmdi zmdi-plus"></i>
+            </button>
+        </div>
+        <div class="card-body">
+            <table id="content-table" class="table table-striped table-vmiddle"
+                ng-if="assistant.collectionFields && assistant.collectionFields.length > 0">
+                <thead>
+                    <tr>
+                        <th style="width: 30%">Campo</th>
+                        <th style="width: 40%">Descrição</th>
+                        <th style="width: 15%">Obrigatório</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="field in assistant.collectionFields track by field.id">
+                        <td>{{ field.name }}</td>
+                        <td>
+                            <span class="limited-instruction">{{ field.description || '-' }}</span>
+                        </td>
+                        <td>{{ field.required ? 'Sim' : 'Não' }}</td>
+                        <td style="justify-content: end; display: flex; right: 12px; position: absolute;">
+                            <div class="options-feature dropdown" uib-dropdown="">
+                                <a href="" uib-dropdown-toggle="" aria-expanded="false"
+                                    class="dropdown-toggle" aria-haspopup="true">
+                                    <i class="zmdi zmdi-more-vert"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                        <a ng-click="openModalCollectionField(field)" href="">
+                                            {{'EDITAR' | translate}}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a ng-click="removeCollectionField(field)" href="">
+                                            {{'REMOVER' | translate}}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="row" ng-if="!assistant.collectionFields || assistant.collectionFields.length === 0">
+                <div class="col-xs-12" style="margin: 20px 0;">
+                    <p class="text-muted text-center m-t-15">
+                        Nenhum campo adicionado
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card m-b-20">
+        <div class="card-header ch-alt">
+            <h2>{{'CAMPO_CONTEXTO'| translate}}</h2>
+            <div class="m-t-5">
+                <span>Selecione quais informações do contato serão enviadas automaticamente como contexto para o
+                    assistente. Isso evita perguntas desnecessárias e melhora a qualidade das respostas.</span>
+            </div>
+        </div>
+
+        <div class="card-body card-padding">
+            <div class="row" ng-if="availableContextFields.length > 0">
+                <div class="col-sm-12">
+                    <div class="form-group fg-float m-b-20">
+                        <div class="fg-line">
+                            <select class="form-control input-lg" ng-model="contextFieldCtrl.selectedId"
+                                ng-options="field.id as field.nome for field in availableContextFields">
+                                <option value=""></option>
+                            </select>
+                            <label class="fg-label">{{'PAGE_CUSTOM_FIELDS'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <button ng-click="addContextField()" class="btn bgm-blue waves-effect pull-right">{{"ADICIONAR" | translate}}</button>
+            </div>
+
+            <table class="table" ng-if="assistant.contextFields.length > 0">
+                <thead>
+                    <tr>
+                        <th>{{"NOME" | translate}}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="field in assistant.contextFields track by field.id">
+                        <td style="vertical-align: middle">{{field.name}}</td>
+                        <td class="actions">
+                            <button ng-click="removeContextField(field)"
+                                class="btn btn-danger btn-icon waves-effect waves-circle">
+                                <i class="zmdi zmdi-close"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="text-muted text-center m-t-30" ng-if="assistant.contextFields.length === 0">
+                {{"NENHUM-REGISTRO" | translate}}
+            </p>
+        </div>
+    </div>
+
+    <div class="card m-b-20" style="background-color: #F7F7F7;" ng-if="assistant.type === 'BOT'">
+        <div class="card-body card-padding" style="padding: 10px 0 0px;">
+            <div class="row" style="margin-left: -6px; margin-right: -6px;">
+                <div class="col-sm-12 text-center">
+                    <div class="form-group fg-float">
+                        <div style="color: #595959; font-size: 15px;">
+                            {{ 'RESPOSTA_MULTIPLA_MENSAGENS' | translate }}
+                        </div>
+                        <span>{{ 'DESCRICAO_RESPOSTA_MULTIPLA_MENSAGENS' | translate }}</span>
+                        <div class="options-public-crm" style="justify-content: center;">
+                            <label class="label-options-crm">
+                                <input type="radio" name="answerInMultipleMessages"
+                                    ng-model="assistant.answerInMultipleMessages" value="true" ng-required="true">
+                                <div style="padding-top: 4px; font-size: 14px;">{{'SIM' | translate}}</div>
+                            </label>
+                            <label class="label-options-crm">
+                                <input type="radio" name="answerInMultipleMessages"
+                                    ng-model="assistant.answerInMultipleMessages" value="false">
+                                <div style="padding-top: 4px; font-size: 14px;">{{'NAO' | translate}}</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card m-b-20" style="background-color: #F7F7F7;" ng-if="assistant.type === 'BOT'">
+        <div class="card-body card-padding" style="padding: 10px 0 0px;">
+            <div class="row" style="margin-left: -6px; margin-right: -6px;">
+                <div class="col-sm-12 text-center">
+                    <div class="form-group fg-float">
+                        <div style="color: #595959; font-size: 15px;">{{ 'RECEBER_AUDIO' | translate }}</div>
+                        <div class="options-public-crm" style="justify-content: center;">
+                            <label class="label-options-crm">
+                                <input type="radio" name="botReceiveAudio" ng-model="assistant.botReceiveAudio"
+                                    value="true" ng-required="true">
+                                <div style="padding-top: 4px; font-size: 14px;">{{'SIM' | translate}}</div>
+                            </label>
+                            <label class="label-options-crm">
+                                <input type="radio" name="botReceiveAudio" ng-model="assistant.botReceiveAudio"
+                                    value="false">
+                                <div style="padding-top: 4px; font-size: 14px;">{{'NAO' | translate}}</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card m-b-20" style="background-color: #F7F7F7;" ng-if="assistant.type === 'BOT'">
+        <div class="card-body card-padding" style="padding: 10px 0 0px;">
+            <div class="row" style="margin-left: -6px; margin-right: -6px;">
+                <div class="col-sm-12 text-center">
+                    <div class="form-group fg-float">
+                        <div style="color: #595959; font-size: 15px;">
+                            {{ 'TRANSCREVER_AUDIO_AUTOMATICAMENTE' | translate }}
+                        </div>
+                        <div class="options-public-crm" style="justify-content: center;">
+                            <label class="label-options-crm">
+                                <input type="radio" name="autoTranscription" ng-model="assistant.autoTranscription"
+                                    value="true" ng-required="true">
+                                <div style="padding-top: 4px; font-size: 14px;">{{'SIM' | translate}}</div>
+                            </label>
+                            <label class="label-options-crm">
+                                <input type="radio" name="autoTranscription" ng-model="assistant.autoTranscription"
+                                    value="false">
+                                <div style="padding-top: 4px; font-size: 14px;">{{'NAO' | translate}}</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="background-color: #F7F7F7;"
+        ng-class="{'m-b-10': assistant.botReplyUsingAudio == 'true', 'm-b-20': assistant.botReplyUsingAudio == 'false'}"
+        ng-if="assistant.type === 'BOT'">
+        <div class="card-body card-padding" style="padding: 10px 0 0px;">
+            <div class="row" style="margin-left: -6px; margin-right: -6px;">
+                <div class="col-sm-12 text-center">
+                    <div class="form-group fg-float">
+                        <div style="color: #595959; font-size: 15px;">{{ 'RESPONDER_USANDO_AUDIO' | translate }}</div>
+                        <div class="options-public-crm" style="justify-content: center;">
+                            <label class="label-options-crm">
+                                <input type="radio" name="botReplyUsingAudio" ng-model="assistant.botReplyUsingAudio"
+                                    value="true" ng-required="true">
+                                <div style="padding-top: 4px; font-size: 14px;">{{'SIM' | translate}}</div>
+                            </label>
+                            <label class="label-options-crm">
+                                <input type="radio" name="botReplyUsingAudio" ng-model="assistant.botReplyUsingAudio"
+                                    value="false">
+                                <div style="padding-top: 4px; font-size: 14px;">{{'NAO' | translate}}</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-voice-all">
+        <div class="card m-b-20 col-sm-8" ng-if="assistant.type === 'BOT' && assistant.botReplyUsingAudio == 'true'"
+            style="padding: 0;">
+            <div class="card-header ch-alt">
+                <h2>{{ 'CONFIGURACOES_AUDIO' | translate }}</h2>
+                <div class="m-t-5">
+                    <span>
+                        {{ 'DEFINIR_COMO_ASSISTENTE_SE_COMUNICARA' | translate }}
+                    </span>
+                </div>
+            </div>
+            <div class="card-body card-padding">
+                <div class="contianer-voice-header">
+                    <div class="title-voice">
+                        {{ 'VOZES' | translate }}
+                    </div>
+                    <div class="line-voice"></div>
+                </div>
+                <div class="container-voice-option">
+                    <div class="option-voice" ng-repeat="voice in voices" ng-click="setActiveVoice(voice.name)">
+                        <div class="content-footer-voice">
+                            <div class="name-voice">
+                                {{voice.name}}
+                            </div>
+                            <i class="fas fa-circle icon-select" ng-class="{'active-voice': voice.active}"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="contianer-voice-header m-t-25">
+                    <div class="title-voice">
+                        {{ 'MODELS' | translate }}
+                    </div>
+                    <div class="line-voice"></div>
+                </div>
+                <div class="container-voice-option" style="grid-template-columns: repeat(5, 1fr)">
+                    <div class="option-voice" ng-repeat="vibe in vibes" ng-click="setActiveVibe(vibe.name)">
+                        <div class="content-footer-voice">
+                            <div class="name-voice">
+                                {{vibe.name}}
+                            </div>
+                            <i class="fas fa-circle icon-select" ng-class="{'active-voice': vibe.active}"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-instruction-voice">
+                    <div class="col-sm-12">
+                        <div class="form-group fg-float m-b-20 m-t-20">
+                            <div class="fg-line">
+                                <textarea
+                                    ng-change="setActiveModelByInstruction(assistant.speechConfiguration.instruction)"
+                                    class="form-control fg-input input-lg" rows="16"
+                                    ng-model="assistant.speechConfiguration.instruction"></textarea>
+                                <label class="fg-label">{{ 'INSTRUCAO' | translate }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card m-b-20 col-sm-4" ng-if="assistant.type === 'BOT' && assistant.botReplyUsingAudio == 'true'"
+            style="padding: 0;">
+            <div class="card-header ch-alt">
+                <h2>{{ 'TESTE_VOZ_TITULO' | translate }}</h2>
+                <div class="m-t-5">
+                    <span>
+                        {{ 'TESTE_VOZ_DESCRICAO' | translate }}
+                    </span>
+                </div>
+                <button title="Clique para ouvir uma prévia da voz do seu assistente"
+                    class="btn bgm-orange btn-float btn-float-2 waves-effect" ng-click="onTestVoice()">
+                    <i class="zmdi zmdi-play"></i>
+                </button>
+            </div>
+            <div class="card-body card-padding">
+                <div class="row">
+                    <div class="col-sm-12 roteiro-test-voice" style="margin-top: 15px;">
+                        <div class="form-group fg-float m-b-20 m-t-20">
+                            <div class="fg-line">
+                                <textarea class="form-control fg-input input-lg" rows="26"
+                                    ng-model="voiceTest.message"></textarea>
+                                <label class="fg-label">{{ 'ROTEIRO' | translate }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center" id="audio" style="padding-bottom: 1px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card m-b-20">
+        <div class="card-header ch-alt">
+            <h2>
+                {{'COMPORTAMENTO-DIRETRIZES' | translate}}
+                <span style="color: red;">*</span>
+            </h2>
+            <div class="m-t-5">
+                <span>{{'INFORMACOES-COMPORTAMENTAIS-DIRETRIZES' | translate}}</span>
+            </div>
+            <button title="Clique para usar os modelos de instrução de exemplo"
+                class="btn bgm-blue btn-float btn-float-2 waves-effect" ng-click="selectModuleInstruction()">
+                <i class="zmdi zmdi-assignment"></i>
+            </button>
+            <button title="{{ 'ADICIONAR' | translate }}" class="btn bgm-teal btn-float btn-float-2 waves-effect"
+                ng-click="openModalInstruction()">
+                <i class="zmdi zmdi-plus"></i>
+            </button>
+        </div>
+        <div class="card-body card-padding" style="padding: 20px;">
+            <div class="row m-t-20" ng-if="assistant.instructions.length">
+                <div class="col-xs-12" ng-repeat="instruction in assistant.instructions">
+                    <div class="kc-item">
+                        <div class="kc-icon">
+                            <i class="zmdi zmdi-comment-text"></i>
+                        </div>
+                        <div class="kc-content">
+                            <h4 class="kc-titulo">
+                                {{ instruction.title }}
+                            </h4>
+                            <p style="margin-bottom: 5px;" ng-bind-html="treatThetext(instruction.value, $index)"></p>
+                            <a href="" ng-click="toggleReadMoreAlt($index)"
+                                ng-show="validReadMore(instruction.value.length)">
+                                {{ expandedTexts[$index] ? 'Ler menos' : 'Ler mais' }}
+                            </a>
+                        </div>
+                        <div class="kc-actions">
+                            <ul class="actions">
+                                <li class="dropdown" uib-dropdown="">
+                                    <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle"
+                                        aria-haspopup="true">
+                                        <i class="zmdi zmdi-more-vert"></i>
+                                    </a>
+
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li>
+                                            <a ng-click="openModalInstruction(instruction)" href="">
+                                                {{'EDITAR'| translate}}
+                                            </a>
+                                            <a ng-click="deleteInstruction(instruction)" href="">
+                                                {{'REMOVER'| translate}}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" ng-if="!assistant.instructions.length">
+                <div class="col-xs-12">
+                    <p class="text-muted text-center m-t-15">
+                        {{ 'NENHUMA-INSTRUCAO-COMPORTAMENTAL' | translate }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-if="assistant.type === 'BOT'">
+        <div class="container-services">
+            <div class="col-sm-12">
+                <div class="card m-b-20">
+                    <div class="card-header ch-alt">
+                        <h2>
+                            {{ 'DIRECIONAMENTO-DE-ATENDIMENTOS' | translate }}
+                            <span style="color: red;">*</span>
+                        </h2>
+                        <div class="m-t-5">
+                            {{ 'UTILIZE-FUNCIONALIDADE-DIRECIONAMENTO' | translate }}
+                        </div>
+                        <button title="{{ 'ADICIONAR' | translate }}"
+                            class="btn bgm-teal btn-float btn-float-2 waves-effect"
+                            ng-click="openModalDepartmentRedirect()">
+                            <i class="zmdi zmdi-plus"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <table id="content-table" class="table table-striped table-vmiddle"
+                            ng-if="assistant.tickets.length > 0">
+                            <thead>
+                                <tr>
+                                    <th style="width: 20%">{{ 'TITULO' | translate }}</th>
+                                    <th style="width: 30%">{{ 'INSTRUCAO' | translate }}</th>
+                                    <th style="width: 15%">{{ 'LISTAR-ATENDENTES' | translate }}</th>
+                                    <th style="width: 20%">{{ 'DEPARTAMENTOS' | translate }}</th>
+                                    <th style="width: 20%">{{ 'CAMPOS-CUSTOMIZADOS' | translate }}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="registro in assistant.tickets | orderBy:title">
+                                    <td>
+                                        {{registro.title}}
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="limited-instruction">
+                                            {{registro.instruction}}</div>
+                                    </td>
+                                    <td>
+                                        {{registro.requestAgents ? 'Sim' : 'Não'}}
+                                    </td>
+                                    <td>
+                                        <div class="department-container" ng-if="registro.departaments.length > 0">
+                                            <span class="department-circle"
+                                                ng-repeat="department in registro.departaments | limitTo: 5"
+                                                title="{{ department.name }}" style="background-color: #2196F3;">
+                                                {{ department.name.charAt(0) }}
+                                            </span>
+                                            <span ng-if="registro.departaments.length > 5"
+                                                class="department-circle more-symbol"
+                                                ng-click="toggleDropdown(registro)">
+                                                +{{ registro.departaments.length - 5 }}
+                                            </span>
+                                            <div ng-if="registro.showAllDepartments" class="all-departments-dropdown">
+                                                <div>
+                                                    <a>
+                                                        <i ng-click="toggleDropdown(registro)" class="fas fa-times"></i>
+                                                    </a>
+                                                    <div ng-repeat="department in registro.departaments">
+                                                        {{department.name}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="department-container" ng-if="!registro.departaments.length">
+                                            {{'NENHUM-REGISTRO'| translate}}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="department-container" ng-if="registro.fields.length > 0">
+                                            <span class="department-circle"
+                                                ng-repeat="field in registro.fields | limitTo: 5"
+                                                title="{{ field.nome - field.description }}"
+                                                style="background-color: #2196F3;">
+                                                {{ field.nome.charAt(0) }}
+                                            </span>
+                                            <span ng-if="registro.fields.length > 5"
+                                                class="department-circle more-symbol"
+                                                ng-click="toggleDropdown(registro)">
+                                                +{{ registro.fields.length - 5 }}
+                                            </span>
+                                            <div ng-if="registro.showAllDepartments" class="all-departments-dropdown">
+                                                <div>
+                                                    <a>
+                                                        <i ng-click="toggleDropdown(registro)" class="fas fa-times"></i>
+                                                    </a>
+                                                    <div ng-repeat="field in registro.fields">
+                                                        {{field.nome}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="department-container" ng-if="!registro.fields.length">
+                                            {{'NENHUM-REGISTRO'| translate}}
+                                        </div>
+                                    </td>
+                                    <td style="justify-content: end; display: flex; right: 12px; position: absolute;">
+                                        <div class="options-feature dropdown" uib-dropdown="">
+                                            <a href="" uib-dropdown-toggle="" aria-expanded="false"
+                                                class="dropdown-toggle" aria-haspopup="true">
+                                                <i class="zmdi zmdi-more-vert"></i>
+                                            </a>
+
+                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                <li>
+                                                    <a ng-click="openModalDepartmentRedirect(registro)"
+                                                        href="">{{'EDITAR' | translate}}</a>
+                                                </li>
+                                                <li>
+                                                    <a ng-click="deleteTicket(registro)" href="">
+                                                        {{'REMOVER' | translate}}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="row" ng-if="!assistant.tickets.length">
+                            <div class="col-xs-12" style="margin: 20px 0;">
+                                <p class="text-muted text-center m-t-15">
+                                    {{ 'NENHUM-DIRECIONAMENTO' | translate }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-if="assistant.type === 'BOT'">
+        <div class="container-services">
+            <div class="col-sm-12">
+                <div class="card m-b-20">
+                    <div class="card-header ch-alt">
+                        <h2>{{ 'ATRIBUICAO_AUTOMATICA_TAGS' | translate }}</h2>
+                        <div class="m-t-5">{{ 'DESCRICAO_ATRIBUICAO_AUTOMATICA_TAGS' | translate }}</div>
+                        <button title="{{ 'ADICIONAR' | translate }}"
+                            ng-show="!assistant.autoTaggingInstructions.length"
+                            class="btn bgm-teal btn-float btn-float-2 waves-effect" ng-click="openAutoTaggingModal()">
+                            <i class="zmdi zmdi-plus"></i>
+                        </button>
+                        <button title="{{ 'EDITAR' | translate }}"
+                            ng-show="assistant.autoTaggingInstructions.length > 0"
+                            class="btn bgm-blue btn-float btn-float-2 waves-effect" ng-click="openAutoTaggingModal()">
+                            <i class="zmdi zmdi-edit"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <table id="content-table" class="table table-striped table-vmiddle"
+                            ng-show="assistant.autoTaggingInstructions.length > 0">
+                            <thead>
+                                <tr>
+                                    <th style="width: 20%">{{ 'TAGS' | translate }}</th>
+                                    <th style="width: 25%">{{ 'INSTRUCAO' | translate }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="registro in assistant.autoTaggingInstructions | orderBy:title">
+                                    <td>
+                                        {{registro.tagName}}
+                                    </td>
+                                    <td>
+                                        <div class="limited-instruction">{{registro.instruction}}</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="row" ng-show="!assistant.autoTaggingInstructions.length">
+                            <div class="col-xs-12" style="margin: 20px 0;">
+                                <p class="text-muted text-center m-t-15">
+                                    {{ 'NENHUMA_ATRIBUICAO_AUTOMATICA_TAGS' | translate }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-if="assistant.type === 'BOT'">
+        <div class="container-services">
+            <div class="col-sm-12">
+                <div class="card m-b-20">
+                    <div class="card-header ch-alt">
+                        <h2>
+                            {{ 'INTEGRACOES' | translate }}
+                        </h2>
+                        <div class="m-t-5">
+                            <span>
+                                {{ 'INTEGRE-FERRAMENTAS' | translate }}
+                            </span>
+                        </div>
+                        <button title="{{ 'ADICIONAR' | translate }}"
+                            class="btn bgm-teal btn-float btn-float-2 waves-effect" ng-click="openModalIntegration()">
+                            <i class="zmdi zmdi-plus"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <table id="content-table" class="table table-striped table-vmiddle"
+                            ng-if="assistant.integrations.length > 0">
+                            <thead>
+                                <tr>
+                                    <th style="width: 20%">{{'TITULO' | translate}}</th>
+                                    <th style="width: 20%">{{'URL' | translate}}</th>
+                                    <th style="width: 40%">{{ 'INSTRUCAO' | translate }}</th>
+                                    <th style="width: 20%">{{ 'CAMPOS-CUSTOMIZADOS' | translate }}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="integration in assistant.integrations | orderBy:title">
+                                    <td>
+                                        {{integration.title}}
+                                    </td>
+                                    <td>
+                                        {{integration.url}}
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="limited-instruction">
+                                            {{integration.instruction}}</div>
+                                    </td>
+                                    <td>
+                                        <div class="department-container" ng-if="integration.fields.length > 0">
+                                            <span class="department-circle"
+                                                ng-repeat="field in integration.fields | limitTo: 5"
+                                                title="{{ field.nome - field.description }}"
+                                                style="background-color: #2196F3;">
+                                                {{ field.nome.charAt(0) }}
+                                            </span>
+                                            <span ng-if="integration.fields.length > 5"
+                                                class="department-circle more-symbol"
+                                                ng-click="toggleDropdown(integration)">
+                                                +{{ integration.fields.length - 5 }}
+                                            </span>
+                                            <div ng-if="integration.showAllDepartments"
+                                                class="all-departments-dropdown">
+                                                <div>
+                                                    <a>
+                                                        <i ng-click="toggleDropdown(integration)"
+                                                            class="fas fa-times"></i>
+                                                    </a>
+                                                    <div ng-repeat="field in integration.fields">
+                                                        {{field.nome}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="department-container" ng-if="!integration.fields.length">
+                                            {{ 'NENHUM-CAMPO-CUSTOMIZADO' | translate }}
+                                        </div>
+                                    </td>
+                                    <td style="justify-content: end; display: flex; right: 12px; position: absolute;">
+                                        <div class="options-feature dropdown" uib-dropdown="">
+                                            <a href="" uib-dropdown-toggle="" aria-expanded="false"
+                                                class="dropdown-toggle" aria-haspopup="true">
+                                                <i class="zmdi zmdi-more-vert"></i>
+                                            </a>
+
+                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                <li>
+                                                    <a ng-click="openModalIntegration(integration)" href="">{{'EDITAR' |
+                                                        translate}}</a>
+                                                </li>
+                                                <li>
+                                                    <a ng-click="deleteIntegration(integration)" href="">
+                                                        {{'REMOVER' | translate}}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="row" ng-if="!assistant.integrations.length">
+                            <div class="col-xs-12" style="margin: 20px 0;">
+                                <p class="text-muted text-center m-t-15">
+                                    {{ 'NENHUMA-INTEGRACAO' | translate }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card m-b-20" ng-if="assistant.type === 'BOT'">
+        <div class="card-header ch-alt">
+            <h2>{{'MENSAGEM-INDISPONIBILIDADE' | translate}}</h2>
+            <div class="m-t-5">{{'DESCRICAO-MENSAGEM-INDISPONIBILIDADE' | translate}}</div>
+        </div>
+        <div class="card-body card-padding">
+            <div class="options-public-crm">
+                <label class="label-options-crm">
+                    <input type="radio" name="unavailableAttendantsInstructions_active"
+                        ng-model="assistant.unavailableAttendantsInstructions.active" value="true">
+                    <div style="padding-top: 4px; font-size: 14px;">{{'ATIVADO' | translate}}</div>
+                </label>
+                <label class="label-options-crm">
+                    <input type="radio" name="unavailableAttendantsInstructions_active"
+                        ng-model="assistant.unavailableAttendantsInstructions.active" value="false">
+                    <div style="padding-top: 4px; font-size: 14px;">{{'DESATIVADO' | translate}}</div>
+                </label>
+            </div>
+
+            <div class="container-instruction-voice">
+                <div class="col-sm-12">
+                    <div class="form-group fg-float m-b-20 m-t-20">
+                        <div class="fg-line">
+                            <textarea class="form-control fg-input input-lg" rows="16"
+                                ng-disabled="assistant.unavailableAttendantsInstructions.active == 'false'"
+                                ng-model="assistant.unavailableAttendantsInstructions.instructions"></textarea>
+                            <label class="fg-label">{{ 'INSTRUCAO' | translate }}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>
+                {{ 'BASE-DE-CONHECIMENTO' | translate }}
+            </h2>
+            <div class="m-t-5">
+                <span>
+                    {{ 'ADICIONE-INFORMACOES-BASE-CONHECIMENTO' | translate }}
+                </span>
+            </div>
+            <button title="{{ 'ADICIONAR' | translate }}" class="btn bgm-teal btn-float btn-float-2 waves-effect"
+                ng-click="selectTypeKnowledgeBases()">
+                <i class="zmdi zmdi-plus"></i>
+            </button>
+        </div>
+        <div class="card-body card-padding" style="padding: 20px;">
+            <div class="row m-t-20" ng-if="(assistant.knowledgeBases | filter:{action: '!DELETE'}).length">
+                <div class="col-xs-12" ng-repeat="item in assistant.knowledgeBases track by $index"
+                    ng-if="item.action !== 'DELETE'">
+                    <div class="kc-item">
+                        <div title="{{getMessageErro(item.integrationError)}}">
+                            <div class="kc-icon" ng-class="{'error-file': item.integrationError}">
+                                <i class="zmdi"
+                                    ng-class="{ 'zmdi-comment-text': item.type === 'TEXT', 'zmdi-file': item.type === 'FILE'}"></i>
+                            </div>
+                            <i ng-if="item.integrationError" class="fas fa-info-circle file-erro-knowledgeBases"></i>
+                        </div>
+
+                        <div class="kc-content">
+                            <h4 class="kc-titulo">
+                                {{ item.title }}
+                            </h4>
+                            <p class="kc-descricao" ng-if="item.type === 'TEXT'">
+                                {{ item.value }}
+                            </p>
+                            <a class="kc-link" ng-if="item.type === 'FILE'" ng-href="{{ item.url }}" target="_blank">
+                                {{ 'ABRIR-ARQUIVO' | translate }}
+                            </a>
+                        </div>
+                        <div class="kc-actions">
+                            <ul class="actions">
+                                <li class="dropdown" uib-dropdown="">
+                                    <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle"
+                                        aria-haspopup="true">
+                                        <i class="zmdi zmdi-more-vert"></i>
+                                    </a>
+
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li>
+                                            <a ng-click="editInfo(item)" ng-if="item.type == 'TEXT'" href="">
+                                                {{'EDITAR' | translate}}
+                                            </a>
+                                            <a ng-click="deleteInfo($index)" href="">{{'REMOVER' | translate}}</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" ng-if="!(assistant.knowledgeBases | filter:{action: '!DELETE'}).length">
+                <div class="col-xs-12">
+                    <p class="text-muted text-center m-t-15">
+                        {{ 'NENHUMA_BASE_CONHECIMENTO' | translate }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button ng-disabled="btnSaveDisabled" ng-click="onSave()"
+        class="btn btn-float bgm-blue m-btn waves-effect waves-circle" style="bottom: 25px; right: 80px;">
+        <i class="zmdi zmdi-floppy"></i>
+    </button>
+</div>

@@ -1,0 +1,163 @@
+<link href="css/ai.css?VERSION_HASH" rel="stylesheet" />
+<div class="container-fluid" data-ng-controller="AiAssistantController" ng-init="onInit()">
+    <div class="mini-charts">
+        <div class="card m-b-20">
+            <div class="card-header ch-alt">
+                <h2>
+                    {{'AI-ASSISTANT' | translate}}
+                    <button ng-if="hasTutorial('166')" ng-click="showTutorial('166')"
+                        title="Clique aqui para visualizar o video de explicação."
+                        class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                        <i class="zmdi zmdi-videocam m-r-5"></i>
+                        {{'TUTORIAL'|translate}}
+                    </button>
+                </h2>
+
+                <button class="btn bgm-blue btn-float btn-float-2 waves-effect" ng-click="getAll()">
+                    <i class="zmdi zmdi-search"></i>
+                </button>
+                <button class="btn bgm-teal btn-float btn-float-2 waves-effect" ng-click="newAssistant()"
+                    title="{{'ADICIONAR'|translate}}">
+                    <i class="zmdi zmdi-plus"></i>
+                </button>
+            </div>
+
+            <div class="card-body card-padding">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group fg-float m-b-10 m-t-10">
+                            <div class="fg-line">
+                                <input lta-enter="getAll()" type="text" class="form-control fg-input input-lg"
+                                    ng-model="filtro.name">
+                                <label class="fg-label">{{ "NOME" | translate }}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group fg-float m-b-10 m-t-10">
+                            <div class="fg-line">
+                                <select class="form-control fg-input input-lg" ng-model="filtro.type"
+                                    ng-change="getAll()">
+                                    <option value="ALL">{{'TODOS'|translate}}</option>
+                                    <option value="COPILOT">COPILOT</option>
+                                    <option value="BOT">BOT</option>
+                                </select>
+                                <label class="fg-label">{{'Tipo' | translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group fg-float m-b-10 m-t-10">
+                            <div class="fg-line">
+                                <select class="form-control fg-input input-lg" ng-model="filtro.status"
+                                    ng-change="getAll()">
+                                    <option value="ALL">{{'TODOS'|translate}}</option>
+                                    <option value="ACTIVE">{{'ATIVO'|translate}}</option>
+                                    <option value="INACTIVE">{{'INACTIVE'|translate}}</option>
+                                </select>
+                                <label class="fg-label">{{'STATUS' | translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-1" ng-if="showClients">
+                        <div class="form-group fg-float m-b-10 m-t-10">
+                            <div class="fg-line">
+                                <input lta-enter="getAll()" type="text" class="form-control fg-input input-lg"
+                                    ng-model="filtro.clientId" autofocus>
+                                <label class="fg-label">{{'ID' | translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-11" ng-if="showClients">
+                        <div class="form-group fg-float m-b-10 m-t-10">
+                            <div class="fg-line">
+                                <input type="text" ng-model="filtro.client" lta-enter="getAll()"
+                                    typeahead-on-select="getAll()" typeahead-show-hint="true" typeahead-min-length="3"
+                                    uib-typeahead="client as client.nome for client in getClientsByName($viewValue)"
+                                    typeahead-loading="loadingCustomer" class="form-control input-lg">
+                                <label class="fg-label">{{'CLIENTES'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div ng-if="assistants.length === 0 || assistants.length === undefined || assistants.length === null"
+                class="text-center m-t-30">
+                {{'NENHUM-REGISTRO'| translate}}
+            </div>
+
+            <div class="col-sm-3" ng-repeat="assistant in assistants | orderBy: 'name'">
+                <div class="card">
+                    <div class="card-header ch-alt">
+                        <div class="contant-status-assistant " style="cursor: pointer;"
+                            ng-click="editAssistant(assistant)">
+                            <i ng-if="assistant.active"
+                                title="{{assistant.active ? ('ATIVO' | translate) : ('INATIVO' | translate)}}"
+                                class="zmdi zmdi-check c-green"></i>
+                            <i ng-if="!assistant.active"
+                                title="{{assistant.active ? ('ATIVO' | translate) : ('INATIVO' | translate)}}"
+                                class="zmdi zmdi-block c-red"></i>
+                            <h2>
+                                <span title="{{assistant.name}}" class="limited-title-assistent"
+                                    style="padding-left: 5px;">
+                                    {{assistant.name}}
+                                    <small>{{assistant.type}}</small>
+                                </span>
+                            </h2>
+                        </div>
+
+                        <ul class="actions">
+                            <li class="dropdown" uib-dropdown="">
+                                <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle"
+                                    aria-haspopup="true">
+                                    <i class="zmdi zmdi-more-vert"></i>
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                        <a ng-click="onCreateCopy(assistant)" href="">
+                                            {{'CRIAR-COPIA'|translate}}
+                                        </a>
+                                        <a ng-click="editAssistant(assistant)" href="">
+                                            {{'EDITAR'| translate}}
+                                        </a>
+                                        <hr style="margin: 7px 0;">
+                                        <a ng-click="valideHasProjectConfig(assistant)" href="">
+                                            {{assistant.active ? ('DESATIVAR' | translate) : ('ATIVAR' | translate)}}
+                                        </a>
+                                        <a ng-click="deleteAssistant(assistant.id, filtro.client.id)" href="">
+                                            {{'REMOVER'| translate}}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card-body card-padding">
+                        <div class="content-card-assistent" ng-if="assistant.aiCompany == 'OpenAI'">
+                            <h2>
+                                <img style="border-radius: 40%; height: 30px;"
+                                    src="https://v2b-31.mz-css.net/ce02a680127f6de3a0200d58cab76698/ChatGPT-Logo.png"
+                                    class="pv-main">
+                                <span style="padding-left: 5px;">{{assistant.aiCompany}}</span>
+                            </h2>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

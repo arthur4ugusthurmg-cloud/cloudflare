@@ -1,0 +1,313 @@
+<link rel="stylesheet" href="/css/release-manager.css" />
+
+<div class="container-fluid" data-ng-controller="ReleaseManagerSettingsController" ng-init="onInit()">
+  <div class="card">
+    <div class="card-header ch-alt">
+      <h2>{{release.id ? 'EDIT_RELEASE' : 'NEW_RELEASE' | translate}}</h2>
+    </div>
+
+    <div class="card-body card-padding">
+      <br />
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group fg-float m-b-30">
+            <div class="fg-line fg-toggled">
+              <select class="form-control input-lg select-simples" ng-model="release.module">
+                <option value="CRM">{{'CRM' }}</option>
+                <option value="BULK_MESSAGE">{{'CAMPANHAS' | translate }}</option>
+                <option value="SERVICE">{{'SERVICE' | translate}}</option>
+                <option value="SCHEDULE_STARTER">{{'SCHEDULE_STARTER' | translate}}</option>
+                <option value="SCHEDULE_PROFESSIONAL">{{'SCHEDULE_PROFESSIONAL' | translate}}</option>
+                <option value="SCHEDULE_BUSINESS">{{'SCHEDULE_BUSINESS' | translate}}</option>
+                <option value="SCHEDULE_ENTERPRISE">{{'SCHEDULE_ENTERPRISE' | translate}}</option>
+                <option value="AUTOMATION_STARTER">{{'AUTOMATION_STARTER' | translate}}</option>
+                <option value="AUTOMATION_PROFESSIONAL">{{'AUTOMATION_PROFESSIONAL' | translate}}</option>
+                <option value="AUTOMATION_BUSINESS">{{'AUTOMATION_BUSINESS' | translate}}</option>
+                <option value="AUTOMATION_ENTERPRISE">{{'AUTOMATION_ENTERPRISE' | translate}}</option>
+                <option value="API_BASIC">API - Básico</option>
+                <option value="API_FULL">API - Completo</option>
+                <option value="JADI_COPILOT">Assistente Copilot com IA</option>
+                <option value="JADI_BOT_BASIC">Assistente Virtual com IA - Básico</option>
+                <option value="JADI_BOT_FULL">Assistente Virtual com IA - Completo</option>
+              </select>
+              <label class="fg-label">{{'MODULO'|translate}}</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group fg-float m-b-30">
+            <div class="fg-line">
+              <input type="text" class="form-control fg-input input-lg" ng-model="release.mediaLink" />
+              <label class="fg-label">{{'MEDIA_LINK'|translate}}</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group fg-float m-b-30">
+            <div class="fg-line">
+              <input class="form-control fg-input input-lg" ng-model="release.promoPrice" format="currency" maxlength="6" />
+              <label class="fg-label">{{'PROMO_PRICE'|translate}}</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group fg-float m-b-30">
+            <div class="fg-line">
+              <input class="form-control fg-input input-lg" ng-model="release.monthlyPrice" format="currency" maxlength="6" />
+              <label class="fg-label">{{'MONTHLY_PRICE'|translate}}</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="date-picker dp-blue form-group fg-float m-b-30" ng-class="{'is-opened': activationDateOpened == true}">
+            <div class="fg-line">
+              <input ng-click="activationDateOpened = true" type="text" class="form-control ng-isolate-scope input-lg" ng-model="release.activationDate" show-weeks="false" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" on-open-focus="false" model-view-value="true" is-open="activationDateOpened" close-text="{{'CLOSE' | translate}}" current-text="{{'TODAY' | translate}}" />
+              <label class="fg-label">{{'ACTIVATION_DATE'|translate}}</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="date-picker dp-blue form-group fg-float m-b-30" ng-class="{'is-opened': expirationDateOpened == true}">
+            <div class="fg-line">
+              <input ng-click="expirationDateOpened = true" type="text" class="form-control ng-isolate-scope input-lg" ng-model="release.expirationDate" show-weeks="false" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" on-open-focus="false" model-view-value="true" is-open="expirationDateOpened" close-text="{{'CLOSE' | translate}}" current-text="{{'TODAY' | translate}}" />
+              <label class="fg-label">{{'EXPIRATION_DATE'|translate}}</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group fg-float m-b-30">
+            <div class="fg-line">
+              <input type="text" class="form-control fg-input input-lg" ng-model="release.title" />
+              <label class="fg-label">{{'TITLE'|translate}}</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group fg-float m-b-30">
+            <div class="fg-line">
+              <input type="text" class="form-control fg-input input-lg" ng-model="release.planLabel" maxlength="40" />
+              <label class="fg-label">{{'PLAN_LABEL'|translate}}</label>
+            </div>
+            <small class="help-block">{{'PLAN_LABEL_HELP'|translate}}</small>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group fg-float m-b-30">
+            <div class="fg-line">
+              <input type="text" class="form-control fg-input input-lg" ng-model="release.shortDescription" />
+              <label class="fg-label">{{'SHORT_DESCRIPTION'|translate}}</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-12">
+          <div class="form-group fg-float m-b-30">
+            <div class="fg-line">
+              <textarea class="form-control fg-input input-lg" ng-model="release.description" rows="3"></textarea>
+              <label class="fg-label">{{'DESCRIPTION'|translate}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-alt">
+      <h2>
+        <div lass="checkbox checkbox-inline p-l-0">
+          <label class="cursor-pointer">
+            <input class="m-r-5" type="checkbox" ng-click="checkDomains()" ng-model="domainsChecked">
+            <i class="input-helper"></i>
+            Domínios
+          </label>
+        </div>
+      </h2>
+    </div>
+
+    <div class="card-body card-padding">
+      <div ng-repeat="domain in release.domains">
+        <div class="checkbox m-b-15 m-l-5">
+          <label>
+            <input type="checkbox" value="" ng-model="domain.checked">
+            <i class="input-helper"></i>
+            {{domain.revendaDominio}}
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-alt">
+      <h2>{{'TERMS_OF_USE'|translate}}</h2>
+      <br />
+      Os valores que possuem conchetes {chave_*} são valores que serão
+      preenchidos na visualização do contrato.
+      <br />
+      * Caso essas chaves forem removidas essas informação não apareceram no
+      contrato.
+    </div>
+
+    <div class="card-body card-padding">
+      <div class="row m-t-20 m-b-30">
+        <div class="col-sm-12">
+          <div ckeditor ng-model="release.termsOfUse"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" ng-if="jwt.usuarioId == 1486">
+    <div class="card-header ch-alt">
+      <h2>
+        <label class="cursor-pointer">
+          <input class="m-r-5" type="checkbox" ng-model="contactViaWhatsapp" ng-change="toggleContactViaWhatsapp()" />
+          <i class="input-helper"></i>
+          {{'CONTACT_VIA_WHATSAPP'|translate}}
+        </label>
+      </h2>
+    </div>
+
+    <div class="card-body card-padding">
+      <div ng-if="!contactViaWhatsapp">
+        {{'CONTACT_VIA_WHATSAPP_HELP'|translate}}
+      </div>
+
+      <div ng-if="contactViaWhatsapp">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+              <div class="fg-line">
+                <input type="text" class="form-control fg-input input-lg" ng-model="release.whatsappNumber" maxlength="20" />
+                <label class="fg-label">{{'WHATSAPP_NUMBER'|translate}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+              <div class="fg-line">
+                <textarea class="form-control fg-input input-lg" ng-model="release.whatsappMessage" rows="3"></textarea>
+                <label class="fg-label">{{'WHATSAPP_MESSAGE'|translate}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" ng-if="jwt.usuarioId != 1486">
+    <div class="card-header ch-alt">
+      <h2>{{'NOTIFICATION_SETTINGS' | translate}}</h2>
+    </div>
+
+    <div class="card-body card-padding">
+      <br />
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group fg-float m-b-30">
+            <div class="fg-line fg-toggled">
+              <select class="form-control input-lg select-simples" ng-model="release.hiringMethod" ng-options="method.value as method.displayName for method in hiringMethods"></select>
+              <label class="fg-label">{{'HIRING_METHOD'|translate}}</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group fg-float m-b-30">
+            <div class="fg-line">
+              <input type="email" class="form-control fg-input input-lg" ng-model="release.notificationEmail" maxlength="100" />
+              <label class="fg-label">
+                {{'NOTIFICATION_EMAIL'|translate}}
+              </label>
+            </div>
+            <small class="w-560-px">Caso não informado, não haverá o disparo de e-mails de
+              contratações automática ou envio de informações de erro do webhook
+            </small>
+          </div>
+        </div>
+      </div>
+      <div ng-if="release.hiringMethod === 'MANUAL'">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+              <div class="fg-line">
+                <input type="text" class="form-control fg-input input-lg" ng-model="release.whatsappNumber" maxlength="20" />
+                <label class="fg-label">{{'WHATSAPP_NUMBER'|translate}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+              <div class="fg-line">
+                <textarea class="form-control fg-input input-lg" ng-model="release.whatsappMessage" rows="3"></textarea>
+                <label class="fg-label">{{'WHATSAPP_MESSAGE'|translate}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" ng-if="jwt.usuarioId != 1486 && release.hiringMethod === 'AUTOMATIC'">
+    <div class="card-header ch-alt">
+      <h2>
+        <label class="cursor-pointer">
+          <input class="m-r-5" type="checkbox" ng-model="release.autoApi" />
+          <i class="input-helper"></i>
+
+          {{'API'|translate}}
+          <div class="pull-right">
+            <button title="Download documento webhook" class="btn bgm-blue btn-float-1 waves-circle m-l-5" ng-click="downloadDocument()" style="
+                float: inline-end;
+                float: inline-end;
+                bottom: 4px;
+                left: 8px;
+              ">
+              <i class="zmdi zmdi-file-text"></i>
+            </button>
+          </div>
+        </label>
+      </h2>
+    </div>
+
+    <div class="card-body card-padding">
+      <div ng-if="!release.autoApi">
+        Ative a api para receber a contratação via integração.
+      </div>
+
+      <div ng-if="release.autoApi">
+        <br />
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group fg-float m-b-30">
+              <div class="fg-line">
+                <input type="url" class="form-control fg-input input-lg" ng-model="release.webhookUrl" maxlength="500" />
+                <label class="fg-label">{{'WEBHOOK_URL'|translate}}</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <div class="form-group fg-float m-b-30">
+              <div class="fg-line">
+                <input type="text" class="form-control fg-input input-lg" ng-model="release.webhookHeaders" />
+                <label class="fg-label">{{'WEBHOOK_HEADERS'|translate}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button ng-click="save()" class="btn btn-float bgm-blue m-btn waves-effect waves-circle">
+    <i class="zmdi zmdi-floppy"></i>
+  </button>
+</div>

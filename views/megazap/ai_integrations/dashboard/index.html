@@ -1,0 +1,260 @@
+<link href="css/crm.css?VERSION_HASH" rel="stylesheet" />
+<style>
+    #costPerDay {
+        height: 300px !important;
+    }
+</style>
+<div class="container-fluid" data-ng-controller="AiAssistantDashboardController" ng-init="onInit()">
+
+    <div class="card m-b-20" style="margin: 5px;">
+        <div class="card-header ch-alt">
+            <h2>{{'AI-ASSISTANT-CONSUMO'|translate}}
+                <button ng-if="hasTutorial('164')" ng-click="showTutorial('164')"
+                    title="Clique aqui para visualizar o video explicativo."
+                    class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                    <i class="zmdi zmdi-videocam m-r-5"></i>
+                    {{'TUTORIAL'|translate}}
+                </button>
+            </h2>
+            <button title="{{'PESQUISAR'|translate}}" class="btn bgm-blue btn-float btn-float-2 waves-effect" ng-click="getData(true)">
+                <i class="zmdi zmdi-search"></i>
+            </button>
+        </div>
+    
+         <div class="card-body card-padding">
+            <br />
+            <div class="row">
+
+                <div class="col-md-1" ng-if="isAdministrador() || isRevendedor()">
+                        <div class="form-group fg-float m-b-20">
+                            <div class="fg-line">
+                                <input lta-enter="getData(true)" type="text" class="form-control fg-input input-lg"
+                                    ng-model="filter.clientId" autofocus>
+                                <label class="fg-label">{{'ID' | translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                <div class="col-sm-3">
+                    <div class="form-group fg-float m-b-20">
+                        <div class="fg-line fg-toggled">
+                            <div class="select">
+                                <select class="form-control fg-input input-lg" ng-model="filter.assistantId" ng-change="getData();">
+                                    <option value="0">{{'TODOS'|translate}}</option>
+                                    <option value="{{assistant.assistantId}}" ng-repeat="assistant in assistants">{{assistant.assistantName}}</option>
+                                </select>
+                                <label class="fg-label">{{'AI-ASSISTANT'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-class="{'col-sm-2' : (isAdministrador() || isRevendedor()), 'col-sm-3' : !(isAdministrador()|| isRevendedor())}">
+                    <div class="form-group fg-float m-b-20">
+                        <div class="fg-line fg-toggled">
+                            <div class="select">
+                                <select class="form-control fg-input input-lg" ng-model="filter.departmentId" ng-change="filterAgents(); getData();">
+                                    <option value="0">{{'TODOS'|translate}}</option>
+                                    <option value="{{department.departmentId}}" ng-repeat="department in departments">{{department.departmentName}}</option>
+                                </select>
+                                <label class="fg-label">{{'DEPARTAMENTOS'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="form-group fg-float m-b-20">
+                        <div class="fg-line fg-toggled">
+                            <div class="select">
+                                <select class="form-control fg-input input-lg" ng-model="filter.agentId" ng-change="getData();">
+                                    <option value="0">{{'TODOS'|translate}}</option>
+                                    <option value="{{user.agentId}}" ng-repeat="user in users">{{user.agentName}}</option>
+                                </select>
+                                <label class="fg-label">{{'USUARIOS'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">  
+                    <div class="col-sm-6">
+                        <div class="date-picker dp-blue form-group fg-float m-b-20" ng-class="{'is-opened': startDatePicker == true}">
+                            <div class="fg-line fg-toggled">
+                                <input ng-click="startDatePicker = true" type="text" style="cursor: pointer;" class="form-control input-lg" show-weeks="false" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" on-open-focus="false" model-view-value="true" is-open="startDatePicker" close-text="Fechar" current-text="Hoje" ng-model="filter.startTimeAux">
+                                <label class="fg-label">{{'DATA-DE'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="date-picker dp-blue form-group fg-float m-b-20" ng-class="{'is-opened': endDatePicker == true}">
+                            <div class="fg-line fg-toggled">
+                                <input ng-click="endDatePicker = true" type="text" style="cursor: pointer;" class="form-control input-lg" show-weeks="false" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" on-open-focus="false" model-view-value="true" is-open="endDatePicker" close-text="Fechar" current-text="Hoje" ng-model="filter.endTimeAux">
+                                <label class="fg-label">{{'DATA-ATE'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-indicadores m-b-20" ng-show="kpis">
+        <div class="row" style="margin-left: -7px; margin-right: -7px;">
+
+            <div class="col-md-3">
+                <div class="indicador-item" style="background-color: #0288D1">
+                    <i class="fas fa-wallet"></i>
+                    <div class="indicador-informacoes">
+                        <small>{{ 'TOTAL-GASTO' | translate }}</small>
+                        <h2>{{ kpis.totalValue | currency:"USD " }}</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="indicador-item" style="background-color: #7D67DA">
+                    <i class="fas fa-keyboard"></i>
+                    <div class="indicador-informacoes">
+                        <small>{{ 'INPUT-TOKENS' | translate }}</small>
+                        <h2>{{ kpis.totalInput | number }}</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="indicador-item" style="background-color: #0097A7">
+                    <i class="fas fa-robot"></i>
+                    <div class="indicador-informacoes">
+                        <small>{{ 'OUTPUT-TOKENS' | translate }}</small>
+                        <h2>{{ kpis.totalOutput | number }}</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="indicador-item" style="background-color: #d96565">
+                    <i class="fas fa-layer-group"></i>
+                    <div class="indicador-informacoes">
+                        <small>{{ 'TOTAL-TOKENS' | translate }}</small>
+                        <h2>{{ kpis.totalTokens | number }}</h2>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div ng-show="dataCharts" class="row" style="margin-left: -7px; margin-right: -7px;">
+        <div class="col-sm-12">
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="card-header">
+                    <h2>{{ 'OPENAI-CUSTO-DIA' | translate }}</h2>
+                </div>
+                <div class="card-body" style="padding: 20px;">
+                    <canvas id="costPerDay"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="row" style="margin-left: -7px; margin-right: -7px;">
+        <div class="col-sm-12">
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="card-header">
+                    <h2>OpenAi - Tokens por Dia</h2>
+                </div>
+                <div class="card-body" style="padding: 20px;">
+                    <canvas id="tokensPerDay" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <div ng-show="sumary.length > 0" class="row" style="margin-left: -7px; margin-right: -7px;">
+        <div class="col-sm-12">
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="card-header">
+                    <h2>{{ 'TOKENS-APROXIMADOS-DIA' | translate }}</h2>
+                </div>
+                <div class="card-body" style="padding: 20px; height: 300px">
+                    <canvas id="sumary"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-show="byAssistants.length > 0" class="row" style="margin-left: -7px; margin-right: -7px;">
+        <div class="col-sm-12">
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="card-header">
+                    <h2>{{ 'TOKENS-APROXIMADOS-ASSISTENTES' | translate }}</h2>
+                </div>
+                <div class="card-body" style="padding: 20px; height: 300px">
+                    <canvas id="byAssistants"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-show="byDepartments.length > 0" class="row" style="margin-left: -7px; margin-right: -7px;">
+        <div class="col-sm-12">
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="card-header">
+                    <h2>{{ 'TOKENS-APROXIMADOS-DEPARTAMENTOS' | translate }}</h2>
+                </div>
+                <div class="card-body" style="padding: 20px; height: 300px">
+                    <canvas id="byDepartments"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-show="byAgents.length > 0" class="row" style="margin-left: -7px; margin-right: -7px;">
+        <div class="col-sm-12">
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="card-header">
+                    <h2>{{ 'TOKENS-APROXIMADOS-ATENDENTES' | translate }}</h2>
+                </div>
+                <div class="card-body" style="padding: 20px; height: 300px">
+                    <canvas id="byAgents"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="row" style="margin-left: -7px; margin-right: -7px;" ng-if="dataCharts.length">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Detalhamento Diário</h2>
+                </div>
+                <div class="card-body table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Input Tokens</th>
+                                <th>Output Tokens</th>
+                                <th>Total Tokens</th>
+                                <th>Valor (USD)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="d in dataCharts | unique: 'dateParsed'">
+                                <td>{{ d.dateParsed | date:'dd/MM/yyyy' }}</td>
+                                <td>{{ d.inputTokens | number }}</td>
+                                <td>{{ d.outputTokens | number }}</td>
+                                <td>{{ d.totalTokens | number }}</td>
+                                <td>{{ d.value | currency:"USD " }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+</div>

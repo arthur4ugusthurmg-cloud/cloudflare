@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <h3>{{'ASSOCIAR-TELEFONE'|translate}}<small>{{'ASSOCIAR-TELEFONE-DESCRICAO'|translate}}</small></h3>
+</div>
+<div class="modal-body">
+    <br/>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line fg-toggled">
+                    <div class="select">
+                        <select class="form-control input-lg select-simples" ng-model="novoTelefone.id" autofocus>
+                            <option ng-repeat="telefone in telefones" value="{{telefone.id}}">{{telefone.numero}}</option>
+                        </select>
+                        <label class="fg-label">{{'NUMERO'|translate}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onModalTelefoneInserir()">{{'ENVIAR'|translate}}</button>
+    <button class="btn btn-link" ng-click="onModalTelefoneCancelar()">{{'CANCELAR'|translate}}</button>
+</div>

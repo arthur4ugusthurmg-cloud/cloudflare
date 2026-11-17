@@ -1,0 +1,62 @@
+<link href="css/ai.css?VERSION_HASH" rel="stylesheet" />
+<div class="container-fluid" data-ng-controller="AiAssistantTemplateController" ng-init="getByIdTemplate()">
+    <div class="card m-b-20">
+        <div class="card-header ch-alt">
+            <h2>{{ 'INFORMACOES' | translate }}</h2>
+
+            <div class="m-t-5">
+                <span>{{ 'PREENCHER_CAMPOS_SOLICITADOS' | translate }}</span>
+            </div>
+        </div>
+        <div class="card-body card-padding">
+            <div class="row m-t-10">
+                <div class="col-sm-12">
+                    <div class="form-group fg-float m-b-20 m-t-20">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" ng-model="template.name" disabled>
+                            <label class="fg-label">{{'NOME' | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card m-b-20">
+        <div class="card-header ch-alt">
+            <h2>
+                {{ 'COMPORTAMENTO-DIRETRIZES' | translate }}
+            </h2>
+            <div class="m-t-5">
+                <span>{{ 'INFORMACOES-COMPORTAMENTAIS-DIRETRIZES' | translate }}.</span>
+            </div>
+        </div>
+        <div class="card-body card-padding" style="padding: 20px;">
+            <div class="row m-t-20" ng-if="template.instructions.length">
+                <div class="col-xs-12" ng-repeat="instruction in template.instructions">
+                    <div class="kc-item">
+                        <div class="kc-icon">
+                            <i class="zmdi zmdi-comment-text"></i>
+                        </div>
+                        <div class="kc-content">
+                            <h4 class="kc-titulo">
+                                {{ instruction.title }}
+                            </h4>
+                            <p class="kc-descricao">
+                                {{ instruction.value }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" ng-if="!template.instructions.length">
+                <div class="col-xs-12">
+                    <p class="text-muted text-center m-t-15">
+                        {{ 'NENHUMA-INSTRUCAO-COMPORTAMENTAL' | translate }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

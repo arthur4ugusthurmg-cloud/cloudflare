@@ -1,0 +1,77 @@
+<div class="container-fluid" data-ng-controller="EnqueteListaController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>
+                {{'ENQUETES'|translate}}
+                <button ng-if="hasTutorial('005')" ng-click="showTutorial('005')" title="Clique aqui para visualizar o video de explicação." class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                    <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                </button>
+            </h2>
+
+            <button class="btn bgm-teal btn-float waves-effect" ng-click="onMostarModalNovoRegistro()"><i class="zmdi zmdi-plus"></i></button>
+        </div>
+    </div>
+
+    <br/>
+
+    <div ng-if="registros.length === 0" class="text-center">
+        {{'NENHUM-REGISTRO'|translate}}
+    </div>
+
+    <div class="row" ng-repeat="linha in registros">
+        <div class="col-sm-6" ng-repeat="registro in linha">
+            <div class="card">
+                <div class="card-header ch-alt">
+                    <a data-ui-sref="bots.enquete_edicao({id:{{registro.id}}})">
+                        <h2>
+                            <i ng-if="registro.ativa" class="zmdi zmdi-check c-green"></i> 
+                            <i ng-if="!registro.ativa" class="zmdi zmdi-block c-red"></i> 
+                            #{{registro.numero}}
+                        </h2>
+                    </a>
+
+                    <ul class="actions">
+                        <li class="dropdown" uib-dropdown="">
+                            <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                                <i class="zmdi zmdi-more-vert"></i>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-right">                                
+                                <li>
+                                    <a data-ui-sref="bots.enquete_resultado({id:{{registro.id}}})">{{'VER-RESULTADO'|translate}}</a>
+                                </li>
+                                <li>
+                                    <a data-ui-sref="bots.enquete_edicao({id:{{registro.id}}})">{{'EDITAR'|translate}}</a>
+                                </li>
+                                <li>
+                                    <a ng-click="onInativar(registro)" ng-if="registro.ativa" href="">{{'INATIVAR'|translate}}</a>
+                                    <a ng-click="onAtivar(registro)" ng-if="!registro.ativa" href="">{{'ATIVAR'|translate}}</a>
+                                </li>                                                                
+                                <li>
+                                    <a href="" ng-click="onRemover(registro)" >{{'REMOVER'|translate}}</a>
+                                </li>                                
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <div class="card-body card-padding">
+                    <span ng-if="registro.quantidadeVotos === 0"><b>{{'NENHUM_VOTO'|translate}}</b></span>
+                    <span ng-if="registro.quantidadeVotos === 1"><b>{{registro.quantidadeVotos}} {{'VOTO'|translate}}</b></span>
+                    <span ng-if="registro.quantidadeVotos > 1"><b>{{registro.quantidadeVotos}} {{'VOTOS'|translate}}</b></span>
+
+                    <br/>
+                    <br/>
+
+                    {{registro.texto}}                                        
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+

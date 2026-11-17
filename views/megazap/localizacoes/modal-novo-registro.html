@@ -1,0 +1,20 @@
+<div class="modal-header">
+    <h3>{{'NOVA-LOCALIZACAO'|translate}}</h3>
+</div>
+<div class="modal-body">
+    <br/>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="nome" type="text" class="form-control fg-input input-lg" ng-model="registroAtual.nome" autofocus>
+                    <label class="fg-label">{{'NOME'|translate}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onModalEnviar()">{{'ENVIAR'|translate}}</button>
+    <button class="btn btn-link" ng-click="onModalCancelar()">{{'CANCELAR'|translate}}</button>
+</div>

@@ -1,0 +1,463 @@
+<div ng-controller="MainController" ng-init="onHeaderInit()" class="mz-header-container">
+    <a ng-if="!isFbot() && showLiveBanner()" href="https://youtube.com/live/vxcYsIzoDxI?feature=share"
+        target="_blank" rel="noopener noreferrer" class="mz-live-banner">
+        <span class="mz-live-banner-dot-container">
+            <span class="mz-live-banner-dot-ping"></span>
+            <span class="mz-live-banner-dot"></span>
+        </span>
+        <span>{{"ESTAMOS-AO-VIVO" | translate}}</span>
+    </a>
+
+    <div class="mz-header-left">
+        <div class="menu-button" ng-click="mzTemplate.sidebarMenu.display = !mzTemplate.sidebarMenu.display"><i
+                class="fas fa-bars"></i></div>
+        <div class="logo">
+            <a ng-if="!isFbot()">{{customizacao.nome}}</a>
+            <img ng-if="isFbot()" src="img/ic_fbot.png" style="height:60px;width:60px;" />
+        </div>
+        <div class="m-l-15" ng-if="hasTutorial('001') && isDashboard()">
+            <button ng-click="showTutorial('001')" title="Clique aqui para visualizar o video de explicação."
+                class="btn btn-sm bgm-white waves-effect">
+                <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+            </button>
+        </div>
+    </div>
+    <div class="mz-header-right">
+        <ul class="top-menu m-0" ng-if="!isFbot()">
+            <li class="dropdown m-r-15" uib-dropdown ng-if="gm">
+                <a uib-dropdown-toggle href="">
+                    <span
+                        style="margin-left: 15px; margin-right:15px; display: inline-block; font-size: 16px; margin-top: 7px; padding-bottom: 7px">
+                        <i class="zmdi zmdi-local-store m-r-5"></i>
+                        {{getSelectedGMClientName()}}
+                    </span>
+                    <i class="tm-icon zmdi zmdi-caret-down m-l-5 m-r-10" ng-if="gm.licli.length > 1"
+                        style="font-size: 14px"></i>
+                </a>
+
+                <ul class="dropdown-menu dm-icon pull-right" ng-if="gm.licli.length > 1">
+                    <li ng-repeat="cliente in gm.licli | orderBy: ['nome']"><a data-ng-click="selectGMClient(cliente)"
+                            href="">{{cliente.nome}}</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <div uib-dropdown style="display: flex; align-content: center;">
+            <div uib-dropdown ng-if="!isFbot() && (isGestor() || isSupervisorChatbot() || isAtendente())"
+                style="display: flex; gap: 10px; align-items: center;">
+
+                <!-- LIGACAO ATIVA -->
+
+                <div ng-if="getActiveCall() != undefined && getActiveCall().status == 'ACCEPTED'"
+                    ng-controller="WaCallController"
+                    style="display: flex; background-color: rgb(35, 35, 35); width: 500px; height: 60px; padding-right: 20px; margin-right: 15px;">
+
+                    <div style="flex: 1; flex-grow: 1; align-self: center;">
+                        <div style="height: 36px; width: 36px;" class="call-contact-photo"
+                            ng-style="{'background-image': 'url(' + getActiveCall().contactPhoto + ')'}"></div>
+                    </div>
+                    <div style="flex: 1; flex-grow: 2; align-self: center; color: #d8d8d8">
+                        <div style="font-weight: bold;">{{getActiveCall().contactName || 'Contato'}} -
+                            {{getActiveCall().contactNumber}}</div>
+                        <div>{{getActiveCall().callDurationStr}}</div>
+                    </div>
+                    <div style="flex: 1; text-align: right; flex-grow: 2; align-self: center;"
+                        ng-if="getActiveCall().status == 'ACCEPTED' || getActiveCall().status == 'RINGING'">
+                        <button style="border-radius: 50%; width: 36px; height: 36px; font-size: 16px" title="Recusar"
+                            class="btn bgm-red waves-effect m-r-5" ng-click="terminate()"><i class="zmdi zmdi-phone-end"
+                                style="margin-left: -2px;"></i></button>
+                        <button style="border-radius: 50%; width: 36px; height: 36px; font-size: 16px" title="Microfone"
+                            class="btn bgm-gray waves-effect m-r-5" ng-click="updateMicStatus()"><i class="zmdi"
+                                ng-class="{'zmdi-mic': getActiveCall().micEnabled, 'zmdi-mic-off': !getActiveCall().micEnabled}"></i></button>
+                        <button style="border-radius: 50%; width: 36px; height: 36px; font-size: 16px"
+                            title="Visualizar Atendimento" class="btn bgm-white waves-effect" ng-click="showTicket()"><i
+                                class="fas fa-headset" style="margin-left: -2px"></i></button>
+                    </div>
+
+                </div>
+
+                <div class="btn-notification-container" ng-class="getClockColor()"
+                    title="{{getTempoRestanteHorario()}}">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div ng-if="isMegaZap() && customizacao.chatSuporteAtivo && customizacao.chatSuporteToken">
+                    <button id="wbot-open-chat" class="button-48" role="button" ng-click="openSupportChat()">
+                        <span class="text">{{"SOLICITAR-SUPORTE" | translate}}</span>
+                    </button>
+                </div>
+                <div class="btn-notification-container mz-header-user-image" ng-click="onGetNotificationUser()"
+                    uib-dropdown-toggle>
+                    <i class="fas fa-bell"></i>
+                    <span ng-if="permissions.totalNotifications > 0">
+                        {{permissions.totalNotifications}}
+                    </span>
+                </div>
+                <div class="dropdown-menu dm-icon pull-right"
+                    style="margin-top: 20px; margin-right: 20px; border-radius: 10px;">
+                    <div class="header-container-notification-user">
+                        <div>Notificações</div>
+                        <span ng-if="userNotifications.length > 0" style="color: red;"
+                            ng-click="deleteAllNotificationsUser()">Excluir todas</span>
+                    </div>
+                    <div ng-if="userNotifications.length === 0"
+                        style="text-align: center; margin-bottom: 15px; margin-top: 7px;">{{"NENHUM-REGISTRO" |
+                        translate}}</div>
+                    <div style="padding: 0px 10px;" ng-if="userNotifications.length > 0">
+                        <div {{userNotifications}}
+                            style="height: fit-content; overflow-y: auto; overflow-x: hidden; max-height: 525px; padding: 0 10px;">
+                            <div class="body-container-notification-user" ng-repeat="notification in userNotifications">
+                                <div style="display: flex; gap: 15px; padding: 15px 15px 5px 15px;">
+                                    <div class="icon-hover-notification">
+                                        <i class="fas icon-notification-user sumir"
+                                            ng-class="{
+                                            'icon-task-late fa-tasks': notification.type == 'TASK_LATE',
+                                            'icon-task-reminder fa-tasks': notification.type == 'TASK_REMINDER',
+                                            'fa-user-plus icon-solicitation': notification.type == 'SOLICITACAO_PARTICIPACAO'
+                                        }"></i>
+                                        <i class="fas fa-trash-alt icon-notification-user aparecer"
+                                            ng-click="deleteNotificationUser(notification.id, $event)"></i>
+                                    </div>
+                                    <div class="item-notification">
+                                        <div class="top-notification-user">
+                                            <div class="title-notification-user">
+                                            <span >
+                                                {{notification.title}}
+                                            </span>
+                                        </div>
+                                            <div class="date-notification-user">{{ getFormattedDate(notification) }}
+                                            </div>
+                                        </div>
+                                        <div class="message-notification-user">
+                                        <span>
+                                            {{notification.message}}
+                                        </span>
+                                    </div>
+                                        <div class="container-data-notification-user">
+                                            <div class="time-notification-user">{{getTimeDifference(notification)}}
+                                            </div>
+                                        </div>
+                                        <div
+                                            style="display: flex; align-items: center; gap: 15px; font-size: 12px; margin-top: 5px;" >
+                                            <div>
+                                                <div ng-if="notification.data.startDate"
+                                                title="{{ (notification.data.startDate ? 'DATA-INICIO' : 'DATA') | translate }}">
+                                                <i class="fas fa-calendar-day"
+                                                    style="margin-right: 5px;"></i>{{notification.data.startDate |
+                                                date:('dd/MM/yyyy HH:mm')}}
+                                            </div>
+                                            <div ng-if="notification.data.endDate"
+                                                title="{{ (notification.data.endDate ? 'DATA-LIMITE' : 'DATA') | translate }}">
+                                                <i class="fas fa-hourglass-end"
+                                                    style="margin-right: 5px;"></i>{{notification.data.endDate |
+                                                date:('dd/MM/yyyy HH:mm')}}
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="content-open-modals-board">
+                                    <div ng-style="{'background-color': backgroundColor1, 'borderColor': borderColor1}"
+                                        ng-if="notification.painelAtendimentoId > 0 && notification.type !== 'SOLICITACAO_PARTICIPACAO'"
+                                        title="Abrir o modal do Atendimento"
+                                        ng-click="openInChatContact(notification.painelAtendimentoId)"
+                                        ng-mouseover="backgroundColor1 = customizacao.corPrimaria; borderColor1 = customizacao.corPrimaria"
+                                        ng-mouseleave="backgroundColor1 = ''; borderColor1 = ''">
+                                        Atendimento
+                                    </div>
+                                    <div ng-style="{'background-color': backgroundColor2, 'borderColor': borderColor2}"
+                                        ng-if="notification.crmCardId  > 0"
+                                        title="Abrir o modal do {{notification.crmBoardCardName}}"
+                                        ng-click="openModalCard(notification.crmCardId)"
+                                        ng-mouseover="backgroundColor2 = customizacao.corPrimaria; borderColor2 = customizacao.corPrimaria"
+                                        ng-mouseleave="backgroundColor2 = ''; borderColor2 = ''">
+                                        {{notification.crmBoardCardName}}
+                                    </div>
+                                    <div ng-style="{'background-color': backgroundColor3, 'borderColor': borderColor3}"
+                                        ng-if="notification.crmTaskId > 0" title="Abrir o modal da Tarefa"
+                                        ng-click="openInTask(notification.crmTaskId)"
+                                        ng-mouseover="backgroundColor3 = customizacao.corPrimaria; borderColor3 = customizacao.corPrimaria"
+                                        ng-mouseleave="backgroundColor3 = ''; borderColor3 = ''">
+                                        Tarefa
+                                    </div>
+                                    <div ng-style="{'background-color': backgroundColor4, 'borderColor': borderColor4}"
+                                        ng-if="notification.type === 'SOLICITACAO_PARTICIPACAO'"
+                                        title="Abrir solicitação de participação"
+                                        ng-click="adicionarParticipante(notification)"
+                                        ng-mouseover="backgroundColor4 = customizacao.corPrimaria; borderColor4 = customizacao.corPrimaria"
+                                        ng-mouseleave="backgroundColor4 = ''; borderColor4 = ''">
+                                        Aceitar
+                                    </div>
+                                     <div ng-style="{'background-color': backgroundColor4, 'borderColor': borderColor4}"
+                                        ng-if="notification.type === 'SOLICITACAO_PARTICIPACAO'"
+                                        title="Abrir solicitação de participação"
+                                        ng-click="recusarParticipante(notification.id)"
+                                        ng-mouseover="backgroundColor4 = customizacao.corPrimaria; borderColor4 = customizacao.corPrimaria"
+                                        ng-mouseleave="backgroundColor4 = ''; borderColor4 = ''">
+                                        Recusar
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-full-notifications-user" ng-click="viewNotifications()">Ver todas</div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+<div class="mz-header-user-info-container" uib-dropdown-toggle>
+
+    <div class="mz-header-user-image-container"
+         ng-mousedown="handleProfileMousedown($event)"
+         oncontextmenu="return false">
+
+        <div class="mz-header-user-image">
+
+            <img
+                ng-if="profile.usuario.imagem || profile.usuario.image ||
+                       profile.usuario.foto || profile.usuario.usuarioFoto ||
+                       profile.usuarioFoto || profile.fotoPerfil ||
+                       profile.imagemPerfil || profile.imagem ||
+                       profile.foto || profile.avatar || profile.image"
+                ng-src="{{profile.usuario.imagem ||
+                          profile.usuario.image ||
+                          profile.usuario.foto ||
+                          profile.usuario.usuarioFoto ||
+                          profile.usuarioFoto ||
+                          profile.fotoPerfil ||
+                          profile.imagemPerfil ||
+                          profile.imagem ||
+                          profile.foto ||
+                          profile.avatar ||
+                          profile.image}}"
+                class="img-circle"
+                alt="Foto do usuário">
+
+            <span
+                class="img-circle"
+                ng-if="!(profile.usuario.imagem || profile.usuario.image ||
+                         profile.usuario.foto || profile.usuario.usuarioFoto ||
+                         profile.usuarioFoto || profile.fotoPerfil ||
+                         profile.imagemPerfil || profile.imagem ||
+                         profile.foto || profile.avatar || profile.image)">
+                {{(profile.usuario.usuarioNome ||
+                    profile.usuario.nomeCompleto ||
+                    profile.usuario.nome ||
+                    profile.usuario.name ||
+                    profile.usuario.nomeUsuario ||
+                    profile.usuarioNome ||
+                    profile.nomeCompleto ||
+                    profile.nome ||
+                    profile.name ||
+                    profile.usuario.usuario ||
+                    profile.usuario.login ||
+                    profile.usuario.username ||
+                    profile.usuario ||
+                    'U').toString().charAt(0).toUpperCase()}}
+            </span>
+
+            <span class="status-icon"
+                  ng-if="isAtendente()"
+                  ng-class="{
+                      'online': atendente.status == 'ONLINE',
+                      'offline': atendente.status == 'OFFLINE'
+                  }">
+            </span>
+
+        </div>
+    </div>
+
+    <div class="mz-header-user-info">
+        <div>
+            <span class="mz-header-user-name">
+                {{profile.usuario.usuarioNome ||
+                  profile.usuario.nomeCompleto ||
+                  profile.usuario.nome ||
+                  profile.usuario.name ||
+                  profile.usuario.nomeUsuario ||
+                  profile.usuarioNome ||
+                  profile.nomeCompleto ||
+                  profile.nome ||
+                  profile.name ||
+                  profile.usuario.usuario ||
+                  profile.usuario.login ||
+                  profile.usuario.username ||
+                  profile.usuario ||
+                  'Usuário'}}
+            </span>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+            <ul class="dropdown-menu dm-icon pull-right" style="margin-top: 50px; margin-right: 3px;">
+                <li ng-if="isAtendente() && atendente.avaliacaoAtendimento">
+                    <a>
+                        <i class="zmdi zmdi-star c-yellow"></i>
+                        <span>{{atendente.avaliacaoAtendimento}}</span>
+                    </a>
+                </li>
+                <li ng-if="isAtendente() && atendente.avaliacaoAtendimento" class="divider"></li>
+                <li ng-if="isAtendente() && atendente">
+                    <a style="cursor: pointer; display: flex; align-items: center;" ng-click="trocarStatusAtendente()">
+                        <i class="tm-icon zmdi zmdi-circle status-icon"
+                            ng-class="{'offline': atendente.status == 'ONLINE', 'online': atendente.status == 'OFFLINE'}"></i>
+                        <span>
+                            <div ng-show="atendente.status == 'ONLINE'">
+                                {{"FICAR-OFFLINE" | translate}}
+                            </div>
+                            <div ng-show="atendente.status == 'OFFLINE'">
+                                {{"FICAR-ONLINE" | translate}}
+                            </div>
+                        </span>
+                    </a>
+                </li>
+                <li ng-if="!isFbot()">
+                    <a data-ui-sref="perfil.info"><i class="tm-icon zmdi zmdi-account"></i>{{"PERFIL" | translate}}</a>
+                    <a data-ui-sref="perfil.notificacoes"
+                        ng-if="isGestor() || isSupervisorChatbot() || isAtendente()"><i
+                            class="tm-icon zmdi zmdi-notifications-active"></i>{{"NOTIFICATIONS" | translate}}</a>
+                    <a data-ui-sref="perfil.seguranca"><i class="tm-icon zmdi zmdi-shield-security"></i>{{"SEGURANCA" |
+                        translate}}</a>
+                </li>
+
+                <li ng-if="!isFbot() && (isRevendedor() || ((isGestor() || isSupervisorChatbot()) && customizacao.urlDocApi))"
+                    class="divider"></li>
+
+                <li ng-if="!isFbot() && (isRevendedor() || customizacao.urlDocApi)">
+                    <a href="#" ng-click="showMyApiToken()"
+                        ng-if="isGestor() || isSupervisorChatbot() || isRevendedor()">
+                        <i class="zmdi zmdi-key"></i>Token API
+                    </a>
+                    <a ng-href="{{customizacao.urlDocApi}}" target="_blank" ng-if="isGestor() || isSupervisorChatbot()">
+                        <i class="zmdi zmdi-code"></i>{{'DOCUMENTACAO'| translate}} API
+                    </a>
+                    <a ng-href="https://megazap-partners.readme.io/reference/validate1#/" target="_blank"
+                        ng-if="isRevendedor()">
+                        <i class="zmdi zmdi-code"></i>{{'DOCUMENTACAO'| translate}} API
+                    </a>
+                </li>
+
+                <li ng-if="!isFbot()" class="divider"></li>
+
+                <li class="language-menu" ng-init="languageMenuOpen = false">
+                    <a href="" ng-click="languageMenuOpen = !languageMenuOpen; $event.stopPropagation();"
+                        style="display:flex; align-items:center; justify-content:space-between;">
+                        <span style="display:flex; align-items:center;">
+                            <i class="zmdi zmdi-globe language-icon"></i>
+                            {{ 'IDIOMA' | translate }}
+                        </span>
+                        <i class="zmdi" style="display: flex; justify-content: end;" ng-class="{'zmdi-caret-down': !languageMenuOpen, 'zmdi-caret-up': languageMenuOpen}"></i>
+                    </a>
+
+                    <ul class="dropdown-menu language-submenu" ng-show="languageMenuOpen"
+                        ng-click="$event.stopPropagation()">
+                        <li>
+                            <a href="" ng-click="trocarIdioma('pt-BR'); $event.stopPropagation();">
+                                <img class="icon-idioma" style="margin-left: -5px;" src="img/language/pt-br.png" alt="">
+                                {{'LANG-PT-BR' | translate}}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" ng-click="trocarIdioma('en-US'); $event.stopPropagation();">
+                                <img class="icon-idioma" style="margin-left: -5px;" src="img/language/en.png" alt="">
+                                {{'LANG-EN' | translate}}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" ng-click="trocarIdioma('es-ES'); $event.stopPropagation();">
+                                <img class="icon-idioma" style="margin-left: -5px;" src="img/language/es.png" alt="">
+                                {{'LANG-ES' | translate}}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" ng-click="trocarIdioma('zh-CN'); $event.stopPropagation();">
+                                <img class="icon-idioma" style="margin-left: -5px;" src="img/language/cn.png" alt="">
+                                {{'LANG-CN' | translate}}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li class="divider"></li>
+
+                <li ng-if="!isFbot()">
+                    <a data-ng-click="showInternalChat()"
+                        ng-if="(isGestor() || isSupervisorChatbot() || isAtendente()) && permissions.permissionMegazap && isChatInterno"
+                        class="chat-interno-menu-mobile" href="">
+                        <i class="zmdi zmdi-comments"></i>
+                        {{ "CHAT-INTERNO" | translate }}
+                    </a>
+                </li>
+                <li ng-if="!isFbot()">
+                    <a data-ng-click="enableInternalChat()"
+                        ng-if="(isGestor() || isSupervisorChatbot()) && permissions.permissionMegazap && !isChatInterno"
+                        href="">
+                        <i class="zmdi zmdi-window-restore"></i>
+                        {{ "ATIVAR-CHAT-INTERNO" | translate }}
+                    </a>
+                </li>
+                <li ng-if="!isFbot()">
+                    <a data-ng-click="disableInternalChat()"
+                        ng-if="(isGestor() || isSupervisorChatbot()) && permissions.permissionMegazap && isChatInterno"
+                        href="">
+                        <i class="zmdi zmdi-close"></i>
+                        {{ "DESATIVAR-CHAT-INTERNO" | translate }}
+                    </a>
+                </li>
+
+                <li ng-if="!isFbot()">
+                    <a data-ng-click="changeTutorialVisible()" href="">
+                        <i class="zmdi zmdi-info" style="font-size: 14px;"></i>
+                        {{(tutorialVisible == '1' ? "ESCONDER" : "VISUALIZAR") | translate}} {{ "TUTORIAIS" |
+                        translate }}
+                    </a>
+                </li>
+
+                <li ng-if="hasTutorial('028') && isAtendente()">
+                    <a style="cursor: pointer;" ng-click="showTutorial('028')"
+                        title="Clique aqui para visualizar o video de explicação.">
+                        <i class="zmdi zmdi-videocam"></i>
+                        Tutorial
+                    </a>
+                </li>
+
+                <li ng-if="!isFbot() && customizacao.termoUso">
+                    <a href="{{customizacao.termoUso}}" target="_blank">
+                        <i class="zmdi fas fa-file-signature"></i>
+                        {{"TERMO-DE-USO" | translate}}
+                    </a>
+                </li>
+
+                <li ng-if="!isFbot()" class="divider"></li>
+
+                <!-- <li ng-if="!isFbot()">
+                    <a style="cursor: pointer;" ng-click="showModalNovoLayout()">
+                        <i class="fas fa-rocket"></i>
+                        Novo layout
+                    </a>
+                </li> -->
+
+                <li ng-if="!isFbot() && !newsDesativado">
+                    <a style="cursor: pointer;" ng-click="showModalNews(true)">
+                        <i class="zmdi zmdi-format-list-bulleted"></i>
+                        Novidades
+                    </a>
+                </li>
+
+                <li ng-if="!isFbot()" class="divider"></li>
+
+                <li>
+                    <a href="#" ng-click="onLogout()">
+                        <i class="tm-icon zmdi zmdi-power"></i>
+                        {{"SAIR" | translate}}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

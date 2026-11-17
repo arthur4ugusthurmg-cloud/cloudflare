@@ -1,0 +1,29 @@
+<link href="css/ai.css?VERSION_HASH" rel="stylesheet" />
+<div class="modal-header">
+  <h3>{{'DUPLA-AUTENTICACAO'|translate}}</h3>  
+</div>
+<div class="modal-body">
+  <div ng-if="!securityInfo.totpType" style="margin-top: 5px;" class="m-b-30">{{'ESCOLHA-OPCAO-AUTENTICACAO'|translate}}</div>
+  <div class="row">
+    <div class="content-options-type-m">
+      <div class="option-m" ng-click="onModalAuthenticatorQrcode()"
+        ng-if="!securityInfo.totpType || securityInfo.totpType == 'AUTHENTICATOR'">
+        <i class="zmdi zmdi-lock"></i>
+        <div style="text-align: center;">{{'AUTENTICADOR'|translate}}</div>
+        <i class="zmdi zmdi-check c-green pull-right" style="font-size: 18px;" ng-if="securityInfo.totpType == 'AUTHENTICATOR'"></i>
+      </div>
+      <div class="option-m" ng-click="onModalAuthEmail()"
+        ng-if="!securityInfo.totpType || securityInfo.totpType == 'EMAIL'">
+        <i class="zmdi zmdi-email"></i>
+        <div style="text-align: center;">{{'EMAIL' | translate}}</div>
+         <i class="zmdi zmdi-check c-green pull-right" style="font-size: 18px;" ng-if="securityInfo.totpType == 'EMAIL'"></i>
+      </div>
+    </div>
+    <div class="text-center" ng-if="securityInfo.totpType">
+      <button class="btn btn-danger m-t-10" ng-click="onDisableTotp(true)"><i class="zmdi zmdi-delete m-r-5"></i>{{'DESABILITAR'|translate}}</button>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-link" ng-click="onModalTotpCancel()">{{'FECHAR'|translate}}</button> 
+</div><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"06036110936f47979162a2584e077426","r":1,"spa":2}' crossorigin="anonymous"></script>

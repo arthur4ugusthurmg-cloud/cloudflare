@@ -1,0 +1,153 @@
+<div class="container-fluid" data-ng-controller="RelatorioWaCallsController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>
+                Ligações via Whatsapp (beta)
+            </h2>
+
+            <button title="{{'BUSCAR'| translate}}" class="btn bgm-blue btn-float btn-float-2 waves-effect" ng-click="getAll()"><i class="zmdi zmdi-search"></i></button>
+
+        </div>
+        <div class="card-body card-padding">
+            <br />
+            <div class="row">
+
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                               <select ng-change="getAll()" class="form-control input-lg select-simples" ng-model="filter.telefoneId">
+                                <option value="0">{{'TODOS'|translate}}</option>
+                                <option ng-repeat="telefone in telefones" value="{{telefone.id}}">{{telefone.numero}}</option>
+                            </select>
+                            <label class="fg-label">Telefones</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAll()" name="nome" type="text" class="form-control fg-input input-lg" ng-model="filter.contactNumber">
+                            <label class="fg-label">Contato</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAll()" name="nome" type="text" class="form-control fg-input input-lg" ng-model="filter.ticketId">
+                            <label class="fg-label">Atendimento</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="getAll()" class="form-control input-lg select-simples" ng-model="filter.status">
+                                <option value="ALL">{{"TODOS" | translate}}</option>
+                                <option value="BUSINESS_DIAL">{{"BUSINESS_DIAL" | translate}}</option>
+                                <option value="BUSINESS_INCOMING">{{"BUSINESS_INCOMING" | translate}}</option>
+                                <option value="BUSINESS_ACCEPTED">{{"BUSINESS_ACCEPTED" | translate}}</option>
+                                <option value="BUSINESS_REJECTED">{{"BUSINESS_REJECTED" | translate}}</option>
+                                <option value="BUSINESS_TERMINATE">{{"BUSINESS_TERMINATE" | translate}}</option>
+                                <option value="USER_RINGING">{{"USER_RINGING" | translate}}</option>
+                                <option value="USER_ACCEPTED">{{"USER_ACCEPTED" | translate}}</option>
+                                <option value="USER_REJECTED">{{"USER_REJECTED" | translate}}</option>
+                                <option value="FAILED">{{"FAILED" | translate}}</option>
+                                <option value="COMPLETED">{{"COMPLETED" | translate}}</option>
+                                <option value="UNKNOWN">{{"UNKNOWN" | translate}}</option>
+                            </select>
+                            <label class="fg-label">{{ "STATUS" | translate }}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAll()" type="text" class="form-control ng-isolate-scope input-lg" data-input-mask="{mask: '00/00/0000'}" maxlength="10" autocomplete="off" ng-model="filter.createdAtFrom">
+                            <label class="fg-label">{{"DATA-CRIACAO-DE" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAll()" type="text" class="form-control ng-isolate-scope input-lg" data-input-mask="{mask: '00/00/0000'}" maxlength="10" autocomplete="off" ng-model="filter.createdAtUntil">
+                            <label class="fg-label">{{"DATA-CRIACAO-ATE" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="registros.length > 0" class="card">
+        <div class="card-body">
+            <div>
+                <table id="content-table" class="table table-striped table-vmiddle">
+                    <thead>
+                        <tr>
+                            <th style="width: 1%">ID</th>
+                            <th>Origem</th>
+                            <th>Bot</th>
+                            <th>Contato</th>
+                            <th>Atendente</th>
+                            <th>Atendimento</th>
+                            <th>Data</th>
+                            <th>Duração</th>
+                            <th>Status</th>
+                            <th style="width: 1%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="registro in registros">
+                            <td>
+                                #{{registro.id}}
+                            </td>
+                            <td>
+                                {{registro.direction | translate}}
+                            </td>
+                            <td>
+                                {{registro.botNumber}}
+                            </td>
+                            <td>
+                                {{registro.contactName}}
+                                <br />
+                                {{registro.contactNumber}}
+                            </td>
+                            <td>
+                                {{registro.atendenteNome || 'Ninguém Atendeu'}}
+                            </td>
+                            <td>
+                                <a href="#/atendimentos/chat?aid={{registro.atendimentoId}}">{{registro.atendimentoId}}</a>
+                            </td>
+                            <td class="text-nowrap">
+                                {{ registro.createdAt | date:"dd/MM/yyyy HH:mm"}}
+                            </td>
+                            <td class="text-nowrap">
+                                {{ formatDuration(registro.duration || 0) }}
+                            </td>
+                            <td style='white-space: nowrap; text-align: center'>
+                                {{ registro.status | translate }}
+                            </td>
+                            <td class="text-center" style="white-space: nowrap">
+                                <button ng-click="showWaCallDetails(registro)" class="btn btn-default waves-effect"><i class="zmdi zmdi-search"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="showMore" class="text-center p-b-30">
+        <button ng-click="getAll(true)" class="btn btn-default waves-effect"><i class="zmdi zmdi-refresh"></i> {{"MAIS" | translate}}</button>
+    </div>
+
+</div>

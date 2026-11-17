@@ -1,0 +1,15 @@
+<div class="modal-header">
+    <h2 class="modal-title" style="font-size: 20px; margin: 8px 0px;">{{canalSelecionado.apelido ? 'Renomear Canal' : 'Nomear Canal'}}</h2>
+</div>
+<div class="modal-body">
+    <p>Informe um nome para identificar este canal:</p>
+    <div class="form-group">
+        <div class="fg-line">
+            <input type="text" class="form-control input-lg" ng-model="apelidoCanal.valor" placeholder="Nome do canal" lta-enter="onModalSalvarApelido()">
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onModalCancelarApelido()">{{'CANCELAR'}}</button>
+    <button class="btn btn-primary" ng-click="onModalSalvarApelido()">{{'SALVAR'}}</button>
+</div>

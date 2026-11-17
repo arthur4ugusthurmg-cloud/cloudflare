@@ -1,0 +1,823 @@
+
+<div
+    class="container-fluid"
+    data-ng-controller="BancoArquivoController"
+    ng-init="onInit()">
+
+    <!-- =====================================================
+         CABEÇALHO
+         ===================================================== -->
+
+    <div class="card" style="margin-bottom:15px;">
+
+        <div class="card-header ch-alt m-b-20">
+
+            <h2>
+                Banco de arquivos
+
+                <button
+                    ng-if="hasTutorial('138') && (isGestor() || isSupervisorChatbot())"
+                    ng-click="showTutorial('138')"
+                    title="Clique aqui para visualizar o tutorial de explicação."
+                    class="btn btn-sm bgm-blue m-l-10 waves-effect">
+
+                    <i class="zmdi zmdi-info m-r-5"></i>
+                    Tutorial
+
+                </button>
+
+                <button
+                    ng-if="hasTutorial('139') && isAtendente()"
+                    ng-click="showTutorial('139')"
+                    title="Clique aqui para visualizar o tutorial de explicação."
+                    class="btn btn-sm bgm-blue m-l-10 waves-effect">
+
+                    <i class="zmdi zmdi-info m-r-5"></i>
+                    Tutorial
+
+                </button>
+
+            </h2>
+
+
+            <!-- MENU ADICIONAR -->
+
+            <ul
+                class="actions pull-right btn-float btn-float-2"
+                style="margin-left:40px;margin-top:-20px;">
+
+                <li class="dropdown" uib-dropdown>
+
+                    <a href="">
+                        <button
+                            href=""
+                            uib-dropdown-toggle
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            title="Adicionar"
+                            class="btn-float btn-float-2 dropdown-toggle btn bgm-teal waves-effect">
+
+                            <i class="zmdi zmdi-plus"></i>
+
+                        </button>
+                    </a>
+
+                    <ul
+                        class="dropdown-menu dropdown-menu-right"
+                        style="top:57px;left:-89px;">
+
+                        <li>
+
+                            <a
+                                ng-click="onMostrarModalNovoArquivo()"
+                                href="">
+                                Novo arquivo
+                            </a>
+
+                            <a
+                                ng-click="abrirModalNovaPasta()"
+                                href="">
+                                Nova pasta
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+                </li>
+
+            </ul>
+
+
+            <!-- BOTÃO BUSCAR -->
+
+            <button
+                title="Buscar"
+                class="btn bgm-blue btn-float btn-float-2 waves-effect"
+                ng-click="getAll(false)">
+
+                <i class="zmdi zmdi-search"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             FILTROS
+             ================================================= -->
+
+        <div class="card-body card-padding">
+
+            <br />
+
+            <div class="row">
+
+                <div
+                    ng-class="{
+                        'col-sm-6': (!isGestor() && !isSupervisorChatbot()),
+                        'col-sm-9': (isGestor() || !isSupervisorChatbot())
+                    }">
+
+                    <div class="form-group fg-float m-b-30">
+
+                        <div class="fg-line">
+
+                            <input
+                                lta-enter="getAll(false)"
+                                name="nome"
+                                type="text"
+                                class="form-control fg-input input-lg"
+                                ng-model="filtro.nome">
+
+                            <label class="fg-label">
+                                Nome
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DEPARTAMENTO -->
+
+                <div class="col-sm-3">
+
+                    <div class="form-group fg-float m-b-30">
+
+                        <div class="fg-line">
+
+                            <select
+                                ng-change="getAll(false)"
+                                class="form-control input-lg select-simples"
+                                ng-model="filtro.departamentoId"
+                                ng-options="departamento.id as departamento.nome for departamento in departamentosFiltragem">
+                            </select>
+
+                            <label class="fg-label">
+                                Departamento
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ORIGEM -->
+
+                <div
+                    class="col-sm-3"
+                    ng-if="!isGestor() && !isSupervisorChatbot()">
+
+                    <div class="form-group fg-float m-b-30">
+
+                        <div class="fg-line">
+
+                            <select
+                                ng-change="getAll(false)"
+                                class="form-control input-lg select-simples"
+                                ng-model="filtro.origem"
+                                ng-options="tipo.key as tipo.value for tipo in origensFiltro">
+                            </select>
+
+                            <label class="fg-label">
+                                Origem
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BREADCRUMB
+         ===================================================== -->
+
+    <div class="banco-arquivo-container-breadcrumb">
+
+        <span ng-click="clickBreadCrumb(-1)">
+            Banco de arquivos
+        </span>
+
+        <span
+            ng-repeat="item in breadcrumb track by $index"
+            ng-click="clickBreadCrumb($index)">
+
+            <i class="zmdi zmdi-chevron-right"></i>
+
+            {{item.fileName}}
+
+        </span>
+
+    </div>
+
+
+    <!-- =====================================================
+         BOTÕES
+         ===================================================== -->
+
+    <div class="banco-arquivo-container-buttons">
+
+        <div
+            ng-if="!disabledDeleteSelecionados()"
+            class="banco-arquivo-container-btn-delete">
+
+            <button
+                class="btn btn-md bgm-red waves-effect"
+                style="margin-bottom:20px;font-weight:500;"
+                ng-click="onDeleteSelecionados()">
+
+                <i class="zmdi zmdi-delete m-r-5"></i>
+
+                Excluir selecionado(s)
+
+            </button>
+
+
+            <button
+                class="btn btn-md bgm-blue waves-effect"
+                style="margin-bottom:20px;margin-left:10px;font-weight:500;"
+                ng-click="onMostrarModalMoverPara()">
+
+                <i class="zmdi zmdi-scissors m-r-5"></i>
+
+                Mover selecionado(s) para
+
+            </button>
+
+        </div>
+
+
+        <!-- MODO DE EXIBIÇÃO -->
+
+        <div class="banco-arquivo-container-modo-exibicao text-center">
+
+            <i
+                class="zmdi zmdi-view-module"
+                ng-click="alterarModoExibicao('GRADE')"
+                style="margin-right:5px;"
+                ng-class="{
+                    'banco-arquivo-container-modo-exibicao-selecionado':
+                    modoExibicao == 'GRADE'
+                }">
+            </i>
+
+
+            <i
+                class="zmdi zmdi-view-list-alt"
+                ng-click="alterarModoExibicao('LISTA')"
+                ng-class="{
+                    'banco-arquivo-container-modo-exibicao-selecionado':
+                    modoExibicao == 'LISTA'
+                }">
+            </i>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         NENHUM REGISTRO
+         ===================================================== -->
+
+    <div
+        ng-if="registros.length === 0 && loading === false"
+        class="text-center">
+
+        Nenhum registro encontrado.
+
+    </div>
+
+
+    <!-- =====================================================
+         LISTA
+         ===================================================== -->
+
+    <div
+        class="banco-arquivo-tabela-container"
+        ng-if="registros.length > 0 && modoExibicao == 'LISTA'">
+
+        <div class="card-body">
+
+            <div>
+
+                <table
+                    id="content-table"
+                    class="table table-striped table-vmiddle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th style="width:20px;"></th>
+
+                            <th
+                                style="width:20px;text-align:right;">
+                            </th>
+
+                            <th style="width:70%;">
+                                Nome do arquivo
+                            </th>
+
+                            <th>
+                                Criado por
+                            </th>
+
+                            <th
+                                style="text-align:right;width:20px;">
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr
+                            ng-repeat="registro in registros">
+
+                            <!-- CHECKBOX -->
+
+                            <td>
+
+                                <input
+                                    class="banco-arquivo-tabela-checkbox"
+                                    type="checkbox"
+                                    ng-model="registro.selecionado"
+                                    ng-if="!registro.compartilhado">
+
+                            </td>
+
+
+                            <!-- ÍCONE -->
+
+                            <td>
+
+                                <div
+                                    ng-if="registro.type == 'PDF'"
+                                    style="text-align:right;">
+
+                                    <i
+                                        class="fas fa-file-pdf"
+                                        style="font-size:20px;color:brown;">
+                                    </i>
+
+                                </div>
+
+
+                                <div
+                                    ng-if="registro.type == 'AUDIO'"
+                                    style="text-align:right;">
+
+                                    <i
+                                        class="zmdi zmdi-audio"
+                                        style="font-size:20px;">
+                                    </i>
+
+                                </div>
+
+
+                                <div
+                                    ng-if="registro.type == 'VIDEO'"
+                                    style="text-align:right;">
+
+                                    <i
+                                        class="zmdi zmdi-videocam"
+                                        style="font-size:20px;">
+                                    </i>
+
+                                </div>
+
+
+                                <div
+                                    ng-if="registro.type == 'ARQUIVO'"
+                                    style="text-align:right;">
+
+                                    <i
+                                        class="zmdi zmdi-file"
+                                        style="font-size:20px;">
+                                    </i>
+
+                                </div>
+
+
+                                <div
+                                    ng-if="registro.type == 'IMAGEM'"
+                                    style="text-align:right;">
+
+                                    <i
+                                        class="zmdi zmdi-image"
+                                        style="font-size:20px;">
+                                    </i>
+
+                                </div>
+
+
+                                <div
+                                    ng-if="registro.type == 'FOLDER'"
+                                    style="text-align:right;">
+
+                                    <i
+                                        class="zmdi zmdi-folder"
+                                        style="font-size:20px;color:#f7d366;">
+                                    </i>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- NOME -->
+
+                            <td>
+
+                                <span
+                                    class="banco-arquivo-tabela-label-nome"
+                                    ng-click="onClickFileName(registro)">
+
+                                    {{registro.fileName}}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- CRIADO POR -->
+
+                            <td>
+
+                                {{registro.createdByName}}
+
+                            </td>
+
+
+                            <!-- AÇÕES -->
+
+                            <td
+                                style="text-align:right;padding-right:10px;">
+
+                                <div
+                                    style="display:flex;align-items:center;">
+
+                                    <i
+                                        class="zmdi m-r-10"
+                                        style="font-size:20px;"
+                                        ng-class="{
+                                            'zmdi-folder-person': !registro.shared,
+                                            'zmdi-share': registro.shared
+                                        }"
+                                        title="Compartilhamento">
+                                    </i>
+
+
+                                    <ul
+                                        class="actions pull-right"
+                                        ng-if="isGestor() || isSupervisorChatbot() || !registro.compartilhado">
+
+                                        <li
+                                            class="dropdown"
+                                            uib-dropdown>
+
+                                            <a
+                                                href=""
+                                                uib-dropdown-toggle
+                                                aria-expanded="false"
+                                                class="dropdown-toggle"
+                                                aria-haspopup="true">
+
+                                                <i class="zmdi zmdi-more-vert"></i>
+
+                                            </a>
+
+
+                                            <ul class="dropdown-menu dropdown-menu-right">
+
+                                                <li>
+
+                                                    <a
+                                                        ng-click="onEditar(registro)"
+                                                        href="">
+                                                        Editar compartilhamento
+                                                    </a>
+
+                                                    <a
+                                                        ng-click="onDelete(registro)"
+                                                        href="">
+                                                        Remover
+                                                    </a>
+
+                                                    <a
+                                                        ng-click="onMostrarModalMoverPara(registro)"
+                                                        href="">
+                                                        Mover para
+                                                    </a>
+
+                                                </li>
+
+                                            </ul>
+
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         GRADE
+         ===================================================== -->
+
+    <div
+        class="banco-arquivo-list-container"
+        ng-if="registros.length > 0 && modoExibicao == 'GRADE'">
+
+        <div
+            class="banco-arquivo-list-item"
+            ng-repeat="registro in registros">
+
+            <div class="banco-arquivo-list-item-border">
+
+
+                <!-- ÁREA DO ARQUIVO -->
+
+                <div
+                    class="banco-arquivo-list-item-img"
+                    ng-style="{
+                        'background-image':
+                        getBackgroundImageUrl(registro)
+                    }">
+
+
+                    <div
+                        class="banco-arquivo-tag"
+                        ng-if="registro.compartilhado">
+
+                        Compartilhado
+
+                    </div>
+
+
+                    <!-- AÇÕES -->
+
+                    <div
+                        style="display:flex;"
+                        ng-if="!registro.compartilhado">
+
+                        <div
+                            style="width:50%;display:flex;padding:5px 10px;">
+
+                            <div class="banco-arquivo-check-container">
+
+                                <div class="checkbox m-b-15">
+
+                                    <label class="banco-arquivo-check">
+
+                                        <input
+                                            type="checkbox"
+                                            ng-model="registro.selecionado">
+
+                                        <i class="input-helper"></i>
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            style="width:50%;display:flex;flex-direction:row-reverse;padding:10px;">
+
+                            <ul
+                                class="actions banco-arquivo-list-item-action-delete"
+                                ng-if="isGestor() || isSupervisorChatbot() || !registro.compartilhado"
+                                ng-class="{
+                                    'banco-arquivo-list-item-action-atendente-delete':
+                                    isAtendente()
+                                }">
+
+                                <li
+                                    class="dropdown"
+                                    uib-dropdown>
+
+                                    <a
+                                        href=""
+                                        uib-dropdown-toggle
+                                        aria-expanded="false"
+                                        class="dropdown-toggle banco-arquivo-list-item-action-btn"
+                                        aria-haspopup="true">
+
+                                        <i
+                                            class="zmdi zmdi-more-vert"
+                                            style="color:black;">
+                                        </i>
+
+                                    </a>
+
+
+                                    <ul class="dropdown-menu dropdown-menu-right">
+
+                                        <li>
+
+                                            <a
+                                                ng-click="onEditar(registro)"
+                                                href="">
+                                                Editar compartilhamento
+                                            </a>
+
+                                            <a
+                                                ng-click="onDelete(registro)"
+                                                href="">
+                                                Remover
+                                            </a>
+
+                                            <a
+                                                ng-click="onMostrarModalMoverPara(registro)"
+                                                href="">
+                                                Mover para
+                                            </a>
+
+                                        </li>
+
+                                    </ul>
+
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ÍCONES -->
+
+                    <div
+                        ng-if="registro.type == 'PDF'"
+                        style="text-align:center;">
+
+                        <i
+                            class="fas fa-file-pdf"
+                            style="font-size:68px;color:brown;">
+                        </i>
+
+                    </div>
+
+
+                    <div
+                        ng-if="registro.type == 'AUDIO'"
+                        style="text-align:center;">
+
+                        <i
+                            class="zmdi zmdi-audio"
+                            style="font-size:84px;">
+                        </i>
+
+                    </div>
+
+
+                    <div
+                        ng-if="registro.type == 'VIDEO'"
+                        style="text-align:center;">
+
+                        <i
+                            class="zmdi zmdi-videocam"
+                            style="font-size:84px;">
+                        </i>
+
+                    </div>
+
+
+                    <div
+                        ng-if="registro.type == 'ARQUIVO'"
+                        style="text-align:center;">
+
+                        <i
+                            class="zmdi zmdi-file"
+                            style="font-size:84px;">
+                        </i>
+
+                    </div>
+
+
+                    <div
+                        ng-if="registro.type == 'IMAGEM'"
+                        style="text-align:center;">
+
+                        <i
+                            class="zmdi zmdi-image"
+                            style="font-size:84px;">
+                        </i>
+
+                    </div>
+
+
+                    <div
+                        ng-if="registro.type == 'FOLDER'"
+                        style="text-align:center;">
+
+                        <i
+                            class="zmdi zmdi-folder"
+                            style="font-size:84px;color:#f7d366;">
+                        </i>
+
+                    </div>
+
+                </div>
+
+
+                <!-- INFORMAÇÕES -->
+
+                <div
+                    class="banco-arquivo-list-item-label"
+                    ng-click="onClickFileName(registro)">
+
+                    <div class="banco-arquivo-list-item-label-nome">
+
+                        <i
+                            class="zmdi m-r-10"
+                            style="font-size:14px;"
+                            ng-class="{
+                                'zmdi-folder-person': !registro.shared,
+                                'zmdi-share': registro.shared
+                            }"
+                            title="Compartilhamento">
+                        </i>
+
+                        {{registro.fileName}}
+
+                    </div>
+
+
+                    <div class="banco-arquivo-list-item-label-dono">
+
+                        <i
+                            class="zmdi m-r-10 zmdi-account"
+                            style="font-size:14px;">
+                        </i>
+
+                        {{registro.createdByName}}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIS
+         ===================================================== -->
+
+    <div
+        ng-if="showMore"
+        class="text-center p-b-30 p-t-20">
+
+        <button
+            ng-click="getAll(true)"
+            class="btn btn-default waves-effect">
+
+            <i class="zmdi zmdi-refresh"></i>
+
+            Mais
+
+        </button>
+
+    </div>
+
+</div>
+

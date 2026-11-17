@@ -1,0 +1,338 @@
+<div class="container-fluid" data-ng-controller="WorkQueueListController" ng-init="onInit()">
+
+        <link href="css/app.min.1.css?e4041a2b" rel="stylesheet" id="app-level">
+    <link href="css/app.min.2.css?e4041a2b" rel="stylesheet">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2 class="text-center">{{"ADMINISTRACAO" | translate}}</h2>
+            <button title="{{'BUSCAR'| translate}}" class="btn bgm-blue btn-float btn-float-3 waves-effect" ng-click="onInit()"><i class="zmdi zmdi-refresh"></i></button>
+        </div>
+        <div class="card-body">
+            <div class="row">
+
+                <ul class="nav nav-tabs nav-justified p-t-5 p-l-15 p-r-15">
+                    <li class="cursor-pointer" ng-class="{'active': tab === 3}"><a class="p-15" ng-click="tab = 3">{{"FATURAS-VENCIDAS" | translate}} ({{invoices.summary.count}})</a></li>
+                    <!-- <li class="cursor-pointer" ng-class="{'active': tab === 1}"><a ng-click="tab = 1">{{"TAREFAS-CADASTRO" | translate}}</a></li> -->
+                    <!-- <li class="cursor-pointer" ng-class="{'active': tab === 2}"><a ng-click="tab = 2">{{"TAREFAS-SUPORTE" | translate}}</a></li> -->
+                    <li class="cursor-pointer" ng-class="{'active': tab === 4}"><a class="p-15" ng-click="tab = 4">{{"CLIENTE-FI-ATIVO-SEM-CLIENTE-OP" | translate}} ({{report1.length}})</a></li>
+                    <li class="cursor-pointer" ng-class="{'active': tab === 5}"><a class="p-15" ng-click="tab = 5">{{"CLIENTE-FI-ATIVO-SEM-CONTRATO" | translate}} ({{report2.length}})</a></li>
+                    <li class="cursor-pointer" ng-class="{'active': tab === 6}"><a class="p-15" ng-click="tab = 6">{{"CLIENTE-OP-CLIENTE-FI-INATIVO" | translate}} ({{report3.length}})</a></li>
+                    <li class="cursor-pointer" ng-class="{'active': tab === 7}"><a class="p-15" ng-click="tab = 7">{{"CLIENTE-OP-SEM-CLIENTE-FI" | translate}} ({{report4.length}})</a></li>
+                </ul>
+        
+                <div class="col-sm-12" ng-show="tab === 1">
+                    <div class="card">
+                        <div class="p-30 text-center" ng-if="workQueueOperation.data.length === 0">
+                            {{"TODAS-TAREFAS-CADASTRO-CONCLUIDAS" | translate}}.
+                        </div>
+        
+                        <div ng-if="workQueueOperation.data.length > 0" class="card">
+                            <div class="card-body">
+                                <table id="content-table" class="table table-striped table-vmiddle">
+                                    <thead>
+                                        <tr>
+                                            <th>{{"DESCRICAO" | translate}}</th>
+                                            <th>{{"CLIENTE-OPERACIONAL" | translate}}</th>
+                                            <th>{{"CLIENTE-FINANCEIRO" | translate}}</th>
+                                            <th style="width: 1%">DATA</th>
+                                            <th style="width: 1%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="registro in workQueueOperation.data">
+        
+                                            <td>
+                                                {{registro.description}}
+                                            </td>
+                                            <td>
+                                                <a data-ui-sref="cadastros.cliente_edicao({id: registro.confClienteId})">{{registro.confClienteNome}}</a>
+                                            </td>
+                                            <td>
+                                                <a data-ui-sref="sales.customers_view({id: registro.salesCustomerId})">{{registro.salesCustomerNome}}</a>
+                                            </td>
+                                            <td class="text-center text-nowrap">
+                                                {{ registro.createdAt|date:('dd/MM/yyyy HH:mm')}}
+                                            </td>
+                                            <td class="text-nowrap">
+                                                <button ng-click="showModalUpdateDoneWorkQueue(registro)" title="Finalizar" class="btn btn-default waves-effect"><i class="zmdi zmdi-check"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+        
+                            <div ng-if="workQueueOperation.showMore" class="text-center p-b-30 p-t-30">
+                                <button ng-click="getWorkQueueOperation(20)" class="btn btn-default waves-effect"><i class="zmdi zmdi-refresh"></i> {{"MAIS" | translate}}</button>
+                            </div>
+        
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="col-sm-12" ng-show="tab === 2">
+                    <div class="card">
+                        <div class="p-30 text-center" ng-if="workQueueSupport.data.length === 0">
+                            {{"TODAS-TAREFAS-SUPORTE-CONCLUIDAS" | translate}}.
+                        </div>
+        
+                        <div ng-if="workQueueSupport.data.length > 0" class="card">
+                            <div class="card-body">
+                                <table id="content-table" class="table table-striped table-vmiddle">
+                                    <thead>
+                                        <tr>
+                                            <th>{{"DESCRICAO" | translate}}</th>
+                                            <th>{{"RESPONSAVEL" | translate}}</th>
+                                            <th>{{"CLIENTE-OPERACIONAL" | translate}}</th>
+                                            <th>{{"CLIENTE-FINANCEIRO" | translate}}</th>
+                                            <th style="width: 1%">DATA</th>
+                                            <th style="width: 1%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="registro in workQueueSupport.data">
+                                            <td>
+                                                {{registro.description}}
+                                            </td>
+                                            <td>
+                                                {{registro.responsavel}}
+                                            </td>
+                                            <td>
+                                                <a data-ui-sref="cadastros.cliente_edicao({id: registro.confClienteId})">{{registro.confClienteNome}}</a>
+                                            </td>
+                                            <td>
+                                                <a data-ui-sref="sales.customers_view({id: registro.salesCustomerId})">{{registro.salesCustomerNome}}</a>
+                                            </td>
+                                            <td class="text-center text-nowrap">
+                                                {{ registro.createdAt|date:('dd/MM/yyyy HH:mm')}}
+                                            </td>
+                                            <td class="text-nowrap">
+                                                <button ng-click="showModalUpdateDoneWorkQueue(registro)" title="Finalizar" class="btn btn-default waves-effect"><i class="zmdi zmdi-check"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+        
+                            <div ng-if="workQueueSupport.showMore" class="text-center p-b-30 p-t-30">
+                                <button ng-click="getWorkQueueSupport(20)" class="btn btn-default waves-effect"><i class="zmdi zmdi-refresh"></i> {{"MAIS" | translate}}</button>
+                            </div>
+        
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="col-sm-12" ng-show="tab === 3">
+                    <div class="card">
+        
+                        <div class="p-30 text-center" ng-if="invoices.data.length === 0">
+                            {{"SEM-FATURAS-VENCIDAS-CLIENTES" | translate}}.
+                        </div>
+        
+                        <div ng-if="invoices.data.length > 0" class="card">
+                            <div class="card-body">
+                                <table id="content-table" class="table table-striped table-vmiddle">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 1%"></th>
+                                            <th style="width: 1%">{{"NUMERO" | translate}}</th>
+                                            <th>{{"CLIENTE" | translate}}</th>
+                                            <th>{{"REVENDA" | translate}}</th>
+                                            <th style="width: 1%">{{"VALOR" | translate}}</th>
+                                            <th style="width: 1%">{{"VENCIMENTO" | translate}}</th>
+                                            <th style="width: 1%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="registro in invoices.data| orderBy:'dueDate'">
+                                            <td class="text-nowrap text-center">
+                                                <i title="Possui Boleto" ng-if="registro.hasBankSlip" class="zmdi zmdi-attachment-alt"></i>
+                                                <i title="Fatura Agrupada" ng-if="registro.merged" class="zmdi zmdi-collection-text m-l-5"></i>
+                                            </td>
+                                            <td class="text-center" style="white-space: nowrap">
+                                                <a data-ui-sref="sales.invoices_view({id: registro.id})">{{registro.id}}</a>
+                                            </td>
+                                            <td>
+                                                <a data-ui-sref="sales.customers_view({id: registro.customer.id})">{{registro.customer.name}}</a>
+                                            </td>
+                                            <td>
+                                                <a data-ui-sref="sales.customers_view({id: registro.customerReseller.id})">{{registro.customerReseller.name}}</a>
+                                            </td>
+                                            <td class="text-right">
+                                                {{registro.total| currency:""}}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ registro.dueDate|date:('dd/MM/yyyy')}}
+                                            </td>
+                                            <td class="text-nowrap">
+                                                <a data-ui-sref="sales.invoices_view({id:{{registro.id}}})"><button title="Visualizar" class="btn btn-default waves-effect"><i class="zmdi zmdi-search"></i></button></a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+        
+                            <div ng-if="invoices.showMore" class="text-center p-b-30 p-t-30">
+                                <button ng-click="getInvoicesExpired(20)" class="btn btn-default waves-effect"><i class="zmdi zmdi-refresh"></i> Mais</button>
+                            </div>
+        
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="col-sm-12" ng-show="tab === 4">
+                    <div class="card">
+        
+                        <div class="p-30 text-center" ng-if="report1.length === 0">
+                            {{"SEM-PENDENCIAS" | translate}}.
+                        </div>
+        
+                        <div ng-if="report1.data.length > 0" class="card">
+                            <div class="card-body">
+                                <table id="content-table" class="table table-striped table-vmiddle">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 1%">{{"TIPO" | translate}}</th>
+                                            <th>{{"CLIENTE-OPERACIONAL" | translate}}</th>
+                                            <th>{{"CLIENTE-FINANCEIRO" | translate}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="registro in report1">
+                                            <td>
+                                                {{registro.type}}
+                                            </td>
+                                            <td>
+                                                <a ng-if="registro.type === 'CLIENTE'" data-ui-sref="cadastros.cliente_edicao({id: registro.op_id})">{{registro.op_name}}</a>
+                                                <a ng-if="registro.type === 'REVENDEDOR'" data-ui-sref="cadastros.revenda_edicao({id: registro.op_id})">{{registro.op_name}}</a>
+                                            </td>
+                                            <td>
+                                                <a data-ui-sref="sales.customers_view({id: registro.sl_id})">{{registro.sl_name}}</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="col-sm-12" ng-show="tab === 5">
+                    <div class="card">
+        
+                        <div class="p-30 text-center" ng-if="report2.length === 0">
+                            {{"SEM-PENDENCIAS" | translate}}.
+                        </div>
+        
+                        <div ng-if="report2.length > 0" class="card">
+                            <div class="card-body">
+                                <table id="content-table" class="table table-striped table-vmiddle">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 1%">{{"TIPO" | translate}}</th>
+                                            <th style="width: 50%">{{"CLIENTE-OPERACIONAL" | translate}}</th>
+                                            <th style="width: 50%">{{"CLIENTE-FINANCEIRO" | translate}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="registro in report2">
+                                            <td>
+                                                {{registro.type}}
+                                            </td>
+                                            <td>
+                                                <a ng-if="registro.type === 'CLIENTE'" data-ui-sref="cadastros.cliente_edicao({id: registro.op_id})">{{registro.op_name}}</a>
+                                                <a ng-if="registro.type === 'REVENDEDOR'" data-ui-sref="cadastros.revenda_edicao({id: registro.op_id})">{{registro.op_name}}</a>
+                                            </td>
+                                            <td>
+                                                <a data-ui-sref="sales.customers_view({id: registro.sl_id})">{{registro.sl_name}}</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="col-sm-12" ng-show="tab === 6">
+                    <div class="card">
+        
+                        <div class="p-30 text-center" ng-if="report3.length === 0">
+                            {{"SEM-PENDENCIAS" | translate}}.
+                        </div>
+        
+                        <div ng-if="report3.length > 0" class="card">
+                            <div class="card-body">
+                                <table id="content-table" class="table table-striped table-vmiddle">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 1%">{{"TIPO" | translate}}</th>
+                                            <th style="width: 50%">{{"CLIENTE-OPERACIONAL" | translate}}</th>
+                                            <th style="width: 50%">{{"CLIENTE-FINANCEIRO" | translate}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="registro in report3">
+                                            <td>
+                                                {{registro.type}}
+                                            </td>
+                                            <td>
+                                                <a ng-if="registro.type === 'CLIENTE'" data-ui-sref="cadastros.cliente_edicao({id: registro.op_id})">{{registro.op_name}}</a>
+                                                <a ng-if="registro.type === 'REVENDEDOR'" data-ui-sref="cadastros.revenda_edicao({id: registro.op_id})">{{registro.op_name}}</a>
+                                            </td>
+                                            <td>
+                                                <a data-ui-sref="sales.customers_view({id: registro.sl_id})">{{registro.sl_name}}</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="col-sm-12" ng-show="tab === 7">
+                    <div class="card">
+        
+                        <div class="p-30 text-center" ng-if="report4.length === 0">
+                            {{"SEM-PENDENCIAS" | translate}}.
+                        </div>
+        
+                        <div ng-if="report4.length > 0" class="card">
+                            <div class="card-body">
+                                <table id="content-table" class="table table-striped table-vmiddle">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 1%">{{"TIPO" | translate}}</th>
+                                            <th style="width: 50%">{{"CLIENTE-OPERACIONAL" | translate}}</th>
+                                            <th style="width: 50%">{{"CLIENTE-FINANCEIRO" | translate}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="registro in report4">
+                                            <td>
+                                                {{registro.type}}
+                                            </td>
+                                            <td>
+                                                <a ng-if="registro.type === 'CLIENTE'" data-ui-sref="cadastros.cliente_edicao({id: registro.op_id})">{{registro.op_name}}</a>
+                                                <a ng-if="registro.type === 'REVENDEDOR'" data-ui-sref="cadastros.revenda_edicao({id: registro.op_id})">{{registro.op_name}}</a>
+                                            </td>
+                                            <td>
+                                                <a ng-if="registro.type === 'CLIENTE'" data-ui-sref="cadastros.revenda_edicao({id: registro.rev_id})">{{registro.rev_name}}</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+        </div>
+        
+    </div>
+
+    
+
+</div>

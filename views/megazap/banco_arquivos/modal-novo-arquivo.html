@@ -1,0 +1,91 @@
+<div class="modal-header" ng-if="!registro.id">
+    <h3>{{"UPLOAD-ARQUIVOS" | translate}}<small></small></h3>
+</div>
+<div class="modal-body">
+    <div class="row" ng-if="!registro.id && (arquivos == null || arquivos.length == 0)">
+        <div class="col-sm-12 text-center">
+            <input id="fileInputBancoArquivo" type="file" multiple="false" name="..." style="display: none;">
+            <button ng-click="onClickNovoArquivo()" title="Clique aqui para carregar arquivo" class="btn btn-sm bgm-blue waves-effect">
+                <i class="zmdi zmdi-upload"></i> &nbsp; {{"SELECIONAR" | translate}}
+            </button>
+        </div>
+    </div>
+    <div class="row" ng-if="loadingFiles == true">
+        <div>{{"CARREGANDO" | translate}}...</div>
+    </div>
+
+    <div style="max-height:400px; overflow: auto;" ng-if="!registro.id && loadingFiles != true && arquivos != null && arquivos.length > 0">
+        <div class="modal-banco-arquivo-list-container">
+            <div class="modal-banco-arquivo-list-item" ng-repeat="registro in arquivos">
+                <div class="modal-banco-arquivo-list-item-border">
+                    <div class="modal-banco-arquivo-list-item-img" style="padding-top: 30px;" ng-style="{'background-image': getBackgroundImageUrl(registro)}">
+                        <div ng-if="registro.type == 'PDF'" style="text-align: center; display: flex; flex-direction: column;">
+                            <i class="fas fa-file-pdf" style="font-size: 68px; margin-top:10px;color:brown"></i>
+                        </div>
+                        <div ng-if="registro.type == 'AUDIO'" style="text-align: center;">
+                            <i class="zmdi zmdi-audio" style="font-size: 84px; margin-top:10px"></i>
+                        </div>
+                        <div ng-if="registro.type == 'VIDEO'" style="text-align: center;">
+                            <i class="zmdi zmdi-videocam" style="font-size: 84px; margin-top:10px"></i>
+                        </div>
+                        <div ng-if="registro.type == 'ARQUIVO'" style="text-align: center;">
+                            <i class="zmdi zmdi-file" style="font-size: 84px; margin-top:10px"></i>
+                        </div>
+                    </div>
+                    <div class="modal-banco-arquivo-list-item-label" title="{{registro.name}}">
+                        {{registro.name}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <br />
+    <div ng-if="(arquivos != null && arquivos.length > 0) || registro.id != null">
+        <h3>{{"COMPARTILHAMENTO" | translate}}</h3>
+        <br><br>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group fg-float m-b-30">
+                    <div class="fg-line fg-toggled">
+                        <select class="form-control input-lg select-simples" ng-model="compartilhamento.departamentoId">
+                            <option value="0" ng-if="isGestor()">{{"TODOS" | translate}}</option>
+                            <option value="0" ng-if="isAtendente()">Nenhum</option>
+                            <option ng-repeat="departamento in departamentosNaoAdicionados()" value="{{departamento.id}}">
+                                {{departamento.nome}}</option>
+                        </select>
+                        <label class="fg-label">{{'DEPARTAMENTO'|translate}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button ng-click="onAdicionarDepartamento()" class="btn bgm-blue waves-effect">{{"ADICIONAR-DEPARTAMENTO" | translate}}</button>
+            </div>
+        </div>
+
+        <br />
+
+        <table class="table" ng-show="mostrarTabelaDepartamentos()">
+            <thead>
+                <tr>
+                    <th>{{"NOME" | translate}}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="departamento in registro.departamentos" ng-if="!departamento.excluido">
+                    <td style="vertical-align: middle">{{departamento.nome}}</td>
+                    <td class="actions">
+                        <button ng-click="onDeletarDepartamento(departamento)" class="btn btn-danger btn-icon waves-effect waves-circle">
+                            <i class="zmdi zmdi-close"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onModalNovoArquivoInserir()">{{'ENVIAR'|translate}}</button>
+    <button class="btn btn-link" ng-click="onModalNovoArquivoClose()">{{'CANCELAR'|translate}}</button>
+</div>

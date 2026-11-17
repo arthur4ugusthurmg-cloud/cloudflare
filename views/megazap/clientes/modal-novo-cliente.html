@@ -1,0 +1,163 @@
+<div class="modal-header">
+    <h3>{{'NOVO-CLIENTE'|translate}}<small>{{'NOVO-REGISTRO-DESCRICAO'|translate}}</small></h3>
+</div>
+<div class="modal-body">
+    <br/>
+    <div class="row">
+        <div class="col-sm-12 text-center" ng-if="novoRegistro.modulo == 'SAEGA'">
+            <div id="imagem-input-saega" class="fileinput fileinput-new"data-provides="fileinput">
+                <div class="fileinput-preview thumbnail"
+                    data-trigger="fileinput"
+                    style="line-height: 200px">
+
+                    <img ng-src="{{'img/sem-foto.png'}}" />
+                </div>
+                <div>
+                    <span class="btn btn-info btn-file">
+                        <span class="fileinput-new">Selecionar Logo</span>
+                        <span class="fileinput-exists">Alterar</span>
+                        <input type="file" name="..." />
+                    </span>
+
+                    <a href="#"
+                    class="btn btn-danger fileinput-exists"
+                    data-dismiss="fileinput">
+                    Remover
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div ng-class="{'col-sm-6': isRevendedor() || isSupervisorRevenda(), 'col-sm-12': isAdministrador()}">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="nome" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.nome" autofocus>
+                    <label class="fg-label">{{'NOME'|translate}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12" ng-if="novoRegistro.modulo == 'SAEGA'">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="subtitulo" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.subtitulo" autofocus>
+                    <label class="fg-label">Subtítulo</label>
+                </div>
+            </div>
+        </div>
+        <div ng-class="{'col-sm-6': isRevendedor() || isSupervisorRevenda(), 'col-sm-12': isAdministrador()}" ng-if="isRevendedor() || isSupervisorRevenda()">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="nome" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.documento">
+                    <label class="fg-label">Documento (CPF/CNPJ)</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6" ng-if="isRevendedor() || isSupervisorRevenda()">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="nome" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.nomeFantasia">
+                    <label class="fg-label">Nome Fantasia</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6" ng-if="isRevendedor() || isSupervisorRevenda()">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="nome" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.razaoSocial">
+                    <label class="fg-label">Razão Social</label>
+                </div>
+            </div> 
+        </div>
+        <div class="col-sm-12" ng-if="isAdministrador()">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input type="text" ng-model="novoRegistro.salesCustomer" typeahead-show-hint="true" typeahead-min-length="3" uib-typeahead="customer as customer.displayName for customer in getCustomers($viewValue)" typeahead-loading="loadingCustomer" class="form-control input-lg">
+                    <label class="fg-label">Cliente Financeiro</label>
+                </div>
+            </div>
+        </div>
+        <div ng-class="{'col-sm-6': isRevendedor() || isSupervisorRevenda(), 'col-sm-12': isAdministrador()}">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+<select class="form-control input-lg select-simples"
+        ng-model="novoRegistro.modulo"
+        ng-options="mod.id as mod.nome for mod in modulos">
+    <option value="">Selecione um módulo</option>
+</select>
+                    <label class="fg-label">Módulo de Acesso</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6" ng-if="isRevendedor() || isSupervisorRevenda()">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <select class="form-control input-lg select-simples" ng-model="novoRegistro.dominioClienteRevenda" required>
+                        <option value=""></option>
+                        <option ng-repeat="dominio in novoRegistro.dominios" value="{{dominio.dominio}}">{{dominio.nome + ' (' + dominio.dominio + ')'}}</option>
+                    </select>
+                    <label class="fg-label">Domínio</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12"
+            ng-if="novoRegistro.modulo !== 'SAEGA' && novoRegistro.modulo !== 'AGROCENSO'">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="nome" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.responsavel.nome">
+                    <label class="fg-label">{{'RESPONSAVEL'|translate}}</label>
+                </div>
+            </div>
+        </div>
+
+<div
+    ng-if="novoRegistro.modulo !== 'SAEGA'"
+    ng-class="{
+        'col-sm-6': isRevendedor() || isSupervisorRevenda(),
+        'col-sm-12': isAdministrador()
+    }">
+
+    <div class="form-group fg-float m-b-30">
+        <div class="fg-line">
+            <input
+                name="login"
+                type="text"
+                class="form-control fg-input input-lg"
+                ng-model="novoRegistro.responsavel.login"
+                required>
+
+            <label class="fg-label">{{'LOGIN'}}</label>
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-6">
+    <div class="form-group fg-float m-b-30">
+        <div class="fg-line">
+            <input
+                name="email"
+                type="email"
+                class="form-control fg-input input-lg"
+                ng-model="novoRegistro.responsavel.email"
+                autocomplete="email"
+                required>
+            <label class="fg-label">{{'E-EMAIL'}}</label>
+        </div>
+    </div>
+</div>
+        <div class="col-sm-6" ng-if="podeDefinirLimiteAtendentes()">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input type="number" class="form-control fg-input input-lg" ng-model="novoRegistro.limiteAtendentes">
+                    <label class="fg-label">{{'LIMITE-ATENDENTES'|translate}}</label>
+                </div>
+            </div>
+        </div>
+        </div> 
+    </div>
+    <div class="alert alert-info" role="alert" ng-if="isRevendedor() || isSupervisorRevenda()">
+        <i class="zmdi zmdi-alert-circle-o zmdi-hc-fw"></i> {{ "AVISO-EMAIL-SENHA" | translate }}
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onModalInserir()">{{'ENVIAR'|translate}}</button>
+    <button class="btn btn-link" ng-click="onModalCancelar()">{{'CANCELAR'|translate}}</button>
+</div>

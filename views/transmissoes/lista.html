@@ -1,0 +1,53 @@
+<div class="container-fluid" data-ng-controller="TransmissaoListaController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>{{'TRANSMISSOES'| translate}}</h2>
+
+            <button class="btn bgm-teal btn-float waves-effect" ng-click="onMostarModalNovoRegistro()"><i class="zmdi zmdi-plus"></i></button>
+        </div>
+    </div>
+
+    <br/>
+
+    <div ng-if="registros.length === 0" class="text-center">
+        {{'NENHUM-REGISTRO'| translate}}
+    </div>
+
+    <div class="row" ng-repeat="linha in registros">
+        <div class="col-sm-4" ng-repeat="registro in linha">
+              <div class="card blog-post">
+                <div class="bp-header">
+
+                    <ul class="actions pull-right">
+                        <li class="dropdown" uib-dropdown="">
+                            <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                                <i class="zmdi zmdi-more-vert"></i>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-right">                                
+                                <li>
+                                    <a data-ui-sref="bots.transmissao_edicao({id:{{registro.id}}})">{{'EDITAR'|translate}}</a>
+                                </li>
+                                <li>
+                                    <a ng-click="onRemover(registro)" href="">{{'REMOVER'|translate}}</a>
+                                </li>                                
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <a data-ui-sref="bots.transmissao_edicao({id:{{registro.id}}})" href="" class="bp-title bgm-light-gray">
+                        <h2>{{registro.nome}}</h2>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+

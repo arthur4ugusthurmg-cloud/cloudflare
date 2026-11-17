@@ -1,0 +1,129 @@
+<div class="container-fluid" data-ng-controller="BackupController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>
+                Backups
+                <small>{{"BACKUP-DESCRICAO" | translate}}</small>
+            </h2>
+
+            <button title="Adicionar" class="btn bgm-teal btn-float btn-float-2 waves-effect" ng-click="onShowModalNovoRegistro()"><i class="zmdi zmdi-plus"></i></button>
+            <button title="Executar Job" class="btn bgm-teal btn-float btn-float-2 waves-effect" ng-click="runJob()"><i class="zmdi zmdi-play"></i></button>
+            <button title="Pesquisar" class="btn bgm-blue btn-float btn-float-2 waves-effect" ng-click="getAll(true)"><i class="zmdi zmdi-search"></i></button>            
+
+        </div>
+        <div class="card-body card-padding">
+            <br />
+            <div class="row">
+
+                <div class="col-sm-9">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getAll(true)" name="nome" type="text" class="form-control fg-input input-lg" ng-model="filtro.displayName">
+                            <label class="fg-label">{{"NOME" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="getAll(true)" class="form-control input-lg select-simples" ng-model="filtro.status">
+                                <option value="ALL">{{"Todos" | translate}}</option>
+                                <option value="PENDING">{{"PENDING" | translate}}</option>
+                                <option value="IN_PROGRESS">{{"PROCESSANDO" | translate}}</option>
+                                <option value="FINISHED">{{"FINALIZADO" | translate}}</option>
+                                <option value="EMPTY">Vazio</option>
+                                <option value="ERROR">{{"ERRO" | translate}}</option>
+                            </select>
+                            <label class="fg-label">Status</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="registros.length > 0" class="card">
+        <div class="card-body">
+            <div>
+                <table id="content-table" class="table table-striped table-vmiddle">
+                    <thead>
+                        <tr>
+                            <th style="width: 1%">#</th>
+                            <th style="width: 1%">{{"STATUS" | translate}}</th>
+                            <th>{{"TIPO" | translate}}</th>
+                            <th>{{"NOME" | translate}}</th>
+                            <th>{{"DATA-INICIO" | translate}}</th>
+                            <th>{{"ULTIMA-ATUALIZACAO" | translate}}</th>
+                            <th>{{"PROGRESSO" | translate}}</th>
+                            <th>{{"ATENDIMENTOS" | translate}}</th>
+                            <th>{{"TAMANHO" | translate}}</th>
+                            <th style="width: 1%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="registro in registros">
+                            <td style='white-space: nowrap; text-align: center'>
+                                {{registro.id}}
+                            </td>
+                            <td style='white-space: nowrap; text-align: center'>
+                                <div ng-if="registro.status === 'PENDING'" class="status-td bgm-gray c-white">{{"PENDING" | translate}}</div>
+                                <div ng-if="registro.status === 'IN_PROGRESS'" class="status-td bgm-blue c-white" title="Salvando mensagens...">{{"PROCESSANDO" | translate}}</div>
+                                <div ng-if="registro.status === 'GENERATING_ZIP'" class="status-td bgm-blue c-white" title="Gerando arquivo zip...">{{"PROCESSANDO" | translate}}</div>
+                                <div ng-if="registro.status === 'GENERATING_LINK'" class="status-td bgm-blue c-white" title="Gerando link...">{{"PROCESSANDO" | translate}}</div>
+                                <div ng-if="registro.status === 'DELETING_TEMP_FILE'" class="status-td bgm-blue c-white" title="Deletando arquivo temporário...">{{"PROCESSANDO" | translate}}</div>
+                                <div ng-if="registro.status === 'DELETING_TEMP_FOLDER'" class="status-td bgm-blue c-white" title="Deletando pasta temporária...">{{"PROCESSANDO" | translate}}</div>
+                                <div ng-if="registro.status === 'FINISHED'" class="status-td bgm-green c-white">{{"FINALIZADO" | translate}}</div>
+                                <div ng-if="registro.status === 'EMPTY'" class="status-td bgm-green c-white">Vazio</div>
+                                <div ng-if="registro.status === 'ERROR'" class="status-td bgm-red c-white">{{"ERRO" | translate}}</div>
+                            </td>
+                            <td>
+                                <span ng-if="registro.type === 'CLIENT'">{{"CLIENTE" | translate}}</span>
+                                <span ng-if="registro.type === 'PROTOCOL'">{{"PROTOCOLO" | translate}}</span>
+                                <span ng-if="registro.type === 'BOT'">BOT</span>
+                                <span ng-if="registro.type === 'CONTACT'">{{"CONTATO" | translate}}</span>
+                            </td>
+                            <td>
+                                <div class="m-b-10"><b>{{'CRIADO-POR' | translate}}: </b> {{ registro.createdBy }}</div>
+                                <b>{{"CLIENTE" | translate}}: </b>{{ registro.clientId }} - {{registro.clientName}}
+                                <div ng-if="registro.type !== 'CLIENT'">                                    
+                                    <div ng-if="registro.type === 'BOT' || registro.type === 'CONTACT'"><b>Bot: </b> {{ registro.botDisplayName }}</div>
+                                    <div ng-if="registro.type === 'PROTOCOL'"><b>{{"PROTOCOLO" | translate}}: </b> {{ registro.displayName }}</div>
+                                    <div ng-if="registro.type === 'CONTACT'"><b>{{"CONTATO" | translate}}: </b> {{ registro.displayName }}</div>
+                                </div>
+                                <div ng-if="registro.filterCreatedFrom || registro.filterCreatedTo">
+                                    <b>Filtro: </b> {{ registro.filterCreatedFrom | date:"dd/MM/yyyy"}} até {{ registro.filterCreatedTo ? (registro.filterCreatedTo | date:"dd/MM/yyyy") : 'hoje'}}
+                                </div>
+                            </td>
+                            <td class="text-nowrap">
+                                {{ registro.inProgressAt | date:"dd/MM/yyyy HH:mm"}}
+                            </td>
+                            <td class="text-nowrap">
+                                {{ registro.updatedAt | date:"dd/MM/yyyy HH:mm"}}
+                            </td>
+                            <td>
+                                {{ registro.percent }}%
+                            </td>
+                            <td>
+                                {{ registro.countData }}
+                            </td>
+                            <td class="text-nowrap">
+                                {{ formatBytes(registro.size, 2) }}
+                            </td>
+                            <td class="text-center" style="white-space: nowrap">
+                                <button title="Visualizar Link" ng-if="registro.url" ng-click="onShowLink(registro)" class="btn btn-success waves-effect"><i class="zmdi zmdi-link"></i></button>
+                                <button title="Reprocessar" ng-if="registro.status == 'ERROR'" ng-click="onReset(registro)" class="btn btn-primary waves-effect m-r-5"><i class="zmdi zmdi-refresh"></i></button>
+                                <button title="Remover" ng-if="registro.status == 'PENDING' || registro.status == 'ERROR'" ng-click="onExcluir(registro)" class="btn btn-danger waves-effect"><i class="zmdi zmdi-delete"></i></button>                                
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="showMore && registros.length >= 20" class="text-center p-b-30">
+        <button ng-click="getAll()" class="btn btn-default waves-effect"><i class="zmdi zmdi-refresh"></i> {{"MAIS" | translate}}</button>
+    </div>
+
+</div>

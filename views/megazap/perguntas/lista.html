@@ -1,0 +1,74 @@
+<div
+    class="modal-header"
+    ng-controller="TelefoneQrcodeController">
+
+    <h2>
+        {{ 'QRCODE' | translate }}
+        <small>{{ 'QRCODE-DESCRICAO' | translate }}</small>
+    </h2>
+
+</div>
+
+<div
+    class="modal-body text-center"
+    ng-controller="TelefoneQrcodeController">
+
+    <br>
+
+    <div class="col-sm-12">
+        <div class="form-group fg-float m-b-30">
+            <div class="radio radio-inline m-b-15 p-l-0 m-r-10">
+                <label>
+                    <input
+                        type="radio"
+                        value="qrcode"
+                        ng-model="telefoneAuthType"
+                        ng-change="updateTelefoneAuthType('qrcode')"
+                        name="authType">
+
+                    <i class="input-helper"></i>
+                    Leitura via QR Code
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="telefoneErro" class="alert alert-danger">
+        {{ telefoneErro }}
+    </div>
+
+    <img
+        ng-if="telefoneQrcode"
+        ng-src="{{ telefoneQrcode }}"
+        alt="QR Code do WhatsApp"
+        style="width:100%;max-width:400px;height:auto;">
+
+    <div
+        ng-if="!telefoneQrcode && !telefoneErro"
+        class="alert alert-info"
+        role="alert">
+
+        <b>{{ 'ATENCAO' | translate }}!</b>
+        <br>
+
+        <span>
+            {{ 'AGUARDE-RECONHECIMENTO-QRCODE' | translate }}
+        </span>
+
+        <br>
+
+        <small ng-if="telefoneStatus">
+            {{ telefoneStatus }}
+        </small>
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <button
+        type="button"
+        class="btn btn-link"
+        ng-click="onModalQrcodeCancelar()">
+        {{ 'CANCELAR' | translate }}
+    </button>
+</div>

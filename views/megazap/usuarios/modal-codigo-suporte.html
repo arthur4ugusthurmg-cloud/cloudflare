@@ -1,0 +1,21 @@
+<div class="modal-header">
+    <h3>Informe o código de suporte</h3>
+</div>
+<div class="modal-body">
+    <p>
+        <b>ATENÇÃO!</b>
+        <br/>
+        <br/>
+        - O usuário deverá gerar o código de acesso para o suporte, que terá validade de 24 horas e poderá ser encontrado na tela de segurança do usuário.
+        <br/>
+        - O acesso terá duração de 24 horas e, em seguida, você deverá solicitar um novo código.
+        <br/>
+        - Todo acesso ficará registrado em log e poderá ser rastreado pelos administradores do sistema.
+    </p>
+    <br/>
+    <input type="text" class="form-control fg-input input-lg" ng-model="usuarioSelecionado.accessCode" autofocus>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="login()">{{'ENVIAR'|translate}}</button>
+    <button class="btn btn-link" ng-click="cancelarModalCodigoSuporte()">{{'CANCELAR'|translate}}</button>
+</div>

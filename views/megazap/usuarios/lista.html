@@ -1,0 +1,215 @@
+<div class="container-fluid" data-ng-controller="UsuarioListaController" ng-init="onInit()">
+
+    <div class="card" style="margin-bottom: 5px;">
+        <div class="card-header ch-alt">
+            <h2>
+                {{'USUARIOS'| translate}}
+                <button ng-if="hasTutorial('002')" ng-click="showTutorial('002')" title="Clique aqui para visualizar o video de explicação." class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                    <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                </button>
+            </h2>
+
+            <button class="btn bgm-blue btn-float btn-float-2 waves-effect" ng-click="getUsuarios()"><i class="zmdi zmdi-search"></i></button>
+            <button class="btn bgm-teal btn-float btn-float-2 waves-effect" ng-if="isAdministrador()" ng-click="onMostarModalNovoRegistro()" title="Adicionar Gestor Master"><i class="zmdi zmdi-plus"></i></button>
+
+            <div class="lvh-search" data-ng-if="listviewSearchStat" data-ng-click="listviewSearchStat">
+                <input type="text" placeholder="{{'DIGITE-AQUI'| translate}}" class="lvhs-input">
+            </div>
+        </div>
+
+        <div class="card-body card-padding" style="padding-bottom: 0; padding-top: 0;">
+            <br /><br />
+            <div class="row">
+
+                <div class="col-sm-2" ng-if="isAdministrador()">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getUsuarios()" type="text" class="form-control fg-input input-lg" ng-model="filtro.revendedor" autofocus>
+                            <label class="fg-label">{{ "REVENDEDOR" | translate }}</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div ng-if="isAdministrador() || isRevendedor() || isSupervisorRevenda()" ng-class="{'col-sm-2': isAdministrador(), 'col-sm-4': isRevendedor() || isSupervisorRevenda()}">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getUsuarios()" type="text" class="form-control fg-input input-lg" ng-model="filtro.cliente" autofocus>
+                            <label class="fg-label">{{ "CLIENTE" | translate }}</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div ng-class="{'col-sm-2': isAdministrador(), 'col-sm-4': isRevendedor() || isSupervisorRevenda(), 'col-sm-8': !isAdministrador() && !isRevendedor() && !isSupervisorRevenda()}">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input lta-enter="getUsuarios()" type="text" class="form-control fg-input input-lg" ng-model="filtro.usuario" autofocus>
+                            <label class="fg-label">{{ "USUARIO" | translate }}</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-2" ng-if="isAdministrador()">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="getUsuarios()" class="form-control input-lg select-simples" ng-model="filtro.cargo">
+                                <option value="ALL">{{ "TODOS" | translate }}</option>
+                                <option ng-repeat="cargo in cargos" value="{{cargo.value}}">{{cargo.label}}</option>
+                            </select>
+                            <label class="fg-label">{{ "CARGO" | translate }}</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-2">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="getUsuarios()" class="form-control input-lg select-simples" ng-model="filtro.perfil">
+                                <option value="ALL">{{ "TODOS" | translate }}</option>
+
+                                <option ng-if="isAdministrador()" value="Administrador">{{ "ADMINISTRADOR" | translate }}</option> 
+
+                                <optgroup ng-if="isAdministrador() || isRevendedor() || isSupervisorRevenda() || isGestor() || isSupervisorChatbot()" label="{{'HELPDESK'|translate}}">
+                                    <option ng-if="isAdministrador() || isRevendedor() || isSupervisorRevenda()" value="Gestor">{{ "GESTOR" | translate }}</option>
+                                    <option ng-if="isAdministrador() || isRevendedor() || isGestor()" value="Supervisor.Chatbot">{{ "SUPERVISOR" | translate }}</option>
+                                    <option value="Atendente">{{ "ATENDENTE" | translate }}</option>
+                                </optgroup>
+
+                                <optgroup ng-if="isAdministrador() || isRevendedor() || isSupervisorRevenda()" label="{{'REVENDA'|translate}}">
+                                    <option ng-if="isAdministrador()" value="Revendedor">{{ "REVENDEDOR" | translate }}</option>
+                                    <option value="Supervisor.Revenda">{{ "SUPERVISOR" | translate }}</option>
+                                </optgroup>
+
+                                <optgroup ng-if="isAdministrador() || isRevendedor() || isSupervisorRevenda()" label="Delivery">
+                                    <option value="Gestor">{{ "GESTOR" | translate }}</option>
+                                    <option value="Supervisor.Delivery">{{ "SUPERVISOR" | translate }}</option>
+                                    <option value="Operador">{{ "OPERADOR" | translate }}</option>
+                                    <option value="Garçom">{{ "GARCOM" | translate }}</option>
+                                </optgroup>
+                                
+                                <optgroup ng-if="isAdministrador()" label="Saega">
+                                    <option value="Suporte.Saega">{{ "Suporte" | translate }}</option>
+                                </optgroup>
+                            </select>
+                            <label class="fg-label">{{'PERFIL' | translate}}</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-2">
+
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line fg-toggled">
+                            <select ng-change="getUsuarios()" class="form-control input-lg select-simples" ng-model="filtro.status">
+                                <option value="todos">{{ "TODOS" | translate }}</option>
+                                <option value="ativos">{{ "ATIVO" | translate }}</option>
+                                <option value="inativos">{{ "INACTIVE" | translate }}</option>
+                            </select>
+                            <label class="fg-label">{{'STATUS'|translate}}</label>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <br />
+
+    <div ng-repeat="revendedor in registros">
+
+        <div ng-if="revendedor.nome">
+            <h3>{{revendedor.nome}}</h3>
+            <br />
+        </div>
+
+        <div ng-repeat="cliente in revendedor.clientes">
+
+            <div ng-if="cliente.nome">
+                <h4>{{cliente.nome}}</h4>
+                <br />
+            </div>
+
+            <div class="row" ng-repeat="linha in cliente.usuarios">
+
+                <div class="col-sm-4" ng-repeat="registro in linha">
+                    <div class="card">
+                        <div class="card-header ch-alt">
+                            <h2>
+                                <i ng-if="registro.ativo" class="zmdi zmdi-check c-green"></i>
+                                <i ng-if="!registro.ativo" class="zmdi zmdi-block c-red"></i>
+                                {{registro.nome}} 
+                                <i ng-if="registro.has2FA" class="zmdi zmdi-shield-check m-l-5 c-green" title="2FA Ativada"></i>
+                                <i ng-if="!registro.has2FA" class="zmdi zmdi-shield-security m-l-5 c-red" title="2FA Desativada"></i>
+                            </h2>
+
+                            <ul class="actions">
+                                <li class="dropdown" uib-dropdown="">
+                                    <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                                        <i class="zmdi zmdi-more-vert"></i>
+                                    </a>
+
+                                    <ul class="dropdown-menu dropdown-menu-right">
+
+                                        <li ng-if="!permissions.apenasVisualizacao && (!isRevendedor() || isSupervisorRevenda() || (isRevendedor() || isSupervisorRevenda() && registro.perfil !== 'Gestor'))">
+                                            <a ng-click="onMostarModalEdicaoRegistro(registro)" ng-if="!registro.gestorMaster" href="">{{'EDITAR'| translate}}</a>
+                                            <a ng-click="onMostarModalEdicaoGestorMaster(registro.id)" ng-if="registro.gestorMaster" href="">{{'EDITAR'| translate}}</a>
+
+                                            <a data-ng-if="registro.ativo && (isAdministrador() || isRevendedor())" ng-click="verificarPendenciasUsuario(registro)" href="">{{'INATIVAR'| translate}}</a>
+                                            <a data-ng-if="!registro.ativo && (isAdministrador() || isRevendedor())" ng-click="onAtivar(registro)" href="">{{'ATIVAR'| translate}}</a>
+                                            <a data-ng-if="registro.gestorMaster && (isAdministrador() || isRevendedor())" ng-click="removerGestorMaster(registro)" href="">{{'EXCLUIR'| translate}}</a>
+                                        </li>
+                                        <li ng-if="!permissions.apenasVisualizacao && (isAdministrador() || isRevendedor() || isSupervisorRevenda()) && registro.perfil !== 'Suporte.Saega'">
+                                            <hr />
+                                            <a ng-if="isAdministrador() || isRevendedor() || isSupervisorRevenda()" ng-click="onResetQrCodes(registro)" href=""> <i class="zmdi zmdi-shield-security m-r-5"></i>{{'RESETAR-QR-CODES'| translate}}</a>
+                                            <a ng-if="registro.perfil == 'Administrador'" ng-click="onMostarModalHorarios(registro)" href="">{{'HORARIO-ATENDIMENTO-TITULO'| translate}}</a>
+                                            <hr />
+                                        </li>
+                                        <li ng-if="(isAdministrador() || isRevendedor() || isSupervisorRevenda()) && registro.perfil !== 'Suporte.Saega'">
+                                            <a ng-click="abrirModalCodigoSuporte(registro)" href="">{{ "ENTRAR-COM-ESTE-USUARIO" | translate }}</a>
+                                        </li>
+                                        <li ng-if="registro.perfil == 'Suporte.Saega'">
+                                            <div class="text-center m-t-10 m-b-5">
+                                                <button 
+                                                    ng-click="gerarAcesso(registro, 'SAEGA')" 
+                                                    class="btn btn-sm bgm-green waves-effect">
+                                                    <i class="zmdi zmdi-key"></i> Gerar Acesso
+                                                </button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                        <div class="card-body card-padding">
+                            <div><b>{{'LOGIN'| translate}}: </b>{{registro.login}}</div>
+                            <div><b>{{'PERFIL'| translate}}: </b>{{registro.perfil}}</div>
+                            <div ng-if="registro.cargoMz"><b>{{'CARGO'| translate}}: </b>{{cargoLabel(registro.cargoMz)}}</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div ng-if="showMore" class="text-center p-b-30">
+        <button ng-click="getUsuarios(true)" class="btn btn-default waves-effect"><i class="zmdi zmdi-refresh"></i>
+            {{ "MAIS" | translate }}</button>
+    </div>
+
+</div>

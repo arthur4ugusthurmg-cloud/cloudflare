@@ -1,0 +1,18 @@
+
+{
+  "success": true,
+  "message": "Relatório de clientes ativos sem operação associado.",
+  "data": [
+    {
+      "id": 1,
+      "cliente_id": 123,
+      "nome": "Cliente Exemplo",
+      "email": "cliente@exemplo.com",
+      "telefone": "31999999999",
+      "ativo": true,
+      "tem_cliente_op": false,
+      "data_criacao": "2026-10-11T10:00:00Z"
+    }
+  ],
+  "total": 1
+}

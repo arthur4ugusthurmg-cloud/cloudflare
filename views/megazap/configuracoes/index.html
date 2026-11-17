@@ -1,0 +1,491 @@
+<div class="container-fluid" data-ng-controller="ConfiguracaoController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>{{"NOTIFICACAO" | translate}}</h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <br />
+            <div class="row">
+                <div class="col-sm-9">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="255" ng-model="configuracoes.notificacao.mensagem">
+                            <label class="fg-label">{{"MENSAGEM" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="cp-container">
+                        <div class="input-group form-group fg-float">
+                            <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                            <div class="fg-line dropdown" uib-dropdown>
+                                <input type="text" class="form-control cp-value m-t-5" ng-model="configuracoes.notificacao.cor" uib-dropdown-toggle>
+
+                                <div class="dropdown-menu">
+                                    <ng-farbtastic ng-model="configuracoes.notificacao.cor"></ng-farbtastic>
+                                </div>
+
+                                <i class="cp-value m-t-5" style="background-color: {{ configuracoes.notificacao.cor}}"></i>
+                                <label class="fg-label ng-binding">{{"COR" | translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="50" ng-model="configuracoes.notificacao.textoBotao">
+                            <label class="fg-label">{{"TEXTO-BOTAO" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" maxlength="255" ng-model="configuracoes.notificacao.linkBotao">
+                            <label class="fg-label">{{"LINK-BOTAO" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="checkbox m-b-15">
+                <label>
+                    <input type="checkbox" value="" ng-model="configuracoes.notificacao.ativo">
+                    <i class="input-helper"></i>
+                    {{"ATIVO" | translate}}
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>Jobs</h2>
+        </div>
+
+        <div class="card-body card-padding">
+
+
+            <h4>Bot Google Business Messages</h4>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.gbmMessagesRead">
+                            <i class="input-helper"></i>
+                            {{"LER-MENSAGENS" | translate}}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.gbmMessagesSend">
+                            <i class="input-helper"></i>
+                            {{"ENVIAR-MENSAGENS" | translate}}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.gbmMessagesVerification">
+                            <i class="input-helper"></i>
+                            {{"VERIFICAR-STATUS" | translate}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <h4>Bot Email</h4>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.emailMessagesRead">
+                            <i class="input-helper"></i>
+                            {{"LER-MENSAGENS" | translate}}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.emailMessagesSend">
+                            <i class="input-helper"></i>
+                            {{"ENVIAR-MENSAGENS" | translate}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <h4>Bot WhatsApp (Zevia)</h4>
+
+            <div class="row">
+
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.whatsappReadZenvia">
+                            <i class="input-helper"></i>
+                            {{"LER-MENSAGENS" | translate}}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.whatsappSendZenvia">
+                            <i class="input-helper"></i>
+                            {{"ENVIAR-MENSAGENS" | translate}}
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <h4>Bot WhatsApp (360 Dialog)</h4>
+
+            <div class="row">
+
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.whatsappRead360Dialog">
+                            <i class="input-helper"></i>
+                            {{"LER-MENSAGENS" | translate}}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.whatsappSend360Dialog">
+                            <i class="input-helper"></i>
+                            {{"ENVIAR-MENSAGENS" | translate}}
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <h4>Bot WhatsApp (Gupshup)</h4>
+
+            <div class="row">
+
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.whatsappReadGupshup">
+                            <i class="input-helper"></i>
+                            {{"LER-MENSAGENS" | translate}}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.whatsappSendGupshup">
+                            <i class="input-helper"></i>
+                            {{"ENVIAR-MENSAGENS" | translate}}
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <h4>Bot WhatsApp (Oficial)</h4>
+
+            <div class="row">
+
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.whatsappReadOficial">
+                            <i class="input-helper"></i>
+                            {{"LER-MENSAGENS" | translate}}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.whatsappSendOficial">
+                            <i class="input-helper"></i>
+                            {{"ENVIAR-MENSAGENS" | translate}}
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <h4>Bot Facebook</h4>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.facebookRead">
+                            <i class="input-helper"></i>
+                            {{"LER-MENSAGENS" | translate}}
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.facebook">
+                            <i class="input-helper"></i>
+                            {{"ENVIAR-MENSAGENS" | translate}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <h4>Bot Instagram</h4>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.instagramRead">
+                            <i class="input-helper"></i>
+                            {{"LER-MENSAGENS" | translate}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <h4>Bot Telegram</h4>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.telegram">
+                            <i class="input-helper"></i>
+                            {{"ENVIAR-MENSAGENS" | translate}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <h4>{{"FINANCEIRO" | translate}}</h4>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.salesIuguProcessQueue">
+                            <i class="input-helper"></i>
+                            {{"PROCESSAR-EVENTOS-IUGU" | translate}}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.salesCreateInvoicesByContract">
+                            <i class="input-helper"></i>
+                            {{"CRIAR-FATURAS-CONTRATOS" | translate}}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.salesVerifyExpiredInvoices">
+                            <i class="input-helper"></i>
+                            {{"VERIFICAR-FATURAS-VENCIDAS" | translate}}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.salesNfseManagement">
+                            <i class="input-helper"></i>
+                            {{"GERENCIAR-NFSES" | translate}}
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <h4>{{"OTHER" | translate}}</h4>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.email">
+                            <i class="input-helper"></i>
+                            {{"ENVIAR-EMAILS" | translate}}
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.sms">
+                            <i class="input-helper"></i>
+                            {{"ENVIAR-SMS" | translate}}
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.serverClean">
+                            <i class="input-helper"></i>
+                            {{"LIMPAR-BOTS-DUPLICADOS-SERVERS" | translate}}
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.backup">
+                            <i class="input-helper"></i>
+                            {{"GERAR-BACKUP" | translate}}
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.webhookSend">
+                            <i class="input-helper"></i>
+                            Webhooks
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.agentsOutsideWorkingHours">
+                            <i class="input-helper"></i>
+                            {{"DEIXAR-ATENDENTES-FORA-HORARIO" | translate}}
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.task">
+                            <i class="input-helper"></i>
+                            Mensagens Programadas
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.leadFactory">
+                            <i class="input-helper"></i>
+                            Leads Factory
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            <input type="checkbox" value="" ng-model="configuracoes.job.crmTaskReminder">
+                            <i class="input-helper"></i>
+                            Tarefas - Notificação de Lembrete
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>{{"ALOCACAO-SERVIDORES" | translate}}</h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <br />
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="number" class="form-control fg-input input-lg" maxlength="20" ng-model="configuracoes.alocacao.botsServer">
+                            <label class="fg-label">{{"LIMITE-BOTS-SERVIDOR" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="number" class="form-control fg-input input-lg" maxlength="255" ng-model="configuracoes.alocacao.mensagensHora">
+                            <label class="fg-label">{{"LIMITE-MENSAGENS-HORA" | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>{{"AIS-INTEGRATIONS" | translate}}</h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <div class="row">
+                <div class="col-sm-3" ng-repeat="item in configuracoes.ais">
+                    <div class="checkbox m-b-15">
+                        <label style="display: flex;">
+                            <img style="border-radius: 40%; height: 20px;" ng-src="{{item.logoUrl}}" class="pv-main" alt="">
+                            <input type="checkbox" value="" ng-model="item.active">
+                            <i class="input-helper"></i>
+                            <span style="padding-left: 5px;">{{item.name}}</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button ng-click="onUpdate()" class="btn btn-float bgm-blue m-btn waves-effect waves-circle"><i class="zmdi zmdi-floppy"></i></button>
+
+</div>

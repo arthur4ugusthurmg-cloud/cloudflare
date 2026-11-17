@@ -1,0 +1,20 @@
+<div class="modal-body whatsapp-emojis" style="padding: 0;">
+    <div class="content-emoji-list modal-emoji" ng-class="{'opened': emojiListControl.opened}">
+        <div class="emoji-list-tabs">
+            <div ng-repeat="category in emojiList track by $index" ng-click="selectEmojiTab($index)" class="emoji-list-tab" ng-class="{'active' : emojiListControl.activeTab == $index}">{{category.icon | translate}}</div>
+        </div>
+        <div ng-repeat="category in emojiList track by $index" class="emoji-list-emojis" ng-if="emojiListControl.activeTab == $index" ng-swipe-right="selectPreviousEmojiTab()" ng-swipe-left="selectNextEmojiTab()">
+            <div ng-click="onSelecionarEmoji(emoji.emoji)" class="emoji-list-emoji" ng-repeat="emoji in emojiListControl.emojis" ng-swipe-left-right="selectPreviousEmojiTab()" ng-swipe-left="selectNextEmojiTab()">
+                {{emoji.emoji}}
+            </div>
+        </div>
+        <div class="emoji-list-emojis recent-emojis">
+            <div ng-click="onSelecionarEmoji(emoji)" class="emoji-list-emoji" ng-repeat="emoji in emojiListControl.recentEmojis">
+                {{emoji}}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onModalEmojisCancelar()">{{'CANCELAR'|translate}}</button>
+</div>

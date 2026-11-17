@@ -1,0 +1,65 @@
+<div class="container-fluid" data-ng-controller="HorariosAtendimentoController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>
+               {{"HORARIO-ATENDIMENTO-GERAL-TITULO" | translate}}
+                <button ng-if="hasTutorial('129')" ng-click="showTutorial('129')" title="Clique aqui para visualizar o video de explicação." class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                    <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                </button>
+                <small>{{"HORARIO-ATENDIMENTO-DESCRICAO-2" | translate}} <br /><b>{{"DE" | translate}}: </b> 00:00 e <b>{{"ATE" | translate}}: </b> 00:00.</small>
+                <hr/>
+                <small>
+                   {{"REGRA-APLICADA-POR-DIA-ORDEM-TITULO" | translate}}:
+                    <br />
+                    <br />
+                    1. {{"HORARIOS-ATENDENTE" | translate}}
+                    <br />
+                    2. {{"HORARIOS-DEPARTAMENTO" | translate}}
+                    <br />
+                    3. {{"HORARIOS-GERAIS" | translate}}
+                    <br />
+                </small>
+            </h2>            
+        </div>        
+    
+        <div class="card-body card-padding">
+            <div class="m-t-30 horarios-atendimento" ng-repeat="diaAtendimento in configuracoes.diasAtendimento">
+                <div class="text-center m-t-10"><b>{{diaAtendimento.nome | translate | uppercase}}</b></div>
+
+                <div class="row p-15">
+                    <div class="col-sm-12">
+                        <button ng-click="adicionarHorario(diaAtendimento)" class="btn btn-default btn-block m-b-25">
+                            <span class="zmdi zmdi-plus"></span> {{"HORARIO" | translate}}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row p-10" ng-repeat="horario in diaAtendimento.horarios" ng-if="horario.acao != 'EXCLUIR'">
+                    <div class="col-sm-6" style="width: 43%">
+                        <div class="form-group fg-float">
+                            <div class="fg-line">
+                                <input type="text" class="form-control fg-input input-lg" ng-model="horario.de" input-mask="{mask: '00:00'}" ng-change="atualizarHorario(horario)">
+                                <label class="fg-label">{{"DE" | translate }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" style="width: 43%">
+                        <div class="form-group fg-float">
+                            <div class="fg-line">
+                                <input type="text" class="form-control fg-input input-lg" ng-model="horario.ate" input-mask="{mask: '00:00'}" ng-change="atualizarHorario(horario)">
+                                <label class="fg-label">{{"ATE" | translate }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-1" style="padding-left: 0; padding-top: 15px">
+                        <span ng-click="excluirHorario(horario)" class="zmdi zmdi-close cursor-pointer c-red"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button ng-click="onSalvar()" class="btn btn-float bgm-blue m-btn waves-effect waves-circle"><i class="zmdi zmdi-floppy"></i></button>
+
+</div>

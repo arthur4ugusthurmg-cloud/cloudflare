@@ -1,0 +1,84 @@
+<div class="modal-header">
+    <h3>{{'NOVA-INFORMACAO-CONTATO'|translate}}</h3>
+</div>
+<div class="modal-body">
+    <br />
+    <div class="row">
+
+        <div class="col-sm-12">
+
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <div class="select">
+                        <select class="form-control input-lg select-simples" ng-model="novoRegistro.modulo">
+                            <option value="HELPDESK">{{'HELPDESK' | translate}}</option>
+                            <option value="CRM">CRM</option>
+                        </select>
+                        <label class="fg-label">{{'MODULO' | translate}}</label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-12">
+
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <div class="select">
+                        <select class="form-control input-lg select-simples" ng-model="novoRegistro.entidade">
+                            <option ng-if="novoRegistro.modulo == 'HELPDESK'" value="CONTACT">{{'CONTATO' | translate}}</option>
+                            <option ng-if="novoRegistro.modulo == 'CRM'" value="CLIENT">{{'CLIENTE' | translate}}</option>
+                            <option ng-if="novoRegistro.modulo == 'CRM'" value="CARD">Card</option>
+                        </select>
+                        <label class="fg-label">{{'ENTIDADE' | translate}}</label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="nome" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.nome" autofocus>
+                    <label class="fg-label">{{'NOME'|translate}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line fg-toggled">
+                    <div class="select">
+                        <select class="form-control input-lg select-simples" ng-model="novoRegistro.tipoDado">
+                            <option value="TEXTO">{{ "TEXTO" | translate }}</option>
+                            <option value="DATA">{{ "DATA" | translate }}</option>
+                            <option value="HORA">{{ "HORA" | translate }}</option>
+                            <option value="NUMERO_INTEIRO">{{ "NUMERO_INTEIRO" | translate }}</option>
+                            <option value="NUMERO_INTEIRO_POSITIVO">{{ "NUMERO_INTEIRO_POSITIVO" | translate }}</option>
+                            <option value="NUMERO_DECIMAL">{{ "NUMERO_DECIMAL" | translate }}</option>
+                            <option value="NUMERO_DECIMAL_POSITIVO">{{ "NUMERO_DECIMAL_POSITIVO" | translate }}</option>
+                            <option value="ARQUIVO">{{ "ARQUIVO" | translate }}</option>
+                        </select>
+                        <label class="fg-label">{{"TIPO-DADOS" | translate}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="checkbox m-b-15">
+                <label>
+                    <input type="checkbox" value="" ng-model="novoRegistro.apenasVisualizacao">
+                    <i class="input-helper"></i>
+                    {{'APENAS-VISUALIZACAO'|translate}}
+                </label>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onModalInserir()">{{'ENVIAR'|translate}}</button>
+    <button class="btn btn-link" ng-click="onModalCancelar()">{{'CANCELAR'|translate}}</button>
+</div>

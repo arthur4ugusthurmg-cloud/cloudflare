@@ -1,0 +1,12 @@
+[
+    {
+        "numero": 13,
+        "nome": "LULA",
+        "disponivelBot": true
+    },
+    {
+        "numero": 14,
+        "nome": "LULA1",
+        "disponivelBot": false
+    }
+]

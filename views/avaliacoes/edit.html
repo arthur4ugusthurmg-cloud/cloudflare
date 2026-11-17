@@ -1,0 +1,916 @@
+<style>
+  .qb-canvas {
+    background: #f5f6f8;
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .qb-vazio {
+    text-align: center;
+    padding: 30px 20px;
+    color: #90a4ae;
+  }
+
+  .qb-vazio i {
+    display: block;
+    font-size: 38px;
+    color: #cfd8dc;
+    margin-bottom: 10px;
+  }
+
+  .qb-card {
+    position: relative;
+    background: #fff;
+    border: 1px solid #e4e7eb;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    transition: box-shadow .2s ease, border-color .2s ease;
+  }
+
+  .qb-card:before {
+    content: '';
+    position: absolute;
+    left: -1px;
+    top: -1px;
+    bottom: -1px;
+    width: 5px;
+    border-radius: 8px 0 0 8px;
+    background: transparent;
+    transition: background .2s ease;
+  }
+
+  .qb-card.qb-ativa {
+    border-color: #cfd6dd;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, .10);
+  }
+
+  .qb-card.qb-ativa:before {
+    background: #0288D1;
+  }
+
+  .qb-resumo {
+    display: flex;
+    align-items: center;
+    padding: 14px 18px;
+    cursor: pointer;
+  }
+
+  .qb-resumo:hover {
+    background: #fafbfc;
+    border-radius: 8px;
+  }
+
+  .qb-num {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    margin-right: 12px;
+    border-radius: 50%;
+    background: #eceff1;
+    color: #78909c;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 26px;
+    text-align: center;
+  }
+
+  .qb-resumo-texto {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #37474f;
+    font-size: 14px;
+  }
+
+  .qb-sem-titulo {
+    color: #b0bec5;
+    font-style: italic;
+  }
+
+  .qb-obrig-marca {
+    color: #ef4444;
+    margin-left: 3px;
+  }
+
+  .qb-tag {
+    flex: 0 0 auto;
+    margin-left: 12px;
+    font-size: 11px;
+    color: #607d8b;
+    background: #eceff1;
+    border-radius: 12px;
+    padding: 3px 10px;
+    white-space: nowrap;
+  }
+
+  .qb-tag i {
+    margin-right: 4px;
+  }
+
+  .qb-corpo {
+    padding: 18px 18px 0 18px;
+  }
+
+  .qb-tipos {
+    margin-bottom: 6px;
+  }
+
+  .qb-tipo {
+    display: inline-block;
+    border: 1px solid #e0e0e0;
+    background: #fff;
+    border-radius: 6px;
+    padding: 6px 12px;
+    margin: 0 6px 6px 0;
+    font-size: 12px;
+    color: #607d8b;
+    cursor: pointer;
+    transition: border-color .15s ease, background .15s ease, color .15s ease;
+  }
+
+  .qb-tipo:hover {
+    border-color: #90a4ae;
+    color: #37474f;
+  }
+
+  .qb-tipo.ativo {
+    border-color: #0288D1;
+    background: #e3f2fd;
+    color: #0277bd;
+    font-weight: 600;
+  }
+
+  .qb-tipo i {
+    margin-right: 5px;
+  }
+
+  .qb-preview {
+    background: #fafbfc;
+    border: 1px dashed #e0e4e8;
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-top: 10px;
+  }
+
+  .qb-preview-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    color: #b0bec5;
+    margin-bottom: 10px;
+  }
+
+  .qb-nps span {
+    display: inline-block;
+    width: 34px;
+    height: 34px;
+    margin: 0 5px 5px 0;
+    line-height: 32px;
+    text-align: center;
+    border: 1px solid #dde2e7;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #78909c;
+    background: #fff;
+  }
+
+  .qb-estrelas i {
+    font-size: 26px;
+    color: #ffc107;
+    margin-right: 4px;
+  }
+
+  .qb-opcao {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .qb-glifo {
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    border: 2px solid #b0bec5;
+  }
+
+  .qb-glifo.circulo {
+    border-radius: 50%;
+  }
+
+  .qb-glifo.quadrado {
+    border-radius: 3px;
+  }
+
+  .qb-opcao-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    padding: 4px 0;
+    font-size: 14px;
+    color: #37474f;
+    box-shadow: none;
+  }
+
+  .qb-opcao-input:focus {
+    outline: none;
+    border-bottom-color: #0288D1;
+  }
+
+  .qb-icone-btn {
+    flex: 0 0 auto;
+    border: 0;
+    background: transparent;
+    color: #b0bec5;
+    font-size: 16px;
+    padding: 2px 6px;
+    cursor: pointer;
+  }
+
+  .qb-icone-btn:hover {
+    color: #ef4444;
+  }
+
+  .qb-add-opcao {
+    border: 0;
+    background: transparent;
+    color: #0288D1;
+    font-size: 13px;
+    padding: 4px 0;
+    margin-top: 2px;
+    cursor: pointer;
+  }
+
+  .qb-add-opcao i {
+    margin-right: 5px;
+  }
+
+  .qb-texto-fake {
+    border: 1px solid #e4e7eb;
+    border-radius: 6px;
+    background: #fff;
+    color: #b0bec5;
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .qb-rodape {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #eceff1;
+    margin-top: 16px;
+    padding: 8px 18px;
+  }
+
+  .qb-dica {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 12px;
+    color: #90a4ae;
+    padding-right: 15px;
+  }
+
+  .qb-obrig-label {
+    font-size: 12px;
+    color: #78909c;
+    margin-right: 10px;
+    white-space: nowrap;
+  }
+
+  .qb-acao {
+    border: 1px solid #dde2e7;
+    background: #fff;
+    color: #607d8b;
+    height: 32px;
+    min-width: 34px;
+    padding: 0 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    margin-left: 6px;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease, border-color .15s ease;
+  }
+
+  .qb-acao i {
+    font-size: 15px;
+    vertical-align: middle;
+  }
+
+  .qb-acao-texto i {
+    margin-right: 6px;
+  }
+
+  .qb-acao:hover {
+    background: #eceff1;
+    border-color: #b0bec5;
+    color: #37474f;
+  }
+
+  .qb-acao.perigo:hover {
+    background: #ffebee;
+    border-color: #ef9a9a;
+    color: #ef4444;
+  }
+
+  .qb-acao[disabled] {
+    opacity: .4;
+    cursor: default;
+    background: #fff;
+    border-color: #e4e7eb;
+    color: #b0bec5;
+  }
+
+  .qb-grupo-acao {
+    display: inline-flex;
+    margin-left: 6px;
+  }
+
+  .qb-grupo-acao .qb-acao {
+    margin-left: 0;
+    border-radius: 0;
+  }
+
+  .qb-grupo-acao .qb-acao:first-child {
+    border-radius: 6px 0 0 6px;
+  }
+
+  .qb-grupo-acao .qb-acao:last-child {
+    border-radius: 0 6px 6px 0;
+    border-left: 0;
+  }
+
+  .qb-sep {
+    display: inline-block;
+    width: 1px;
+    height: 22px;
+    background: #eceff1;
+    margin: 0 8px;
+  }
+
+  .qb-add {
+    display: block;
+    width: 100%;
+    border: 1px dashed #cfd6dd;
+    background: #fff;
+    border-radius: 8px;
+    padding: 14px;
+    color: #0288D1;
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color .15s ease, background .15s ease;
+  }
+
+  .qb-add:hover {
+    border-color: #0288D1;
+    background: #f5fbff;
+  }
+
+  .qb-add i {
+    margin-right: 6px;
+  }
+
+  .qb-chips {
+    margin-top: 6px;
+  }
+
+  .qb-chip {
+    display: inline-block;
+    background: #e3f2fd;
+    border: 1px solid #b3e0f7;
+    color: #0277bd;
+    border-radius: 14px;
+    padding: 5px 10px 5px 14px;
+    margin: 0 8px 8px 0;
+    font-size: 13px;
+  }
+
+  .qb-chip i {
+    margin-left: 8px;
+    color: #0288D1;
+    cursor: pointer;
+    vertical-align: middle;
+  }
+
+  .qb-chip i:hover {
+    color: #ef4444;
+  }
+
+  .qb-clientes-resumo {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: #f1f8fe;
+    border: 1px solid #b3e0f7;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 6px;
+    color: #0277bd;
+    font-size: 14px;
+  }
+
+  .qb-clientes-resumo .qb-clientes-texto {
+    flex: 1 1 auto;
+  }
+
+  .qb-clientes-resumo small {
+    display: block;
+    color: #607d8b;
+  }
+
+  .qb-clientes-lista {
+    max-height: 260px;
+    overflow: auto;
+    border: 1px solid #eceff1;
+    border-radius: 6px;
+    margin-top: 10px;
+  }
+
+  .qb-clientes-item {
+    display: flex;
+    align-items: center;
+    padding: 7px 14px;
+    font-size: 13px;
+    color: #37474f;
+    border-bottom: 1px solid #f5f6f8;
+  }
+
+  .qb-clientes-item:last-child {
+    border-bottom: 0;
+  }
+
+  .qb-clientes-item:hover {
+    background: #fafbfc;
+  }
+
+  .qb-clientes-item span {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .qb-clientes-item i {
+    flex: 0 0 auto;
+    color: #b0bec5;
+    cursor: pointer;
+  }
+
+  .qb-clientes-item i:hover {
+    color: #ef4444;
+  }
+
+  .qb-chips-vazio {
+    color: #90a4ae;
+    font-size: 13px;
+    padding: 6px 0 10px 0;
+  }
+</style>
+
+<div class="container-fluid" data-ng-controller="AvaliacoesController" ng-init="onInit()">
+  <div class="card">
+    <div class="card-header ch-alt">
+      <h2>
+        {{avaliacao.id ? 'Editar avaliação' : 'Nova avaliação'}}
+        <small>Defina o título, o período e o comportamento da pesquisa exibida aos usuários.</small>
+      </h2>
+    </div>
+
+    <div class="card-body card-padding">
+      <br />
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group fg-float m-b-30">
+            <div class="fg-line" ng-class="{'fg-toggled': avaliacao.titulo}">
+              <input type="text" class="form-control fg-input input-lg" ng-model="avaliacao.titulo" maxlength="200" />
+              <label class="fg-label">Título *</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-12">
+          <div class="form-group fg-float m-b-30">
+            <div class="fg-line" ng-class="{'fg-toggled': avaliacao.descricao}">
+              <textarea class="form-control fg-input input-lg" rows="2" ng-model="avaliacao.descricao"
+                maxlength="1000"></textarea>
+              <label class="fg-label">Descrição / mensagem de abertura</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-12">
+          <div class="form-group fg-float m-b-30">
+            <div class="fg-line" ng-class="{'fg-toggled': avaliacao.mensagemFinal}">
+              <input type="text" class="form-control fg-input input-lg" ng-model="avaliacao.mensagemFinal"
+                maxlength="500" />
+              <label class="fg-label">Mensagem de agradecimento</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="date-picker dp-blue form-group fg-float m-b-30"
+            ng-class="{'is-opened': dataInicioOpened == true}">
+            <div class="fg-line" ng-class="{'fg-toggled': avaliacao.dataInicio}">
+              <input ng-click="dataInicioOpened = true" type="text" class="form-control ng-isolate-scope input-lg"
+                ng-model="avaliacao.dataInicio" show-weeks="false" uib-datepicker-popup="dd/MM/yyyy"
+                ui-mask="99/99/9999" on-open-focus="false" model-view-value="true" is-open="dataInicioOpened"
+                close-text="{{'CLOSE' | translate}}" current-text="{{'TODAY' | translate}}" />
+              <label class="fg-label">Início da pesquisa</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="date-picker dp-blue form-group fg-float m-b-30" ng-class="{'is-opened': dataFimOpened == true}">
+            <div class="fg-line" ng-class="{'fg-toggled': avaliacao.dataFim}">
+              <input ng-click="dataFimOpened = true" type="text" class="form-control ng-isolate-scope input-lg"
+                ng-model="avaliacao.dataFim" show-weeks="false" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999"
+                on-open-focus="false" model-view-value="true" is-open="dataFimOpened"
+                close-text="{{'CLOSE' | translate}}" current-text="{{'TODAY' | translate}}" />
+              <label class="fg-label">Fim da pesquisa</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-4">
+          <div class="form-group fg-float m-b-10">
+            <div class="fg-line" ng-class="{'fg-toggled': avaliacao.diasMinimosCadastro}">
+              <input type="number" min="0" step="1" class="form-control fg-input input-lg"
+                ng-model="avaliacao.diasMinimosCadastro" />
+              <label class="fg-label">Dias mínimos de cadastro para exibir</label>
+            </div>
+          </div>
+          <small style="color: #90a4ae;">
+            Só aparece para usuários cadastrados há pelo menos esse número de dias. Use 0 para exibir desde o
+            primeiro acesso.
+          </small>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="checkbox m-b-15">
+            <label class="cursor-pointer">
+              <input type="checkbox" ng-model="avaliacao.ativo" />
+              <i class="input-helper"></i>
+              Ativa
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="checkbox m-b-15">
+            <label class="cursor-pointer">
+              <input type="checkbox" ng-model="avaliacao.exibirModal" />
+              <i class="input-helper"></i>
+              Abrir automaticamente
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="checkbox m-b-15">
+            <label class="cursor-pointer">
+              <input type="checkbox" ng-model="avaliacao.permiteDispensar" />
+              <i class="input-helper"></i>
+              Permitir pular
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="checkbox m-b-15">
+            <label class="cursor-pointer">
+              <input type="checkbox" ng-model="avaliacao.anonima" />
+              <i class="input-helper"></i>
+              Respostas anônimas
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-alt">
+      <h2>
+        Perguntas
+        <small>Clique em uma pergunta para editá-la. A ordem abaixo é a ordem de exibição.</small>
+      </h2>
+    </div>
+
+    <div class="card-body card-padding">
+      <div class="qb-canvas">
+
+        <div ng-if="avaliacao.perguntas.length === 0" class="qb-vazio">
+          <i class="zmdi zmdi-format-list-bulleted"></i>
+          Nenhuma pergunta ainda. Adicione a primeira abaixo.
+        </div>
+
+        <div ng-repeat="pergunta in avaliacao.perguntas" class="qb-card"
+          ng-class="{'qb-ativa': ehPerguntaAtiva(pergunta)}">
+
+          <div ng-if="!ehPerguntaAtiva(pergunta)" class="qb-resumo" ng-click="selecionarPergunta(pergunta)">
+            <div class="qb-num">{{$index + 1}}</div>
+            <div class="qb-resumo-texto">
+              <span ng-if="pergunta.enunciado">{{pergunta.enunciado}}</span>
+              <span ng-if="!pergunta.enunciado" class="qb-sem-titulo">Pergunta sem enunciado</span>
+              <span ng-if="pergunta.obrigatoria" class="qb-obrig-marca" title="Resposta obrigatória">*</span>
+            </div>
+            <div class="qb-tag">
+              <i class="{{getTipoPergunta(pergunta.tipo).icon}}"></i>{{getTipoPergunta(pergunta.tipo).label}}
+            </div>
+          </div>
+
+          <div ng-if="ehPerguntaAtiva(pergunta)">
+            <div class="qb-corpo">
+
+              <div class="row">
+                <div class="col-sm-7">
+                  <div class="form-group fg-float m-b-20 m-t-20">
+                    <div class="fg-line" ng-class="{'fg-toggled': pergunta.enunciado}">
+                      <input type="text" class="form-control fg-input input-lg" ng-model="pergunta.enunciado"
+                        maxlength="500" />
+                      <label class="fg-label">Pergunta {{$index + 1}} *</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-5">
+                  <div class="form-group fg-float m-b-20 m-t-20">
+                    <div class="fg-line" ng-class="{'fg-toggled': pergunta.ajuda}">
+                      <input type="text" class="form-control fg-input input-lg" ng-model="pergunta.ajuda"
+                        maxlength="300" />
+                      <label class="fg-label">Texto de ajuda (opcional)</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="qb-tipos">
+                <span ng-repeat="tipo in tiposPergunta" class="qb-tipo"
+                  ng-class="{'ativo': pergunta.tipo === tipo.value}" ng-click="setTipoPergunta(pergunta, tipo.value)">
+                  <i class="{{tipo.icon}}"></i>{{tipo.label}}
+                </span>
+              </div>
+
+              <div class="qb-preview">
+                <div class="qb-preview-label">Como o usuário vai responder</div>
+
+                <div ng-if="pergunta.tipo === 'NPS'" class="qb-nps">
+                  <span ng-repeat="nota in previewNps">{{nota}}</span>
+                </div>
+
+                <div ng-if="pergunta.tipo === 'ESTRELAS'" class="qb-estrelas">
+                  <i class="zmdi zmdi-star-outline" ng-repeat="estrela in previewEstrelas"></i>
+                </div>
+
+                <div ng-if="exigeOpcoes(pergunta)">
+                  <div class="qb-opcao" ng-repeat="opcao in pergunta.opcoes">
+                    <span class="qb-glifo"
+                      ng-class="{'circulo': pergunta.tipo === 'ESCOLHA_UNICA', 'quadrado': pergunta.tipo === 'ESCOLHA_MULTIPLA'}"></span>
+                    <input type="text" class="qb-opcao-input" ng-model="opcao.descricao" maxlength="300"
+                      placeholder="Opção {{$index + 1}}" />
+                    <button type="button" class="qb-icone-btn" title="Remover opção"
+                      ng-click="removeOpcao(pergunta, $index)">
+                      <i class="zmdi zmdi-close"></i>
+                    </button>
+                  </div>
+
+                  <button type="button" class="qb-add-opcao" ng-click="addOpcao(pergunta)">
+                    <i class="zmdi zmdi-plus"></i>Adicionar opção
+                  </button>
+                </div>
+
+                <div ng-if="pergunta.tipo === 'TEXTO'" class="qb-texto-fake">
+                  Resposta escrita pelo usuário...
+                </div>
+              </div>
+            </div>
+
+            <div class="qb-rodape">
+              <div class="qb-dica">{{getTipoPergunta(pergunta.tipo).dica}}</div>
+
+              <span class="qb-obrig-label">Obrigatória</span>
+              <div class="toggle-switch" data-ts-color="blue">
+                <input id="qb-obrig-{{$index}}" type="checkbox" hidden="hidden" ng-model="pergunta.obrigatoria" />
+                <label for="qb-obrig-{{$index}}" class="ts-helper"></label>
+              </div>
+
+              <span class="qb-sep"></span>
+
+              <div class="qb-grupo-acao">
+                <button type="button" class="qb-acao" title="Mover para cima" ng-disabled="$first"
+                  ng-click="moverPergunta($index, -1)">
+                  <i class="zmdi zmdi-long-arrow-up"></i>
+                </button>
+                <button type="button" class="qb-acao" title="Mover para baixo" ng-disabled="$last"
+                  ng-click="moverPergunta($index, 1)">
+                  <i class="zmdi zmdi-long-arrow-down"></i>
+                </button>
+              </div>
+
+              <button type="button" class="qb-acao qb-acao-texto" ng-click="duplicarPergunta($index)">
+                <i class="zmdi zmdi-copy"></i>Duplicar
+              </button>
+              <button type="button" class="qb-acao qb-acao-texto perigo" ng-click="removePergunta($index)">
+                <i class="zmdi zmdi-delete"></i>Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="qb-add" ng-click="addPergunta('NPS')">
+          <i class="zmdi zmdi-plus"></i>Adicionar pergunta
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-alt">
+      <h2>
+        Quem responde
+        <small>
+          Selecione os perfis que devem receber esta avaliação. Se nenhum for marcado, ela é exibida para
+          <strong>todos os perfis</strong>.
+        </small>
+      </h2>
+    </div>
+
+    <div class="card-body card-padding">
+      <div class="row">
+        <div class="col-sm-4" ng-repeat="perfil in perfisDisponiveis">
+          <div class="checkbox m-b-15 m-l-5">
+            <label class="cursor-pointer">
+              <input type="checkbox" ng-checked="perfilSelecionado(perfil.perfil)"
+                ng-click="togglePerfil(perfil.perfil)" />
+              <i class="input-helper"></i>
+              {{perfil.nome}}
+            </label>
+          </div>
+        </div>
+      </div>
+      <small>
+        <span ng-if="!avaliacao.perfis || avaliacao.perfis.length === 0">Visível para todos os perfis.</span>
+        <span ng-if="avaliacao.perfis.length > 0">Direcionada a {{avaliacao.perfis.length}} perfil(s).</span>
+      </small>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-alt">
+      <h2>
+        Segmentação por parceiro
+        <small>Escolha se a avaliação vale para todos os parceiros ou apenas para alguns.</small>
+      </h2>
+    </div>
+
+    <div class="card-body card-padding">
+      <div ng-if="parceiros.length === 0">
+        Nenhum parceiro disponível.
+      </div>
+
+      <div ng-if="parceiros.length > 0">
+        <div class="row">
+          <div class="col-sm-5">
+            <div class="form-group fg-float m-b-20 m-t-10">
+              <div class="fg-line fg-toggled">
+                <select class="form-control input-lg select-simples" ng-model="segmentacaoParceiro"
+                  ng-change="onChangeSegmentacaoParceiro()">
+                  <option value="TODOS">Todos os parceiros</option>
+                  <option value="ESPECIFICOS">Apenas parceiros selecionados</option>
+                </select>
+                <label class="fg-label">Parceiros</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div ng-if="segmentacaoParceiro === 'ESPECIFICOS'">
+          <div class="row">
+            <div class="col-sm-5">
+              <div class="form-group fg-float m-b-10 m-t-10">
+                <div class="fg-line" ng-class="{'fg-toggled': buscaParceiro}">
+                  <input type="text" class="form-control fg-input" ng-model="buscaParceiro"
+                    typeahead-show-hint="true" typeahead-min-length="0"
+                    uib-typeahead="parceiro as parceiro.nome for parceiro in buscarParceiros($viewValue)"
+                    typeahead-on-select="onSelecionarParceiro($item)" typeahead-no-results="semParceiro" />
+                  <label class="fg-label">Adicionar parceiro</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-7" style="padding-top: 18px;">
+              <small style="color: #90a4ae;" ng-if="parceirosDisponiveis().length === 0">
+                Todos os parceiros já foram adicionados.
+              </small>
+              <small style="color: #90a4ae;" ng-if="semParceiro && buscaParceiro">
+                Nenhum parceiro encontrado.
+              </small>
+            </div>
+          </div>
+
+          <div class="qb-chips">
+            <span class="qb-chip" ng-repeat="parceiro in parceirosMarcados()">
+              {{parceiro.nome}}
+              <i class="zmdi zmdi-close" title="Remover" ng-click="removerParceiro(parceiro)"></i>
+            </span>
+            <div class="qb-chips-vazio" ng-if="parceirosMarcados().length === 0">
+              Nenhum parceiro adicionado. Use o campo acima para escolher.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <small ng-if="parceiros.length > 0">
+        <span ng-if="parceirosSelecionados() === 0">Visível para todos os parceiros.</span>
+        <span ng-if="parceirosSelecionados() > 0">Direcionada a {{parceirosSelecionados()}} parceiro(s).</span>
+      </small>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ch-alt">
+      <h2>
+        Segmentação por cliente
+        <small>Se nenhum cliente for adicionado, a avaliação vale para <strong>todos os clientes</strong>.</small>
+      </h2>
+    </div>
+
+    <div class="card-body card-padding">
+      <div class="row">
+        <div class="col-sm-5">
+          <div class="form-group fg-float m-b-10 m-t-10">
+            <div class="fg-line" ng-class="{'fg-toggled': buscaCliente}">
+              <input type="text" class="form-control fg-input" ng-model="buscaCliente"
+                typeahead-show-hint="true" typeahead-min-length="2" typeahead-wait-ms="300"
+                uib-typeahead="cliente as cliente.nome for cliente in buscarClientes($viewValue)"
+                typeahead-on-select="onSelecionarCliente($item)" typeahead-no-results="semCliente" />
+              <label class="fg-label">Adicionar cliente (digite ao menos 2 letras)</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-7" style="padding-top: 18px;">
+          <small style="color: #90a4ae;" ng-if="semCliente && buscaCliente">
+            Nenhum cliente encontrado.
+          </small>
+        </div>
+      </div>
+
+      <div class="qb-chips-vazio" ng-if="clientesSelecionados().length === 0">
+        Nenhum cliente adicionado. Use o campo acima para buscar.
+      </div>
+
+      <div class="qb-clientes-resumo" ng-if="clientesSelecionados().length > 0">
+        <i class="zmdi zmdi-attachment-alt" style="font-size: 20px;"></i>
+        <div class="qb-clientes-texto">
+          <b>{{clientesSelecionados().length}} cliente(s) anexado(s)</b>
+          <small ng-if="clientesDoDashboard > 0">
+            {{clientesDoDashboard}} vindo(s) das respostas do dashboard. A pesquisa será exibida só para eles.
+          </small>
+          <small ng-if="clientesDoDashboard === 0">A pesquisa será exibida só para eles.</small>
+        </div>
+        <button type="button" class="qb-acao qb-acao-texto" ng-click="uiClientes.mostrar = !uiClientes.mostrar">
+          <i class="zmdi" ng-class="uiClientes.mostrar ? 'zmdi-chevron-up' : 'zmdi-chevron-down'"></i>
+          {{uiClientes.mostrar ? 'Ocultar clientes' : 'Ver clientes'}}
+        </button>
+        <button type="button" class="qb-acao qb-acao-texto perigo" ng-click="limparClientes()">
+          <i class="zmdi zmdi-delete"></i>Remover todos
+        </button>
+      </div>
+
+      <div ng-if="uiClientes.mostrar && clientesSelecionados().length > 0">
+        <div class="row">
+          <div class="col-sm-5">
+            <div class="form-group fg-float m-b-0 m-t-15">
+              <div class="fg-line" ng-class="{'fg-toggled': uiClientes.filtro}">
+                <input type="text" class="form-control fg-input" ng-model="uiClientes.filtro"
+                  ng-model-options="{ debounce: 150 }" />
+                <label class="fg-label">Filtrar clientes anexados</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="qb-clientes-lista">
+          <div class="qb-clientes-item" ng-repeat="cliente in clientesFiltrados() track by cliente.confClienteId">
+            <span title="{{cliente.nome}}">{{cliente.nome || ('Cliente #' + cliente.confClienteId)}}</span>
+            <i class="zmdi zmdi-close" title="Remover" ng-click="removerCliente(cliente)"></i>
+          </div>
+          <div class="qb-chips-vazio p-l-15" ng-if="clientesFiltrados().length === 0">
+            Nenhum cliente encontrado com esse filtro.
+          </div>
+        </div>
+      </div>
+
+      <small ng-if="clientesSelecionados().length === 0" class="db m-t-10">Visível para todos os clientes.</small>
+    </div>
+  </div>
+
+  <button ng-click="save()" class="btn btn-float bgm-blue m-btn waves-effect waves-circle" title="Salvar">
+    <i class="zmdi zmdi-floppy"></i>
+  </button>
+</div>

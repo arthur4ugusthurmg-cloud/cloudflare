@@ -1,0 +1,30 @@
+<div class="container-fluid" ng-controller="ApplinksResellerController" ng-init="onInit()">
+  <div class="card">
+    <div class="card-header ch-alt m-b-20">
+      <h2>{{"LINK-APLICATIVO-TITULO" | translate }}</h2>
+      <small>{{"LINK-APLICATIVO-DESCRICAO" | translate}}</small>
+    </div>
+  </div>
+
+  <div class="app-link-list">
+
+    <a target="_blank" ng-href="{{app.link}}" ng-repeat="app in apps" class="app-link-card">
+      <div class="app-link-icon">
+        <i ng-if="app.platform == 'IOS'" class="fab fa-apple"></i>
+        <i ng-if="app.platform == 'ANDROID'" class="fab fa-android"></i>
+        <i ng-if="app.platform == 'DESKTOP'" class="fas fa-desktop"></i>
+        <i ng-if="app.platform == 'PRINTER'" class="fas fa-print"></i>
+      </div>
+      <div class="app-link-name">
+        {{app.name}}
+      </div>
+    </a>
+
+  </div>
+
+  <div style="text-align:center" ng-if="apps.length == 0">
+    {{"LINK-APLICATIVO-NENHUM" | translate}}
+  </div>
+
+
+</div>

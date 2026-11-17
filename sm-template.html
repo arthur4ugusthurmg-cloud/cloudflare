@@ -1,0 +1,31 @@
+<div ng-if="!isFbot() && showMegaZapNotification" class="notification megazap-notification"
+    ng-style="{'background-color': megazapNotification.cor}">
+    {{megazapNotification.mensagem}}
+    <a ng-href="{{megazapNotification.linkBotao}}" target="_blank" ng-if="megazapNotification.textoBotao">
+        <button class="btn btn-default">
+            {{megazapNotification.textoBotao}}
+        </button>
+    </a>
+    <button type="button" class="close" ng-click="closeMegaZapNotification()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<header class="mz-header" ng-class="{'with-internal-chat': !isFbot() && isChatInterno}" data-ng-include
+    src="'template/mz-header.html?VERSION_HASH'" data-ng-controller="headerCtrl as hctrl"
+    ng-style="{'background-color': customizacao.corPrimaria}">
+</header>
+
+<section class="mz-main-section"
+    ng-class="{'with-internal-chat': !isFbot() && isChatInterno, 'menu-opened': !isFbot() && mzTemplate.sidebarMenu.display, 'p-l-0': isFbot()}">
+
+    <aside class="mz-main-menu" data-ng-include src="'template/mz-sidebar.html?VERSION_HASH'" ng-if="!isFbot()"> </aside>
+
+    <section id="content" class="page-view">
+        <div data-ui-view></div>
+    </section>
+
+</section>
+
+<div ng-if="permissions.permissionMegazap && isChatInterno && !isFbot()" data-ng-include
+    src="'views/megazap/chat_interno/chat_interno.html?VERSION_HASH'"> </div>

@@ -1,0 +1,177 @@
+<div class="container-fluid" data-ng-controller="DepartamentoEdicaoController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>{{registro.nome}}</h2>
+            <div class="m-t-5" title="Código utilizado na integração.">
+                <b ng-if='registro.uuid'>UUID: </b>
+                <span>{{registro.uuid ? registro.uuid : ''}}</span>    
+            </div>
+        </div>
+
+        <div class="card-body card-padding">
+            <br/>            
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <div id="imagem-input" class="fileinput fileinput-new" data-provides="fileinput">                        
+                        <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="line-height: 200px;">
+                            <img ng-src="{{registro.imagem}}"/>
+                        </div>
+                        <div>
+                            <span class="btn btn-info btn-file">
+                                <span class="fileinput-new">{{'SELECIONAR-IMAGEM'|translate}}</span>
+                                <span class="fileinput-exists">{{'ALTERAR'|translate}}</span>
+                                <input type="file" name="...">
+                            </span>
+                            <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">{{'REMOVER'|translate}}</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <br/>
+            <br/>
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input type="number" class="form-control fg-input input-lg" style="width: 100px" ng-model="registro.numero">
+                    <label class="fg-label">{{'NUMERO'|translate}}</label>
+                </div>
+            </div>
+            <br/>
+            <div class="form-group fg-float m-b-15">
+                <div class="fg-line">
+                    <textarea class="form-control input-lg" msd-elastic ng-model="registro.nome"></textarea>
+                    <label class="fg-label">{{'NOME'|translate}}</label>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>
+                {{"HORARIO-ATENDIMENTO-TITULO" | translate}}
+                <small>{{"DETERMINAR-HORARIO-DEPARTAMENTO-TITULO" | translate}}.</small>
+                <small>{{"HORARIO-ATENDIMENTO-DESCRICAO-2" | translate}}: <br /><b>{{"DE" | translate}}: </b> 00:00 e <b>{{"ATE" | translate}}: </b> 00:00.</small>
+            </h2>
+        </div>
+        <div class="card-body card-padding">
+            <div class="m-t-30 horarios-atendimento" ng-repeat="horarioAtendimento in registro.diasAtendimento">                
+                <div class="text-center m-t-10"><b>{{horarioAtendimento.nome}}</b></div>                
+
+                <div class="row p-15">
+                    <div class="col-sm-12">
+                        <button ng-click="adicionarHorario(horarioAtendimento)" class="btn btn-default btn-block m-b-25">
+                            <span class="zmdi zmdi-plus"></span> {{"HORARIO" | translate}}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row p-10" ng-repeat="horario in horarioAtendimento.horarios" ng-if="horario.acao != 'EXCLUIR'">
+                    <div class="col-sm-6" style="width: 43%">
+                        <div class="form-group fg-float">
+                            <div class="fg-line">
+                                <input type="text" class="form-control fg-input input-lg" ng-model="horario.de" input-mask="{mask: '00:00'}" ng-change="atualizarHorario(horario)">
+                                <label class="fg-label">{{"DE" | translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" style="width: 43%">
+                        <div class="form-group fg-float">
+                            <div class="fg-line">
+                                <input type="text" class="form-control fg-input input-lg" ng-model="horario.ate" input-mask="{mask: '00:00'}" ng-change="atualizarHorario(horario)">
+                                <label class="fg-label">{{"ATE" | translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-1" style="padding-left: 0; padding-top: 15px">
+                        <span ng-click="excluirHorario(horario)" class="zmdi zmdi-close cursor-pointer c-red"></span>
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>{{"MOTIVOS" | translate}}</h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <br/>            
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input id="motivo" type="text" class="form-control fg-input input-lg" ng-model="motivo.motivo">
+                            <label class="fg-label">{{"NOME" | translate}}</label>
+                        </div>
+                    </div>
+
+                    <button ng-click="onSalvarMotivo()" class="btn bgm-blue waves-effect pull-right">{{"SALVAR" | translate}}</button>    
+                </div>
+            </div>
+
+            <br/>
+
+            <table class="table" ng-if="registro.motivos && registro.motivos.length > 0">
+                <thead>
+                    <tr>
+                        <th>{{"NOME" | translate}}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="m in registro.motivos | orderBy:'motivo'" ng-if="m.acao !== 'EXCLUIR'">
+                        <td style="vertical-align: middle">{{m.motivo}}</td>
+                        <td class="actions">                            
+                            <button ng-if="m.id > 0" ng-click="onEditarMotivo(m)" class="btn btn-default btn-icon waves-effect waves-circle m-r-5"><i class="zmdi zmdi-edit"></i></button> 
+                            <button ng-click="onDeletarMotivo(m)" class="btn btn-danger btn-icon waves-effect waves-circle"><i class="zmdi zmdi-close"></i></button> 
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+    </div> 
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>{{'AUDITORIA'|translate}}</h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <br/>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group m-b-30">
+                        <label>{{'CRIADOR'|translate}}</label>
+                        <div>{{registro.criador}}</div>
+                    </div>
+                    <br/>
+                    <div class="form-group m-b-30">
+                        <label>{{'DATA-CRIACAO'|translate}}</label>
+                        <div>{{registro.dataCriacao|date:('DATE-FORMAT'|translate)}}</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group m-b-30">
+                        <label>{{'ATUALIZADOR'|translate}}</label>
+                        <div>{{registro.atualizador}}</div>
+                    </div>
+                    <br/>
+                    <div class="form-group m-b-30">
+                        <label>{{'DATA-ATUALIZACAO'|translate}}</label>
+                        <div>{{registro.dataAtualizacao|date:('DATE-FORMAT'|translate)}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <button ng-click="onSalvar()" class="btn btn-float bgm-blue m-btn waves-effect waves-circle"><i class="zmdi zmdi-floppy"></i></button>
+
+</div>
+
+

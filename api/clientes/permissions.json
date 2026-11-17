@@ -1,0 +1,127 @@
+{
+    "changePassword": true,
+    "permissionMegazap": true,
+    "permissionlayout":  false,
+    "permissionCarteiraContato": false,
+    "permissionSms": false,
+    "permissionDelivery": false,
+    "permissionLeads": false,
+    "integracaoWebhook": false,
+    "moduloRecados": true,
+    "permissionCrm": false,
+    "totalNotifications": 0,
+    "permissionBulkMessage": false,
+    "permissionApiAtivaBasica": false,
+    "permissionApiAtivaCompleta": false,
+    "permissionIAs": true,
+    "permissionCriarEditarAis": true,
+    "permissionAssistenteCompletoAis": false,
+    "permissionBotCompletoAis": false,
+    "permissionBotBasicoAis": false,
+    "permissionSchedule": false,
+    "scheduleFinanceiro": false,
+    "scheduleAgendamentoOnline": false,
+    "scheduleAgendasExternas": false,
+    "scheduleNotificacoes": false,
+    "permissionAdstrack": false,
+    "permissionDigitalSigning": false,
+    "permissionAutomation": true,
+    "automationAtivaBasica": false,
+    "automationAtivaAvancada": false,
+    "automationLimiteFluxosAtivos": 2,
+    "automationLimiteAcoesMes": 500,
+    "automationPoliticaExcedente": "BLOQUEAR",
+    "permissionPages": [
+        {
+            "module": "MODULE_ALL",
+            "pages": [
+                {
+                    "name": "PAGE_TASKS",
+                    "level": "FULL"
+                }
+            ]
+        },
+        {
+            "module": "MODULE_HELPDESK",
+            "pages": [
+                {
+                    "name": "ACTION_ATTENDANT_DOWNLOAD_REPORTS",
+                    "level": "FULL"
+                },
+                {
+                    "name": "ACTION_CONTACT_PORTFOLIO_IMPORT_EXPORT",
+                    "level": "FULL"
+                },
+                {
+                    "name": "ACTION_TAGS_FIXED",
+                    "level": "FULL"
+                },
+                {
+                    "name": "PAGE_APPS",
+                    "level": "FULL"
+                },
+                {
+                    "name": "PAGE_BLACKLIST",
+                    "level": "FULL"
+                },
+                {
+                    "name": "PAGE_CONTACT_BOOK",
+                    "level": "FULL"
+                },
+                {
+                    "name": "PAGE_CONTACT_PORTFOLIO",
+                    "level": "FULL"
+                },
+                {
+                    "name": "PAGE_FILES",
+                    "level": "FULL"
+                },
+                {
+                    "name": "PAGE_QUICK_MESSAGES",
+                    "level": "FULL"
+                },
+                {
+                    "name": "PAGE_REPORT_LEADS",
+                    "level": "FULL"
+                },
+                {
+                    "name": "PAGE_REPORT_TICKETS",
+                    "level": "FULL"
+                },
+                {
+                    "name": "PAGE_REPORT_WA_CALLS",
+                    "level": "FULL"
+                },
+                {
+                    "name": "PAGE_RETURNS",
+                    "level": "FULL"
+                },
+                {
+                    "name": "PAGE_SCHEDULE_MESSAGES_DATA",
+                    "level": "FULL"
+                },
+                {
+                    "name": "PAGE_SCRAPS",
+                    "level": "FULL"
+                },
+                {
+                    "name": "PAGE_TAGS",
+                    "level": "FULL"
+                },
+                {
+                    "name": "PAGE_TICKETS",
+                    "level": "FULL"
+                }
+            ]
+        }
+    ],
+    "removerPotencialPermitido": true,
+    "visualizarAgendaContatosBot": true,
+    "criarAtendimentoAtivo": true,
+    "reabrirAtendimento": true,
+    "ticketActiveOrderBy": "CREATE_DATE",
+    "permissaoTransferirMassa": true,
+    "permissaoCompartilharContatos": true,
+    "permissaoBaixarRelatorios": true,
+    "permissaoCarteiraImportarExportar": true
+}

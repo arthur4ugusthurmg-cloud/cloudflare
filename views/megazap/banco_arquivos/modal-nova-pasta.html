@@ -1,0 +1,21 @@
+<div class="modal-header">
+    <h3>{{'NOVA-PASTA'|translate}}</h3>
+</div>
+
+
+<div class="modal-body">
+    <div class="row p-t-10">
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input id="input-email-comunicacao" ng-model="registro.fileName" type="text" maxlength="40" class="form-control fg-input input-lg" autofocus>
+                    <label class="fg-label">{{'NOME-NOVA-PASTA'|translate}}</label>
+                </div>               
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onCriarNovaPasta()" ng-disabled="registro.fileName.length === 0">{{'ENVIAR'|translate}}</button>
+    <button class="btn btn-link" ng-click="onCancelarNovaPasta()">{{'CANCELAR'|translate}}</button> 
+</div>

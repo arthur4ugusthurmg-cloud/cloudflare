@@ -1,0 +1,105 @@
+<div class="modal-header">
+    <h3 ng-if="!registro.id">{{'NOVA-TAG'|translate}}<small>{{'NOVO-REGISTRO-DESCRICAO'|translate}}</small></h3>
+    <h3 ng-if="registro.id">{{'EDITAR-TAG'|translate}}
+        <small><b>UUID:</b> {{registro.uuid}}</small>
+    </h3>
+    <span class="badge tag-atendimento m-t-20" ng-if="registro.text" ng-style="{'background-color': registro.backgroundColor, 'color': registro.color }">
+        {{ registro.text }}
+    </span>
+</div>
+<div class="modal-body">
+    <br />
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="nome" type="text" class="form-control fg-input input-lg" maxlength="25" ng-model="registro.text" ng-change="registro.text = (registro.text | uppercase)" autofocus>
+                    <label class="fg-label">{{'TEXTO'|translate}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <select class="form-control input-lg select-simples" ng-model="registro.type" ng-options="(tipo.nome|translate) for tipo in tiposFiltragem" disabled>
+                    </select>
+                    <label class="fg-label">{{'TIPO' | translate}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="cp-container">
+                <div class="input-group form-group fg-float">
+                    <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                    <div class="fg-line dropdown" uib-dropdown>
+                        <input type="text" class="form-control cp-value m-t-5" ng-model="registro.backgroundColor" uib-dropdown-toggle>
+
+                        <div class="dropdown-menu">
+                            <ng-farbtastic ng-model="registro.backgroundColor"></ng-farbtastic>
+                        </div>
+
+                        <i class="cp-value m-t-5" style="background-color: {{ registro.backgroundColor }}"></i>
+                        <label class="fg-label ng-binding">{{ "COR-DE-FUNDO" | translate }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="cp-container">
+                <div class="input-group form-group fg-float">
+                    <span class="input-group-addon"><i class="zmdi zmdi-invert-colors"></i></span>
+                    <div class="fg-line dropdown" uib-dropdown>
+                        <input type="text" class="form-control cp-value m-t-5" ng-model="registro.color" uib-dropdown-toggle>
+
+                        <div class="dropdown-menu">
+                            <ng-farbtastic ng-model="registro.color"></ng-farbtastic>
+                        </div>
+
+                        <i class="cp-value m-t-5" style="background-color: {{ registro.color }}"></i>
+                        <label class="fg-label ng-binding">{{ "COR" | translate }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <select class="form-control input-lg select-simples" ng-model="registro.novoDepartamento" ng-options="departamento.nome for departamento in departamentosFiltragem">
+                    </select>
+                    <label class="fg-label">{{'DEPARTAMENTO'|translate}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button ng-click="onAddDepartamento()" ng-disabled="!permitirAdicionarDepartamento()" class="btn bgm-teal m-b-30 m-r-10">
+        <span class="zmdi zmdi-plus"></span>
+        {{"ADICIONAR" | translate}}
+    </button>
+
+    <div class="table-responsive" ng-if="existemRegistrosAtivos(registro.departments)">
+        <table id="content-table" class="table table-vmiddle">
+            <thead>
+                <tr>
+                    <th style="width: 99%">{{'DEPARTAMENTO'|translate}}</th>
+                    <th style="width: 1%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="department in registro.departments" ng-if="!department.deleted">
+                    <td>
+                        {{ department.nome }}
+                    </td>
+                    <td style="white-space: nowrap">
+                        <button ng-click="onRemoverDepartamento(department)" title="{{ 'EXCLUIR' | translate }}" class="btn btn-danger waves-effect"><i class="zmdi zmdi-delete"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onModalSalvar(registro.id)" ng-if="isGestor() || isSupervisorChatbot() || !registro.shared">{{'ENVIAR'|translate}}</button>
+    <button class="btn btn-link" ng-click="onModalCancelar()">{{'CANCELAR'|translate}}</button>
+</div>

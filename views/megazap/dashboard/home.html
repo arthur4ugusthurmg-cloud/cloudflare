@@ -1,0 +1,606 @@
+<div class="container-fluid" data-ng-controller="DashboardController" ng-init="onInit()">
+    <div class="mini-charts" ng-if="permissions.permissionMegazap">
+
+        <div class="row dashboard-home m-b-20" ng-if="isMegaZap()">
+
+            <div class="col-lg-3 text-center dashboard-titulo">
+                <h1>SUITE</h1>
+                <h2>{{ "MULTIPLATAFORMA" | translate | uppercase }}</h2>
+            </div>
+
+            <div class="col-lg-9 text-center dashboard-imagem">
+                <div class="col" title="HelpDesk">
+                    <div>
+                        <img src="/img/modulos/helpdesk.png" />
+                    </div>
+                </div>
+                <div class="col" title="Delivery">
+                    <div>
+                        <img src="/img/modulos/delivery.png" />
+                    </div>
+                </div>
+                <div class="col" title="ChatBot">
+                    <div>
+                        <img src="/img/modulos/chatbot.png" />
+                    </div>
+                </div>
+                <div class="col" title="LinkBio">
+                    <div>
+                        <img src="/img/modulos/linkbio.png" />
+                    </div>
+                </div>
+                <div class="col" title="Guide">
+                    <div>
+                        <img src="/img/modulos/guide.png" />
+                    </div>
+                </div>
+                <div class="col" title="Pagamentos">
+                    <div>
+                        <img src="/img/modulos/pagamentos.png" />
+                    </div>
+                </div>
+                <div class="col" title="Parceiros">
+                    <div>
+                        <img src="/img/modulos/parceiros.png" />
+                    </div>
+                </div>
+                <div class="col" title="Academy">
+                    <div>
+                        <img src="/img/modulos/academy.png" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-group fg-float m-b-15 m-t-15  text-center" style="line-height: 40px;">
+            <b ng-click="onFiltrarDataMes(-1);" class="fas fa-chevron-left cursor-pointer p-r-5"></b>
+            <div class="fg-line fg-toggled" style="width: 150px;" >
+                <input id="filtroDataMes"  ng-model="filtroDataMes" style="font-size: 24px; text-align: center;" type="text" class="form-control ng-isolate-scope input-lg" data-input-mask="{mask: '00/0000'}" />
+            </div>
+            <b ng-click="onFiltrarDataMes(1);" class="fas fa-chevron-right cursor-pointer p-l-5"></b>
+        </div>
+
+        <div class="row dashboard-indicadores dashboard-indicadores-gestor">
+
+            <!--ATENDENTES ONLINE-->
+            <div class="col-lg-3 col-md-6">
+                <div class="indicador-item" style="background-color: #15B1B2">
+                    <i class="fas fa-users"></i>
+
+                    <div class="indicador-informacoes">
+                        <small>{{"ATENDENTES-ONLINE" | translate}}</small>
+                        <h2>{{(indicadores.fixos.atendentesOnline.online|| 0) | number}}</h2>
+                    </div>
+
+                    <hr />
+
+                    <div class="indicador-informacoes">
+                        <div>{{"TOTAL" | translate}}: <b>{{(indicadores.fixos.atendentesOnline.total|| 0) | number}}</b></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--ATENDENTES ATIVOS-->
+            <div class="col-lg-3 col-md-6">
+                <div class="indicador-item" style="background-color: #78909C">
+                    <i class="fas fa-user"></i>
+
+                    <div class="indicador-informacoes">
+                        <small>{{"ATENDENTES-ATIVOS" | translate}}</small>
+                        <h2>{{(indicadores.fixos.atendentes.quantidade|| 0) | number}}</h2>
+                    </div>
+
+                    <hr />
+
+                    <div class="indicador-informacoes">
+                        <div>{{"LIMITE" | translate}}: <b>{{(indicadores.fixos.atendentes.limite|| 0) | number}}</b></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--NOVOS CONTATOS NO MÊS (LEADS)-->
+            <div class="col-lg-3 col-md-6">
+                <div class="indicador-item" style="background-color: #7D67DA">
+                    <i class="fas fa-address-card"></i>
+
+                    <div class="indicador-informacoes">
+                        <div class="pull-right filtro">
+                            <b ng-click="getIndicadorLeads('MES', -1);" class="fas fa-chevron-left cursor-pointer p-r-5"></b>
+                            {{dataIndicadorLeads| date: 'MM/yyyy'}}
+                            <b ng-click="getIndicadorLeads('MES', 1);" class="fas fa-chevron-right cursor-pointer p-l-5"></b>
+                        </div>
+                        <small>{{ "NOVOS-LEADS" | translate }}</small>
+                        <h2>{{(indicadores.leads['MES']|| 0) | number}}</h2>
+                    </div>
+
+                    <hr />
+
+                    <div class="indicador-informacoes">
+                        <div>{{"TOTAL" | translate}}: <b>{{(indicadores.leads['TODOS']|| 0) | number}}</b></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--MENSAGENS NO MÊS-->
+            <div class="col-lg-3 col-md-6">
+                <div class="indicador-item" style="background-color: #0097A7">
+                    <i class="fas fa-comments"></i>
+
+                    <div class="indicador-informacoes">
+                        <div class="pull-right filtro">
+                            <b ng-click="getIndicadorMensagens('MES', -1);" class="fas fa-chevron-left cursor-pointer p-r-5"></b>
+                            {{dataIndicadorMensagens| date: 'MM/yyyy'}}
+                            <b ng-click="getIndicadorMensagens('MES', 1);" class="fas fa-chevron-right cursor-pointer p-l-5"></b>
+                        </div>
+                        <small>{{"MENSAGENS" | translate}}</small>
+                        <h2>{{(indicadores.mensagens['MES']|| 0) | number}}</h2>
+                    </div>
+
+                    <hr />
+
+                    <div class="indicador-informacoes">
+                        <div>{{"TOTAL" | translate}}: <b>{{(indicadores.mensagens['TODOS']|| 0) | number}}</b></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--QUANTIDADE AVALIAÇÕES NO MÊS-->
+            <div class="col-lg-3 col-md-6">
+                <div class="indicador-item" style="background-color: #988222">
+                    <i class="fas fa-star"></i>
+
+                    <div class="indicador-informacoes">
+                        <div class="pull-right filtro">
+                            <b ng-click="getIndicadorQuantidadeAvaliacoes('MES', -1);" class="fas fa-chevron-left cursor-pointer p-r-5"></b>
+                            {{dataIndicadorQuantidadeAvaliacoes| date: 'MM/yyyy'}}
+                            <b ng-click="getIndicadorQuantidadeAvaliacoes('MES', 1);" class="fas fa-chevron-right cursor-pointer p-l-5"></b>
+                        </div>
+                        <small>{{"AVALIACAOES" | translate}}</small>
+                        <h2>{{(indicadores.quantidadeAvaliacoes['MES']|| 0) | number}}</h2>
+                    </div>
+
+                    <hr />
+
+                    <div class="indicador-informacoes">
+                        <div>{{"TOTAL" | translate}} <b>{{(indicadores.quantidadeAvaliacoes['TODOS']|| 0) | number}}</b></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--ATENDIMENTOS PENDENTES-->
+            <div class="col-lg-3 col-md-6">
+                <div class="indicador-item" style="background-color: #757575">
+                    <i class="fas fa-exclamation-triangle"></i>
+
+                    <div class="indicador-informacoes">
+                        <small>{{"DASHBOARD-ATENDIMENTOS-PENDENTES" | translate}}</small>
+                        <h2>{{(indicadores.fixos.atendimentosStatus.pendentes|| 0) | number}}</h2>
+                    </div>
+
+                    <hr />
+
+                    <div class="indicador-informacoes">
+                        <div>{{"ATIVOS" | translate}}: <b>{{(indicadores.fixos.atendimentosStatus.ativos|| 0) | number}}</b></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--RECADOS NO MÊS-->
+            <div class="col-lg-3 col-md-6">
+                <div class="indicador-item" style="background-color: #0288D1">
+                    <i class="fas fa-clipboard"></i>
+
+                    <div class="indicador-informacoes">
+                        <div class="pull-right filtro">
+                            <b ng-click="getIndicadorRecados('MES', -1);" class="fas fa-chevron-left cursor-pointer p-r-5"></b>
+                            {{dataIndicadorRecados| date: 'MM/yyyy'}}
+                            <b ng-click="getIndicadorRecados('MES', 1);" class="fas fa-chevron-right cursor-pointer p-l-5"></b>
+                        </div>
+                        <small>{{"RECADOS" | translate}}</small>
+                        <h2>{{(indicadores.recados['MES']|| 0) | number}}</h2>
+                    </div>
+
+                    <hr />
+
+                    <div class="indicador-informacoes">
+                        <div>{{"TOTAL" | translate}}: <b>{{(indicadores.recados['TODOS']|| 0) | number}}</b></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--TEMPO MÉDIO DE ATENDIMENTO NO MÊS-->
+            <div class="col-lg-3 col-md-6">
+                <div class="indicador-item" style="background-color: #424242">
+                    <i class="fas fa-clock"></i>
+
+                    <div class="indicador-informacoes">
+                        <div class="pull-right filtro">
+                            <b ng-click="getIndicadorTempoAtendimento('MES', -1);" class="fas fa-chevron-left cursor-pointer p-r-5"></b>
+                            {{dataIndicadorTempoAtendimento| date: 'MM/yyyy'}}
+                            <b ng-click="getIndicadorTempoAtendimento('MES', 1);" class="fas fa-chevron-right cursor-pointer p-l-5"></b>
+                        </div>
+                        <small>{{"TEMPO-ATENDIMENTO" | translate}}</small>
+                        <h2>{{formatarTempo(indicadores.tempoAtendimento['MES'])}}</h2>
+                    </div>
+
+                    <hr />
+
+                    <div class="indicador-informacoes">
+                        <div>{{"GERAL" | translate}}: <b>{{formatarTempo(indicadores.tempoAtendimento['TODOS'])}}</b></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--ATENDIMENTOS NO MÊS-->
+            <div class="col-lg-3 col-md-6">
+                <div class="indicador-item" style="background-color: #A1887F">
+                    <i class="fas fa-headset"></i>
+
+                    <div class="indicador-informacoes">
+                        <div class="pull-right filtro">
+                            <b ng-click="getIndicadorAtendimentos('MES', -1);" class="fas fa-chevron-left cursor-pointer p-r-5"></b>
+                            {{dataIndicadorAtendimentos| date: 'MM/yyyy'}}
+                            <b ng-click="getIndicadorAtendimentos('MES', 1);" class="fas fa-chevron-right cursor-pointer p-l-5"></b>
+                        </div>
+                        <small>{{ "DASHBOARD-ATENDIMENTOS" | translate }}</small>
+                        <h2>{{(indicadores.atendimentos['MES']|| 0) | number}}</h2>
+                    </div>
+
+                    <hr />
+
+                    <div class="indicador-informacoes">
+                        <div>{{"TOTAL" | translate}}: <b>{{(indicadores.atendimentos['TODOS']|| 0) | number}}</b></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--MÉDIA DE AVALIAÇÃO NO MÊS-->
+            <div class="col-lg-3 col-md-6">
+                <div class="indicador-item" style="background-color: #bfa228">
+                    <i class="fas fa-star"></i>
+
+                    <div class="indicador-informacoes">
+                        <div class="pull-right filtro">
+                            <b ng-click="getIndicadorMediaAvaliacao('MES', -1);" class="fas fa-chevron-left cursor-pointer p-r-5"></b>
+                            {{dataIndicadorMediaAvaliacao| date: 'MM/yyyy'}}
+                            <b ng-click="getIndicadorMediaAvaliacao('MES', 1);" class="fas fa-chevron-right cursor-pointer p-l-5"></b>
+                        </div>
+                        <small>{{"MEDIA-AVALIACAO" | translate}}</small>
+                        <h2>{{(indicadores.mediaAvaliacao['MES']|| 0) | number}}</h2>
+                    </div>
+
+                    <hr />
+
+                    <div class="indicador-informacoes">
+                        <div>{{"GERAL" | translate}}: <b>{{(indicadores.mediaAvaliacao['TODOS']|| 0) | number}}</b></div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <br />
+
+        <div class="row">
+
+            <!--TOP 5 - ATENDIMENTOS POR ATENDENTE-->
+
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="pull-right">
+                            <i ng-click="getTopFiveAtendimentosAtendente('MES', -1)" class="fas fa-chevron-left cursor-pointer p-r-5"></i>
+                            {{dataTopFiveAtendimentosAtendente| date: 'MM/yyyy'}}
+                            <i ng-click="getTopFiveAtendimentosAtendente('MES', 1)" class="fas fa-chevron-right cursor-pointer p-l-5"></i>
+                        </div>
+                        <h2>
+                            <i class="fas fa-user"></i>
+                            {{"TOP5-ATENDIMENTOS-ATENDENTE" | translate}}
+                            <small>{{"TOP5-ATENDIMENTOS-ATENDENTE-DESC" | translate}}.</small>
+                        </h2>
+                    </div>
+
+                    <div class="card-body m-t-0">
+
+                        <div class="p-20" ng-if="topFive.topFiveAtendimentosAtendente.length == 0">
+                            {{"AINDA-NAO-POSSUI-ATENDIMENTOS" | translate}}.
+                        </div>
+
+                        <table class="table table-inner table-vmiddle" ng-if="topFive.topFiveAtendimentosAtendente.length > 0">
+                            <thead>
+                                <tr>
+                                    <th>{{'NOME'|translate}}</th>
+                                    <th>{{'MES'|translate}}</th>
+                                    <th style="width: 1%">{{'TOTAL'|translate}}</th>
+                                <tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-show="$index < 5 || showTopFiveAtendimentosPorAtendente" ng-repeat="atendente in topFive.topFiveAtendimentosAtendente | orderBy: '-mes'">
+                                    <td title="{{atendente.nome}}">{{atendente.nome.substring(0, 50)}}</td>
+                                    <td>{{atendente.mes}}</td>
+                                    <td class="f-500 c-cyan">{{atendente.total}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="text-center p-15" ng-show="topFive.topFiveAtendimentosAtendente.length > 5">
+                            <span ng-show='!showTopFiveAtendimentosPorAtendente' class="cursor-pointer f-500 c-cyan" ng-click="showTopFiveAtendimentosPorAtendente = true">{{ "VER-TODOS" | translate | lowercase }}</span>
+                            <span ng-show='showTopFiveAtendimentosPorAtendente' class="cursor-pointer f-500 c-cyan" ng-click="showTopFiveAtendimentosPorAtendente = false">{{ "VER-MENOS" | translate | lowercase }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--TOP 5 - AVALIAÇÕES POR ATENDENTE-->
+
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="pull-right">
+                            <i ng-click="getTopFiveAvaliacoesAtendente('MES', -1)" class="fas fa-chevron-left cursor-pointer p-r-5"></i>
+                            {{dataTopFiveAvaliacoesAtendente| date: 'MM/yyyy'}}
+                            <i ng-click="getTopFiveAvaliacoesAtendente('MES', 1)" class="fas fa-chevron-right cursor-pointer p-l-5"></i>
+                        </div>
+                        <h2>
+                            <i class="fas fa-star"></i>
+                            {{"TOP5-AVALIACOES-ATENDENTE" | translate}}
+                            <small>{{"TOP5-AVALIACOES-ATENDENTE-DESC" | translate}}.</small>
+                        </h2>
+                    </div>
+
+                    <div class="card-body m-t-0">
+
+                        <div class="p-20" ng-if="topFive.topFiveAvaliacoesAtendente.length == 0">
+                            {{"AINDA-NAO-POSSUI-AVALIACOES" | translate}}.
+                        </div>
+
+                        <table class="table table-inner table-vmiddle" ng-if="topFive.topFiveAvaliacoesAtendente.length > 0">
+                            <thead>
+                                <tr>
+                                    <th>{{'NOME'|translate}}</th>
+                                    <th>{{'MES'|translate}}</th>
+                                    <th style="width: 1%">{{'GERAL'|translate}}</th>
+                                <tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-show="$index < 5 || showTopFiveAvaliacoesPorAtendente" ng-repeat="atendente in topFive.topFiveAvaliacoesAtendente| orderBy: '-mes'">
+                                    <td title="{{atendente.nome}}">{{atendente.nome.substring(0, 50)}}</td>
+                                    <td>{{atendente.mes == -1 ? '-' : atendente.mes}}</td>
+                                    <td class="f-500 c-cyan">{{atendente.total == -1 || atendente.total == undefined ? '-' : atendente.total}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="text-center p-15" ng-show="topFive.topFiveAvaliacoesAtendente.length > 5">
+                            <span ng-show='!showTopFiveAvaliacoesPorAtendente' class="cursor-pointer f-500 c-cyan" ng-click="showTopFiveAvaliacoesPorAtendente = true">{{ "VER-TODOS" | translate | lowercase }}</span>
+                            <span ng-show='showTopFiveAvaliacoesPorAtendente' class="cursor-pointer f-500 c-cyan" ng-click="showTopFiveAvaliacoesPorAtendente = false">{{ "VER-MENOS" | translate | lowercase }}</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <!--ATENDIMENTOS POR DEPARTAMENTO-->
+
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="pull-right">
+                            <i ng-click="getTopFiveAtendimentosDepartamento('MES', -1)" class="fas fa-chevron-left cursor-pointer p-r-5"></i>
+                            {{dataTopFiveAtendimentosDepartamento| date: 'MM/yyyy'}}
+                            <i ng-click="getTopFiveAtendimentosDepartamento('MES', 1)" class="fas fa-chevron-right cursor-pointer p-l-5"></i>
+                        </div>
+                        <h2>
+                            <i class="fas fa-sitemap"></i>
+                            {{"TOP5-ATENDIMENTOS-DEPARTAMENTO" | translate}}
+                            <small>{{"TOP5-ATENDIMENTOS-DEPARTAMENTO" | translate}}.</small>
+                        </h2>
+                    </div>
+
+                    <div class="card-body m-t-0">
+
+                        <div class="p-20" ng-if="topFive.topFiveAtendimentosDepartamento.length == 0">
+                            {{"AINDA-NAO-POSSUI-ATENDIMENTOS" | translate}}.
+                        </div>
+
+                        <table class="table table-inner table-vmiddle" ng-if="topFive.topFiveAtendimentosDepartamento.length > 0">
+                            <thead>
+                                <tr>
+                                    <th>{{'NOME'|translate}}</th>
+                                    <th>{{'MES'|translate}}</th>
+                                    <th style="width: 1%">{{'TOTAL'|translate}}</th>
+                                <tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-show="$index < 5 || showTopFiveAtendimentosPorDepartamento" ng-repeat="departamento in topFive.topFiveAtendimentosDepartamento | orderBy: '-mes'">
+                                    <td title="{{departamento.nome}}">{{departamento.nome.substring(0, 50)}}</td>
+                                    <td>{{departamento.mes}}</td>
+                                    <td class="f-500 c-cyan">{{departamento.total}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="text-center p-15" ng-show="topFive.topFiveAtendimentosDepartamento.length > 5">
+                            <span ng-show='!showTopFiveAtendimentosPorDepartamento' class="cursor-pointer f-500 c-cyan" ng-click="showTopFiveAtendimentosPorDepartamento = true">{{ "VER-TODOS" | translate | lowercase }}</span>
+                            <span ng-show='showTopFiveAtendimentosPorDepartamento' class="cursor-pointer f-500 c-cyan" ng-click="showTopFiveAtendimentosPorDepartamento = false">{{ "VER-MENOS" | translate | lowercase }}</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!--TOP 5 - AVALIAÇÕES POR DEPARTAMENTO-->
+
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="pull-right">
+                            <i ng-click="getTopFiveAvaliacoesDepartamento('MES', -1)" class="fas fa-chevron-left cursor-pointer p-r-5"></i>
+                            {{dataTopFiveAvaliacoesDepartamento| date: 'MM/yyyy'}}
+                            <i ng-click="getTopFiveAvaliacoesDepartamento('MES', 1)" class="fas fa-chevron-right cursor-pointer p-l-5"></i>
+                        </div>
+                        <h2>
+                            <i class="fas fa-star"></i>
+                            {{"TOP5-AVALIACOES-DEPARTAMENTO" | translate}}
+                            <small>{{"TOP5-AVALIACOES-DEPARTAMENTO-DESC" | translate}}.</small>
+                        </h2>
+                    </div>
+
+                    <div class="card-body m-t-0">
+
+                        <div class="p-20" ng-if="topFive.topFiveAvaliacoesDepartamento.length == 0">
+                            {{"AINDA-NAO-POSSUI-AVALIACOES" | translate}}.
+                        </div>
+
+                        <table class="table table-inner table-vmiddle" ng-if="topFive.topFiveAvaliacoesDepartamento.length > 0">
+                            <thead>
+                                <tr>
+                                    <th>{{'NOME'|translate}}</th>
+                                    <th>{{'MES'|translate}}</th>
+                                    <th style="width: 1%">{{'GERAL'|translate}}</th>
+                                <tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-show="$index < 5 || showTopFiveAvaliacoesPorDepartamento" ng-repeat="departamento in topFive.topFiveAvaliacoesDepartamento| orderBy: '-mes'">
+                                    <td title="{{departamento.nome}}">{{departamento.nome.substring(0, 50)}}</td>
+                                    <td>{{departamento.mes == -1 ? '-' : departamento.mes}}</td>
+                                    <td class="f-500 c-cyan">{{departamento.total == -1 || departamento.total == undefined ? '-' : departamento.total}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="text-center p-15" ng-show="topFive.topFiveAvaliacoesDepartamento.length > 5">
+                            <span ng-show='!showTopFiveAvaliacoesPorDepartamento' class="cursor-pointer f-500 c-cyan" ng-click="showTopFiveAvaliacoesPorDepartamento = true">{{ "VER-TODOS" | translate | lowercase }}</span>
+                            <span ng-show='showTopFiveAvaliacoesPorDepartamento' class="cursor-pointer f-500 c-cyan" ng-click="showTopFiveAvaliacoesPorDepartamento = false">{{ "VER-MENOS" | translate | lowercase }}</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" ng-if="topFive.topFiveMotivosAtendimento.length > 0">
+
+            <!--MOTIVOS DE ATENDIMENTO-->
+
+            <div class="col-sm-12">
+                <div class="card m-b-0">
+                    <div class="card-header">
+                        <div class="pull-right">
+                            <i ng-click="getTopFiveMotivosAtendimento('MES', -1)" class="fas fa-chevron-left cursor-pointer p-r-5"></i>
+                            {{dataTopFiveMotivosAtendimento| date: 'MM/yyyy'}}
+                            <i ng-click="getTopFiveMotivosAtendimento('MES', 1)" class="fas fa-chevron-right cursor-pointer p-l-5"></i>
+                        </div>
+                        <h2>
+                            <i class="fas fa-list"></i>
+                            {{"TOP5-MOTIVOS-ATENDIMENTO" | translate}}
+                            <small>{{"TOP5-MOTIVOS-ATENDIMENTO-DESC" | translate}}.</small>
+                        </h2>
+                    </div>
+
+                    <div class="card-body m-t-0">
+
+                        <table class="table table-inner table-vmiddle" ng-if="topFive.topFiveMotivosAtendimento.length > 0">
+                            <thead>
+                                <tr>
+                                    <th style="width: 1%">{{'DEPARTAMENTO'|translate}}</th>
+                                    <th style="width: 69%">{{"MOTIVO" | translate}}</th>
+                                    <th>{{'MES'|translate}}</th>
+                                    <th style="width: 10%">{{'TOTAL'|translate}}</th>
+                                <tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-show="$index < 5 || showTopFiveMotivosAtendimento" ng-repeat="motivos in topFive.topFiveMotivosAtendimento | orderBy: '-mes'">
+                                    <td title="{{motivos.departamento}}">{{motivos.departamento.substring(0, 50)}}</td>
+                                    <td title="{{motivos.motivo}}">{{motivos.motivo.substring(0, 50)}}</td>
+                                    <td>{{motivos.mes}}</td>
+                                    <td class="f-500 c-cyan">{{motivos.total}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="text-center p-15" ng-show="topFive.topFiveMotivosAtendimento.length > 5">
+                            <span ng-show='!showTopFiveMotivosAtendimento' class="cursor-pointer f-500 c-cyan" ng-click="showTopFiveMotivosAtendimento = true">{{ "VER-TODOS" | translate | lowercase }}</span>
+                            <span ng-show='showTopFiveMotivosAtendimento' class="cursor-pointer f-500 c-cyan" ng-click="showTopFiveMotivosAtendimento = false">{{ "VER-MENOS" | translate | lowercase }}</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-group fg-float m-b-15 m-t-15 text-center" style="line-height: 40px;">
+            <b ng-click="onFiltrarDataDia(-1);" class="fas fa-chevron-left cursor-pointer p-r-5"></b>
+            <div class="fg-line fg-toggled" style="width: 150px;" >
+                <input id="filtroDataDia" style="font-size: 24px; text-align: center;" type="text" class="form-control ng-isolate-scope input-lg" data-input-mask="{mask: '00/00/0000'}" />
+            </div>
+            <b ng-click="onFiltrarDataDia(1);" class="fas fa-chevron-right cursor-pointer p-l-5"></b>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="pull-right">
+                            <i ng-click="recuperarTrocaMensagens(-1)" class="fas fa-chevron-left cursor-pointer p-r-5"></i>
+                            {{dataTrocaMensagens| date: 'dd/MM/yyyy'}}
+                            <i ng-click="recuperarTrocaMensagens(1)" class="fas fa-chevron-right cursor-pointer p-l-5"></i>
+                        </div>
+                        <h2>
+                            <i class="fas fa-comments"></i>
+                            {{"HORARIO-PICO-TROCA-MENSAGENS" | translate}}
+                            <small>{{"HORARIO-PICO-TROCA-MENSAGENS-DESC" | translate}}.</small>
+                        </h2>
+                    </div>
+
+                    <div class="card-body" style="padding: 20px;">
+                        <div id="horarioPicoTrocaMensagens" style="height: 200px;"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="pull-right">
+                            <i ng-click="recuperarNovosAtendimentos(-1)" class="fas fa-chevron-left cursor-pointer p-r-5"></i>
+                            {{dataNovosAtendimentos| date: 'dd/MM/yyyy'}}
+                            <i ng-click="recuperarNovosAtendimentos(1)" class="fas fa-chevron-right cursor-pointer p-l-5"></i>
+                        </div>
+                        <h2>
+                            <i class="fas fa-headset"></i>
+                            {{"HORARIO-PICO-NOVOS-ATENDIMENTOS" | translate}}
+                            <small>{{"HORARIO-PICO-NOVOS-ATENDIMENTOS-DESC" | translate}}.</small>
+                        </h2>
+                    </div>
+
+                    <div class="card-body" style="padding: 20px;">
+                        <div id="horarioPicoNovosAtendimentos" style="height: 200px;"></div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div> -->
+
+    </div>
+</div>

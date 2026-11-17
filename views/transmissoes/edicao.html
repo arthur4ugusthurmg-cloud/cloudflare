@@ -1,0 +1,29 @@
+<div class="container-fluid" data-ng-controller="TransmissaoEdicaoController" ng-init="onInit()">
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>{{'TRANSMISSAO'| translate}}</h2>
+
+            <button ng-click="onRemover(registro)" class="btn bgm-red btn-float waves-effect pull-right"><i class="zmdi zmdi-delete"></i></button>    
+        </div>
+
+        <div class="card-body card-padding">  
+            <br/>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control fg-input input-lg" ng-model="registro.nome">
+                            <label class="fg-label">{{'NOME'| translate}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <button ng-click="onSalvar()" class="btn btn-float bgm-blue m-btn waves-effect waves-circle"><i class="zmdi zmdi-floppy"></i></button>
+
+</div>
+
+

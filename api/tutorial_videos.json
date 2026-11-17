@@ -1,0 +1,1356 @@
+[
+    {
+        "modulo": "Automation",
+        "tutoriais": [
+            {
+                "id": 233,
+                "chave": "240",
+                "nome": "Documentação Automation - Fluxos",
+                "link": "https://v4d.mz-css.net/f78a7087b1af4489e9a7807682c119f7/14ec0343661cb04c0b0c45b0c88dff42/Manual_Automacoes.pdf"
+            },
+            {
+                "id": 232,
+                "chave": "252",
+                "nome": "Documentação Automation - Fluxos",
+                "link": ""
+            }
+        ]
+    },
+    {
+        "modulo": "AUTOMATION",
+        "tutoriais": [
+            {
+                "id": 231,
+                "chave": "194",
+                "nome": "Dashboard",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/9d9dd9345fd4a04105e24552243d4131/001_Dashboard.mp4"
+            },
+            {
+                "id": 228,
+                "chave": "195",
+                "nome": "Fluxos",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/f1c3efb489200903d5222ac8b335a24a/002_Fluxos.mp4"
+            },
+            {
+                "id": 229,
+                "chave": "196",
+                "nome": "Fluxos Agendados",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/581ab20ca234b7fb381aeb569fd4d74f/003_Fluxos_Agendados.mp4"
+            },
+            {
+                "id": 230,
+                "chave": "197",
+                "nome": "Histórico de Eventos",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/39babffbe2efd3b6ea646638da0bd550/004_Historico_De_Eventos.mp4"
+            }
+        ]
+    },
+    {
+        "modulo": "BULK MESSAGE",
+        "tutoriais": [
+            {
+                "id": 195,
+                "chave": "162",
+                "nome": "Campanhas",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/b33ebe69901bdc9dd5da03d49a0109de/005_Campanhas.mp4"
+            },
+            {
+                "id": 196,
+                "chave": "163",
+                "nome": "Grupos",
+                "link": ""
+            }
+        ]
+    },
+    {
+        "modulo": "CHATBOT",
+        "tutoriais": [
+            {
+                "id": 1,
+                "chave": "001",
+                "nome": "Dashboard",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/67fdee1210ccf58be1d64fe0d6ab8d93/006_Dashboard.mp4"
+            },
+            {
+                "id": 2,
+                "chave": "002",
+                "nome": "Usuários",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/c69cbbc2eb2348e6c681b43a03be99c2/007_Usuarios.mp4"
+            },
+            {
+                "id": 3,
+                "chave": "003",
+                "nome": "Departamentos",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/928bef788e568278c9c7545823de94f7/008_Departamentos.mp4"
+            },
+            {
+                "id": 4,
+                "chave": "004",
+                "nome": "Campos Customizados",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/a9c12f3316a588c076c3611fc655eb14/009_Campos_Customizados.mp4"
+            },
+            {
+                "id": 5,
+                "chave": "005",
+                "nome": "Enquetes",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/3abfa6b946f9f48c0f8970bd01d4c704/010_Enquetes.mp4"
+            },
+            {
+                "id": 6,
+                "chave": "006",
+                "nome": "Recados - Atendente",
+                "link": "https://v2.mz-cdn.com/ab4455600453497e43e8a1a8f9a8346a/Recados.mp4"
+            },
+            {
+                "id": 7,
+                "chave": "007",
+                "nome": "Relatório de Atendimentos",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/21b12e22c469e79c17391d33a7a676d4/011_Relatorio_De_Atendimentos.mp4"
+            },
+            {
+                "id": 8,
+                "chave": "008",
+                "nome": "Relatórios de Contatos",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/1a57d5185e06f7ebec14a231c526496c/012_Relatorios_De_Contatos.mp4"
+            },
+            {
+                "id": 9,
+                "chave": "009",
+                "nome": "Criação de um Bot",
+                "link": "https://v4d.mz-css.net/0d6f441a1da49c961656af3dac6eb282/4c0f03fa36db956d43ef93b715c81b6f/Parceiros_Atendimento_Bots_Gestor.webm"
+            },
+            {
+                "id": 10,
+                "chave": "010",
+                "nome": "Opções do Menu",
+                "link": ""
+            },
+            {
+                "id": 11,
+                "chave": "011",
+                "nome": "Bot - Configurações",
+                "link": ""
+            },
+            {
+                "id": 12,
+                "chave": "012",
+                "nome": "Bot - Mensagens",
+                "link": ""
+            },
+            {
+                "id": 13,
+                "chave": "013",
+                "nome": "Bot - Mensagens Gerais",
+                "link": ""
+            },
+            {
+                "id": 14,
+                "chave": "014",
+                "nome": "Bot - Mensagens de Atendimento",
+                "link": ""
+            },
+            {
+                "id": 15,
+                "chave": "015",
+                "nome": "Bot - Mensagens de Recado",
+                "link": ""
+            },
+            {
+                "id": 16,
+                "chave": "016",
+                "nome": "Bot - Mensagens de Enquete",
+                "link": ""
+            },
+            {
+                "id": 17,
+                "chave": "017",
+                "nome": "Bot - Mensagens de Avaliação",
+                "link": ""
+            },
+            {
+                "id": 18,
+                "chave": "018",
+                "nome": "Bot - Mensagens de Palavra-Chave",
+                "link": ""
+            },
+            {
+                "id": 19,
+                "chave": "019",
+                "nome": "Bot - Imagens"
+            },
+            {
+                "id": 20,
+                "chave": "020",
+                "nome": "Bot - Perguntas Inicias",
+                "link": ""
+            },
+            {
+                "id": 21,
+                "chave": "021",
+                "nome": "Bot - Perguntas Menus",
+                "link": ""
+            },
+            {
+                "id": 22,
+                "chave": "022",
+                "nome": "Bot - Auditoria",
+                "link": ""
+            },
+            {
+                "id": 23,
+                "chave": "023",
+                "nome": "Bot - WhatsApp (Cloud Server)",
+                "link": "https://v2b-17.mz-css.net/bf2bae3e36c7722caaa11353b15f87dc/whatsapp.mp4"
+            },
+            {
+                "id": 24,
+                "chave": "024",
+                "nome": "Bot - Site",
+                "link": "https://v2-2.mz-cdn.com/f4a7e8df23a8119f1a8411939206d92b/Bot_Site.mp4"
+            },
+            {
+                "id": 25,
+                "chave": "025",
+                "nome": "Bot - Facebook",
+                "link": ""
+            },
+            {
+                "id": 26,
+                "chave": "026",
+                "nome": "Bot - Telegram",
+                "link": "https://v2-2.mz-cdn.com/32ffa28d2579051803e4dd2dcdc95af4/Bot_Telegram.mp4"
+            },
+            {
+                "id": 27,
+                "chave": "027",
+                "nome": "Criação de Atendentes",
+                "link": "https://v2b-18.mz-css.net/b4654173ac804d8ccda8401e528c1935/criacao-atendente.mp4"
+            },
+            {
+                "id": 28,
+                "chave": "028",
+                "nome": "Painel de Atendimento",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/824750307937a0afe155a66faae88e62/014_Painel_De_Atendimento.mp4"
+            },
+            {
+                "id": 116,
+                "chave": "079",
+                "nome": "Bots > WA Chatbot (Instalador)",
+                "link": ""
+            },
+            {
+                "id": 118,
+                "chave": "081",
+                "nome": "Bot - Instagram",
+                "link": "https://v2-11.mz-css.net/63301c3a52e6ec1800385d96c8a165e5/instagram.mp4"
+            },
+            {
+                "id": 126,
+                "chave": "089",
+                "nome": "Bot - WhatsApp (Local Server)"
+            },
+            {
+                "id": 130,
+                "chave": "092",
+                "nome": "Relatório de Clientes Potenciais",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/b616ac1af3d9eca370b4c45f36d64915/015_Relatorio_De_Clientes_Potenciais.mp4"
+            },
+            {
+                "id": 131,
+                "chave": "093",
+                "nome": "Relatório de Integrações",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/cc23524742281bb9daff27f67d0f2695/016_Relatorio_De_Integracoes.mp4"
+            },
+            {
+                "id": 132,
+                "chave": "094",
+                "nome": "Bot - Google Business Messages"
+            },
+            {
+                "id": 135,
+                "chave": "097",
+                "nome": "Supervisores",
+                "link": "https://v4d.mz-css.net/f78a7087b1af4489e9a7807682c119f7/761903ea2645cc35352964da4a3f76f9/10-_Parceiros_24-07_Usuarios.mp4"
+            },
+            {
+                "id": 140,
+                "chave": "098",
+                "nome": "Webhook - Lista",
+                "link": ""
+            },
+            {
+                "id": 141,
+                "chave": "099",
+                "nome": "Webhook - Novo",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/c4e16cb4493d793619d46fa8b43e6385/017_Webhook_-_Novo.mp4"
+            },
+            {
+                "id": 142,
+                "chave": "100",
+                "nome": "Webhook - Eventos",
+                "link": ""
+            },
+            {
+                "id": 143,
+                "chave": "101",
+                "nome": "Webhook - Bots",
+                "link": "https://v2-7.mz-css.net/bc54d75e7de836ca3406b8d14656cf2e/Webhook-bots.mp4"
+            },
+            {
+                "id": 144,
+                "chave": "102",
+                "nome": "Webhook - JSON de Exemplo"
+            },
+            {
+                "id": 145,
+                "chave": "103",
+                "nome": "Webhook - Relatório",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/1721c0b5c19412c86e285f38943ab3f8/018_Webhook_-_Relatorio.mp4"
+            },
+            {
+                "id": 146,
+                "chave": "104",
+                "nome": "Webhook - Enviar Dados",
+                "link": ""
+            },
+            {
+                "id": 161,
+                "chave": "129",
+                "nome": "Horário de Atendimento Geral",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/e7872aad4ff1e330ff7ba76c02bc0739/019_Horario_De_Atendimento_Geral.mp4"
+            },
+            {
+                "id": 163,
+                "chave": "130",
+                "nome": "Tags de Atendimento (Atendente)",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/94bac61c51be44a7444409c993345010/020_Tags_De_Atendimento_Atendente.mp4"
+            },
+            {
+                "id": 162,
+                "chave": "131",
+                "nome": "Mensagens Rápidas",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/d4b6837bf688eccdefa0ac7608abbdcf/021_Mensagens_Rapidas.mp4"
+            },
+            {
+                "id": 164,
+                "chave": "132",
+                "nome": "Tags de Atendimento (Gestor)",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/44d0635d31c5e876f82ebc7db8ff7c0d/022_Tags_De_Atendimento_Gestor.mp4"
+            },
+            {
+                "id": 165,
+                "chave": "133",
+                "nome": "Mensagens Programadas - Atendente",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/b823764321ad3dd6cefad4d14de50604/023_Mensagens_Programadas_-_Atendente.mp4"
+            },
+            {
+                "id": 166,
+                "chave": "134",
+                "nome": "Eventos",
+                "link": ""
+            },
+            {
+                "id": 167,
+                "chave": "135",
+                "nome": "Integrações",
+                "link": "https://v4d.mz-css.net/f293b09199ba4494602d5ce84ae189e5/bf60f4437dd3a6938e704b6e91d168f0/09-_Integracoes.mp4"
+            },
+            {
+                "id": 169,
+                "chave": "136",
+                "nome": "Retornos",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/d2a198c75520fa81ee3263abd26629e9/024_Retornos.mp4"
+            },
+            {
+                "id": 170,
+                "chave": "137",
+                "nome": "Bot - Configuração Email",
+                "link": "https://v2-10.mz-css.net/9787841fe9a5aeba39f9dbe13f10363a/Configuracao_-_E-mail.mp4"
+            },
+            {
+                "id": 171,
+                "chave": "138",
+                "nome": "Banco de Arquivos - Gestor",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/cbad480c5ecb436a87c29bed8df4eb1d/025_Banco_De_Arquivos_-_Gestor.mp4"
+            },
+            {
+                "id": 172,
+                "chave": "139",
+                "nome": "Banco de Arquivos - Atendente",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/1bddad02dfe8478ed19a364b0eeccc24/026_Banco_De_Arquivos_-_Atendente.mp4"
+            },
+            {
+                "id": 173,
+                "chave": "140",
+                "nome": "Recados - Gestor",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/93bf6a34001ce0b862ec0bfcd9d72bf3/027_Recados_-_Gestor.mp4"
+            },
+            {
+                "id": 174,
+                "chave": "141",
+                "nome": "Mensagens Programadas - Gestor",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/f90a6268167044724a44c882ba066b70/028_Mensagens_Programadas_-_Gestor.mp4"
+            },
+            {
+                "id": 175,
+                "chave": "142",
+                "nome": "Agenda - Gestor",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/bd47f10ed8bf12378f29e935c3d4a2aa/029_Agenda_-_Gestor.mp4"
+            },
+            {
+                "id": 176,
+                "chave": "143",
+                "nome": "Agenda - Atendente",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/a5d441e578004c807fb56fec6cd1f009/030_Agenda_-_Atendente.mp4"
+            },
+            {
+                "id": 177,
+                "chave": "144",
+                "nome": "Configuração de Botões",
+                "link": "https://v2-12.mz-css.net/f3dd1b09c7e81bb2f5718c236e181a6a/Botoes_nos_Menus.mp4"
+            },
+            {
+                "id": 178,
+                "chave": "145",
+                "nome": "Painel de Métricas - Gestor",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/c3d0be5fb83d4a0974584d52fa4e443b/031_Painel_De_Metricas_-_Gestor.mp4"
+            },
+            {
+                "id": 179,
+                "chave": "146",
+                "nome": "Blacklist",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/87f73ec7552a7571bb743b8cd0e81594/032_Blacklist.mp4"
+            },
+            {
+                "id": 204,
+                "chave": "170",
+                "nome": "Template - Listagem",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/8e4d841e282becce50d41eeb5888ce35/033_Template_-_Listagem.mp4"
+            },
+            {
+                "id": 205,
+                "chave": "171",
+                "nome": "Template - Criação & Edição",
+                "link": "https://v4d.mz-css.net/f293b09199ba4494602d5ce84ae189e5/3960287f074f86d1c0b172a47becb5be/Templates.mp4"
+            },
+            {
+                "id": 207,
+                "chave": "173",
+                "nome": "Carteira de Contatos",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/5cbab4a22d8d5717300ef35b218a62e3/034_Carteira_De_Contatos.mp4"
+            },
+            {
+                "id": 208,
+                "chave": "174",
+                "nome": "TI - API",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/bd6678d715f7585fe4a53ceb9f749e7f/035_Ti_-_Api.mp4"
+            },
+            {
+                "id": 209,
+                "chave": "175",
+                "nome": "Atendimento - Configurações",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/b1a10229ad8ec4abba0f0ba5c92a5207/036_Atendimento_-_Configuracoes.mp4"
+            },
+            {
+                "id": 210,
+                "chave": "176",
+                "nome": "Ligações Via WhatsApp",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/06211ffb6c86eaee37eb5d0ce497d8d3/037_Ligacoes_Via_Whatsapp.mp4"
+            },
+            {
+                "id": 211,
+                "chave": "177",
+                "nome": "TI - Webhooks",
+                "link": "https://v4d.mz-css.net/f293b09199ba4494602d5ce84ae189e5/2ea84a27cade055e65e66ebb35dd56cb/Webhooks.mp4"
+            },
+            {
+                "id": 236,
+                "chave": "253",
+                "nome": "Carteira de Contatos - Gestor",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/5cbab4a22d8d5717300ef35b218a62e3/038_Carteira_De_Contatos_-_Gestor.mp4"
+            },
+            {
+                "id": 237,
+                "chave": "254",
+                "nome": "Carteira de Contatos - Operador",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/296bde7125329fdb55a0df6bc1cf2e71/039_Carteira_De_Contatos_-_Operador.mp4"
+            },
+            {
+                "id": 238,
+                "chave": "255",
+                "nome": "Localizações",
+                "link": "https://v4d.mz-css.net/715dcb7384a57cd37669f5d95ac35bf2/eee1c34655d6daba6daa5f75ecc31346/Parceiros_Localizacoes.mp4"
+            },
+            {
+                "id": 239,
+                "chave": "256",
+                "nome": "Contratar Módulos",
+                "link": ""
+            },
+            {
+                "id": 240,
+                "chave": "257",
+                "nome": "Canais de comunicação",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/ac34f23aebbe34e091a7bb3df7ee785c/040_Canais_De_Comunicacao.mp4"
+            },
+            {
+                "id": 241,
+                "chave": "258",
+                "nome": "Atendimentos com retorno - operador",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/8d8f8879abdb481a768414b2cc55e680/041_Atendimentos_Com_Retorno_-_Operador.mp4"
+            },
+            {
+                "id": 242,
+                "chave": "259",
+                "nome": "Atendimentos com retorno - gestor",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/d2a198c75520fa81ee3263abd26629e9/042_Atendimentos_Com_Retorno_-_Gestor.mp4"
+            },
+            {
+                "id": 243,
+                "chave": "260",
+                "nome": "Funcionalidades",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/20fb09eed5d149b7dac9ccfdd28d5904/043_Funcionalidades.mp4"
+            },
+            {
+                "id": 244,
+                "chave": "261",
+                "nome": "Mensagens Rapidas - Operador",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/840a51c7b405802521d46df1d5f8c138/044_Mensagens_Rapidas_-_Operador.mp4"
+            },
+            {
+                "id": 245,
+                "chave": "262",
+                "nome": "Mensagens Programadas - Operador",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/b823764321ad3dd6cefad4d14de50604/045_Mensagens_Programadas_-_Operador.mp4"
+            },
+            {
+                "id": 246,
+                "chave": "263",
+                "nome": "Tarefas - Operador",
+                "link": "https://v4d.mz-css.net/f293b09199ba4494602d5ce84ae189e5/91fc87ab205ac89ac5fc9c57c4032e62/09-_Tarefas.mp4"
+            },
+            {
+                "id": 254,
+                "chave": "270",
+                "nome": "Blacklist - Operador",
+                "link": "-"
+            },
+            {
+                "id": 255,
+                "chave": "271",
+                "nome": "Relatório de Atendimentos - Operador",
+                "link": "-"
+            },
+            {
+                "id": 256,
+                "chave": "272",
+                "nome": "Clientes Potenciais - Operador",
+                "link": "-"
+            },
+            {
+                "id": 257,
+                "chave": "273",
+                "nome": "Ligações Via WhatsApp - Operador",
+                "link": "-"
+            },
+            {
+                "id": 259,
+                "chave": "275",
+                "nome": "Configurações Gerais",
+                "link": "-https://v4d.mz-css.net/715dcb7384a57cd37669f5d95ac35bf2/2e0be9de6c91f4c720057df544a3d759/Parceiros_Configuracoes_Gerais.webm"
+            },
+            {
+                "id": 260,
+                "chave": "276",
+                "nome": "Configurações Gerais - Operador",
+                "link": ""
+            },
+            {
+                "id": 265,
+                "chave": "291",
+                "nome": "Custo da Meta",
+                "link": "https://v4d.mz-css.net/0d6f441a1da49c961656af3dac6eb282/f61bdd22dc83958126d4234433a6d316/Canais_de_comunicacao_Custos_da_meta.webm"
+            }
+        ]
+    },
+    {
+        "modulo": "CRM",
+        "tutoriais": [
+            {
+                "id": 180,
+                "chave": "147",
+                "nome": "CRM - Fluxo de trabalho",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/1016c56640a8699c8bf91ef8db093dbc/046_Crm_-_Fluxo_De_Trabalho.mp4"
+            },
+            {
+                "id": 181,
+                "chave": "148",
+                "nome": "CRM - Fluxos de trabalho",
+                "link": "https://v4d.mz-css.net/f293b09199ba4494602d5ce84ae189e5/feafc841d1a81ebcb834e67dfb2e0c46/Kanbans.mp4"
+            },
+            {
+                "id": 182,
+                "chave": "149",
+                "nome": "CRM - Clientes",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/d4218594c57ff66f504704a744045d3f/047_Crm_-_Clientes.mp4"
+            },
+            {
+                "id": 183,
+                "chave": "150",
+                "nome": "CRM - Tarefas",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/6f112c10164ae9ffad205ef5cc51bd94/048_Crm_-_Tarefas.mp4"
+            },
+            {
+                "id": 184,
+                "chave": "151",
+                "nome": "CRM - Produtos",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/60f3243333f7ad409e2b87e3ebaf768d/049_Crm_-_Produtos.mp4"
+            },
+            {
+                "id": 185,
+                "chave": "152",
+                "nome": "CRM - Card",
+                "link": "https://v2b-24.mz-css.net/b260cf22339ea9cd6333daabfb8de507/CRM_-_Cards.mp4"
+            },
+            {
+                "id": 186,
+                "chave": "153",
+                "nome": "CRM - Relatorio-Card",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/672efdfcba2e598edd3f71600e9cfb71/050_Crm_-_Relatorio-Card.mp4"
+            },
+            {
+                "id": 187,
+                "chave": "154",
+                "nome": "CRM - Relatorio-Produto",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/8b5410f50262a1f84463572af3372a37/051_Crm_-_Relatorio-Produto.mp4"
+            },
+            {
+                "id": 188,
+                "chave": "155",
+                "nome": "CRM - Add-Tarefa",
+                "link": ""
+            },
+            {
+                "id": 189,
+                "chave": "156",
+                "nome": "CRM - Add-Cliente",
+                "link": ""
+            },
+            {
+                "id": 190,
+                "chave": "157",
+                "nome": "CRM - Add-Produto",
+                "link": "https://v2b-21.mz-css.net/0ddec236b7373081e2c28972b7154937/CRM_-_Relatorio_de_Cards.mp4"
+            },
+            {
+                "id": 191,
+                "chave": "158",
+                "nome": "Dashboard - Geral",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/0c832861b40ffc2654d016c439694502/052_Dashboard_-_Geral.mp4"
+            },
+            {
+                "id": 192,
+                "chave": "159",
+                "nome": "Dashboard - Aceitos e Perdidos",
+                "link": "https://v4d.mz-css.net/6dd6f9d5beed2a98152857d86c1f3984/f457e5a2524aa87dd5e08295138478c1/2-_Dashboard_aceitos_e_perdidos.mp4"
+            },
+            {
+                "id": 193,
+                "chave": "160",
+                "nome": "Dashboard - Equipe",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/4ae07fdf4c01f0be2333eee3d66c3cda/054_Dashboard_-_Equipe.mp4"
+            },
+            {
+                "id": 194,
+                "chave": "161",
+                "nome": "Dashboard - Produtos",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/48c3f4126865b16395cd984ebcf7d592/055_Dashboard_-_Produtos.mp4"
+            },
+            {
+                "id": 247,
+                "chave": "264",
+                "nome": "Dashboard Geral - Operador",
+                "link": "-"
+            },
+            {
+                "id": 248,
+                "chave": "265",
+                "nome": "Dashboard Aceitos e Perdidos - Operador",
+                "link": "-"
+            },
+            {
+                "id": 249,
+                "chave": "266",
+                "nome": "Dashboard Produtos - Operador",
+                "link": "-"
+            },
+            {
+                "id": 250,
+                "chave": "267",
+                "nome": "CRM Relatorio-Card - Operador",
+                "link": "-"
+            },
+            {
+                "id": 252,
+                "chave": "268",
+                "nome": "CRM Relatorio-Produto - Operador",
+                "link": "-"
+            },
+            {
+                "id": 258,
+                "chave": "274",
+                "nome": "CRM Clientes - Operador",
+                "link": "-"
+            }
+        ]
+    },
+    {
+        "modulo": "DELIVERY",
+        "tutoriais": [
+            {
+                "id": 68,
+                "chave": "029",
+                "nome": "Formas de Pagamento",
+                "link": "https://v2.mz-cdn.com/4674828e1fbd27d6ab95c6e875f85cd9/Formas_de_pagamento.mp4"
+            },
+            {
+                "id": 69,
+                "chave": "031",
+                "nome": "Áreas de Entrega - Distância",
+                "link": "https://v2.mz-cdn.com/31bd9d57af3b5ae973c2b7e49c85be22/Areas_de_Entrega.mp4"
+            },
+            {
+                "id": 70,
+                "chave": "032",
+                "nome": "Lista de Cupons de Desconto",
+                "link": "https://v2.mz-cdn.com/edcf9c19b28ef5db6242428b5ba446f4/Lista_de_Cupons_de_Desconto.mp4"
+            },
+            {
+                "id": 71,
+                "chave": "033",
+                "nome": "Customizações",
+                "link": "https://v2-2.mz-cdn.com/3fd0c6b269c975e6d22babb9766644f4/customizacao.mp4"
+            },
+            {
+                "id": 72,
+                "chave": "034",
+                "nome": "Dashboard",
+                "link": "https://v2.mz-cdn.com/6df52d6577750c6f5566c0bd4d8860db/Dashboard.mp4"
+            },
+            {
+                "id": 73,
+                "chave": "035",
+                "nome": "Lista de Entregadores",
+                "link": "https://v2.mz-cdn.com/23fbdbf3902602aad7fded643a7bd9b4/Lista_de_Entregadores.mp4"
+            },
+            {
+                "id": 74,
+                "chave": "036",
+                "nome": "Horários de Funcionamento",
+                "link": "https://v2.mz-cdn.com/28fae68790a0015b2ef59fabf1cc4709/Horarios_de_Funcionamento.mp4"
+            },
+            {
+                "id": 75,
+                "chave": "037",
+                "nome": "Pausas Programadas",
+                "link": "https://v2.mz-cdn.com/469355704ee2a87b023d240b5783a2af/Pausas_Programadas.mp4"
+            },
+            {
+                "id": 76,
+                "chave": "038",
+                "nome": "Controles de Abertura e Fechamento",
+                "link": "https://v2-2.mz-cdn.com/93d3bbd506f5e16945f0c8beb555f0db/Controles_de_Abertura_e_Fechamento.mp4"
+            },
+            {
+                "id": 77,
+                "chave": "039",
+                "nome": "Mensagens Padrão",
+                "link": "https://v2.mz-cdn.com/9e205a4b87a84951694dd71374bc8840/Mensagens_Padrao.mp4"
+            },
+            {
+                "id": 78,
+                "chave": "040",
+                "nome": "Mensagens Customizadas",
+                "link": "https://v2.mz-cdn.com/42d1060fd9bc29f70d7bda407fb1f64e/Mensagens_Customizadas.mp4"
+            },
+            {
+                "id": 79,
+                "chave": "041",
+                "nome": "Pedido Manual",
+                "link": "https://v2.mz-cdn.com/735565802c0171f2c51734741cb96166/Pedido_Manual.mp4"
+            },
+            {
+                "id": 80,
+                "chave": "042",
+                "nome": "Pedido Manual - Buscar Cliente (Área de Entrega)",
+                "link": "https://v2.mz-cdn.com/22061a312cfde177df398d6b3142c589/Pedido_Manual_Buscar_Cliente.mp4"
+            },
+            {
+                "id": 81,
+                "chave": "043",
+                "nome": "Pedido Manual - Novo Cliente (Área de Entrega)",
+                "link": "https://v2-2.mz-cdn.com/acb18cfcad677d4d6bd5469da70dbe5e/Novo_cliente.mp4"
+            },
+            {
+                "id": 82,
+                "chave": "044",
+                "nome": "Pedidos",
+                "link": "https://v2-3.mz-cdn.com/c545c6545252091ebc9c51554db14f66/Pedidos.mp4"
+            },
+            {
+                "id": 83,
+                "chave": "045",
+                "nome": "Perfil - Informações",
+                "link": "https://v2-2.mz-cdn.com/ad5c73bfd6c1be8e75ceb6229267760d/Informacoes.mp4"
+            },
+            {
+                "id": 84,
+                "chave": "046",
+                "nome": "Perfil - Localização",
+                "link": "https://v2.mz-cdn.com/9e9be6c3d1d06e7abb3c62a102692e35/Perfil_Localizacao.mp4"
+            },
+            {
+                "id": 85,
+                "chave": "047",
+                "nome": "Perfil - Contatos",
+                "link": "https://v2.mz-cdn.com/1a3fd4c5d4d65218e5cba0fcd758f94b/Perfil_Contatos.mp4"
+            },
+            {
+                "id": 86,
+                "chave": "048",
+                "nome": "Lista de Produtos",
+                "link": "https://v2.mz-cdn.com/c3ffc160835b9beaacdc38974a906f1e/Lista_de_Produtos.mp4"
+            },
+            {
+                "id": 87,
+                "chave": "049",
+                "nome": "Produto",
+                "link": "https://v2-2.mz-cdn.com/589875e8a4777911413f20ee542dfdce/menu.mp4"
+            },
+            {
+                "id": 88,
+                "chave": "050",
+                "nome": "Relatório de Pedidos",
+                "link": "https://v2-6.mz-css.net/d892197d7b7d6f7383bd14f0757ffa9e/15_FILTRAGEM_DE_PEDIDOS_11.mp4"
+            },
+            {
+                "id": 89,
+                "chave": "051",
+                "nome": "Relatório Financeiro",
+                "link": "https://v2-4.mz-css.net/3ffabebb126664c59bb091f2a17661ed/16_RELATORIO_FINANCEIRO.mp4"
+            },
+            {
+                "id": 90,
+                "chave": "052",
+                "nome": "Lista de Usuários",
+                "link": "https://v2-5.mz-css.net/7f9cb40b29ad26ea7d43c04e988567ef/13_USUARIOS.mp4"
+            },
+            {
+                "id": 91,
+                "chave": "053",
+                "nome": "Usuário",
+                "link": "https://v2-2.mz-cdn.com/1f4b3eead5f3534289dfb48d767095d3/usuario.mp4"
+            },
+            {
+                "id": 92,
+                "chave": "054",
+                "nome": "Pausar",
+                "link": "https://v2.mz-cdn.com/c4b44fd08f39cd57db240416ece4256d/Pausar.mp4"
+            },
+            {
+                "id": 93,
+                "chave": "055",
+                "nome": "Abrir e Fechar",
+                "link": "https://v2-6.mz-css.net/224d85aa55d449a907212d66c3b3232b/14_ABRIR_FECHAR.mp4"
+            },
+            {
+                "id": 94,
+                "chave": "056",
+                "nome": "Entregador",
+                "link": "https://v2.mz-cdn.com/59a0a21d420e9dd007ce66359b13d6da/entregadores.mp4"
+            },
+            {
+                "id": 95,
+                "chave": "057",
+                "nome": "Cupom de Desconto",
+                "link": "https://v2.mz-cdn.com/edabe5db72cd0a2b45e2278f68bdbc60/Cupom.mp4"
+            },
+            {
+                "id": 96,
+                "chave": "058",
+                "nome": "Relatório de Cupom",
+                "link": "https://v2-2.mz-cdn.com/77ea477c2cc9e131c8157c7019983c5f/Relatorio_do_Cupom.mp4"
+            },
+            {
+                "id": 97,
+                "chave": "059",
+                "nome": "Produtos > Categoria - Edição",
+                "link": ""
+            },
+            {
+                "id": 98,
+                "chave": "060",
+                "nome": "Produtos > Item - Detalhes",
+                "link": "https://v2.mz-cdn.com/8c207a15627f75dceca91d11f32fc959/Produtos_Item_Detalhes.mp4"
+            },
+            {
+                "id": 99,
+                "chave": "061",
+                "nome": "Produtos > Item - Complementos",
+                "link": "https://v2.mz-cdn.com/191ba5b74c08f91e0031a7db30e8ca72/Produtos_Item_Complementos.mp4"
+            },
+            {
+                "id": 100,
+                "chave": "062",
+                "nome": "Produtos > Item - Disponibilidade",
+                "link": "https://v2-4.mz-css.net/9baadcae92542ebea4cc6b5ba8d58ce8/WhatsApp_Video_2022-06-09_at_11.40.42.mp4"
+            },
+            {
+                "id": 101,
+                "chave": "063",
+                "nome": "Produtos > Categoria - Funções",
+                "link": "https://v2.mz-cdn.com/58c4bec324e330e19a999e3f0d5707c6/Produtos_Categoria_Funcoes.mp4"
+            },
+            {
+                "id": 102,
+                "chave": "065",
+                "nome": "Produtos > Categoria > Produto",
+                "link": "https://v2.mz-cdn.com/713898dde2c3feeef58e7d74cea6d09d/Produtos_Categoria_Produto.mp4"
+            },
+            {
+                "id": 104,
+                "chave": "067",
+                "nome": "Produtos > Complemento - Detalhes",
+                "link": "https://v2.mz-cdn.com/ecd58ab84f091441fbef02c14ee12650/Produtos_Complemento_Detalhes.mp4"
+            },
+            {
+                "id": 105,
+                "chave": "068",
+                "nome": "Produtos > Complemento - Opções",
+                "link": "https://v2.mz-cdn.com/184fc25eabcfa337949e9d7e188542a4/Produtos_Complemento_Opcoes.mp4"
+            },
+            {
+                "id": 106,
+                "chave": "069",
+                "nome": "Produtos > Complemento - Copiar",
+                "link": "https://v2.mz-cdn.com/0a80382c50274825b4699d59c3d49dfc/Produtos_Complemento_Copiar.mp4"
+            },
+            {
+                "id": 107,
+                "chave": "070",
+                "nome": "Produtos > Detalhes",
+                "link": "https://v2.mz-cdn.com/1b83559aa15627b3d8b7f42f42ed8d74/Detalhes.mp4"
+            },
+            {
+                "id": 108,
+                "chave": "071",
+                "nome": "Produtos > Categorias",
+                "link": "https://v2.mz-cdn.com/8b963f7f7d38ac16dc266868f1bf3232/Categoria.mp4"
+            },
+            {
+                "id": 109,
+                "chave": "072",
+                "nome": "Integrações",
+                "link": "https://v2.mz-cdn.com/86be9fa49ed30be4fc41e7192b0e7c88/Integracoes.mp4"
+            },
+            {
+                "id": 110,
+                "chave": "073",
+                "nome": "Integrações > WA Chatbot (Instalador)",
+                "link": ""
+            },
+            {
+                "id": 111,
+                "chave": "074",
+                "nome": "Integrações > Associar Whatsapp",
+                "link": "https://v2.mz-cdn.com/ad87c34b7535e7619d4e6a56ff30e4a2/Associar_WhatsApp.mp4"
+            },
+            {
+                "id": 112,
+                "chave": "075",
+                "nome": "Integrações > Whatsapp (Cloud Server) > Ativar",
+                "link": "https://v2.mz-cdn.com/4c9ede910886349cf11225a90bd4e2cd/whatsapp.mp4"
+            },
+            {
+                "id": 113,
+                "chave": "076",
+                "nome": "Integrações > Facebook > Ativar",
+                "link": "https://v2-2.mz-cdn.com/5a055ec40c8fe638a4be1c0ce7a9d7fe/ativafacebook.mp4"
+            },
+            {
+                "id": 114,
+                "chave": "077",
+                "nome": "Integrações > Telegram > Ativar",
+                "link": "https://v2-2.mz-cdn.com/1871ed8f85a377fd83e265d8e7c3f9a3/Telegram.mp4"
+            },
+            {
+                "id": 115,
+                "chave": "078",
+                "nome": "Integrações > Site > Ativar",
+                "link": ""
+            },
+            {
+                "id": 117,
+                "chave": "080",
+                "nome": "Integrações > Instagram > Ativar",
+                "link": "https://v2.mz-cdn.com/62bc6d4825fccc2c46c0028678221c2e/instagram.mp4"
+            },
+            {
+                "id": 120,
+                "chave": "083",
+                "nome": "Pedidos > Detalhes",
+                "link": "https://v2-6.mz-css.net/fa6d3dc673dfcadb4ba1cc853d817743/Copia_de_campanha.mp4"
+            },
+            {
+                "id": 121,
+                "chave": "084",
+                "nome": "Pedidos > Histórico",
+                "link": "https://v2.mz-cdn.com/732dcdb36c5f10a59a6fea63eb9ee505/Historico.mp4"
+            },
+            {
+                "id": 122,
+                "chave": "085",
+                "nome": "Integrações > Associar Site",
+                "link": "https://v2.mz-cdn.com/cc0fce2acfa3c4c69bddb559d91a1a43/Associar_Site.mp4"
+            },
+            {
+                "id": 123,
+                "chave": "086",
+                "nome": "Integrações > Associar Facebook",
+                "link": "https://v2.mz-cdn.com/e3340465d5f7996583e5f58737ddca3b/Associar_Facebook.mp4"
+            },
+            {
+                "id": 124,
+                "chave": "087",
+                "nome": "Integrações > Associar Instagram",
+                "link": "https://v2.mz-cdn.com/3e9e5865a516c9b19391c5a377b1bde5/Associar_Instagram.mp4"
+            },
+            {
+                "id": 125,
+                "chave": "088",
+                "nome": "Integrações > Associar Telegram",
+                "link": "https://v2.mz-cdn.com/4afe3d56678be3cf874d8bca1e89b0fe/Associar_Telegram.mp4"
+            },
+            {
+                "id": 128,
+                "chave": "090",
+                "nome": "Integrações > Whatsapp (Local Server) > Ativar ",
+                "link": "https://v2-3.mz-cdn.com/a790a1f74b3f9623410b9dc8af19d7f1/LocalServerAtivar.mp4"
+            },
+            {
+                "id": 129,
+                "chave": "091",
+                "nome": "Áreas de Entrega > Bairros",
+                "link": "https://v2-2.mz-cdn.com/de08d2eb0e342716447144a7ced23a8a/Areas_de_Entrega_Bairros.mp4"
+            },
+            {
+                "id": 133,
+                "chave": "095",
+                "nome": "Envio de Notificações",
+                "link": "https://v2-2.mz-cdn.com/f64d792620130b3004ec020b896849f4/Notificacoes.mp4"
+            },
+            {
+                "id": 134,
+                "chave": "096",
+                "nome": "Qrcode",
+                "link": "https://v2.mz-cdn.com/b9c6b35d119b0233397f7043af76aeab/Qr-code.mp4"
+            },
+            {
+                "id": 157,
+                "chave": "105",
+                "nome": "Pedidos em Mesa",
+                "link": "https://v2-6.mz-css.net/94547ca5402ba19594c1481c1987e41b/3_MESA.mp4"
+            },
+            {
+                "id": 148,
+                "chave": "106",
+                "nome": "Lista de Caixas",
+                "link": "https://v2-5.mz-css.net/fa7e78efdc0fc566c2b08cf9e851753b/8_CRIANDO_CAIXA.mp4"
+            },
+            {
+                "id": 149,
+                "chave": "107",
+                "nome": "Lista de Garçons",
+                "link": "https://v2-5.mz-css.net/8d610ad2080a89d4c0336c69d33a0c70/7_CRIANDO_GARCOM_.mp4"
+            },
+            {
+                "id": 150,
+                "chave": "108",
+                "nome": "Garçom",
+                "link": "https://v2-4.mz-css.net/96157cee9ce4d6f01f67b60536a7deb0/8_EDITANDO_GARCOM_.mp4"
+            },
+            {
+                "id": 151,
+                "chave": "109",
+                "nome": "Lista de Mesas",
+                "link": "https://v2-5.mz-css.net/ebc0da95f2697d0a67faff7395de978e/3_MESA_1.mp4"
+            },
+            {
+                "id": 152,
+                "chave": "110",
+                "nome": "Mesa"
+            },
+            {
+                "id": 153,
+                "chave": "111",
+                "nome": "Impressora",
+                "link": "https://v2-6.mz-css.net/193229a387a9e5c5aa151a212d7166f4/EDITAR_IMPRESSORA_11.mp4"
+            },
+            {
+                "id": 154,
+                "chave": "112",
+                "nome": "Relatório de Fluxo de Caixa",
+                "link": "https://v2-5.mz-css.net/be5983727428fca22f796bc966304973/12_RELATORIOS_CAIXA.mp4"
+            },
+            {
+                "id": 136,
+                "chave": "113",
+                "nome": "Pedido Manual > Buscar Cliente (Bairro)",
+                "link": "https://v2.mz-cdn.com/2c7dce0259121a829bf92316d43270fc/Buscar_cliente.mp4"
+            },
+            {
+                "id": 137,
+                "chave": "114",
+                "nome": "Controle de Estoque",
+                "link": "https://v2-2.mz-cdn.com/d5c5b9d2ccd18ccf73aea8e6db992cf7/Estoque.mp4"
+            },
+            {
+                "id": 138,
+                "chave": "115",
+                "nome": "Pedido Manual > Novo Cliente (Bairro)",
+                "link": "https://v2-2.mz-cdn.com/ebc4534399e8e9344d5b4bf52b1c7710/Pedido_Manual_N.Cliente.mp4"
+            },
+            {
+                "id": 139,
+                "chave": "116",
+                "nome": "Programa de Fidelidade",
+                "link": "https://v2-2.mz-cdn.com/373eb35330a3921b9096da2e620eceea/fidelidade.mp4"
+            },
+            {
+                "id": 155,
+                "chave": "117",
+                "nome": "Operação de Caixa",
+                "link": "https://v2-6.mz-css.net/c81251b04e877c33ec0d59c35595010b/2_FUNCOES_DE_CAIXA.mp4"
+            },
+            {
+                "id": 156,
+                "chave": "118",
+                "nome": "Pedidos Delivery",
+                "link": "https://v2-5.mz-css.net/2f5b6560efebb8553c4e39df25127d62/Design_sem_nome_5.mp4"
+            },
+            {
+                "id": 158,
+                "chave": "125",
+                "nome": "Abertura/Fechamento de Caixa",
+                "link": "https://v2-4.mz-css.net/fcd89061e5b953ca8463d91f0b47fc21/1_ABRIR_CAIXA.mp4"
+            },
+            {
+                "id": 159,
+                "chave": "126",
+                "nome": "Lista de Impressoras",
+                "link": "https://v2-4.mz-css.net/36856b549dd86c3140b9d83d953587d1/impressora.mp4"
+            },
+            {
+                "id": 160,
+                "chave": "127",
+                "nome": "Perfil > Mesa",
+                "link": "https://v2-6.mz-css.net/100e106e0d14f71f57514ae53713e84e/4_PERFIL_DE_MESA.mp4"
+            },
+            {
+                "id": 147,
+                "chave": "128",
+                "nome": "Perfil > Senha de Cancelamento",
+                "link": "https://v2-4.mz-css.net/118a3a7cebc2133a7adb2f853fa87bdd/5_SENHA_CANCELAMNETO.mp4"
+            }
+        ]
+    },
+    {
+        "modulo": "GERAL",
+        "tutoriais": [
+            {
+                "id": 206,
+                "chave": "172",
+                "nome": "Perfil",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/12d058ae87662d4099084ddcee50011e/056_Perfil.mp4"
+            },
+            {
+                "id": 212,
+                "chave": "178",
+                "nome": "Segurança",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/c09f0f7f269a2e8d487ccd2b272ed388/057_Seguranca.mp4"
+            },
+            {
+                "id": 213,
+                "chave": "179",
+                "nome": "Faturas",
+                "link": ""
+            },
+            {
+                "id": 214,
+                "chave": "180",
+                "nome": "Fatura",
+                "link": ""
+            },
+            {
+                "id": 261,
+                "chave": "277",
+                "nome": "Perfil - Operador",
+                "link": "https://v4d.mz-css.net/715dcb7384a57cd37669f5d95ac35bf2/dc3ded221bb5ca4e5453b00ddfd0579f/Parceiros_Perfil_Atendente.webm"
+            },
+            {
+                "id": 262,
+                "chave": "278",
+                "nome": "Segurança - Operador",
+                "link": ""
+            },
+            {
+                "id": 263,
+                "chave": "279",
+                "nome": "Notificações - Operador",
+                "link": ""
+            },
+            {
+                "id": 264,
+                "chave": "280",
+                "nome": "Notificações - Gestor",
+                "link": "https://v4d.mz-css.net/715dcb7384a57cd37669f5d95ac35bf2/782cd65f4c2fb73c889053b7cd2f8acd/Parceiros_Gestor_Notificacoes.webm"
+            }
+        ]
+    },
+    {
+        "modulo": "JADI",
+        "tutoriais": [
+            {
+                "id": 197,
+                "chave": "164",
+                "nome": "Consumo do Assistente de IA",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/54634e119005daf7ba30194e97a8b1b6/058_Consumo_Do_Assistente_De_Ia.mp4"
+            },
+            {
+                "id": 200,
+                "chave": "165",
+                "nome": "IAs",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/bf7ac597d9fc2d5bdc843759b82769e2/059_Ias.mp4"
+            },
+            {
+                "id": 202,
+                "chave": "166",
+                "nome": "Assistentes",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/ad3ebbeb03b8f100525b55052427e245/060_Assistentes.mp4"
+            },
+            {
+                "id": 199,
+                "chave": "167",
+                "nome": "Assistentes > Criação e Edição",
+                "link": ""
+            },
+            {
+                "id": 198,
+                "chave": "168",
+                "nome": "Gestão de Funcionalidades > Funcionalidades",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/9dae9cf8963bf13572c43bc9187262cc/061_Gestao_De_Funcionalidades_Funcionalidades.mp4"
+            },
+            {
+                "id": 201,
+                "chave": "169",
+                "nome": "Gestão de Funcionalidades > Agrupamento dos Menus",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/769cc85d0e92ac8eb639a285e0029164/062_Gestao_De_Funcionalidades_Agrupamento_Dos_Menus.mp4"
+            }
+        ]
+    },
+    {
+        "modulo": "SCHEDULING",
+        "tutoriais": [
+            {
+                "id": 215,
+                "chave": "181",
+                "nome": "Compromissos",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/1609d3e9d8f0416bcbf43c1a99237e8e/063_Compromissos.mp4"
+            },
+            {
+                "id": 216,
+                "chave": "182",
+                "nome": "Dashboard",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/55047b70695ff484f1187236692c6f39/064_Dashboard.mp4"
+            },
+            {
+                "id": 217,
+                "chave": "183",
+                "nome": "Tipos de Atividades",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/4f762312d415524df9c303fb479467fb/065_Tipos_De_Atividades.mp4"
+            },
+            {
+                "id": 218,
+                "chave": "184",
+                "nome": "Atividades",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/05b6b16a0bfa4aa310639342719353ea/066_Atividades.mp4"
+            },
+            {
+                "id": 219,
+                "chave": "185",
+                "nome": "Agendas",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/338478b044c9e915d9fe0b7e4255e9ff/067_Agendas.mp4"
+            },
+            {
+                "id": 220,
+                "chave": "186",
+                "nome": "Disponibilidades",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/3297bde4721e98eda62702446eb33d2f/068_Disponibilidades.mp4"
+            },
+            {
+                "id": 221,
+                "chave": "187",
+                "nome": "Fila de Espera",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/23139afdddc026322f81f8301c83f4d0/069_Fila_De_Espera.mp4"
+            },
+            {
+                "id": 222,
+                "chave": "188",
+                "nome": "Feriados",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/cd8ccdfb027bd02625ab6adb17587a34/070_Feriados.mp4"
+            },
+            {
+                "id": 223,
+                "chave": "189",
+                "nome": "Notificações - Configurações Gerais",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/2af51ad198bf0b1155d902a4627861b2/071_Notificacoes_-_Configuracoes_Gerais.mp4"
+            },
+            {
+                "id": 224,
+                "chave": "190",
+                "nome": "Notificações - Configurações Específica",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/0eb5f45b472f13954cf42a6a35241282/072_Notificacoes_-_Configuracoes_Especifica.mp4"
+            },
+            {
+                "id": 225,
+                "chave": "191",
+                "nome": "Notificações - Templates",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/f4f9f71de58f9f9e9272ce7a979f13d1/073_Notificacoes_-_Templates.mp4"
+            },
+            {
+                "id": 226,
+                "chave": "192",
+                "nome": "Agendamento Online",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/bbc9b41d91f567a467ecc8a757275ee3/074_Agendamento_Online.mp4"
+            },
+            {
+                "id": 227,
+                "chave": "193",
+                "nome": "Agendas Externas",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/17e7152c3affab7fe88e1990ba8e434f/075_Agendas_Externas.mp4"
+            },
+            {
+                "id": 234,
+                "chave": "249",
+                "nome": "Financeiro",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/d078d87944ad513faee07f5368701974/076_Financeiro.mp4"
+            },
+            {
+                "id": 235,
+                "chave": "250",
+                "nome": "Formas de Pagamento",
+                "link": "https://v4d.mz-css.net/fa825d02cdd06de2d3addf13494f2dfd/2c3fd8a7c6028d8a71a40bc32ec8c14a/077_Formas_De_Pagamento.mp4"
+            }
+        ]
+    }
+]

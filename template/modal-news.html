@@ -1,0 +1,2150 @@
+<link href="css/news.css?VERSION_HASH" rel="stylesheet" />
+<div class="modal-header" ng-class="{'b-t-0' : !isNews}">
+    <div class="centralizar m-t-20" ng-if="!isMulti360()">
+        <div class="switch-button">
+            <input class="switch-button-checkbox" type="checkbox" ng-click="toggleNews()"></input>
+            <label class="switch-button-label"><span class="switch-button-label-span">Novidades</span></label>
+        </div>
+        <div class="obs-new emphasis">
+            <div ng-show="!isNews">Conheça as principais novidades em nossa plataforma!</div>
+            <div ng-show="isNews">Fique de olho… Em breve, a sua plataforma nunca mais será a mesma!</div>
+        </div>
+    </div>
+    <h3 ng-if="isMulti360()">
+        {{"NOVIDADES"| translate}}
+        <small>Conheça as principais novidades em nossa plataforma!</small>
+    </h3>
+</div>
+<div class="modal-body modal-news" style="max-height: 650px;">
+    <div style="padding: 20px 26px 10px;" ng-show="!isNews">
+        <div>
+
+            <!-- ------------------------------------------------------------ -->
+            <!-- ------------------------------------------------------------ -->
+            <!-- APENAS A ÚLTIMA NOVIDADE AQUI -->
+            <!-- ------------------------------------------------------------ -->
+            <!-- ------------------------------------------------------------ -->
+
+            <div>
+                <h4>09/10/2026</h4>
+
+                <div>
+                    <h6>
+                        <span class="bg-new">NOVO</span>
+                        Visualizar Contatos de Clientes (Somente novo layout)
+                    </h6>
+
+                    <p class="m-b-0">
+                        Agora é possível que o gestor e supervisores (com permissão) possam controlar a visualização do número de telefone dos clientes pelos atendentes.
+                        Eles podem realizar os atendimentos normalmente, sem ter acesso ao contato do cliente.
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+            </div>
+
+            <!-- ------------------------------------------------------------ -->
+            <!-- ------------------------------------------------------------ -->
+            <!-- TODAS AS NOVIDADES ANTIGAS FICAM NA DIV ABAIXO NA <div ng-if="mostrarTodasNovidades"> -->
+            <!-- ------------------------------------------------------------ -->
+            <!-- ------------------------------------------------------------ -->
+
+            <div class="text-center p-b-30 m-t-15" ng-if="!mostrarTodasNovidades">
+                <button ng-click="setMostrarTodasNovidades(true)" class="btn btn-default waves-effect"><i
+                        class="zmdi zmdi-plus"></i> {{"MAIS" | translate}}</button>
+            </div>
+
+            <div ng-if="mostrarTodasNovidades">
+                <h4>06/10/2026</h4>
+
+                <div>
+                    <h6>
+                        Continuar a Conversa pelo Webchat
+                    </h6>
+
+                    <p class="m-b-0">
+                        Agora o bot pode enviar, junto com a mensagem de boas-vindas, um template de WhatsApp com um
+                        botão que leva o cliente a continuar a mesma conversa pelo <b>webchat</b>, direto no navegador.
+                        Para usar, ative <b>Enviar template de continuar conversa</b> na edição do bot e escolha o
+                        template; o template só aparece nessa lista depois de ser marcado como apto na tela de
+                        <b>Templates do WhatsApp</b>. Durante o atendimento, o chat mostra se as mensagens estão sendo
+                        entregues <b>somente pelo webchat</b> ou <b>pelo webchat e também pelo WhatsApp</b>, e o
+                        atendente pode alternar entre os dois a qualquer momento pelo menu do chat. Disponível no
+                        <b>WhatsApp API Oficial</b>, inclusive na versão coexistente.
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <div>
+                    <h6>
+                        Agrupamento de Mensagens no WhatsApp API Oficial
+                    </h6>
+
+                    <p class="m-b-0">
+                        Agora o bot pode juntar várias mensagens de texto em um único envio, deixando a conversa mais
+                        limpa e reduzindo o número de notificações no celular do cliente. Ative o
+                        <b>Agrupamento de Mensagens</b> na edição do bot e escolha o limite de mensagens por
+                        agrupamento, de 2 até 5. O agrupamento funciona apenas com mensagens simples (texto):
+                        mensagens com mídia, respostas a mensagens, templates e menus interativos continuam sendo
+                        enviados individualmente. Disponível no <b>WhatsApp API Oficial.</b>
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <div>
+                    <h6>
+                        Dashboard de Custos da Meta - (Somente no novo layout)
+                    </h6>
+
+                    <p class="m-b-0">
+                        Agora você acompanha em um só lugar quanto o WhatsApp está custando. O novo
+                        <b>Dashboard de Custos da Meta</b> reúne o valor gasto no período e a evolução ao longo do
+                        tempo, com filtros por data, para você enxergar para onde o investimento está indo e planejar
+                        os próximos envios sem surpresa na fatura. Disponível no <b>WhatsApp API Oficial.</b>
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <h4>25/08/2026</h4>
+
+                <div>
+                    <h6>
+                        Aviso de Templates Gratuitos em Atendimento Originado de Anúncio
+                    </h6>
+
+                    <p class="m-b-0">
+                        Quando o cliente iniciar a conversa clicando em um anúncio do Facebook ou do Instagram
+                        (Click to WhatsApp), a Meta libera o envio de templates <b>sem custo por 72 horas</b>.
+                        Agora, sempre que a sessão de 24 horas estiver encerrada nesses atendimentos, o chat exibe
+                        o aviso <b>"Atendimento originado de anúncio: os templates são gratuitos até"</b> com a
+                        <b>data e a hora exatas em que essa gratuidade termina</b>, para que você aproveite a janela
+                        antes que ela expire. Atenção: as 72 horas valem apenas para a gratuidade dos templates a janela de mensagem livre continua sendo de 24 horas. Disponível no
+                        <b>WhatsApp API Oficial.</b>
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <h4>28/07/2026</h4>
+
+                <div>
+                    <h6>
+                        Atendimento Ativo pelo Telegram
+                    </h6>
+
+                    <p class="m-b-0">
+                        Agora também é possível iniciar um atendimento ativo pelo <b>Telegram</b>. Basta selecionar o canal
+                        do Telegram ao criar o atendimento e começar a conversa com o seu cliente, sem precisar esperar
+                        que ele envie a primeira mensagem.
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <h4>23/07/2026</h4>
+
+                <div>
+                    <h6>
+                        Envio de Localização no Atendimento
+                    </h6>
+
+                    <p class="m-b-0">
+                        Agora o gestor pode cadastrar localizações e vinculá-las aos departamentos, e o atendente pode
+                        enviá-las diretamente no chat de atendimento. No <b>WhatsApp API Oficial</b> a localização é enviada
+                        como um template de localização nativo; nos demais canais ela é enviada como um link do mapa,
+                        facilitando o cliente a encontrar o seu endereço.
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <div>
+                    <h6>
+                        Iniciar Atendimento pela Menção (@) em Grupos
+                    </h6>
+
+                    <p class="m-b-0">
+                        Em grupos do <b>WhatsApp (QR Code)</b>, ao mencionar um contato com @ o número passa a ficar clicável.
+                        Basta clicar para iniciar um novo atendimento individual já com o contato preenchido, agilizando
+                        o retorno aos participantes do grupo.
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <div>
+                    <h6>
+                        Reação com Emoji nas Mensagens
+                    </h6>
+
+                    <p class="m-b-0">
+                        Agora o atendente pode reagir às mensagens dos clientes com emojis diretamente no chat de
+                        atendimento, tornando a conversa mais ágil e próxima. Disponível no <b>WhatsApp API Oficial.</b>
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <h4>14/07/2026</h4>
+
+                <div>
+                    <h6>
+                        Campanhas - Download de Relatórios em CSV
+                    </h6>
+
+                    <p class="m-b-0">
+                        Agora é possível baixar os dados das suas campanhas em formato CSV. O botão de download está
+                        disponível tanto na listagem de campanhas quanto na tela de relatório de cada campanha,
+                        facilitando a exportação e a análise das informações da sua operação.
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <h4>24/04/2026</h4>
+
+                <div>
+                    <h6>
+                        Campanhas - Intervalo de disparo de mensagens
+                    </h6>
+
+                    <p class="m-b-0">
+                        Agora é possível definir e personalizar o intervalo de disparos das mensagens para suas campanhas
+                        de acordo com o canal desejado. Assim você consegue controlar melhor a cadência das campanhas
+                        e evitar banimentos de números.
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <div>
+                    <h6>
+                        Exclusão de Mensagens pelo Gestor
+                    </h6>
+
+                    <p class="m-b-0">
+                        Agora o gestor pode apagar mensagens na plataforma tanto do chat de atendimento quanto do chat interno,
+                        oferecendo mais controle sobre o conteúdo das conversas da sua operação.
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <h4>26/03/2026</h4>
+
+                <div>
+                    <h6>
+                        Rascunho de Mensagens
+                    </h6>
+
+                    <p class="m-b-0">
+                        Agora o sistema salva automaticamente o rascunho da sua mensagem enquanto você digita.
+                        Ao navegar entre atendimentos, seu texto e arquivos anexados ficam preservados,
+                        para que você nunca perca o que estava escrevendo.
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <div>
+                    <h6>
+                        Controle de Permissão para Download de Relatórios
+                    </h6>
+
+                    <p class="m-b-0">
+                        Agora é possível que o gestor defina individualmente quais usuários têm permissão para baixar relatórios.
+                        Essa melhoria oferece mais controle e segurança sobre o acesso às informações da sua operação.
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <h4>10/03/2026</h4>
+
+                <div>
+                    <h6>
+                        IA com Acesso a Campos Customizados
+                    </h6>
+
+                    <p class="m-b-0">
+                        Agora a nossa IA consegue acessar informações previamente armazenadas em campos customizados,
+                        mesmo quando o cliente retorna após um atendimento já finalizado. Essa melhoria permite que dados já
+                        coletados, como nome e outras informações relevantes, sejam utilizados em novos atendimentos,
+                        proporcionando mais continuidade, contexto e eficiência nas interações.
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <h4>03/03/2026</h4>
+
+                <div>
+                    <h6>
+                        Visualização em Mapa Mental no Grupo de Perguntas do Bot
+                    </h6>
+
+                    <p class="m-b-0">
+                        Agora é possível visualizar o grupo de perguntas do bot em formato de mapa mental,
+                        proporcionando uma visão mais clara e intuitiva da estrutura do seu fluxo de atendimento.
+                    </p>
+
+                    <div class="m-t-10">
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>
+                            ✅ <strong>Visão Completa:</strong>
+                            Visualize toda a árvore de perguntas e menus do bot de forma gráfica e organizada.
+                        </li>
+
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>
+                            ✅ <strong>Navegação Intuitiva:</strong>
+                            Navegue entre os níveis do bot com facilidade, identificando rapidamente conexões e fluxos.
+                        </li>
+                    </div>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <h4>20/02/2026</h4>
+
+                <div>
+                    <h6>
+                        Nomeação e Renomeação de Canais de Atendimento
+                    </h6>
+
+                    <p class="m-b-0">
+                        Agora é possível nomear ou renomear seus canais de atendimento, facilitando a identificação e a
+                        organização da sua operação.
+                        Essa melhoria proporciona mais personalização e eficiência na gestão dos seus canais.
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <div>
+                    <h6>
+                        Filtro de Busca de Mensagens no Relatório
+                    </h6>
+
+                    <p class="m-b-0">
+                        Agora você pode aplicar filtros no relatório de mensagens para localizar conversas específicas com
+                        mais rapidez.
+                        Isso torna a análise de dados mais prática, ágil e eficiente.
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <h4>03/02/2026</h4>
+
+                <div>
+                    <h6>
+                        Criação e envio de Templates
+                    </h6>
+
+                    <p class="m-b-0">
+                        Reformulamos toda a experiência de criação e envio de templates, tornando o processo
+                        mais intuitivo, visual e eficiente para o dia a dia.
+                    </p>
+
+                    <div class="m-t-10">
+                        <li style="list-style: none; margin-bottom: 15px;" ng-non-bindable>
+                            ✅ <strong>Página de Criação:</strong>
+                            A criação de templates agora é feita em uma página dedicada ao invés de um modal,
+                            com um preview mais fiel a como a mensagem chegará para o cliente.
+                        </li>
+
+                        <li style="list-style: none; margin-bottom: 15px;" ng-non-bindable>
+                            ✅ <strong>Filtros na Listagem:</strong>
+                            A listagem de templates agora conta com filtros para facilitar a busca e localização
+                            dos seus templates.
+                        </li>
+
+                        <li style="list-style: none; margin-bottom: 15px;" ng-non-bindable>
+                            ✅ <strong>Visual de Envio:</strong>
+                            Melhoramos o visual de todo o fluxo de envio de templates, com um filtro no modal
+                            de envio para buscar templates por nome.
+                        </li>
+
+                        <li style="list-style: none; margin-bottom: 15px;" ng-non-bindable>
+                            ✅ <strong>Favoritar Templates:</strong>
+                            Agora o atendente pode favoritar seus templates preferidos para acesso rápido.
+                        </li>
+                    </div>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <h4>23/01/2026</h4>
+
+                <div>
+                    <h6>
+                        Tags fixas para supervisor
+                    </h6>
+
+                    <p class="m-b-0">
+                        Com essa melhoria, o supervisor passa a ter mais controle sobre o uso de tags nos atendimentos,
+                        sempre mediante permissão do gestor, garantindo mais agilidade, padronização e eficiência
+                        operacional.
+                    </p>
+
+                    <div class="m-t-10">
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>
+                            ✅ <strong>Configuração pelo Gestor:</strong>
+                            Defina nas configurações se o supervisor terá ou não acesso para configurar o comportamento
+                            das tags.
+                        </li>
+
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>
+                            ✅ <strong>Herdar ou Usar Tags Independentes:</strong>
+                            O supervisor pode optar por herdar as tags do atendimento anterior ou utilizar tags
+                            independentes a cada novo atendimento, conforme a permissão definida.
+                        </li>
+                    </div>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <div>
+                    <h6>
+                        Aceitar participação em atendimento
+                    </h6>
+
+                    <p class="m-b-0">
+                        Facilite a colaboração entre atendentes com o novo recurso de solicitação de participação
+                        em atendimentos já em andamento.
+                    </p>
+
+                    <div class="m-t-10">
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>
+                            ✅ <strong>Solicitação de Participação:</strong>
+                            Ao tentar iniciar um atendimento para um cliente que já está em atendimento,
+                            é possível solicitar a participação no atendimento existente.
+                        </li>
+
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>
+                            ✅ <strong>Aceitar ou Recusar:</strong>
+                            O atendente responsável recebe a solicitação e pode aceitar ou recusar a participação,
+                            mantendo total controle sobre o atendimento.
+                        </li>
+                    </div>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <h4>16/01/2026</h4>
+
+                <div>
+                    <h6>
+                        Exclusão e cancelamento em massa de mensagens programadas
+                    </h6>
+
+                    <p class="m-b-0">
+                        Ganhe mais controle e eficiência no atendimento com a nova melhoria no gerenciamento
+                        de mensagens programadas, incluindo ajustes no reprocessamento já existente no sistema.
+                    </p>
+
+                    <div class="m-t-10">
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>
+                            ✅ <strong>Exclusão em Massa:</strong>
+                            Remova várias mensagens programadas de uma só vez, evitando ações repetitivas.
+                        </li>
+
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>
+                            ✅ <strong>Cancelamento Simplificado:</strong>
+                            Cancele envios futuros de forma rápida e centralizada, com mais segurança operacional.
+                        </li>
+
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>
+                            ✅ <strong>Reprocessamento Aprimorado:</strong>
+                            Ajustes na funcionalidade existente para garantir maior confiabilidade no reenvio de
+                            mensagens.
+                        </li>
+                    </div>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <div>
+                    <h6>
+                        Aprimoramento na tela de relatórios de cards (CRM)
+                    </h6>
+
+                    <p class="m-b-0">
+                        Inclusão de novos filtros por lista e etapa, facilitando a análise e o acompanhamento dos cards,
+                        além da possibilidade de exportar os relatórios em formato XLSX.
+                    </p>
+                </div>
+
+
+                <hr class="m-t-30 m-b-30" />
+
+                <div>
+                    <h6>
+                        Melhoria nos gráficos de pizza do dashboard (CRM)
+                    </h6>
+
+                    <p class="m-b-0">
+                        Aprimoramento dos gráficos de pizza nas telas de Serviços, Produtos e Equipe, oferecendo uma
+                        visualização mais clara e precisa dos dados para facilitar a análise e a tomada de decisão.
+                    </p>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <div>
+                    <h6>
+                        Melhoria na visualização de imagens
+                    </h6>
+
+                    <p class="m-b-0">
+                        Agora é possível ampliar as imagens diretamente no modal, permitindo dar zoom para uma
+                        visualização
+                        mais detalhada e precisa.
+                    </p>
+                </div>
+
+                <h4>24/11/2025</h4>
+
+                <div>
+                    <h6> Mensagens Rápidas Agrupadas</h6>
+                    <p class="m-b-0">
+                        Melhore a produtividade do atendimento criando grupos completos de mensagens rápidas
+                        que podem ser enviados de uma só vez.
+                    </p>
+
+                    <div class="m-t-10">
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>
+                            ✅ <strong>Agrupe Mensagens:</strong>
+                            Crie conjuntos contendo várias mensagens rápidas, incluindo texto ou qualquer tipo de
+                            arquivo.
+                        </li>
+
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>
+                            ✅ <strong>Envio em Sequência:</strong>
+                            Envie todo o grupo com apenas um clique, facilitando rotinas repetitivas no atendimento.
+                        </li>
+
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>
+                            ✅ <strong>Padronização:</strong>
+                            Organize fluxos prontos para ser reutilizados por toda a equipe.
+                        </li>
+                    </div>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <div>
+                    <h6>Encaminhamento de Mensagens e Arquivos</h6>
+                    <p class="m-b-0">
+                        Ganhe agilidade no compartilhamento de informações encaminhando mensagens e arquivos
+                        entre atendimentos ou para o chat interno.
+                    </p>
+
+                    <div class="m-t-10">
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>
+                            ✅ <strong>Encaminhe Conteúdos:</strong>
+                            Envie facilmente mensagens ou arquivos de um atendimento para outro ou para o chat interno.
+                        </li>
+
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>
+                            ✅ <strong>Compartilhamento Rápido:</strong>
+                            Mantenha a equipe alinhada sem copiar e colar, apenas selecione e encaminhe.
+                        </li>
+
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>
+                            ✅ <strong>Mais Organização:</strong>
+                            Facilite a troca de informações entre setores e acelere os fluxos internos.
+                        </li>
+                    </div>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <h4>11/11/2025</h4>
+
+                <div>
+                    <h6>Citação de Mensagens no Chat Interno</h6>
+                    <p class="m-b-0">
+                        Facilite a comunicação entre a equipe destacando trechos importantes de conversas e mantendo o
+                        contexto nas discussões.
+                    </p>
+                    <div class="m-t-10">
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>✅ <strong>Cite
+                                Mensagens:</strong>
+                            Selecione uma mensagem no chat interno e adicione-a como citação em sua resposta.</li>
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>✅ <strong>Mais
+                                Clareza:</strong>
+                            Mantenha o contexto das conversas e evite ruídos na comunicação entre os atendentes.</li>
+                    </div>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <h4>30/10/2025</h4>
+
+                <div>
+                    <h6>Carteira de Contatos</h6>
+                    <p class="m-b-0">
+                        Mantenha a coerência no relacionamento e garanta que seus clientes sejam atendidos sempre pelos
+                        especialistas certos.
+                    </p>
+                    <div class="m-t-10">
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>✅ <strong>Vincular
+                                Clientes:</strong> Cadastre
+                            clientes específicos para cada atendente da sua operação.</li>
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>✅ <strong>Retorno
+                                Fiel:</strong> Quando um cliente
+                            reabrir o atendimento, ele voltará automaticamente ao mesmo atendente que o atendeu antes.
+                        </li>
+                    </div>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <div>
+                    <h6>Tags Fixas</h6>
+                    <p class="m-b-0">
+                        Mantenha o histórico e o contexto do cliente sempre à vista! Agora, o gestor tem controle total
+                        sobre as
+                        <strong>Tags</strong> aplicadas no ciclo de vida do atendimento.
+                    </p>
+                    <div class="m-t-10">
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>✅ <strong>Contexto
+                                Imediato:</strong> As tags
+                            aplicadas no último atendimento retornam automaticamente quando o cliente reabre a conversa.
+                        </li>
+                    </div>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <div>
+                    <h6>Funções para Gestores e Supervisores</h6>
+                    <p class="m-b-0">
+                        Ferramentas para uma gestão mais estratégica e ativa no acompanhamento dos atendimentos.
+                    </p>
+                    <div class="m-t-10">
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>✅ <strong>Mensagens
+                                Programadas:</strong> Crie e
+                            agende mensagens para serem enviadas automaticamente nos atendimentos - ideal para
+                            lembretes, acompanhamentos e comunicações padronizadas.</li>
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>✅ <strong>Retornos:</strong>
+                            Defina lembretes de
+                            acompanhamento em atendimentos com seus agentes, garantindo que nenhum cliente fique sem
+                            retorno no momento certo.</li>
+                    </div>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <div>
+                    <h6>Mudanças na Organização</h6>
+                    <p class="m-b-0">
+                        A navegação ficou mais fluida e personalizável com as novas divisões de telas e ajustes na aba
+                        de
+                        atendimentos.
+                    </p>
+                    <div class="m-t-10">
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>✅ <strong>Separação de
+                                Telas:</strong> As áreas de
+                            <em>Perfil</em> e <em>Notificações</em> agora são independentes, tornando a navegação mais
+                            clara e direta.
+                        </li>
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>✅ <strong>Aba de
+                                Atendimentos:</strong> Novo ícone
+                            de <em>Engrenagem</em> permite personalizar a ordenação dos atendimentos (por data de
+                            criação ou da última mensagem).</li>
+                        <li style="list-style: none; margin-bottom: 5px;" ng-non-bindable>✅ <strong>Fluxo de Tags para
+                                Gestores:</strong>
+                            Defina se as tags serão fixas ou dinâmicas, ajustando a forma como os atendimentos são
+                            categorizados.</li>
+                    </div>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <h4>19/09/2025</h4>
+
+                <div>
+                    <h6>Assistente Copilot com IA</h6>
+                    <p class="m-b-0">
+                        Apoio imediato para dúvidas e objeções, sugestões em tempo real para melhorar abordagens com
+                        clientes.
+                    </p>
+                    <div style="display: flex; align-items: center;">
+                        <img src="https://v4d.mz-css.net/c1f95d0490d5eaf3238d1b1a8441035a/f524868241d38412e8b8c8d6e6cf12b9/copilot.png"
+                            style="float: left; width: 150px; height: 150px; flex: 0;">
+                        <ul style="flex: 1">
+                            <li style="list-style: none;" ng-non-bindable>✅ Base de conhecimento</li>
+                            <li style="list-style: none;" ng-non-bindable>✅ Funcionalidades direto no chat do
+                                atendimento</li>
+                            <li style="list-style: none;" ng-non-bindable>✅ Transcrição de áudios</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <div>
+                    <h6>Assistente Virtual no Bot com IA</h6>
+                    <p class="m-t-10 m-b-0">
+                        Experiência única, inteligente e totalmente conectada com a empresa, além de texto ela
+                        compreende áudio e mais recursos avançados.
+                    </p>
+                    <div style="display: flex; align-items: center;">
+                        <img src="https://v4d.mz-css.net/c1f95d0490d5eaf3238d1b1a8441035a/b0e9678c1ad089ee65ed4c8386b88b07/completa.png"
+                            style="float: left; width: 150px; height: 150px; flex: 0;">
+                        <ul style="flex: 1">
+                            <li style="list-style: none;" ng-non-bindable>✅ Base de conhecimento</li>
+                            <li style="list-style: none;" ng-non-bindable>✅ Integrações</li>
+                            <li style="list-style: none;" ng-non-bindable>✅ Criação de atendimentos</li>
+                            <li style="list-style: none;" ng-non-bindable>✅ Transcrição de audios</li>
+                            <li style="list-style: none;" ng-non-bindable>✅ Interpretação de áudios</li>
+                            <li style="list-style: none;" ng-non-bindable>✅ Envio de áudios diretamente pela IA</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <hr class="m-t-30 m-b-30" />
+
+                <div>
+                    <h6>Ligação via WhatsApp API (beta)</h6>
+                    <p class="m-t-10 m-b-0">
+                        Comunicação de outro nível com esse novo recurso que o WhatsApp disponibilizou para nós!
+                        Ligações diretamente via WhatsApp.
+                    </p>
+                    <div class="m-t-30" style="display: flex; align-items: center; margin-bottom: 40px">
+                        <img src="https://v4d.mz-css.net/216d9fb08d84c66fe4d59bfd071de18e/791ab0eb85d8cc9740d92b19cecf8c4d/image.png"
+                            style="float: left; width: 120px; height: 120px; flex: 0; margin-left: 30px;">
+                        <ul style="flex: 1">
+                            <li style="list-style: none;" ng-non-bindable>✅ Receba ligações direto na plataforma</li>
+                            <li style="list-style: none;" ng-non-bindable>✅ Envie mensagens para seus clientes te ligar
+                            </li>
+                            <li style="list-style: none;" ng-non-bindable>✅ Liga diretamente para seus clientes</li>
+                            <li style="list-style: none;" ng-non-bindable>✅ Relatório de acompanhamento</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <hr />
+
+                <h4>24/06/2025</h4>
+                <h6>Atualização na API Oficial do WhatsApp</h6>
+                <p>
+                    <strong>Envio de Imagens e Arquivos com Legenda</strong><br>
+                    Agora é possível enviar imagens e arquivos acompanhados de legenda diretamente pela API Oficial do
+                    WhatsApp. <br>
+                    Isso torna a comunicação mais clara e rica em contexto.
+                </p>
+                <p>
+                    <strong>Aviso de Sessão Expirada</strong><br>
+                    Quando o limite de 24 horas sem interação é atingido, a plataforma exibe um aviso informando que a
+                    sessão expirou, <br>
+                    além de um botão para retomar o atendimento de forma prática e rápida.
+                </p>
+
+                <hr />
+
+                <h4>24/06/2025</h4>
+                <h6>Atualização no canal do Instagram</h6>
+                <p>
+                    <strong>Recebimento de Reels e Posts</strong><br>
+                    A partir de agora, Reels e Posts recebidos pelo canal do Instagram serão exibidos como mensagens na
+                    plataforma. <br>
+                    Isso facilita o atendimento e o acompanhamento das interações de forma centralizada.
+                </p>
+                <p>
+                    <strong>Citação de Mensagem</strong><br>
+                    As mensagens recebidas com citação agora exibem também uma referência direta à mensagem original
+                    dentro
+                    da plataforma, <br>
+                    garantindo mais contexto e fluidez na conversa.
+                </p>
+
+                <p>
+                    <strong>Reações com Emojis nas Mensagens</strong><br>
+                    Passamos a exibir as reações com emojis feitas pelos usuários nas mensagens. A reação aparecerá
+                    diretamente no balão da mensagem dentro da plataforma.
+                </p>
+
+                <hr />
+
+                <h4>05/06/2025</h4>
+                <h6>Atendimentos</h6>
+                <p>
+                    Agora é possível enviar contatos pelos canais Whats QR Code, Telegram, Facebook e Instagram em
+                    formato
+                    de texto para facilitar o compartilhamento.
+                </p>
+
+                <div ng-if="isMegaZap()">
+
+                    <hr />
+
+                    <h4>30/05/2025</h4>
+
+                    <h6>Novo Módulo de Campanhas</h6>
+                    <p>
+                        Agora você pode criar e gerenciar campanhas diretamente pelo sistema, utilizando WhatsApp API
+                        Oficial, QR Code (Beta) e E-mail de forma simples, rápida e eficaz. Leve sua comunicação a um
+                        novo
+                        nível com mais
+                        praticidade e melhores resultados.
+                    </p>
+
+                    <hr />
+
+                    <h4>30/05/2025</h4>
+
+                    <h6>API Completa</h6>
+                    <p>
+                        Inclui suporte a webhook para integrar e automatizar processos com facilidade. Perfeita para
+                        quem
+                        busca agilidade, automação e escala nos atendimentos! <br />
+                        Com ela, você pode:
+                    </p>
+                    <ul style="margin: -17px -40px 23px; width: 340px;">
+                        <li style="list-style: none;" ng-non-bindable>✅ Envio de mensagens via WhatsApp QR Code</li>
+                        <li style="list-style: none;" ng-non-bindable>✅ Envio direto pela API Oficial da Meta</li>
+                        <li style="list-style: none;" ng-non-bindable>✅ Criar e gerenciar contatos</li>
+                        <li style="list-style: none;" ng-non-bindable>✅ Abrir atendimentos automaticamente</li>
+                        <li style="list-style: none;" ng-non-bindable>✅ Aplicar tags personalizadas</li>
+                        <li style="list-style: none;" ng-non-bindable>✅ Registrar retornos</li>
+                    </ul>
+
+                    <hr />
+
+                    <h4>30/05/2025</h4>
+                    <h6>API Básica</h6>
+                    <p>
+                        Inclui suporte a webhook para integrar e automatizar processos com facilidade. <br />
+                        Com ela, você pode:
+                    </p>
+                    <ul style="margin: -17px -40px 23px; width: 340px;">
+                        <li style="list-style: none;" ng-non-bindable>✅ Criar e gerenciar contatos</li>
+                        <li style="list-style: none;" ng-non-bindable>✅ Abrir atendimentos automaticamente</li>
+                        <li style="list-style: none;" ng-non-bindable>✅ Aplicar tags personalizadas</li>
+                        <li style="list-style: none;" ng-non-bindable>✅ Registrar retornos</li>
+                    </ul>
+                </div>
+
+                <hr />
+
+                <h4>30/05/2025</h4>
+                <h6>Relatório de Atendimentos</h6>
+                <p>
+                    Agora é possível efetuar a pesquisa de atendimentos e ordenar pelas colunas de datas disponíveis
+                    no relatório.
+                </p>
+
+                <hr />
+
+                <h4>29/05/2025</h4>
+
+                <h6>Mensagens rápidas</h6>
+                <p>
+                    Novas tags poderão ser utilizadas nas mensagens rápidas, facilitando a personalização das respostas
+                    automáticas. As tags disponíveis são:
+                </p>
+                <ul style="margin: -17px -40px 23px; width: 300px;">
+                    <li style="list-style: none;" ng-non-bindable><b>{{agent.name}}</b> - Nome do atendente</li>
+                    <li style="list-style: none;" ng-non-bindable><b>{{contact.name}}</b> - Nome do seu cliente</li>
+                </ul>
+                </p>
+
+                <hr />
+
+                <h4>29/05/2025</h4>
+
+                <h6>Bot Site</h6>
+                <p>
+                    Nova notificação de mensagens não lidas será exibida no ícone do bot no site, facilitando a
+                    visualização
+                    de novas mensagens recebidas, além de ter uma nova configuração que poderá ser feita pelo gestor
+                    para
+                    ativar ou desativar notificações de som.
+                </p>
+
+                <hr />
+
+                <h4>23/05/2025</h4>
+
+                <h6>Permissões de Atendentes</h6>
+                <p>
+                    O gestor poderá atribuir novas permissões na tela de edição de atendentes de forma individual:<br>
+                    - Permitir remover contatos dos potenciais<br>
+                    - Permitir transferir atendimentos em lote<br>
+                    - Permitir compartilhar agenda de contatos
+                </p>
+
+                <hr />
+
+                <h4>23/05/2025</h4>
+
+                <h6>Atendimentos</h6>
+                <p>
+                    Atendentes com permissão, poderão efetuar exclusão de contatos da aba de potenciais<br>
+                    Atendentes com permissão, poderão efetuar transferência em lote dos atendimentos na tela de
+                    relatório de
+                    atendimentos<br>
+                    Atendentes com permissão, poderão favoritar contatos na agenda para ele próprio, compartilhar com um
+                    departamento ou geral
+                </p>
+
+                <hr />
+
+                <h4>23/05/2025</h4>
+
+                <h6>Avaliação de atendimentos</h6>
+                <p>
+                    Atendimentos poderão ser avaliados pelo cliente mesmo após passar o tempo limite configurado
+                    (somente se
+                    a mensagem enviada for uma nota realmente)
+                </p>
+
+                <hr />
+
+                <h4>15/05/2025</h4>
+
+                <h6>Tela de bots</h6>
+                <p>
+                    Agora é possivel efetuar filtros, alem de recuperar algum bot que tenha sido excluído por acidente.
+                </p>
+
+                <hr />
+
+                <h4>15/05/2025</h4>
+
+                <h6>Agenda de contatos</h6>
+                <p>
+                    Agora o atendente pode favoritar um contato somente para ele, um departamento ou geral.
+                </p>
+
+                <hr />
+
+                <h4>08/05/2025</h4>
+
+                <h6>Atendimentos</h6>
+                <p>
+                    Agora é possível marcar/desmarcar um atendimento como lido ou não lido
+                </p>
+
+                <hr />
+
+                <h4>08/05/2025</h4>
+
+                <h6>Participantes do atendimento</h6>
+                <p>
+                    Agora é possível adicionar mais de um participante ao mesmo tempo no atendimento, Gestores e
+                    supervisores
+                    também conseguem fazer diretamente pela tela de atendimento.
+                </p>
+
+                <hr />
+
+                <h4>08/05/2025</h4>
+
+                <h6>Horário de fim de expediente</h6>
+                <p>
+                    Agora um pequeno relógio avisará que o horário do expediente está terminando, Ao faltar 5 minutos
+                    para o
+                    fim
+                    do expediente, um alerta será exibido na tela para o atendente.
+                </p>
+
+                <hr />
+
+                <h4>29/04/2025</h4>
+
+                <h6>Gestão de Tags Liberada</h6>
+                <p>
+                    Agora os gestores e supervisores podem adicionar, editar e remover tags diretamente nas
+                    configurações do
+                    bot. Use as tags para organizar e classificar melhor as interações, facilitando a análise e o
+                    gerenciamento dos fluxos.
+                </p>
+
+                <hr />
+
+                <h4>29/04/2025</h4>
+
+                <h6>Alerta de Alterações Não Salvas</h6>
+                <p>
+                    Ao tentar sair do menu de perguntas do bot com alterações não salvas, um aviso será exibido. Isso
+                    garante que nenhum ajuste importante seja perdido por engano.
+                </p>
+
+                <hr />
+
+                <h4>29/04/2025</h4>
+
+                <h6>Histórico de Edição e Exclusão de Mensagens (WhatsApp QR Code)</h6>
+                <p>
+                    Agora, para conversas realizadas via WhatsApp QR Code, sempre que uma mensagem for editada ou
+                    deletada,
+                    isso será registrado no sistema. Você verá claramente que a mensagem sofreu uma alteração e poderá
+                    acessar todo o histórico de modificações, garantindo mais controle e rastreabilidade nas conversas.
+                </p>
+
+                <hr />
+
+                <h4>29/04/2025</h4>
+
+                <h6>Confirmação de Leitura (WhatsApp QR Code)</h6>
+                <p>
+                    Outra novidade na versão QR Code do WhatsApp é a exibição do momento em que a mensagem foi lida pelo
+                    destinatário. Isso permite um acompanhamento mais preciso do andamento das conversas e respostas.
+                </p>
+
+                <hr />
+
+                <h4>29/04/2025</h4>
+
+                <h6>Reações com Emojis nas Mensagens</h6>
+                <p>
+                    Passamos também a exibir as reações com emojis feitas pelos usuários nas mensagens. A reação
+                    aparecerá
+                    diretamente no balão da mensagem dentro da plataforma, tornando a visualização mais dinâmica e fiel
+                    ao
+                    que foi trocado no WhatsApp. Essas melhorias aumentam a fidelidade do registro das conversas e
+                    oferecem
+                    uma visão mais completa das interações feitas pelos usuários.
+                </p>
+
+                <hr />
+
+                <h4>09/04/2025</h4>
+
+                <h6>Melhoria no Webhook</h6>
+                <p>
+                    Implementamos uma melhoria no webhook do sistema. Agora, além de selecionar os eventos e canais
+                    desejados, é
+                    possível configurar também os departamentos dos quais os dados serão enviados. Com esse novo filtro,
+                    você
+                    tem maior controle sobre as informações transmitidas, garantindo que apenas os dados relevantes para
+                    os
+                    departamentos selecionados sejam enviados via webhook. A configuração pode ser feita diretamente na
+                    tela
+                    de
+                    edição do webhook.
+                </p>
+
+                <hr />
+
+                <h4>25/03/2025</h4>
+
+                <h6>Nova Funcionalidade: Seleção de Atendente para Início de Atendimento</h6>
+                <p>
+                    Agora, supervisores e gestores podem iniciar um atendimento diretamente, mas, para garantir um fluxo
+                    adequado, será necessário selecionar um atendente antes de dar início. Essa melhoria evita que o
+                    atendimento
+                    seja vinculado diretamente ao supervisor ou gestor, proporcionando uma gestão mais eficiente e
+                    organizada
+                    dos atendimentos.
+                </p>
+                <div class="obs-new">
+                    <i class="fas fa-info-circle"></i> Logo de início o supervisor não possui permissão para realizar
+                    essa
+                    ação.
+                    Portanto, é necessário que o gestor conceda essa permissão.
+                </div>
+
+                <hr />
+
+                <h4>18/03/2025</h4>
+
+                <h6>Ordenação de Campos Customizados</h6>
+                <p>
+                    Agora, você pode ordenar os campos customizados do jeito que preferir, tornando a navegação mais
+                    fácil e
+                    personalizada! Ajuste a ordem dos campos para otimizar seu fluxo de trabalho de forma rápida e
+                    prática.
+                </p>
+
+                <hr />
+
+                <h4>21/12/2024</h4>
+
+                <h6>Aumento no limite do tamanho dos arquivos</h6>
+                <p>
+                    Confira os novos limites de tamanho para cada tipo de arquivo:
+
+                <div class="table-wrapper m-b-30">
+                    <table class="fl-table">
+                        <thead>
+                            <tr>
+                                <th ng-style="{'background-color': customizacao.corPrimaria}"
+                                    style="border-radius: 6px 0px 0px 0px;"><i style="margin-right: 5px;"
+                                        class="fas fa-hashtag"></i> Canal de Atendimento</th>
+                                <th ng-style="{'background-color': customizacao.corSecundaria}"><i
+                                        style="margin-right: 5px;" class="fas fa-image"></i> Imagens</th>
+                                <th ng-style="{'background-color': customizacao.corPrimaria}"><i
+                                        style="margin-right: 5px;" class="fas fa-music"></i> Áudios</th>
+                                <th ng-style="{'background-color': customizacao.corSecundaria}"><i
+                                        style="margin-right: 5px;" class="fas fa-video"></i> Vídeos</th>
+                                <th ng-style="{'background-color': customizacao.corPrimaria}"
+                                    style="border-radius: 0px 6px 0px 0px;"><i style="margin-right: 5px;"
+                                        class="fas fa-file"></i> Documentos</th>
+                            </tr>
+                        </thead>
+                        <tbody style="border-radius: 6px;">
+                            <tr style="border-radius: 6px;">
+                                <td style="border-radius: 0px 0px 0px 6px">
+                                    <div class="conteiner-platform-title">
+                                        <img src="img/atendimento/wa-messenger.png" />
+                                        <h2>WhatsApp - API</h2>
+                                        <a href="https://developers.facebook.com/docs/whatsapp/cloud-api/reference/media"
+                                            target="_blank" rel="noopener noreferrer"><i
+                                                class="fas fa-external-link-alt"></i></a>
+                                    </div>
+                                </td>
+                                <td>5 MB</td>
+                                <td>16 MB</td>
+                                <td>16 MB</td>
+                                <td style="border-radius: 0px 0px 6px 0px">50 MB</td>
+                            </tr>
+                            <tr style="border-radius: 6px;">
+                                <td style="border-radius: 0px 0px 0px 6px">
+                                    <div class="conteiner-platform-title">
+                                        <img src="img/atendimento/wa-messenger.png" />
+                                        <h2>WhatsApp - QR Code</h2>
+                                    </div>
+                                </td>
+                                <td>50 MB</td>
+                                <td>50 MB</td>
+                                <td>50 MB</td>
+                                <td style="border-radius: 0px 0px 6px 0px">50 MB</td>
+                            </tr>
+                            <tr style="border-radius: 6px;">
+                                <td style="border-radius: 0px 0px 0px 6px">
+                                    <div class="conteiner-platform-title">
+                                        <img src="img/atendimento/instagram.png" />
+                                        <h2>Instagram</h2>
+                                        <a href="https://developers.facebook.com/docs/messenger-platform/instagram/features/send-message"
+                                            target="_blank" rel="noopener noreferrer"><i
+                                                class="fas fa-external-link-alt"></i></a>
+                                    </div>
+                                </td>
+                                <td>8 MB</td>
+                                <td>25 MB</td>
+                                <td>25 MB</td>
+                                <td style="border-radius: 0px 0px 6px 0px">25 MB</td>
+                            </tr>
+                            <tr style="border-radius: 6px;">
+                                <td style="border-radius: 0px 0px 0px 6px">
+                                    <div class="conteiner-platform-title">
+                                        <img src="img/atendimento/fb-messenger.png" />
+                                        <h2>Facebook</h2>
+                                        <a href="https://developers.facebook.com/docs/messenger-platform/reference/send-api"
+                                            target="_blank" rel="noopener noreferrer"><i
+                                                class="fas fa-external-link-alt"></i></a>
+                                    </div>
+                                </td>
+                                <td>25 MB</td>
+                                <td>25 MB</td>
+                                <td>25 MB</td>
+                                <td style="border-radius: 0px 0px 6px 0px">25 MB</td>
+                            </tr>
+                            <tr style="border-radius: 6px;">
+                                <td style="border-radius: 0px 0px 0px 6px">
+                                    <div class="conteiner-platform-title">
+                                        <img src="img/atendimento/site.png" />
+                                        <h2>Site</h2>
+                                    </div>
+                                </td>
+                                <td>50 MB</td>
+                                <td>50 MB</td>
+                                <td>50 MB</td>
+                                <td style="border-radius: 0px 0px 6px 0px">50 MB</td>
+                            </tr>
+                            <tr style="border-radius: 6px;">
+                                <td style="border-radius: 0px 0px 0px 6px">
+                                    <div class="conteiner-platform-title">
+                                        <img src="img/atendimento/email.png" />
+                                        <h2>E-Mail</h2>
+                                    </div>
+                                </td>
+                                <td>50 MB</td>
+                                <td>50 MB</td>
+                                <td>50 MB</td>
+                                <td style="border-radius: 0px 0px 6px 0px">50 MB</td>
+                            </tr>
+                        <tbody>
+                    </table>
+                </div>
+                </p>
+
+                <hr />
+
+                <h4>18/11/2024</h4>
+
+                <h6>Autenticação em Duas Etapas</h6>
+                <p>
+                    Para aumentar a segurança de sua conta, agora oferecemos a opção de Autenticação em Duas Etapas. Com
+                    esse
+                    recurso, o acesso ao sistema exige primeiro a inserção de sua senha. Em seguida, você precisará
+                    informar
+                    um
+                    código de autenticação gerado por um aplicativo, como o Google Authenticator.
+                    <br /><br />
+                    Dessa forma, mesmo que alguém saiba sua senha, só será possível acessar sua conta com o código de
+                    segurança
+                    exclusivo, garantindo que apenas você tenha acesso ao sistema.
+                    <br />
+                <div data-ui-sref-active="d-none">
+                    Clique <a href="" data-ui-sref="perfil.info">aqui</a> para conferir.
+                </div>
+                </p>
+
+                <hr />
+
+                <h4>27/09/2024</h4>
+
+                <h6>Melhorias no Chat Interno</h6>
+                <p>O chat Interno agora suporta cópia, colagem e envio múltiplo de arquivos, além de oferecer
+                    pré-visualização
+                    de arquivos anexados.</p>
+
+                <h6>Supervisores</h6>
+                <p>Agora é possível definir quais telas os supervisores podem acessar.</p>
+
+                <hr />
+
+                <h4>25/09/2024</h4>
+
+                <h6>Supervisores</h6>
+                <p>Agora é possível associar os departamentos responsáveis de cada supervisor. Com isso, ele terá acessa
+                    a
+                    apenas as informações referentes aos departamentos vinculados.</p>
+
+                <hr />
+
+                <h4>20/03/2024</h4>
+
+                <h6>Relatório de Atendimentos</h6>
+                <p>Agora é possível ter um controle melhor na ação de finalizar os atendimentos pelo relatório. Escolha
+                    se
+                    deseja enviar as mensagens de finalização e também escolher os motivos de finalização. Tudo isso
+                    para
+                    manter
+                    as informações dos seus atendimentos sempre atualizadas!</p>
+
+                <hr />
+
+                <h4>28/02/2024</h4>
+
+                <h6>Tela de Atendimento</h6>
+                <p>Agora é possível alterar a ordenação dos atendimentos ativos e de novas mensagens, podendo escolher
+                    entre
+                    "data de criação" ou "data da última mensagem". Clique <a href=""
+                        data-ui-sref="perfil.info">aqui</a>
+                    para
+                    conferir.</p>
+
+                <hr />
+
+                <h4>25/09/2023</h4>
+
+                <h6>Blacklist</h6>
+                <p>Agora é possível bloquear contatos, impedindo o bot receber essas mensagens. Clique <a href=""
+                        data-ui-sref="cadastros.blacklist">aqui</a> para conferir.</p>
+
+                <hr />
+
+                <h4>09/09/2023</h4>
+
+                <h6>Tela de Atendimento para o Gestor</h6>
+                <p>Agora o gestor tem acesso a tela de atendimento, podendo visualizar tudo o que acontecendo com seus
+                    clientes
+                    em tempo real. Também disponibilizamos indicadores dos atendimentos por departamento e atendentes.
+                </p>
+
+                <h6>Mensagens Privadas</h6>
+                <p>Essa funcionalidade permite trocar mensagens entre os participantes de um atendimento, sem que sejam
+                    enviadas
+                    para o cliente.</p>
+
+                <hr />
+
+                <h4>01/08/2023</h4>
+
+                <div>
+                    <h6>Botões nos Menus - WhatsApp (API Oficial)</h6>
+                    <p ng-if="isGestor() || isSupervidorChatbot()">Clique <a href=""
+                            data-ui-sref="bots.perguntas">aqui</a>
+                        para
+                        configurar.</p>
+
+                    <p>
+                        Lembrando que essa opção só está válida para bots de whatsapp com api oficial.
+                        <br />
+                        Caso você ainda não tenha, entre em contato com o nosso time de vendas para saber mais
+                        informações.
+                    </p>
+
+                    <hr />
+                </div>
+
+                <h4>02/02/2023</h4>
+
+                <div>
+                    <h6>Mensagens Programadas</h6>
+
+                    <p>Mensagem programada é uma nova maneira do atendente criar uma ou mais mensagens que serão
+                        enviadas na
+                        data que ele escolher. Ela poderá ser enviada apenas uma vez ou mais de uma vez, caso tenha sido
+                        configurada uma recorrência (diária, semanal, mensal, personalizada).</p>
+                    <p>
+                        Também é possível agendar uma mensagem através de uma integração. Quem configura a integração é
+                        o
+                        gestor, e ele deixa disponível para os atendentes.<br>
+                        Existe uma documentação para o programador do cliente entender como funciona tecnicamente a
+                        integração.
+                        Através dela, é possível enviar mensagens de texto, arquivos, imagens e áudios. Basta seguir a
+                        <a href="https://v2-9.mz-css.net/4be1d47b0ecb1af6ca28a24de672db1f/Integracao_Mensagens_Programadas_v1.0.pdf"
+                            target="_blank">documentação</a>.
+                    </p>
+
+                    <h6>Retornos</h6>
+
+                    <p>
+                        Retorno é uma funcionalidade para o atendente criar um lembrete de quando deve retornar ou
+                        enviar
+                        uma
+                        mensagem para um cliente. Ele poderá ser criado apenas uma vez ou mais de uma vez, caso tenha
+                        sido
+                        configurada uma recorrência (diária, semanal, mensal, personalizada).
+                    </p>
+
+                    <h6>Participantes do Atendimento</h6>
+
+                    <p>
+                        É uma nova funcionalidade para ter mais de um atendente dentro de um atendimento. Será usada
+                        para
+                        situações em que mais de um atendente precisa mandar mensagens dentro do mesmo atendimento.<br>
+                        Apenas o atendente responsável (o primeiro), tem total controle do atendimento, ou seja, poderá
+                        finalizar ou transferir.
+                    </p>
+
+                    <h6>Mensagens Sequenciais</h6>
+
+                    <p>
+                        Agora nos menus é possível cadastrar mais de um texto ou arquivo para um menu. Antes, só podia
+                        um de
+                        cada.
+                    </p>
+
+                    <h6>Banco de Arquivos</h6>
+                    <p>
+                        Agora é possível separar os arquivos em pastas, facilitando a organização e distribuição dos
+                        arquivos.
+                    </p>
+
+
+                    <h6>Campos Customizados</h6>
+                    <p>
+                        Para os campos customizados que possuem alternativas, quando inseridos nos menus, é possível
+                        configurar
+                        para serem listadas as alternativas para o cliente. Dessa forma, o cliente poderá escolher a
+                        opção
+                        correta digitando o número correspondente. Exemplo:<br><br>
+                        Em qual estado você mora?
+                    <ol>
+                        <li>São Paulo</li>
+                        <li>Praia Grande</li>
+                        <li>Santos</li>
+                    </ol>
+                    </p>
+
+                    <hr />
+                </div>
+
+                <h4>28/09/2022</h4>
+
+                <div>
+                    <h6>Novo layout na tela do atendente</h6>
+                    <p>Fizemos uma grande melhorias para tornar o seu trabalho mais dinâmico.</p>
+
+                    <h6>Novo controle de tags nos atendimentos</h6>
+                    <p ng-if="isGestor() || isSupervidorChatbot()">Clique <a href=""
+                            data-ui-sref="cadastros.tags">aqui</a>
+                        para
+                        configurar suas tags.</p>
+                    <p ng-if="isAtendente()">Clique <a href=""
+                            ng-click="onShowOtherPage('atendimentos.chat.tags');close();">aqui</a> para configurar suas
+                        tags.
+                    </p>
+                    <p>O gestor também pode cadastrar as tags para os departamentos.</p>
+
+                    <h6>Novo controle de mensagens rápidas</h6>
+                    <p ng-if="isGestor() || isSupervidorChatbot()">Clique <a href=""
+                            data-ui-sref="cadastros.mensagens_rapidas">aqui</a> para visualizar. </p>
+                    <p ng-if="isAtendente()">Clique <a href=""
+                            ng-click="onShowOtherPage('atendimentos.chat.mensagens_rapidas');close();">aqui</a> para
+                        visualizar.
+                    </p>
+                    <p>Agora é possível criar uma palavra-chave para acessar sua mensagem de forma rápida. Na tela do
+                        atendente,
+                        no campo da mensagem, digite / para visualizar e filtrar as mensagens. Também é possível navegar
+                        pelas
+                        setinhas do teclado.</p>
+                    <p>O gestor também pode cadastrar mensagens para os departamentos.</p>
+
+                    <hr />
+                </div>
+
+                <h4>31/08/2022</h4>
+
+                <div>
+
+                    <h6>Bot de WhatsApp (QR Code)</h6>
+                    <p>
+                        Agora o bot aceita os seguintes tipos de mensagens:
+                        <br />
+                        - contatos
+                        <br />
+                        - gifs
+                        <br />
+                        - chamadas perdidas
+                        <br />
+                        - stickers
+                        <br />
+                        - localização
+                    </p>
+
+                    <h6>Bot de WhatsApp (API Oficial)</h6>
+                    <p>
+                        Enviar templates para atendimentos ativos ou fora da sessão de 24hs.
+                    <p>
+                        Agora o bot aceita os seguintes tipos de mensagens:
+                        <br />
+                        - contatos
+                        <br />
+                        - stickers
+                        <br />
+                        - gifs
+                    </p>
+
+                    <h6>Banco de Arquivos</h6>
+                    <p>
+                        Agora é possível fazer o upload de arquivos para o nosso sistema, para organizar e falicitar o
+                        envio
+                        para os seus clientes.
+                    </p>
+
+                    <hr />
+                </div>
+
+                <h4>18/08/2022</h4>
+
+                <div>
+                    <h6>Menus</h6>
+                    <p>Agora é possível colocar qualquer tipo de arquivo nos menus do seu bot.</p>
+                    <hr />
+                </div>
+
+                <h4>21/07/2022</h4>
+
+                <div ng-if="isMegaZap()">
+                    <h6>Menu de Aplicativos</h6>
+                    <p>Disponibilizamos nosso aplicativo na versão windows e mobile (android). Clique <a href=""
+                            data-ui-sref="configuracoes.applinks">aqui</a> e confira.</p>
+                </div>
+
+                <div>
+                    <h6>Mensagens de Atendimento</h6>
+                    <p>Agora é possível configurar diferentes mensagens por departamento. Confira no menu Mensagens >
+                        Atendimento, na configuração do seu bot.</p>
+                    <hr />
+                </div>
+
+                <h4>19/07/2022</h4>
+
+                <div>
+                    <h6>Distribuição de Atendimentos</h6>
+                    <p>Agora é possível definir se os atendimentos serão distribuídos apenas para os atendentes que
+                        estão
+                        online.</p>
+                </div>
+
+                <div>
+                    <h6>Dashboard do Gestor</h6>
+                    <p>Foram incluídos novos filtros por data.</p>
+                </div>
+
+                <div>
+                    <h6>Horários de Atendimento</h6>
+                    <p>Agora é possível controlar os horários de atendimento por departamento.</p>
+                    <hr />
+                </div>
+
+                <div ng-if="isMegaZap()">
+                    <h4>25/04/2022</h4>
+
+                    <div>
+                        <h6>Integração via Webhook</h6>
+                        <p>Além da integração dentro dos menus, também disponibilizamos integrações em ações automáticas
+                            e
+                            manuais do sistema, como por exemplo: criação ou atualização de um lead, criação ou
+                            finalização
+                            de
+                            um atendimento, entre outros. Isso possibilita um melhor fluxo de atualização de dados no
+                            seu
+                            CRM.
+                            Com um de nossos parceiros de integração, o Pluga, você mesmo poderá fazer essa integração
+                            com
+                            diversos sistemas disponíveis nessa plataforma.</p>
+                        <p>Clique <a href="https://pluga.co" target="_blank">aqui</a> e saiba mais sobre o Pluga.</p>
+
+                        <p>Entre em contato com a equipe de vendas para saber mais informações.</p>
+                        <hr />
+
+                    </div>
+                </div>
+
+                <h4>05/02/2022</h4>
+
+                <div>
+                    <p>Agora é possível controlar quais departamentos podem visualizar/editar cada campo de segmentação.
+                    </p>
+                    <p>Agora é possível restringir os potenciais para departamentos específicos.</p>
+                    <hr />
+                </div>
+                <h4> 19/12/2021</h4>
+
+                <div>
+                    <p>Agora é possível realizar o cadastro de supervisores, tendo as mesmas funcionalidades de um
+                        gestor.
+                        <hr />
+                    </p>
+                </div>
+
+                <h4>08/12/2021</h4>
+
+                <div>
+                    <p>Lançamento da versão beta do chat interno.
+                        <hr />
+                    </p>
+                </div>
+
+                <h4>28/09/2021</h4>
+
+                <div>
+                    <p>Pesquisar mensagens de texto dentro de um atendimento ativo.
+                        <hr />
+                    </p>
+                </div>
+
+                <h4>26/09/2021</h4>
+
+                <div>
+                    <p>Ordenar e trocar de nível os menus do bot apenas arrastando.
+                        <hr />
+                    </p>
+                </div>
+
+                <h4>24/09/2021</h4>
+
+                <div>
+                    <p>Criar um bot com base em um já existente.</p>
+                    <p>Incluir observação nos contatos da agenda.</p>
+                    <p>O gestor pode editar a nota de avaliação dos atendimentos finalizados.</p>
+                    <p>O gestor pode controlar se os atendentes podem ver os contatos da agenda do bot.</p>
+                    <p>Na tela de usuários, o gestor pode se autenticar na plataforma com o usuário de seus atendentes.
+                        <hr />
+                    </p>
+                </div>
+
+                <h4>11/08/2021</h4>
+
+                <div>
+                    <b>Escolha de Atendentes no Bot</b>
+                    <p>
+                        Agora é possível permitir a escolha dos atendentes no bot. Habilite a flag "Listar Atendentes"
+                        dentro do
+                        menu de atendimento.
+                        <hr />
+                    </p>
+                </div>
+
+
+                <h4>20/07/2021</h4>
+
+                <div>
+                    <b>Relatório de Atendimentos</b>
+                    <p>
+                        Agora é possível transferir, reabrir ou finalizar <b>em massa</b> os atendimentos selecionados
+                        no
+                        relatório.
+                    </p>
+
+                    <b>Relatório de Clientes Potenciais</b>
+                    <p>
+                        Agora é possível abrir ou excluir <b>em massa</b> os clientes potenciais selecionados no
+                        relatório.
+                        <hr />
+                    </p>
+                </div>
+
+                <h4>13/07/2021</h4>
+
+                <div>
+                    <b><img style="width: 25px; margin-right: 3px"
+                            src="https://app.mzworkspace.com/img/atendimento/instagram.png" /> INSTAGRAM DIRECT</b>
+                    <p>
+                        Acabamos de liberar a integração com a API oficial do Instagram! Somos um dos primeiros no
+                        Brasil a
+                        conseguir essa parceria!
+                    </p>
+                    <p>
+                        Para saber mais, entre em contato com um consultor de vendas.
+                        <hr />
+                    </p>
+                </div>
+
+                <h4>06/07/2021</h4>
+
+                <div>
+                    <b>Atendimentos</b>
+                    <p>
+                        Agora você tem uma agenda para salvar seus números favoritos e também visualizar números
+                        compartilhados
+                        com a empresa.
+                    </p>
+                    <p>
+                        Ao clicar em um contato, você poderá criar rapidamente um atendimento para ele.
+                    </p>
+                    <p>
+                        Pode-se adicionar um contato criando manualmente, a partir de um atendimento ativo, a partir dos
+                        compartilhados, ou a partir dos números que já mandaram mensagem para o bot.
+                    </p>
+                    <p>
+                        O gestor pode importar/exportar uma planilha ou vcard para todos, limitar por departamento ou
+                        atendente.
+                        <hr />
+                    </p>
+                </div>
+
+                <h4>24/06/2021</h4>
+
+                <div>
+                    <b>Atendimentos</b>
+                    <p>Nova forma de visualizar imagens enviadas e recebidas.</p>
+                </div>
+
+                <div>
+                    <p>As imagens enviadas e recebidas agora ficam agrupadas para melhor visualização.</p>
+                </div>
+
+                <div>
+                    <p>Agora é possível enviar mais de um arquivo por vez.</p>
+                </div>
+
+                <div>
+                    <p>Agora é possível arrastar arquivos para o chat para enviá-los.</p>
+                    <hr />
+                </div>
+
+                <h4>10/06/2021</h4>
+
+                <div>
+                    <b>Relatório de Atendimentos</b>
+                    <p>Será possível filtar os atendimentos que foram criados de forma ativa, reativa, pelos potenciais
+                        ou
+                        pela
+                        integração. Atenção: Serão considerados apenas os atendimentos criados a partir de hoje!</p>
+                </div>
+
+                <div>
+                    <b>Atendimentos</b>
+                    <p>O atendente poderá visualizar as mensagens e informações do contato antes de iniciar um
+                        atendimento
+                        potencial.</p>
+                    <hr />
+                </div>
+
+                <h4>31/05/2021</h4>
+
+                <div>
+                    <b>Atendimentos</b>
+                    <p>Agora é possível realizar a distribuição automática, de forma rotativa, dos atendimentos para os
+                        seus
+                        atendentes. Para habilitar, vá até a configuração de departamentos do seu bot e selecione a
+                        opção
+                        "Distribuir Atendimentos".</p>
+                    <hr />
+                </div>
+
+                <h4>25/05/2021</h4>
+
+                <div>
+                    <b>Atendimentos</b>
+                    <p>Os atendentes só poderão visualizar os "potenciais" dos canais que estão associados.</p>
+                </div>
+
+                <div>
+                    <b>Relatórios</b>
+                    <p>Agora é possível filtrar pelos canais nos relatórios de atendimentos, potenciais e contatos.</p>
+                    <hr />
+                </div>
+
+                <h4>14/05/2021</h4>
+
+                <div>
+                    <b>Atendentes</b>
+                    <p>Agora o gestor consegue deixar os atendentes OFFLINE.</p>
+                    <hr />
+                </div>
+
+                <h4>12/04/2021</h4>
+
+                <div>
+                    <b>Atendimentos</b>
+                    <p>Opção para ordernar os atendimentos na tela do atendente.</p>
+                    <hr />
+                </div>
+
+                <h4>02/02/2021</h4>
+
+                <div>
+                    <b>Atendimentos</b>
+                    <p>Visualizar a imagem do contato do Telegram.</p>
+                </div>
+
+                <div>
+                    <b>Integrações</b>
+                    <p>Visualizar o relatório de integrações feitas nos menus.</p>
+                    <hr />
+                </div>
+
+                <h4>29/01/2021</h4>
+
+                <div>
+                    <b>Atendimentos</b>
+                    <p>Visualizar mensagens marcadas pelos contatos.</p>
+                    <p>Visualizar os status das mensagens: enviado e recebido.</p>
+                    <p>Visualizar a imagem do contato do WA Messenger.</p>
+                    <hr />
+                </div>
+
+                <h4>25/01/2021</h4>
+
+                <div>
+                    <b>Atendimentos</b>
+                    <p>Visualizar a imagem do contato do Facebook.</p>
+                    <hr />
+                </div>
+
+                <h4>18/01/2021</h4>
+
+                <div>
+                    <b>Atendimentos</b>
+                    <p>Visualizar o histórico de ações do atendimento (apenas para novas ações realizadas a partir de
+                        18/01/2021).</p>
+                    <p>Visualizar e editar as informações dos contatos na tela de relatório de atendimentos.</p>
+                    <hr />
+                </div>
+
+                <h4>10/07/2020</h4>
+
+                <div>
+                    <b>Cliente Potenciais</b>
+                    <p>
+                        Agora você pode limpar o relatório de clientes potenciais, para melhorar seu controle.
+                    </p>
+                    <hr />
+                </div>
+
+                <h4>25/06/2020</h4>
+
+                <div>
+                    <b>Atendimentos - Motivos</b>
+                    <p>
+                        Agora é possível permitir que o atendente informe o motivo do atendimento ao finalizar. Primeiro
+                        você
+                        deve cadastrar os motivos por departamento, em seguida, habilite essa funcionalidade na tela de
+                        eu
+                        bot.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Relatório de Atendimentos</b>
+                    <p>
+                        Agora o gestor pode transferir os atendimentos na tela de relatórios.
+                    </p>
+                    <hr />
+                </div>
+
+                <h4>21/06/2020</h4>
+
+                <div>
+                    <b>Chat - Atendimentos</b>
+                    <p>
+                        Permitir enviar áudio gravado pelo microfone.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Chat - Atendimentos</b>
+                    <p>
+                        Permitir enviar qualquer tipo de arquivo.
+                    </p>
+                    <hr />
+                </div>
+
+                <h4>18/06/2020</h4>
+
+                <div>
+                    <b>Atendimentos</b>
+                    <p>
+                        Permitir o envio do nome do atendente junto com as mensagens durante um atendimento.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Bots</b>
+                    <p>
+                        Configurar uma mensagem para ser enviada caso o contato solicite um atendimento e você não
+                        possua
+                        atendentes online ou esteja fora do horário de trabalho.
+                    </p>
+                    <hr />
+                </div>
+
+                <h4>19/05/2020</h4>
+
+                <div>
+                    <b>Envio de SMS</b>
+                    <p>
+                        Agora é possível enviar SMS para os seus contatos no atendimento e também criar campanhas! Entre
+                        em
+                        contado com o setor de vendas para adquirir um pacote!
+                    </p>
+                    <hr />
+                </div>
+
+                <h4>14/05/2020</h4>
+
+                <div>
+                    <b>Contatos</b>
+                    <p>
+                        Permitir filtrar por campos customizados e visualização dos campos ao exportar o excel.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Chat</b>
+                    <p>
+                        Melhoria no preenchimento dos campos customizados na tela do atendente.
+                    </p>
+                    <hr />
+                </div>
+
+                <h4>01/04/2020</h4>
+
+                <div>
+                    <b>Bot - Configurações</b>
+                    <p>
+                        Foram incluídas algumas configurações na tela de listagem dos bots:
+                    </p>
+                    <ul>
+                        <li>Controlar se seus atendentes poderão visualizar todos os atendimentos de um contato.</li>
+                        <li>Tempo limite para um contato escrever um recado.</li>
+                        <li>Tempo limite para um contato avaliar o atendimento.</li>
+                    </ul>
+                    <br />
+                </div>
+
+                <div>
+                    <b>Chat - Atendentes</b>
+                    <p>
+                        Caso o atendente saia do sistema ou feche a tela do atendimento, seu status irá atualizar para
+                        OFFLINE.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Dashboard</b>
+                    <p>
+                        Foi incluído um indicador para visualizar a quantidade de atendentes online.
+                    </p>
+                    <hr />
+                </div>
+
+                <h4>27/03/2020</h4>
+
+                <div>
+                    <b>Bot - Palavras-Chave</b>
+                    <p>
+                        Agora você pode colocar palavras-chave em seus menus e tornar seu bot mais dinâmico.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Bot - Mensagens</b>
+                    <p>
+                        Inclusão das seguintes mensagens customizadas:
+                    </p>
+                    <ul>
+                        <li>Recado finalizado</li>
+                        <li>Erro na votação de uma enquete</li>
+                        <li>Erro na avaliação</li>
+                        <li>Solicitação da palavra-chave</li>
+                        <li>Erro ao recuperar os menus com base nas palavras-chave</li>
+                    </ul>
+                    <hr />
+                </div>
+
+                <h4>24/03/2020</h4>
+
+                <div>
+                    <b>Atendentes</b>
+                    <p>
+                        Definir quais horários um atendente poderá trabalhar.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Atendentes</b>
+                    <p>
+                        O atendente só poderá manipular os atendimentos caso ele esteja com o status online.
+                    </p>
+                    <hr />
+                </div>
+
+                <h4>18/03/2020</h4>
+
+                <div>
+                    <b>Bot</b>
+                    <p>
+                        Agora é possível incluir avaliação nos atendimentos.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Campos para Segmentação</b>
+                    <p>
+                        Inclusão de campos para segmentar seus contatos. Também é possível incluir nas perguntar
+                        iniciais ou
+                        em
+                        qualquer lugar de seu bot.
+                    </p>
+                    <hr />
+                </div>
+
+                <h4>10/03/2020</h4>
+
+                <div>
+                    <b>Chat - Atendimentos Ativos</b>
+                    <p>
+                        Fixar e desafixar um atendimento ativo para ser visualizado no topo da lista.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Bot - Atendimentos</b>
+                    <p>
+                        Incluir o menu do tipo "Atendimentos" em outros níveis do bot, podendo escolher os departamentos
+                        que
+                        serão visualizados nesse menu. Caso escolha a opção "Todos Departamentos", assim que um novo
+                        departamento for criado, ele estará disponível em seu atendimento no bot.
+                    </p>
+                    <hr />
+                </div>
+
+                <h4>06/03/2020</h4>
+
+                <div>
+                    <b>Bot - Mensagens</b>
+                    <p>
+                        Customizar a mensagem quando o atendimento é finalizado.
+                    </p>
+                    <hr />
+                </div>
+
+                <h4>05/03/2020</h4>
+
+                <div>
+                    <b>Chat - Últimas Conversas</b>
+                    <p>
+                        Visualizar no chat as últimas mensagens trocadas com o bot, antes de iniciar o atendimento.
+                    </p>
+                    <hr />
+                </div>
+
+                <h4>21/02/2020</h4>
+
+                <div>
+                    <b>Bot - Atendentes</b>
+                    <p>
+                        Escolher por canal, quais atendentes serão responsáveis por atendente determinados
+                        departamentos.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Bot - Departamentos</b>
+                    <p>
+                        Escolher por canal, quais departamentos estarão disponíveis para atendimento.
+                    </p>
+                    <hr />
+                </div>
+
+                <h4>11/02/2020</h4>
+
+                <div>
+                    <b>Relatório - Clientes Potenciais</b>
+                    <p>
+                        Inclusão de novos filtros e ícone para identificar se o contato enviar anexo.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Chat - Atendimentos</b>
+                    <p>
+                        Inclusão de um ícone para identificar se o atendimento possui algum anexo.
+                    </p>
+                    <hr />
+                </div>
+
+                <h4>25/09/2019</h4>
+
+                <div>
+                    <b>NOVO CANAL: Integração com o Telegram</b>
+                    <p>
+                        Agora é possível conectar o seu Telegram em nossa plataforma. Entre em contato com o suporte
+                        para
+                        obter
+                        mais informações.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Nova tela de atendimentos</b>
+                    <p>
+                        Com um layout mais bonito, agregamos diversas novas funcionalidades para agilizar seu trabalho:
+                    </p>
+                    <ul>
+                        <li>Opção para sinalizar que o atendente está online</li>
+                        <li>Visualização dos novos recados</li>
+                        <li>Visualização dos atendimentos ativos, pendentes e clientes potenciais</li>
+                        <li>Criação de um novo atendimento para WA Messenger e Telegram</li>
+                        <li>Visualização e edição das informações do contato</li>
+                        <li>Visualização de todas as mídias do atendimento</li>
+                        <li>Gerenciamento das comentários do contato</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <b>Foto dos Atendentes</b>
+                    <p>
+                        Agora é possível incluir a foto do atendente.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Recebimento de PDFs no atendimento</b>
+                    <p>
+                        Agora é possível receber PDFs em seus atendimentos.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Vincular mais de um departamento ao atendente</b>
+                    <p>
+                        Com isso, seus atendentes podem responder os atendimentos em mais de um departamento.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Transferir para um atendente específico</b>
+                    <p>
+                        Agora é possível transferir para um atendente específico. Nessa caso, o atendimento ficará
+                        pendente,
+                        mas
+                        visível apenas para o atendente escolhido.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Através de um recado, criar um atendimento para um departamento ou atendente específico</b>
+                    <p>
+                        Com essa funcionalidade é possível direcionar um recado para um departamento ou atendente
+                        responsável
+                        pelo atendimento.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Reabrir um atendimento para um departamento ou atendente específico</b>
+                    <p>
+                        Com essa funcionalidade é possível reabrir-lo para um departamento ou atendente específico.
+                    </p>
+                </div>
+
+                <div>
+                    <b>Criar atendimento para mais de um canal de comunicação</b>
+                    <p>
+                        Na tela de criação de um atendimento, é possível escolher entre WA Messenger e Telegram. Além
+                        disso,
+                        escolher o departamento ou atendente espefício.
+                    </p>
+                </div>
+
+                <div ng-if="isMegaZap()">
+                    <b>Atualização do Termo de Uso</b>
+                    <p>
+                        Clique <a href="https://megazap.chat/termo-uso.pdf" target="_blank">aqui</a> para acessar o
+                        termo de
+                        uso
+                        atualizado.
+                        Utilizando nossa plataforma, você está ciente e concorda com todos os nossos termos.
+                    </p>
+                    <hr />
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div style="padding: 20px 26px 10px;" ng-show="isNews">
+        <div class="new-header mz-bg-primary" ng-show="avisoInicial">
+            <h1>Prepare-se para transformar sua empresa com o que há de mais inovador.</h1>
+            <p style="font-size: 15px; padding: 0 10px;">Nossa plataforma se tornará um ERP completo, transformando sua
+                empresa. Está pronto para descobrir o que vem por aí? </p>
+            <div class="container-button-i">
+                <a ng-click="alterInicial()" class="button-inicial">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    Explore as Novidades!
+                </a>
+            </div>
+        </div>
+
+        <div class="container-carrossel" ng-show="!avisoInicial">
+            <input type="radio" ng-click="selectRadio(1)" name="position" id="pos1" checked />
+            <!-- <input type="radio" ng-click="selectRadio(2)" name="position" id="pos2" /> -->
+            <input type="radio" ng-click="selectRadio(3)" name="position" id="pos3" />
+            <input type="radio" ng-click="selectRadio(4)" name="position" id="pos4" />
+
+            <div id="carousel" class="carousel">
+                <div class="item mz-bg-primary" ng-click="selectRadio(1)"></div>
+                <!-- <div class="item mz-bg-primary" ng-click="selectRadio(2)"></div> -->
+                <div class="item mz-bg-primary" ng-click="selectRadio(3)"></div>
+                <div class="item mz-bg-primary" ng-click="selectRadio(4)"></div>
+            </div>
+        </div>
+
+        <div class="content-icon-pointer" ng-show="!avisoInicial" ng-click="showModalNewItem()">
+            <i class="fas fa-hand-pointer"></i>
+            <div class="label-btn-new">Clique para saber mais</div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="close()">{{'FECHAR'|translate}}</button>
+</div><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"06036110936f47979162a2584e077426","r":1,"spa":2}' crossorigin="anonymous"></script>

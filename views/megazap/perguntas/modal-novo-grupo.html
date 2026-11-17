@@ -1,0 +1,64 @@
+<div class="modal-header">
+    <h3>{{ 'NOVO-BOT'  }}<small>{{'NOVO-REGISTRO-DESCRICAO'}}</small></h3>
+</div>
+<div class="modal-body">
+    <br />
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line fg-toggled">
+                    <div class="select">
+                        <select class="form-control input-lg select-simples" ng-model="novoRegistro.tipo">
+                            <option ng-if="botsEmail.length" value="EMAIL">Email</option>
+                            <option value="CHATBOT">Chatbot</option>
+                            <option ng-if="permissions.permissionBotCompletoAis || permissions.permissionBotBasicoAis" value="JADI">Jadi</option>
+                        </select>
+                        <label class="fg-label">{{'TIPO'}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input name="nome" type="text" class="form-control fg-input input-lg" ng-model="novoRegistro.nome"
+                        autofocus>
+                    <label class="fg-label">{{'NOME'}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12" ng-if="templates.length > 0">
+            <div class="form-group fg-float m-b-30 m-t-15">
+                <div class="fg-line">
+                    <div class="select">
+                        <select class="form-control input-lg select-simples" ng-model="novoRegistro.grupoTemplate"
+                            ng-options="i as i.nome for i in templates track by i.id">
+                            <option></option>
+                        </select>
+                        <label class="fg-label">Template</label>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="novoRegistro.grupoTemplate && novoRegistro.grupoTemplate.descricao">
+                <b>Descrição:</b> {{novoRegistro.grupoTemplate.descricao}}
+            </div>
+
+        </div>
+        <div class="col-sm-12" ng-if="novoRegistro.tipo === 'JADI'">
+            <div class="form-group fg-float m-b-30 m-t-20">
+                <div class="fg-line">
+                    <select class="form-control input-lg select-simples" ng-model="novoRegistro.aiAssistantId">
+                        <option value="{{assistant.id}}" ng-repeat="assistant in assistants | orderBy: 'name'">
+                            {{assistant.name}}</option>
+                    </select>
+                    <label class="fg-label">{{"ASSISTENTE-VIRTUAL-IA" }}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link" ng-click="onModalInserir()">{{'ENVIAR'}}</button>
+    <button class="btn btn-link" ng-click="onModalCancelar()">{{'CANCELAR'}}</button>
+</div>

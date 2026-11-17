@@ -1,0 +1,52 @@
+<div class="container-fluid container-chat" data-ng-controller="RelatorioAtendimentoChatController" ng-init="onInit()">
+    <div class="card m-b-0" id="messages-main">
+        <div class="ms-body">                        
+
+            <div class="listview lv-message">
+                <div class="lv-header-alt clearfix chat-header">
+
+                    <div class="lvh-label">                        
+                        <h5 class="c-black">{{'PROTOCOLO'|translate}}{{": " + atendimento.id}}</h5>
+                        <h4 class="c-bluegray">{{atendimento.usuarioNome}}</h4>
+                        <h5 class="c-black">{{atendimento.usuarioTelefone + " - " + atendimento.usuarioLocalizacao}}</h5>                        
+                    </div>
+
+                </div>
+
+                <div id="chat-div" class="lv-body chat-background" style="overflow: auto" scroll-glue>                    
+                    <div class="lv-item media" ng-class="{right: mensagem.tipo == 'ATENDENTE'}" ng-repeat="mensagem in mensagens">
+                        <div class="media-body">
+                            <div class="ms-item">
+                                <div style="text-transform: uppercase">
+                                    {{mensagem.nome}}
+                                </div>
+                                <div class="chat-line" ng-class="{right: mensagem.tipo == 'ATENDENTE'}">
+                                    &nbsp;
+                                </div>
+                                <div ng-if="mensagem.tipoMensagem == 'TEXTO'" ng-bind-html="tratarTexto(mensagem.mensagem)"></div>
+                                <div ng-if="mensagem.tipoMensagem == 'VIDEO'">
+                                    <video width="320" height="240" controls>
+                                        <source ng-src="{{mensagem.fileUrl | trustUrl}}" type="video/mp4">
+                                    </video>
+                                </div>
+                                <div ng-if="mensagem.tipoMensagem == 'DOCUMENTO'" style="text-align: center">                                    
+                                    <a href="#" ng-click="onVisualizarPDF(mensagem)">
+                                        <img style="max-width: 100px;" src="img/pdf-file.png"/>
+                                        <br/>
+                                        {{mensagem.nomePDF}}
+                                    </a>
+                                </div>
+                                <div ng-if="mensagem.tipoMensagem == 'IMAGEM'">
+                                    <img style="max-height: 200px; max-width: 200px; cursor: pointer" ng-src="{{mensagem.fileUrl}}"/>
+                                </div>
+                                <small class="ms-date pull-right">{{mensagem.dataCriacao|date:('DATE-FORMAT'|translate)}}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 40px; text-align: center" ng-if="atendimento.status == 'FINALIZADO'">{{'ATENDIMENTO-FINALIZADO'| translate}} </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,234 @@
+<link href="css/crm.css?VERSION_HASH" rel="stylesheet" />
+<div class="container-fluid" ng-app="cardDiv" data-ng-controller="TemplatesWhatsAppController" ng-init="onInit()">
+    <div id="cardDiv" class="card crm-d-block m-b-15" style="margin-left: 5px; margin-right: 5px;">
+        <div class="card-header ch-alt" style="border-radius: 8px 8px 0 0;">
+            <h2>
+                Templates
+                <button ng-if="hasTutorial('170')" ng-click="showTutorial('170')"
+                    title="Clique aqui para visualizar o video de explicação."
+                    class="btn btn-sm bgm-blue m-l-10 waves-effect">
+                    <i class="zmdi zmdi-videocam m-r-5"></i>Tutorial
+                </button>
+            </h2>
+            <button title="{{ 'ADICIONAR' | translate }}" class="btn bgm-teal btn-float btn-float-2 waves-effect"
+                ng-click="new()"><i class="zmdi zmdi-plus"></i></button>
+            <button title="{{'PESQUISAR'| translate}}" class="btn bgm-blue btn-float btn-float-2 waves-effect"
+                ng-click="onInit()"><i class="zmdi zmdi-search"></i></button>
+            <button title="Sincronizar templates do WhatsApp" class="btn bgm-orange btn-float btn-float-2 waves-effect"
+                ng-click="syncAll()" ng-disabled="syncing"><i class="zmdi zmdi-refresh" ng-class="{'zmdi-hc-spin': syncing}"></i></button>
+        </div>
+        <div class="card-body card-padding">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group fg-float m-t-20 m-b-5">
+                        <div class="fg-line fg-toggled">
+                            <input lta-enter="getAll()" name="name" type="text" class="form-control fg-input input-lg"
+                                ng-model="filtro.name">
+                            <label class="fg-label">{{'NOME'|translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group fg-float m-t-20 m-b-5">
+                        <div class="select">
+                            <div class="fg-line fg-toggled">
+                                <select ng-change="getAll()" name="departamentoId"
+                                    class="form-control fg-input input-lg" ng-model="filtro.departamentoId">
+                                    <option value="0">{{'TODOS'|translate}}</option>
+                                    <option ng-repeat="dept in departamentos" value="{{dept.id}}">{{dept.name}}</option>
+                                </select>
+                                <label class="fg-label">{{'DEPARTAMENTO'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group fg-float m-t-20 m-b-5">
+                        <div class="select">
+                            <div class="fg-line fg-toggled">
+                                <select class="form-control fg-input input-lg" ng-change="getAll()"
+                                    ng-model="filtro.active">
+                                    <option value="ALL">{{'TODOS' | translate}}</option>
+                                    <option value="true">{{'ATIVO' | translate}}</option>
+                                    <option value="false">{{'INATIVO' | translate}}</option>
+                                </select>
+                                <label class="fg-label">{{'STATUS'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-sm-3">
+                    <div class="form-group fg-float m-t-20 m-b-5">
+                        <div class="select">
+                            <div class="fg-line fg-toggled">
+                                <select ng-change="getAll()" name="templateType" class="form-control fg-input input-lg"
+                                    ng-model="filtro.templateType">
+                                    <option value="ALL">{{'TODOS'|translate}}</option>
+                                    <option value="HSM">HSM (API Oficial)</option>
+                                    <option value="INTERACTIVE">Interativo</option>
+                                    <option value="ORDER_DETAILS">Cobrança</option>
+                                </select>
+                                <label class="fg-label">{{'TIPO'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <!-- <div class="col-sm-2">
+                    <div class="form-group fg-float m-t-20 m-b-5">
+                        <div class="select">
+                            <div class="fg-line fg-toggled">
+                                <select ng-change="getAll()" name="module" class="form-control fg-input input-lg"
+                                    ng-model="filtro.module">
+                                    <option value="ALL">{{'TODOS'|translate}}</option>
+                                    <option value="HELPDESK">Atendimento</option>
+                                    <option value="SCHEDULING">Agendamento</option>
+                                    <option value="AUTOMATION">Automação</option>
+                                </select>
+                                <label class="fg-label">Módulo</label>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="container-services">
+            <div class="not-date" ng-if="templates.length === 0">{{'NENHUM-REGISTRO'| translate}}</div>
+            <div ng-if="templates.length > 0" class="container-customer-crm">
+                <div class="crm-w-full">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>{{'STATUS'|translate}}</th>
+                                <th>{{'IDIOMA'|translate}}</th>
+                                <th>{{'NOME'|translate}}</th>
+                                <th>{{'CATEGORIA'|translate}}</th>
+                                <!-- <th>Tipo</th> -->
+                                <!-- <th>Módulo</th> -->
+                                <th>{{'DESCRICAO'|translate}}</th>
+                                <th>{{'DEPARTAMENTOS'|translate}}</th>
+                                <th>{{'DATA-CRIACAO'|translate}}</th>
+                                <th style="width: 5%;">{{'ATIVO'|translate}}</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="template in templates | orderBy:'name'" class="tr-for-selected">
+                                <td style="line-height: 2;">
+                                    <div style="height: 30px;display: flex;align-items: center;">
+                                        <span title="{{ template.status === 'APPROVED' ? 'Aprovado' : template.status === 'PENDING' ? 'Pendente' : template.status === 'REJECTED' ? 'Rejeitado' : template.status === 'LOCAL' ? 'Local' : 'Sem status' }}"
+                                        style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; vertical-align: middle;"
+                                        ng-style="{
+                                            'background-color': template.status === 'APPROVED' ? '#4CAF50' :
+                                                                template.status === 'PENDING'  ? '#FF9800' :
+                                                                template.status === 'REJECTED' ? '#F44336' :
+                                                                template.status === 'LOCAL'    ? '#2196F3' : '#9E9E9E'
+                                        }">
+                                    </span>
+                                    </div>
+                                </td>
+                                <td style="line-height: 2;">
+                                    <div class="language-wa">{{ getLanguageDisplay(template) }}</div>
+                                </td>
+                                <td style="line-height: 2;">
+                                    {{ template.name || template.whatsappName }}
+                                    <i ng-if="template.pristine" class="zmdi zmdi-cloud-download m-l-5"
+                                        title="Este template existe apenas na Meta e precisa ser importado para o sistema"
+                                        style="font-size: 16px; color: #FF9800; vertical-align: middle;"></i>
+                                </td>
+                                <td style="line-height: 2;" ng-if="template.category">{{ template.category | translate }}</td>
+                                <td style="line-height: 2;" ng-if="!template.category"></td>
+                                <!-- <td style="line-height: 2;">
+                                    <span ng-if="template.templateType === 'HSM' || !template.templateType">HSM</span>
+                                    <span ng-if="template.templateType === 'INTERACTIVE'">Interativo</span>
+                                    <span ng-if="template.templateType === 'ORDER_DETAILS'">Cobrança</span>
+                                </td> -->
+                                <!-- <td style="line-height: 2;">
+                                    <span ng-if="!template.module || template.module === 'HELPDESK'">Atendimento</span>
+                                    <span ng-if="template.module === 'SCHEDULING'">Agendamento</span>
+                                    <span ng-if="template.module === 'AUTOMATION'">Automação</span>
+                                </td> -->
+                                <td style="line-height: 2;" ng-if="template.description" class="limted-description-wa"
+                                    title="{{template.description}}">{{ template.description }}</td>
+                                <td style="line-height: 2;" ng-if="!template.description"></td>
+                                <td style="line-height: 2; width: 270px;">
+                                    <div class="department-container" ng-if="template.departments.length > 0">
+                                        <span class="department-circle"
+                                            ng-repeat="department in template.departments | limitTo: 5"
+                                            title="{{ department.name }}" style="background-color: #2196F3;">
+                                            {{ department.name.charAt(0) }}
+                                        </span>
+                                        <span ng-if="template.departments.length > 5"
+                                            class="department-circle more-symbol" ng-click="toggleDropdown(template)">
+                                            +{{ template.departments.length - 5 }}
+                                        </span>
+                                        <div ng-if="template.showAllDepartments" class="all-departments-dropdown">
+                                            <a><i ng-click="toggleDropdown(template)" class="fas fa-times"></i></a>
+                                            <div class="container-dp">
+                                                <div ng-repeat="department in template.departments">{{
+                                                    department.name }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="department-container" ng-if="template.departments.length === 0">
+                                        <span class="department-circle" title="{{'PUBLICO'|translate}}"
+                                            style="background-color: #009688;">
+                                            P
+                                        </span>
+                                    </div>
+                                </td>
+                                <td style="line-height: 2;">{{ template.createdAt | date:('dd/MM/yyyy HH:mm') }}</td>
+                                <td style="line-height: 2;">
+                                    <label class="switch" style="margin-top: 5px;" ng-if="!template.pristine">
+                                        <input type="checkbox" ng-checked="template.active"
+                                            ng-click="toggleStatus(template)">
+                                        <span class="slider"></span>
+                                    </label>
+                                </td>
+                                <td style="line-height: 2;" ng-if="!template.pristine">
+                                    <a href="" ng-click="preview(template)" title="{{'PRE-VISUALIZACAO' | translate}}"
+                                        class="btn-preview-table">
+                                        <i class="zmdi zmdi-eye"></i>
+                                    </a>
+                                </td>
+                                <td style="line-height: 2;" ng-if="template.pristine"></td>
+                                <td style="width: 55px; line-height: 2;">
+                                    <div style="margin-top: 2px; position: absolute; display: flex; align-items: center;"
+                                        uib-dropdown>
+                                        <a href="" uib-dropdown-toggle="" aria-expanded="false"
+                                            class="btn-options-table" aria-haspopup="true">
+                                            <i class="zmdi zmdi-more-vert"></i>
+                                        </a>
+
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li style="cursor: pointer;" ng-if="template.pristine" ng-click="configure(template)">
+                                                <a>Importar</a>
+                                            </li>
+                                            <li style="cursor: pointer;" ng-if="!template.pristine" ng-click="edit(template.id)">
+                                                <a>{{'EDITAR' | translate}}</a>
+                                            </li>
+                                            <li style="cursor: pointer;" ng-if="!template.pristine">
+                                                <a ng-click="delete(template.whatsappName)">{{'REMOVER'| translate}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div ng-if="hasMorePages" class="text-center p-b-30">
+                <button ng-click="nextPage()" class="btn btn-default waves-effect"><i class="zmdi zmdi-refresh"></i>
+                    {{ "MAIS" | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>

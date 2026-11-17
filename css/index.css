@@ -1,0 +1,80 @@
+
+/* ==========================================
+   LAYOUT PRINCIPAL N3BOT
+   ========================================== */
+
+.mz-main-section {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* ==========================================
+   SIDEBAR
+   ========================================== */
+
+.mz-main-menu {
+    flex: 0 0 auto;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* ==========================================
+   CONTEÚDO DAS PÁGINAS NG-ROUTE
+   ========================================== */
+
+.mz-main-content {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding-top: 0;
+}
+
+/* Container das rotas */
+.mz-main-content [ng-view] {
+    display: block;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* Evita que elementos internos forcem
+   a largura além do conteúdo disponível */
+.mz-main-content img,
+.mz-main-content iframe,
+.mz-main-content table {
+    max-width: 100%;
+}
+
+/* Permite que tabelas largas rolem
+   sem empurrar o layout inteiro */
+.mz-main-content {
+    overflow-x: auto;
+}
+
+/* ==========================================
+   RESPONSIVIDADE
+   ========================================== */
+
+@media (max-width: 768px) {
+    .mz-main-section {
+        min-width: 0;
+    }
+
+    .mz-main-content {
+        min-width: 0;
+        max-width: 100%;
+    }
+}
+
+

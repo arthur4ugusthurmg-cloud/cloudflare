@@ -1,0 +1,499 @@
+<link href="css/total_clientes.css?VERSION_HASH" rel="stylesheet" />
+
+<div class="container-fluid" data-ng-controller="TotalClientes12MesesController" ng-init="onInit()">
+
+  <div class="card" ng-if="!isAdministrador()">
+    <div class="card-body card-padding tc-estado tc-erro">
+      Acesso restrito ao perfil Administrador.
+    </div>
+  </div>
+
+  <div ng-if="isAdministrador()">
+
+    <!-- ===================== Filtros ===================== -->
+    <div class="card m-b-20">
+      <div class="card-header ch-alt">
+        <h2>Total de Clientes — últimos 12 meses
+          <a class="tc-link" ui-sref="relatorios.total_clientes({ revendedorId: filter.revendedorId })"><i class="zmdi zmdi-calendar"></i> ver por período</a>
+        </h2>
+        <small class="tc-sub" ng-if="cards">Fechamentos de {{cards.mesInicial}} a {{cards.mesAtual}} ({{cards.meses}} meses) · {{filter.revendedorNome}} · último fechamento em {{fmtData(cards.dataUltimo)}}</small>
+
+        <button title="Exportar CSV" class="btn bgm-teal btn-float btn-float-2 waves-effect" ng-click="exportarCsv()"
+          ng-disabled="!comparacao.tabela.linhas.length">
+          <i class="zmdi zmdi-download"></i>
+        </button>
+
+        <button title="Limpar filtros" class="btn bgm-bluegray btn-float btn-float-2 waves-effect"
+          ng-click="limparFiltros()">
+          <i class="zmdi zmdi-format-clear"></i>
+        </button>
+
+        <button title="{{'PESQUISAR' | translate}}" class="btn bgm-blue btn-float btn-float-2 waves-effect"
+          ng-click="getData()">
+          <i class="zmdi zmdi-search"></i>
+        </button>
+      </div>
+
+      <div class="card-body card-padding">
+        <br />
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="tc-combo">
+              <div class="form-group fg-float m-b-20">
+                <div class="fg-line fg-toggled">
+                  <input type="text" class="form-control input-lg" autocomplete="off" ng-model="combo.busca"
+                    ng-focus="abrirCombo()" ng-click="abrirCombo()" ng-blur="fecharCombo()"
+                    ng-keydown="tecladoCombo($event)" />
+                  <label class="fg-label">{{'REVENDEDOR' | translate}}</label>
+                </div>
+              </div>
+              <ul class="tc-combo-lista" ng-show="combo.aberto">
+                <li ng-repeat="o in opcoesFiltradas() track by o.id"
+                  ng-class="{'ativo': $index === combo.destaque, 'selecionado': o.id === filter.revendedorId, 'fixo': o.id === -2}"
+                  ng-mousedown="$event.preventDefault(); selecionarRevendedor(o)" title="{{o.nome}}">
+                  {{o.nome}}
+                </li>
+                <li class="vazio" ng-if="opcoesFiltradas().length === 0">Nenhum revendedor encontrado</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== Últimos 12 meses ===================== -->
+    <div class="tc-bloco" ng-class="{'tc-recarregando': mensal.carregando}">
+
+      <div class="card" ng-if="mensal.erro">
+        <div class="card-body card-padding tc-estado tc-erro">
+          <i class="zmdi zmdi-alert-circle-o"></i> Não foi possível carregar os últimos 12 meses. Tente novamente.
+        </div>
+      </div>
+
+      <div class="card" ng-if="!mensal.erro && mensal.vazio && !mensal.carregando">
+        <div class="card-body card-padding tc-estado">Sem registros nos últimos 12 meses.</div>
+      </div>
+
+      <div ng-if="!mensal.erro && !mensal.vazio">
+
+        <!-- Faixa 1 — último fechamento vs. primeiro -->
+        <div class="tc-cards m-b-20" ng-if="cards">
+          <div class="indicador-item tc-heroi tc-com-sparkline" style="background-color: #0288D1">
+            <i class="fas fa-users"></i>
+            <div class="indicador-informacoes">
+              <small>Clientes ({{cards.mesAtual}})</small>
+              <h2>{{fmt(cards.totalClientes)}}</h2>
+              <span class="tc-delta">
+                <i class="{{iconeDelta(cards.deltaClientes.abs)}}"></i>{{fmtSinal(cards.deltaClientes.abs)}}
+                <span ng-if="cards.deltaClientes.pct !== null">({{fmtPct(cards.deltaClientes.pct)}})</span>
+                <span class="tc-delta-contexto">vs. {{cards.mesInicial}}</span>
+              </span>
+            </div>
+            <svg class="tc-card-sparkline" viewBox="0 0 120 32" preserveAspectRatio="none">
+              <polyline ng-repeat="seg in cards.sparkline.clientes track by $index" ng-attr-points="{{seg}}"></polyline>
+            </svg>
+          </div>
+
+          <div class="indicador-item tc-heroi-moeda tc-com-sparkline" style="background-color: #7D67DA" title="{{fmtBrl(cards.receita)}}">
+            <i class="fas fa-file-invoice-dollar"></i>
+            <div class="indicador-informacoes">
+              <small>Receita contratada ({{cards.mesAtual}})</small>
+              <h2>{{fmtBrl(cards.receita, true)}}</h2>
+              <span class="tc-delta">
+                <i class="{{iconeDelta(cards.deltaReceita.abs)}}"></i>{{fmtBrlSinal(cards.deltaReceita.abs, true)}}
+                <span ng-if="cards.deltaReceita.pct !== null">({{fmtPct(cards.deltaReceita.pct)}})</span>
+                <span class="tc-delta-contexto">vs. {{cards.mesInicial}}</span>
+              </span>
+            </div>
+            <svg class="tc-card-sparkline" viewBox="0 0 120 32" preserveAspectRatio="none">
+              <polyline ng-repeat="seg in cards.sparkline.receita track by $index" ng-attr-points="{{seg}}"></polyline>
+            </svg>
+          </div>
+
+          <div class="indicador-item tc-com-sparkline tc-heroi-moeda" style="background-color: #00897B">
+            <i class="fas fa-receipt"></i>
+            <div class="indicador-informacoes">
+              <small>Ticket médio por cliente</small>
+              <h2>{{fmtBrl(cards.ticket)}}</h2>
+              <span class="tc-delta" ng-if="cards.deltaTicket">
+                <i class="{{iconeDelta(cards.deltaTicket.abs)}}"></i>{{fmtBrlSinal(cards.deltaTicket.abs)}}
+                <span ng-if="cards.deltaTicket.pct !== null">({{fmtPct(cards.deltaTicket.pct)}})</span>
+                <span class="tc-delta-contexto">receita ÷ clientes · vs. {{cards.mesInicial}}</span>
+              </span>
+              <span class="tc-delta" ng-if="!cards.deltaTicket">—</span>
+            </div>
+            <svg class="tc-card-sparkline" viewBox="0 0 120 32" preserveAspectRatio="none">
+              <polyline ng-repeat="seg in cards.sparkline.ticket track by $index" ng-attr-points="{{seg}}"></polyline>
+            </svg>
+          </div>
+
+          <div class="indicador-item tc-com-sparkline" ng-if="cards.variacaoMes" ng-style="{'background-color': cards.variacaoMes.clientes.abs >= 0 ? '#1b8f5a' : '#c62828'}">
+            <i class="fas fa-user-plus"></i>
+            <div class="indicador-informacoes">
+              <small>Clientes vs. mês anterior</small>
+              <h2>{{fmtSinal(cards.variacaoMes.clientes.abs)}}</h2>
+              <span class="tc-delta">
+                <i class="{{iconeDelta(cards.variacaoMes.clientes.abs)}}"></i>{{fmtPct(cards.variacaoMes.clientes.pct)}}
+                <span class="tc-delta-contexto">{{cards.mesAnterior}} → {{cards.mesAtual}}</span>
+              </span>
+            </div>
+            <svg class="tc-card-sparkline" viewBox="0 0 120 32" preserveAspectRatio="none">
+              <polyline ng-repeat="seg in cards.sparkline.deltaClientes track by $index" ng-attr-points="{{seg}}"></polyline>
+            </svg>
+          </div>
+
+          <div class="indicador-item tc-com-sparkline tc-heroi-moeda" ng-if="cards.variacaoMes" ng-style="{'background-color': cards.variacaoMes.receita.abs >= 0 ? '#1b8f5a' : '#c62828'}"
+            title="{{fmtBrlSinal(cards.variacaoMes.receita.abs)}}">
+            <i class="fas fa-hand-holding-usd"></i>
+            <div class="indicador-informacoes">
+              <small>Receita vs. mês anterior</small>
+              <h2>{{fmtBrlSinal(cards.variacaoMes.receita.abs, true)}}</h2>
+              <span class="tc-delta">
+                <i class="{{iconeDelta(cards.variacaoMes.receita.abs)}}"></i>{{fmtPct(cards.variacaoMes.receita.pct)}}
+                <span class="tc-delta-contexto">{{cards.mesAnterior}} → {{cards.mesAtual}}</span>
+              </span>
+            </div>
+            <svg class="tc-card-sparkline" viewBox="0 0 120 32" preserveAspectRatio="none">
+              <polyline ng-repeat="seg in cards.sparkline.deltaReceita track by $index" ng-attr-points="{{seg}}"></polyline>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Faixa 2 — ritmo, melhor mês, concentração e canais -->
+        <div class="tc-cards tc-cards-sec m-b-20" ng-if="cards">
+          <div class="tc-card-sec">
+            <small>Crescimento médio mensal</small>
+            <div class="tc-duplo">
+              <div>
+                <span class="tc-mini">Clientes</span>
+                <div class="tc-valor-sm" ng-class="classeDelta(cards.mediaMensal)">{{fmtSinal(cards.mediaMensal, true)}}</div>
+                <div class="tc-detalhe">por mês</div>
+              </div>
+              <div>
+                <span class="tc-mini">Receita</span>
+                <div class="tc-valor-sm" ng-class="classeDelta(cards.mediaMensalReceita)">{{fmtBrlSinal(cards.mediaMensalReceita, true)}}</div>
+                <div class="tc-detalhe">por mês</div>
+              </div>
+            </div>
+            <div class="tc-detalhe">{{cards.mesInicial}} → {{cards.mesAtual}} ({{cards.meses - 1}} intervalo(s))</div>
+          </div>
+
+          <div class="tc-card-sec">
+            <small>Melhor mês</small>
+            <div class="tc-duplo">
+              <div>
+                <span class="tc-mini">Clientes</span>
+                <div class="tc-valor-sm">{{cards.melhorMes.clientes ? fmtMes(cards.melhorMes.clientes.date) : '—'}}</div>
+                <div class="tc-detalhe tc-delta-pos" ng-if="cards.melhorMes.clientes">{{fmtSinal(cards.melhorMes.clientes.delta)}} clientes</div>
+                <div class="tc-detalhe" ng-if="!cards.melhorMes.clientes">sem mês de alta</div>
+              </div>
+              <div>
+                <span class="tc-mini">Receita</span>
+                <div class="tc-valor-sm">{{cards.melhorMes.receita ? fmtMes(cards.melhorMes.receita.date) : '—'}}</div>
+                <div class="tc-detalhe tc-delta-pos" ng-if="cards.melhorMes.receita">{{fmtBrlSinal(cards.melhorMes.receita.delta, true)}}</div>
+                <div class="tc-detalhe" ng-if="!cards.melhorMes.receita">sem mês de alta</div>
+              </div>
+            </div>
+            <div class="tc-detalhe">maior variação em relação ao mês anterior</div>
+          </div>
+
+          <div class="tc-card-sec" ng-if="multiParceiros()">
+            <small>Concentração (top 10) em {{cards.mesAtual}}</small>
+            <div class="tc-duplo">
+              <div>
+                <span class="tc-mini">Clientes</span>
+                <div class="tc-valor-sm">{{fmtPctSimples(cards.top10.clientes.pct)}}</div>
+                <div class="tc-detalhe">{{fmt(cards.top10.clientes.valor)}} nos 10 maiores</div>
+              </div>
+              <div>
+                <span class="tc-mini">Receita</span>
+                <div class="tc-valor-sm">{{fmtPctSimples(cards.top10.receita.pct)}}</div>
+                <div class="tc-detalhe">{{fmtBrl(cards.top10.receita.valor, true)}} nos 10 maiores</div>
+              </div>
+            </div>
+            <div class="tc-detalhe">{{fmt(cards.totalParceiros)}} revendedores no período</div>
+          </div>
+
+          <div class="tc-card-sec">
+            <small>Canais conectados ({{cards.mesAtual}})</small>
+            <div class="tc-valor">{{fmt(cards.canais)}}</div>
+            <div class="tc-detalhe" ng-class="classeDelta(cards.deltaCanais.abs)">
+              <i class="{{iconeDelta(cards.deltaCanais.abs)}}"></i> {{fmtSinal(cards.deltaCanais.abs)}}
+              <span ng-if="cards.deltaCanais.pct !== null">({{fmtPct(cards.deltaCanais.pct)}})</span>
+              <span class="tc-delta-neutro">vs. {{cards.mesInicial}} · {{fmtDec(cards.canaisPorCliente)}} canais/cliente</span>
+            </div>
+            <div class="tc-detalhe" ng-if="cards.predominante">
+              <span class="tc-canal-cor" ng-style="{'background-color': cards.predominante.cor}"></span>{{cards.predominante.nome}} predominante ({{fmtPctSimples(cards.predominante.pct)}})
+            </div>
+          </div>
+        </div>
+
+        <div class="row tc-row-igual">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Clientes por mês</h2>
+                <small class="tc-sub">Total de clientes no fechamento de cada mês. Clique em um mês para abrir o período.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="tc-chart-box">
+                  <canvas id="g8"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Receita contratada por mês</h2>
+                <small class="tc-sub">Valor dos contratos ativos no fechamento de cada mês, em R$. Clique em um mês para abrir o período.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="tc-chart-box">
+                  <canvas id="g8r"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row tc-row-igual">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Variação % de clientes mês a mês</h2>
+                <small class="tc-sub">(mês − mês anterior) / mês anterior.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="tc-chart-box">
+                  <canvas id="g9"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Variação % de receita mês a mês</h2>
+                <small class="tc-sub">(mês − mês anterior) / mês anterior, sobre a receita contratada.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="tc-chart-box">
+                  <canvas id="g9r"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row tc-row-igual">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Ticket médio por mês</h2>
+                <small class="tc-sub">Receita contratada ÷ clientes, no fechamento de cada mês.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="tc-chart-box">
+                  <canvas id="g11"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Canais por mês</h2>
+                <small class="tc-sub">Colunas empilhadas com as mesmas cores por canal do gráfico de evolução.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="tc-chart-box">
+                  <canvas id="g10"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparativo por revendedor entre dois fechamentos mensais -->
+        <div class="card" id="tc-comparacao" ng-init="tc = comparacao.tabela">
+          <div class="card-header ch-alt">
+            <h2>Comparativo por revendedor entre meses</h2>
+            <small class="tc-sub">Fechamento (último dia) de cada mês, um revendedor por linha · Δ = mês final − mês inicial · {{fmt(tc.linhas.length)}} revendedor(es) · valores em R$</small>
+          </div>
+          <div class="card-body card-padding">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="form-group fg-float m-b-20">
+                  <div class="fg-line fg-toggled">
+                    <div class="select">
+                      <select class="form-control fg-input" ng-model="comparacao.de"
+                        ng-options="m as m.label for m in comparacao.meses track by m.chave" ng-change="onTrocarComparacao()"></select>
+                      <label class="fg-label">Mês inicial</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="form-group fg-float m-b-20">
+                  <div class="fg-line fg-toggled">
+                    <div class="select">
+                      <select class="form-control fg-input" ng-model="comparacao.ate"
+                        ng-options="m as m.label for m in comparacao.meses track by m.chave" ng-change="onTrocarComparacao()"></select>
+                      <label class="fg-label">Mês final</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="form-group fg-float m-b-20">
+                  <div class="fg-line fg-toggled">
+                    <input type="text" class="form-control" ng-model="tc.busca" ng-change="onBuscarTabela(tc)"
+                      ng-model-options="{ debounce: 200 }" />
+                    <label class="fg-label">Buscar revendedor</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 text-right" style="padding-top: 8px;">
+                <button class="btn btn-default btn-sm waves-effect" ng-click="exportarCsv()" ng-disabled="!tc.filtradas.length">
+                  <i class="zmdi zmdi-download"></i> Exportar CSV ({{fmt(tc.filtradas.length)}} linhas)
+                </button>
+              </div>
+            </div>
+
+            <div class="tc-filtro-erro" ng-if="comparacao.erro"><i class="zmdi zmdi-alert-circle-o"></i> {{comparacao.erro}}</div>
+
+            <div class="tc-estado" ng-if="!comparacao.erro && !tc.linhas.length">Sem registros para comparar.</div>
+
+            <div class="tc-tabela-wrap" ng-if="tc.linhas.length">
+              <table class="table table-hover table-condensed tc-tabela">
+                <thead>
+                  <tr>
+                    <th ng-click="ordenarPor(tc, 'nome')">Revendedor
+                  <i class="zmdi" ng-if="tc.ordem === 'nome'" ng-class="tc.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                </th>
+                <th class="tc-num" ng-click="ordenarPor(tc, 'clientesDe')">Clientes {{comparacao.de.rotulo}}
+                  <i class="zmdi" ng-if="tc.ordem === 'clientesDe'" ng-class="tc.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                </th>
+                <th class="tc-num" ng-click="ordenarPor(tc, 'clientesAte')">Clientes {{comparacao.ate.rotulo}}
+                  <i class="zmdi" ng-if="tc.ordem === 'clientesAte'" ng-class="tc.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                </th>
+                <th class="tc-num" ng-click="ordenarPor(tc, 'deltaClientes')">Δ clientes
+                  <i class="zmdi" ng-if="tc.ordem === 'deltaClientes'" ng-class="tc.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                </th>
+                <th class="tc-num" ng-click="ordenarPor(tc, 'deltaClientesPct')">Δ %
+                  <i class="zmdi" ng-if="tc.ordem === 'deltaClientesPct'" ng-class="tc.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                </th>
+                <th>Tend. 12 m</th>
+                <th class="tc-num tc-grupo-receita" ng-click="ordenarPor(tc, 'receitaDe')">Receita {{comparacao.de.rotulo}}
+                  <i class="zmdi" ng-if="tc.ordem === 'receitaDe'" ng-class="tc.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                </th>
+                <th class="tc-num tc-grupo-receita" ng-click="ordenarPor(tc, 'receitaAte')">Receita {{comparacao.ate.rotulo}}
+                  <i class="zmdi" ng-if="tc.ordem === 'receitaAte'" ng-class="tc.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                </th>
+                <th class="tc-num tc-grupo-receita" ng-click="ordenarPor(tc, 'deltaReceita')">Δ receita
+                  <i class="zmdi" ng-if="tc.ordem === 'deltaReceita'" ng-class="tc.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                </th>
+                <th class="tc-num tc-grupo-receita" ng-click="ordenarPor(tc, 'deltaReceitaPct')">Δ %
+                  <i class="zmdi" ng-if="tc.ordem === 'deltaReceitaPct'" ng-class="tc.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                </th>
+                <th class="tc-grupo-receita">Tend. 12 m</th>
+                <th class="tc-num tc-grupo-receita" ng-click="ordenarPor(tc, 'ticketDe')">Ticket {{comparacao.de.rotulo}}
+                  <i class="zmdi" ng-if="tc.ordem === 'ticketDe'" ng-class="tc.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                </th>
+                <th class="tc-num tc-grupo-receita" ng-click="ordenarPor(tc, 'ticketAte')">Ticket {{comparacao.ate.rotulo}}
+                  <i class="zmdi" ng-if="tc.ordem === 'ticketAte'" ng-class="tc.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                </th>
+                <th class="tc-num tc-grupo-receita" ng-click="ordenarPor(tc, 'deltaTicket')">Δ ticket
+                  <i class="zmdi" ng-if="tc.ordem === 'deltaTicket'" ng-class="tc.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                </th>
+                <th class="tc-num" ng-click="ordenarPor(tc, 'canaisDe')">Canais {{comparacao.de.rotulo}}
+                  <i class="zmdi" ng-if="tc.ordem === 'canaisDe'" ng-class="tc.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                </th>
+                <th class="tc-num" ng-click="ordenarPor(tc, 'canaisAte')">Canais {{comparacao.ate.rotulo}}
+                  <i class="zmdi" ng-if="tc.ordem === 'canaisAte'" ng-class="tc.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                </th>
+                <th class="tc-num" ng-click="ordenarPor(tc, 'deltaCanais')">Δ canais
+                  <i class="zmdi" ng-if="tc.ordem === 'deltaCanais'" ng-class="tc.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="l in tc.pagina track by l.id">
+                    <td title="{{l.nome}}">{{l.nome}}</td>
+                    <td class="tc-num">{{fmt(l.clientesDe)}}</td>
+                    <td class="tc-num">{{fmt(l.clientesAte)}}</td>
+                    <td class="tc-num" ng-class="classeDelta(l.deltaClientes)"><i class="{{iconeDelta(l.deltaClientes)}}"></i> {{fmtSinal(l.deltaClientes)}}</td>
+                    <td class="tc-num" ng-class="classeDelta(l.deltaClientesPct)">{{fmtPct(l.deltaClientesPct)}}</td>
+                    <td>
+                      <svg class="tc-spark" viewBox="0 0 80 22" preserveAspectRatio="none">
+                        <polyline ng-repeat="seg in l.sparkline.clientes track by $index" ng-attr-points="{{seg}}"></polyline>
+                      </svg>
+                    </td>
+                    <td class="tc-num tc-grupo-receita">{{fmtBrl(l.receitaDe)}}</td>
+                    <td class="tc-num tc-grupo-receita">{{fmtBrl(l.receitaAte)}}</td>
+                    <td class="tc-num tc-grupo-receita" ng-class="classeDelta(l.deltaReceita)"><i class="{{iconeDelta(l.deltaReceita)}}"></i> {{fmtBrlSinal(l.deltaReceita)}}</td>
+                    <td class="tc-num tc-grupo-receita" ng-class="classeDelta(l.deltaReceitaPct)">{{fmtPct(l.deltaReceitaPct)}}</td>
+                    <td class="tc-grupo-receita">
+                      <svg class="tc-spark tc-spark-receita" viewBox="0 0 80 22" preserveAspectRatio="none">
+                        <polyline ng-repeat="seg in l.sparkline.receita track by $index" ng-attr-points="{{seg}}"></polyline>
+                      </svg>
+                    </td>
+                    <td class="tc-num tc-grupo-receita">{{fmtBrl(l.ticketDe)}}</td>
+                    <td class="tc-num tc-grupo-receita">{{fmtBrl(l.ticketAte)}}</td>
+                    <td class="tc-num tc-grupo-receita" ng-class="classeDelta(l.deltaTicket)">{{fmtBrlSinal(l.deltaTicket)}}</td>
+                    <td class="tc-num">{{fmt(l.canaisDe)}}</td>
+                    <td class="tc-num">{{fmt(l.canaisAte)}}</td>
+                    <td class="tc-num" ng-class="classeDelta(l.deltaCanais)">{{fmtSinal(l.deltaCanais)}}</td>
+                  </tr>
+                  <tr ng-if="!tc.pagina.length">
+                    <td colspan="17" class="text-center" style="color: #90a4ae;">Nenhum revendedor encontrado para "{{tc.busca}}".</td>
+                  </tr>
+                </tbody>
+                <tfoot ng-if="tc.totais">
+                  <tr>
+                    <td>Total ({{fmt(tc.totais.parceiros)}} revendedores)</td>
+                    <td class="tc-num">{{fmt(tc.totais.clientesDe)}}</td>
+                    <td class="tc-num">{{fmt(tc.totais.clientesAte)}}</td>
+                    <td class="tc-num" ng-class="classeDelta(tc.totais.deltaClientes)">{{fmtSinal(tc.totais.deltaClientes)}}</td>
+                    <td class="tc-num" ng-class="classeDelta(tc.totais.deltaClientesPct)">{{fmtPct(tc.totais.deltaClientesPct)}}</td>
+                    <td></td>
+                    <td class="tc-num tc-grupo-receita">{{fmtBrl(tc.totais.receitaDe)}}</td>
+                    <td class="tc-num tc-grupo-receita">{{fmtBrl(tc.totais.receitaAte)}}</td>
+                    <td class="tc-num tc-grupo-receita" ng-class="classeDelta(tc.totais.deltaReceita)">{{fmtBrlSinal(tc.totais.deltaReceita)}}</td>
+                    <td class="tc-num tc-grupo-receita" ng-class="classeDelta(tc.totais.deltaReceitaPct)">{{fmtPct(tc.totais.deltaReceitaPct)}}</td>
+                    <td class="tc-grupo-receita"></td>
+                    <td class="tc-num tc-grupo-receita">{{fmtBrl(tc.totais.ticketDe)}}</td>
+                    <td class="tc-num tc-grupo-receita">{{fmtBrl(tc.totais.ticketAte)}}</td>
+                    <td class="tc-num tc-grupo-receita" ng-class="classeDelta(tc.totais.deltaTicket)">{{fmtBrlSinal(tc.totais.deltaTicket)}}</td>
+                    <td class="tc-num">{{fmt(tc.totais.canaisDe)}}</td>
+                    <td class="tc-num">{{fmt(tc.totais.canaisAte)}}</td>
+                    <td class="tc-num" ng-class="classeDelta(tc.totais.deltaCanais)">{{fmtSinal(tc.totais.deltaCanais)}}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <div class="tc-paginacao" ng-if="tc.filtradas.length > tc.porPagina">
+              <span>
+                Exibindo {{fmt((tc.paginaAtual - 1) * tc.porPagina + 1)}}–{{fmt((tc.paginaAtual - 1) * tc.porPagina + tc.pagina.length)}}
+                de {{fmt(tc.filtradas.length)}}
+              </span>
+              <span>
+                <button class="btn btn-default" ng-click="irParaPagina(tc, 1)" ng-disabled="tc.paginaAtual === 1"><i class="zmdi zmdi-skip-previous"></i></button>
+                <button class="btn btn-default" ng-click="irParaPagina(tc, tc.paginaAtual - 1)" ng-disabled="tc.paginaAtual === 1"><i class="zmdi zmdi-chevron-left"></i></button>
+                <button class="btn btn-default" ng-repeat="p in paginasVisiveis(tc)" ng-class="{'ativo': p === tc.paginaAtual}" ng-click="irParaPagina(tc, p)">{{p}}</button>
+                <button class="btn btn-default" ng-click="irParaPagina(tc, tc.paginaAtual + 1)" ng-disabled="tc.paginaAtual === tc.totalPaginas"><i class="zmdi zmdi-chevron-right"></i></button>
+                <button class="btn btn-default" ng-click="irParaPagina(tc, tc.totalPaginas)" ng-disabled="tc.paginaAtual === tc.totalPaginas"><i class="zmdi zmdi-skip-next"></i></button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

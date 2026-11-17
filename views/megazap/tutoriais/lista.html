@@ -1,0 +1,40 @@
+<div class="container-fluid" data-ng-controller="TutorialVideoListaController" ng-init="onInit()">
+
+    <div class="card" ng-repeat="modulo in registros">
+        <div class="card-header ch-alt">
+            <h2>
+                {{modulo.modulo}}
+            </h2>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 10%">Chave</th>
+                        <th style="width: 30%">Nome</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="tutorial in modulo.tutoriais">
+                        <td>
+                            <div class="m-t-5">
+                                {{tutorial.chave}}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="m-t-5">
+                                {{tutorial.nome}}
+                            </div>
+                        </td>
+                        <td>
+                            <input type="text" class="p-5" style="width: 100%" ng-model="tutorial.editLink"
+                                   ng-blur="onUpdate(tutorial)"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

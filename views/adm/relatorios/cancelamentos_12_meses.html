@@ -1,0 +1,709 @@
+<link href="css/cancelamentos.css?VERSION_HASH" rel="stylesheet" />
+
+<div class="container-fluid" data-ng-controller="Cancelamentos12MesesController" ng-init="onInit()">
+
+  <div class="card" ng-if="!isAdministrador()">
+    <div class="card-body card-padding cc-estado cc-erro">
+      Acesso restrito ao perfil Administrador.
+    </div>
+  </div>
+
+  <div ng-if="isAdministrador()">
+
+    <!-- ===================== Filtro ===================== -->
+    <div class="card m-b-20">
+      <div class="card-header ch-alt">
+        <h2>Cancelamentos — últimos 12 meses
+          <a class="cc-link" ui-sref="relatorios.cancelamentos({ parceiroId: filter.parceiroId })"><i class="zmdi zmdi-calendar"></i> ver por período</a>
+        </h2>
+        <small class="cc-sub" ng-if="cards">{{cards.mesAnterior ? fmtMes(mensal.dados.meses[0].date) + ' → ' : ''}}{{fmtMes(cards.mesAtual.date)}} (mês corrente em andamento) · {{filter.parceiroNome}} · base ativa hoje: {{fmt(cards.ativos)}} cliente(s)</small>
+
+        <button title="Exportar CSV" class="btn bgm-teal btn-float btn-float-2 waves-effect" ng-click="multiParceiros() ? exportarCsvParceiros() : exportarCsvServicos()"
+          ng-disabled="!tabelaParceiros.linhas.length && !tabelaServicos.linhas.length">
+          <i class="zmdi zmdi-download"></i>
+        </button>
+
+        <button title="Limpar filtros" class="btn bgm-bluegray btn-float btn-float-2 waves-effect"
+          ng-click="limparFiltros()">
+          <i class="zmdi zmdi-format-clear"></i>
+        </button>
+
+        <button title="{{'PESQUISAR' | translate}}" class="btn bgm-blue btn-float btn-float-2 waves-effect"
+          ng-click="getData()">
+          <i class="zmdi zmdi-search"></i>
+        </button>
+      </div>
+
+      <div class="card-body card-padding">
+        <br />
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="cc-combo">
+              <div class="form-group fg-float m-b-20">
+                <div class="fg-line fg-toggled">
+                  <input type="text" class="form-control input-lg" autocomplete="off" ng-model="combo.busca"
+                    ng-focus="abrirCombo()" ng-click="abrirCombo()" ng-blur="fecharCombo()"
+                    ng-keydown="tecladoCombo($event)" />
+                  <label class="fg-label">{{'REVENDEDOR' | translate}}</label>
+                </div>
+              </div>
+              <ul class="cc-combo-lista" ng-show="combo.aberto">
+                <li ng-repeat="o in opcoesFiltradas() track by o.id"
+                  ng-class="{'ativo': $index === combo.destaque, 'selecionado': o.id === filter.parceiroId, 'fixo': o.id === -2}"
+                  ng-mousedown="$event.preventDefault(); selecionarParceiro(o)" title="{{o.nome}}">
+                  {{o.nome}}
+                </li>
+                <li class="vazio" ng-if="opcoesFiltradas().length === 0">Nenhum revendedor encontrado</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="cc-nota" style="margin-top: -8px;">Mês corrente + 11 anteriores, sem filtro de datas. Clique em um mês (gráficos ou cards) para abrir o dashboard por período com aquele mês; clique em um parceiro para aplicá-lo ao filtro.</div>
+      </div>
+    </div>
+
+    <div class="cc-bloco" ng-class="{'cc-recarregando': mensal.carregando}">
+
+      <div class="card" ng-if="mensal.erro">
+        <div class="card-body card-padding cc-estado cc-erro">
+          <i class="zmdi zmdi-alert-circle-o"></i> Não foi possível carregar os últimos 12 meses. Tente novamente.
+        </div>
+      </div>
+
+      <div class="card" ng-if="!mensal.erro && mensal.vazio && !mensal.carregando">
+        <div class="card-body card-padding cc-estado">
+          <i class="zmdi zmdi-check-circle" style="color: #1b8f5a;"></i> Nenhum cliente cancelado nos últimos 12 meses · base ativa hoje: {{fmt(mensal.dados.ativos.total.clientes)}} cliente(s).
+        </div>
+      </div>
+
+      <div ng-if="!mensal.erro && !mensal.vazio">
+
+        <!-- ===================== Faixa 1 — 12 meses × base ativa ===================== -->
+        <div class="cc-cards m-b-20" ng-if="cards">
+          <div class="indicador-item cc-heroi cc-com-sparkline" style="background-color: #c62828">
+            <i class="fas fa-user-times"></i>
+            <div class="indicador-informacoes">
+              <small>Cancelados em 12 meses</small>
+              <h2>{{fmt(cards.total)}}</h2>
+              <span class="cc-delta">
+                {{fmtDec(cards.mediaQtd)}} por mês
+                <span class="cc-delta-contexto">média dos {{cards.mesesFechados}} meses fechados · {{fmt(cards.ativos)}} cliente(s) ativos hoje</span>
+              </span>
+            </div>
+            <svg class="cc-card-sparkline" viewBox="0 0 120 32" preserveAspectRatio="none">
+              <polyline ng-repeat="seg in cards.sparkline.qtd track by $index" ng-attr-points="{{seg}}"></polyline>
+            </svg>
+          </div>
+
+          <div class="indicador-item cc-heroi-moeda cc-com-sparkline" style="background-color: #7D67DA" title="{{fmtBrl(cards.valor)}}">
+            <i class="fas fa-file-invoice-dollar"></i>
+            <div class="indicador-informacoes">
+              <small>Receita mensal perdida em 12 m</small>
+              <h2>{{fmtBrl(cards.valor, true)}}</h2>
+              <span class="cc-delta">
+                {{fmtBrl(cards.mediaValor, true)}} por mês
+                <span class="cc-delta-contexto">soma do último contrato dos cancelados · base ativa: {{fmtBrl(cards.receitaAtiva, true)}}/mês</span>
+              </span>
+            </div>
+            <svg class="cc-card-sparkline" viewBox="0 0 120 32" preserveAspectRatio="none">
+              <polyline ng-repeat="seg in cards.sparkline.valor track by $index" ng-attr-points="{{seg}}"></polyline>
+            </svg>
+          </div>
+
+          <div class="indicador-item cc-com-sparkline cc-heroi" style="background-color: #eb6834">
+            <i class="fas fa-percentage"></i>
+            <div class="indicador-informacoes">
+              <small>Churn anual <i class="zmdi zmdi-info-outline cc-info" ng-click="alternarAjuda('churn-anual', $event)" uib-popover-html="ajudaChurn('churn-anual', { tipo: 'anual', cancelados: cards.total, ativos: cards.ativos, mediaMensal: cards.mediaQtd, valorPerdido: cards.valor, receitaAtiva: cards.receitaAtiva })" popover-title="Churn anual, mensal e de receita" popover-trigger="none" popover-is-open="ajudaAberta === 'churn-anual'" popover-placement="bottom" popover-append-to-body="true" popover-class="cc-popover"></i></small>
+              <h2>{{fmtPctSimples(cards.churn)}}</h2>
+              <span class="cc-delta">
+                {{fmtPctSimples(cards.churnMensal)}} ao mês
+                <span class="cc-delta-contexto">{{fmt(cards.total)}} ÷ ({{fmt(cards.ativos)}} ativos + {{fmt(cards.total)}}) · receita: {{fmtPctSimples(cards.churnReceita)}}</span>
+              </span>
+            </div>
+            <svg class="cc-card-sparkline" viewBox="0 0 120 32" preserveAspectRatio="none">
+              <polyline ng-repeat="seg in cards.sparkline.churn track by $index" ng-attr-points="{{seg}}"></polyline>
+            </svg>
+          </div>
+
+          <div class="indicador-item cc-com-sparkline cc-heroi-moeda" style="background-color: #00897B">
+            <i class="fas fa-receipt"></i>
+            <div class="indicador-informacoes">
+              <small>Ticket dos cancelados</small>
+              <h2>{{fmtBrl(cards.ticket)}}</h2>
+              <span class="cc-delta" ng-if="cards.ticketAtivo !== null">
+                <i class="{{iconeDelta(cards.ticket - cards.ticketAtivo)}}"></i>{{fmtBrlSinal(cards.ticket - cards.ticketAtivo)}} vs. base ativa
+                <span class="cc-delta-contexto">ticket médio dos ativos: {{fmtBrl(cards.ticketAtivo)}}</span>
+              </span>
+              <span class="cc-delta" ng-if="cards.ticketAtivo === null">—</span>
+            </div>
+            <svg class="cc-card-sparkline" viewBox="0 0 120 32" preserveAspectRatio="none">
+              <polyline ng-repeat="seg in cards.sparkline.ticket track by $index" ng-attr-points="{{seg}}"></polyline>
+            </svg>
+          </div>
+
+          <div class="indicador-item cc-com-sparkline cc-heroi" style="background-color: #1b8f5a">
+            <i class="fas fa-redo-alt"></i>
+            <div class="indicador-informacoes">
+              <small>Intenção de recontratar</small>
+              <h2>{{fmt(cards.recontratar)}}</h2>
+              <span class="cc-delta">
+                {{fmtPctSimples(cards.recontratarPct)}} dos cancelados
+                <span class="cc-delta-contexto">nos últimos 12 meses</span>
+              </span>
+            </div>
+            <svg class="cc-card-sparkline" viewBox="0 0 120 32" preserveAspectRatio="none">
+              <polyline ng-repeat="seg in cards.sparkline.recontratar track by $index" ng-attr-points="{{seg}}"></polyline>
+            </svg>
+          </div>
+        </div>
+
+        <!-- ===================== Faixa 2 — ritmo ===================== -->
+        <div class="cc-cards cc-cards-sec m-b-20" ng-if="cards">
+          <div class="cc-card-sec">
+            <small>Mês corrente vs. anterior</small>
+            <div class="cc-duplo" ng-if="cards.variacao">
+              <div>
+                <span class="cc-mini">Cancelados</span>
+                <div class="cc-valor-sm" ng-class="classeDelta(cards.variacao.qtd.abs)">
+                  <i class="{{iconeDelta(cards.variacao.qtd.abs)}}"></i> {{fmtPct(cards.variacao.qtd.pct)}}
+                </div>
+                <div class="cc-detalhe">{{fmt(cards.mesAnterior.total.qtd)}} → {{fmt(cards.mesAtual.total.qtd)}}</div>
+              </div>
+              <div>
+                <span class="cc-mini">Receita</span>
+                <div class="cc-valor-sm" ng-class="classeDelta(cards.variacao.valor.abs)">
+                  <i class="{{iconeDelta(cards.variacao.valor.abs)}}"></i> {{fmtPct(cards.variacao.valor.pct)}}
+                </div>
+                <div class="cc-detalhe">{{fmtBrlSinal(cards.variacao.valor.abs, true)}}</div>
+              </div>
+            </div>
+            <div class="cc-detalhe" ng-if="cards.mesAnterior">
+              <a class="cc-clicavel-valor" ng-click="irParaPeriodo(cards.mesAnterior.date)">{{cards.mesAnterior.rotulo}}</a> →
+              <a class="cc-clicavel-valor" ng-click="irParaPeriodo(cards.mesAtual.date)">{{cards.mesAtual.rotulo}}</a> (em andamento)
+            </div>
+          </div>
+
+          <div class="cc-card-sec">
+            <small>Tendência (3 meses vs. 3 anteriores)</small>
+            <div class="cc-valor" ng-if="cards.tendencia" ng-class="classeDelta(cards.tendencia.abs)">
+              <i class="{{iconeDelta(cards.tendencia.abs)}}"></i> {{fmtPct(cards.tendencia.pct)}}
+            </div>
+            <div class="cc-valor" ng-if="!cards.tendencia">—</div>
+            <div class="cc-detalhe" ng-if="cards.tendencia">{{fmt(cards.tendencia.antigos)}} → {{fmt(cards.tendencia.recentes)}} cancelados nos últimos 3 meses fechados</div>
+            <div class="cc-detalhe" ng-if="!cards.tendencia">precisa de 6 meses fechados</div>
+          </div>
+
+          <div class="cc-card-sec">
+            <small>Pior mês</small>
+            <div class="cc-valor" ng-if="cards.pior">
+              <a class="cc-clicavel-valor" ng-click="irParaPeriodo(cards.pior.date)" title="Abrir o dashboard por período neste mês">{{cards.pior.rotulo}}</a>
+            </div>
+            <div class="cc-valor" ng-if="!cards.pior">—</div>
+            <div class="cc-detalhe cc-delta-neg" ng-if="cards.pior">{{fmt(cards.pior.total.qtd)}} cancelado(s) · {{fmtBrl(cards.pior.total.valor, true)}}/mês</div>
+          </div>
+
+          <div class="cc-card-sec">
+            <small>Tempo de casa dos cancelados</small>
+            <div class="cc-valor">{{fmtMeses(cards.tempoMedio)}}</div>
+            <div class="cc-detalhe">{{fmt(cards.tempoMedio)}} dias em média (ponderado pela quantidade de cada mês)</div>
+          </div>
+        </div>
+
+        <!-- ===================== Faixa 3 — perfil e parceiros ===================== -->
+        <div class="cc-cards cc-cards-sec m-b-20" ng-if="cards">
+          <div class="cc-card-sec">
+            <small>Evolução de preço até sair</small>
+            <div class="cc-valor" ng-class="classeDelta(cards.evolucao, true)">{{fmtBrlSinal(cards.evolucao, true)}}/mês</div>
+            <div class="cc-detalhe">{{fmtPct(cards.evolucaoPct)}} entre o primeiro e o último contrato dos cancelados</div>
+          </div>
+
+          <div class="cc-card-sec">
+            <small>Serviço mais presente nos cancelados</small>
+            <div class="cc-valor" ng-if="cards.servico" title="{{cards.servico.nome}}">{{cards.servico.nome}}</div>
+            <div class="cc-valor" ng-if="!cards.servico">—</div>
+            <div class="cc-detalhe" ng-if="cards.servico">
+              em {{fmt(cards.servico.contratos)}} contrato(s) · {{fmtPctSimples(cards.servico.pct)}} dos cancelados · {{fmtBrl(cards.servico.valor, true)}}/mês
+            </div>
+          </div>
+
+          <div class="cc-card-sec" ng-if="multiParceiros()">
+            <small>Parceiro com mais cancelamentos</small>
+            <div class="cc-valor" ng-if="cards.maiorQtd">
+              <a class="cc-clicavel-valor" ng-click="aplicarParceiro(cards.maiorQtd)" title="Aplicar ao filtro">{{cards.maiorQtd.nome}}</a>
+            </div>
+            <div class="cc-valor" ng-if="!cards.maiorQtd">—</div>
+            <div class="cc-detalhe" ng-if="cards.maiorQtd">
+              {{fmt(cards.maiorQtd.qtd)}} cliente(s) · {{fmtPctSimples(cards.maiorQtd.pct)}} do total · {{fmt(cards.maiorQtd.parceiros)}} de {{fmt(cards.maiorQtd.totalParceiros)}} parceiros com cancelamento
+            </div>
+          </div>
+
+          <div class="cc-card-sec" ng-if="multiParceiros()">
+            <small>Parceiro com maior churn <i class="zmdi zmdi-info-outline cc-info" ng-click="alternarAjuda('churn-parceiro', $event)" uib-popover-html="ajudaChurn('churn-parceiro', { tipo: 'anual', nome: cards.maiorChurn.nome, cancelados: cards.maiorChurn.qtd, ativos: cards.maiorChurn.ativos, valorPerdido: cards.maiorChurn.valor, receitaAtiva: cards.maiorChurn.receitaAtiva })" popover-title="Churn do parceiro (12 m)" popover-trigger="none" popover-is-open="ajudaAberta === 'churn-parceiro'" popover-placement="bottom" popover-append-to-body="true" popover-class="cc-popover"></i></small>
+            <div class="cc-valor" ng-if="cards.maiorChurn">
+              <a class="cc-clicavel-valor" ng-click="aplicarParceiro(cards.maiorChurn)" title="Aplicar ao filtro">{{cards.maiorChurn.nome}}</a>
+            </div>
+            <div class="cc-valor" ng-if="!cards.maiorChurn">—</div>
+            <div class="cc-detalhe cc-delta-neg" ng-if="cards.maiorChurn">
+              {{fmtPctSimples(cards.maiorChurn.churn)}} · {{fmt(cards.maiorChurn.qtd)}} de {{fmt(cards.maiorChurn.ativos + cards.maiorChurn.qtd)}} clientes
+            </div>
+          </div>
+
+          <div class="cc-card-sec" ng-if="!multiParceiros()">
+            <small>Base ativa hoje</small>
+            <div class="cc-valor">{{fmt(cards.ativos)}} clientes</div>
+            <div class="cc-detalhe">{{fmtBrl(cards.receitaAtiva, true)}}/mês em contratos ativos</div>
+          </div>
+        </div>
+
+        <!-- ===================== M1 / M1r ===================== -->
+        <div class="row cc-row-igual">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Clientes cancelados por mês <i class="zmdi zmdi-info-outline cc-info" ng-click="alternarAjuda('churn-mensal', $event)" uib-popover-html="ajudaChurn('churn-mensal', { tipo: 'mensal', ativos: cards.ativos })" popover-title="Churn mensal" popover-trigger="none" popover-is-open="ajudaAberta === 'churn-mensal'" popover-placement="right" popover-append-to-body="true" popover-class="cc-popover"></i></h2>
+                <small class="cc-sub">Colunas: cancelados. Linha: churn mensal = cancelados ÷ (ativos hoje + cancelados do mês). Clique em um mês para abrir por período.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="cc-chart-box">
+                  <canvas id="m1"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Receita mensal perdida por mês</h2>
+                <small class="cc-sub">Colunas: soma do último contrato dos cancelados, em R$/mês. Linha: ticket médio dos cancelados no mês. Clique para abrir por período.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="cc-chart-box">
+                  <canvas id="m1r"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== M2 / M2r ===================== -->
+        <div class="row cc-row-igual">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Variação % de cancelados mês a mês</h2>
+                <small class="cc-sub">(mês − mês anterior) / mês anterior. Laranja = subiu (ruim), azul = caiu.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="cc-chart-box">
+                  <canvas id="m2"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Variação % da receita perdida mês a mês</h2>
+                <small class="cc-sub">(mês − mês anterior) / mês anterior, sobre a receita perdida.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="cc-chart-box">
+                  <canvas id="m2r"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== M3 / M4 ===================== -->
+        <div class="row cc-row-igual">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Tempo médio de casa dos cancelados, por mês</h2>
+                <small class="cc-sub">Em dias. Caindo = estamos perdendo clientes cada vez mais novos (problema de onboarding); subindo = clientes antigos estão saindo.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="cc-chart-box">
+                  <canvas id="m3"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Intenção de recontratar por mês</h2>
+                <small class="cc-sub">Colunas: cancelados que indicaram intenção de voltar. Linha: % dos cancelados do mês.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="cc-chart-box">
+                  <canvas id="m4"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== P0 — parceiros por mês ===================== -->
+        <div class="row" ng-if="multiParceiros()">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Cancelados por parceiro, mês a mês</h2>
+                <small class="cc-sub">Colunas empilhadas dos 6 parceiros com mais cancelamentos; os demais agrupados em "Outros". Clique em um segmento para aplicar o parceiro ao filtro.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="cc-chart-box">
+                  <canvas id="p0"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== P1 / P1r ===================== -->
+        <div class="row cc-row-igual" ng-if="multiParceiros()">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Top 10 parceiros por clientes cancelados (12 m)</h2>
+                <small class="cc-sub">Clique em um parceiro para aplicá-lo ao filtro.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="cc-chart-box cc-alto">
+                  <canvas id="p1"></canvas>
+                </div>
+                <div class="cc-nota" ng-if="resumoTop10.qtd.quantidade">
+                  + outros {{fmt(resumoTop10.qtd.quantidade)}} parceiros: {{fmt(resumoTop10.qtd.valor)}} cancelado(s)
+                  ({{fmtPctSimples(resumoTop10.qtd.pct)}}) — <a ng-click="rolarPara('cc-tabela-parceiros')">ver todos na tabela</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Top 10 parceiros por receita perdida (12 m)</h2>
+                <small class="cc-sub">Em R$/mês. Clique em um parceiro para aplicá-lo ao filtro.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="cc-chart-box cc-alto">
+                  <canvas id="p1r"></canvas>
+                </div>
+                <div class="cc-nota" ng-if="resumoTop10.valor.quantidade">
+                  + outros {{fmt(resumoTop10.valor.quantidade)}} parceiros: {{fmtBrl(resumoTop10.valor.valor, true)}}
+                  ({{fmtPctSimples(resumoTop10.valor.pct)}}) — <a ng-click="rolarPara('cc-tabela-parceiros')">ver todos na tabela</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== P2 / P3 ===================== -->
+        <div class="row cc-row-igual" ng-if="multiParceiros()">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Top 10 parceiros por churn (12 m) <i class="zmdi zmdi-info-outline cc-info" ng-click="alternarAjuda('churn-grafico', $event)" uib-popover-html="ajudaChurn('churn-grafico', { tipo: 'anual' })" popover-title="Churn por parceiro (12 m)" popover-trigger="none" popover-is-open="ajudaAberta === 'churn-grafico'" popover-placement="right" popover-append-to-body="true" popover-class="cc-popover"></i></h2>
+                <small class="cc-sub">Cancelados em 12 m ÷ (ativos hoje + cancelados). Parceiro pequeno pode aparecer alto com poucos cancelamentos — confira o "de N". Clique para filtrar.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="cc-chart-box cc-alto">
+                  <canvas id="p2"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Base ativa × cancelados em 12 m por parceiro</h2>
+                <small class="cc-sub">Um ponto por parceiro com cancelamento (eixo X em log). Acima da nuvem: cancela mais do que o esperado para o tamanho. Clique para filtrar.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="cc-chart-box cc-alto">
+                  <canvas id="p3"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== M9 / M10 — serviços ===================== -->
+        <div class="row cc-row-igual">
+          <div class="col-md-7">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Serviços nos contratos cancelados, mês a mês</h2>
+                <small class="cc-sub">Colunas empilhadas dos 6 serviços mais presentes; os demais em "Outros". Conta contratos cancelados que tinham o serviço.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="cc-chart-box">
+                  <canvas id="m9"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-5">
+            <div class="card">
+              <div class="card-header ch-alt">
+                <h2>Serviços mais presentes nos cancelados (12 m)</h2>
+                <small class="cc-sub">Top 10 por contratos cancelados. Tooltip: unidades e valor mensal.</small>
+              </div>
+              <div class="card-body card-padding">
+                <div class="cc-chart-box">
+                  <canvas id="m10"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== Tabela — parceiro × mês ===================== -->
+        <div class="card" id="cc-tabela-parceiros" ng-if="multiParceiros() && tabelaParceiros.linhas.length">
+          <div class="card-header ch-alt">
+            <h2>Parceiros × meses</h2>
+            <small class="cc-sub">{{fmt(tabelaParceiros.totais.comCancelamento)}} de {{fmt(tabelaParceiros.totais.parceiros)}} parceiro(s) com cancelamento em 12 m · valores em R$/mês · clique no nome para filtrar · clique em um mês do cabeçalho para abrir por período</small>
+          </div>
+          <div class="card-body card-padding">
+            <div class="row">
+              <div class="col-sm-5">
+                <div class="form-group fg-float m-b-20">
+                  <div class="fg-line fg-toggled">
+                    <input type="text" class="form-control" ng-model="tabelaParceiros.busca" ng-change="onBuscarTabela(tabelaParceiros)"
+                      ng-model-options="{ debounce: 200 }" />
+                    <label class="fg-label">Buscar parceiro</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-7 text-right" style="padding-top: 8px;">
+                <button class="btn btn-default btn-sm waves-effect" ng-click="exportarCsvParceiros()" ng-disabled="!tabelaParceiros.filtradas.length">
+                  <i class="zmdi zmdi-download"></i> Exportar CSV ({{fmt(tabelaParceiros.filtradas.length)}} linhas)
+                </button>
+              </div>
+            </div>
+
+            <div class="cc-tabela-wrap">
+              <table class="table table-hover table-condensed cc-tabela cc-larga">
+                <thead>
+                  <tr>
+                    <th ng-click="ordenarPor(tabelaParceiros, 'nome')">Parceiro
+                      <i class="zmdi" ng-if="tabelaParceiros.ordem === 'nome'" ng-class="tabelaParceiros.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                    </th>
+                    <th class="cc-num cc-grupo-ativo" ng-click="ordenarPor(tabelaParceiros, 'ativos')">Ativos hoje
+                      <i class="zmdi" ng-if="tabelaParceiros.ordem === 'ativos'" ng-class="tabelaParceiros.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                    </th>
+                    <th class="cc-num cc-grupo-ativo" ng-click="ordenarPor(tabelaParceiros, 'receitaAtiva')">Receita ativa
+                      <i class="zmdi" ng-if="tabelaParceiros.ordem === 'receitaAtiva'" ng-class="tabelaParceiros.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                    </th>
+                    <th class="cc-num" ng-click="ordenarPor(tabelaParceiros, 'qtd')">Cancelados 12 m
+                      <i class="zmdi" ng-if="tabelaParceiros.ordem === 'qtd'" ng-class="tabelaParceiros.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                    </th>
+                    <th class="cc-num" ng-click="ordenarPor(tabelaParceiros, 'churn')">Churn 12 m
+                      <i class="zmdi" ng-if="tabelaParceiros.ordem === 'churn'" ng-class="tabelaParceiros.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                      <i class="zmdi zmdi-info-outline cc-info" ng-click="alternarAjuda('churn-tabela', $event)" uib-popover-html="ajudaChurn('churn-tabela', { tipo: 'anual', cancelados: tabelaParceiros.totais.qtd, ativos: tabelaParceiros.totais.ativos })" popover-title="Churn 12 m (total)" popover-trigger="none" popover-is-open="ajudaAberta === 'churn-tabela'" popover-placement="bottom" popover-append-to-body="true" popover-class="cc-popover"></i>
+                    </th>
+                    <th class="cc-num cc-grupo-valor" ng-click="ordenarPor(tabelaParceiros, 'valor')">Receita perdida
+                      <i class="zmdi" ng-if="tabelaParceiros.ordem === 'valor'" ng-class="tabelaParceiros.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                    </th>
+                    <th class="cc-num cc-grupo-valor" ng-click="ordenarPor(tabelaParceiros, 'churnReceita')">Churn receita
+                      <i class="zmdi" ng-if="tabelaParceiros.ordem === 'churnReceita'" ng-class="tabelaParceiros.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                      <i class="zmdi zmdi-info-outline cc-info" ng-click="alternarAjuda('churn-tabela-receita', $event)" uib-popover-html="ajudaChurn('churn-tabela-receita', { tipo: 'receita', escopo: 'nos últimos 12 meses', cancelados: tabelaParceiros.totais.qtd, valorPerdido: tabelaParceiros.totais.valor, receitaAtiva: tabelaParceiros.totais.receitaAtiva })" popover-title="Churn de receita (total)" popover-trigger="none" popover-is-open="ajudaAberta === 'churn-tabela-receita'" popover-placement="bottom" popover-append-to-body="true" popover-class="cc-popover"></i>
+                    </th>
+                    <th class="cc-num cc-grupo-valor" ng-click="ordenarPor(tabelaParceiros, 'ticket')">Ticket cancelados
+                      <i class="zmdi" ng-if="tabelaParceiros.ordem === 'ticket'" ng-class="tabelaParceiros.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                    </th>
+                    <th class="cc-num" ng-click="ordenarPor(tabelaParceiros, 'tempoMedio')">Tempo de casa
+                      <i class="zmdi" ng-if="tabelaParceiros.ordem === 'tempoMedio'" ng-class="tabelaParceiros.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                    </th>
+                    <th class="cc-num" ng-click="ordenarPor(tabelaParceiros, 'recontratar')">Recontratar
+                      <i class="zmdi" ng-if="tabelaParceiros.ordem === 'recontratar'" ng-class="tabelaParceiros.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                    </th>
+                    <th>Tend. 12 m</th>
+                    <th class="cc-num" ng-repeat="m in meses" ng-class="{'cc-mes-atual': $last}" title="Abrir por período: {{m.rotulo}} · clique com Shift para ordenar"
+                      ng-click="$event.shiftKey ? ordenarPor(tabelaParceiros, m.chave) : irParaPeriodo(m.date)">
+                      {{m.rotulo}}
+                      <i class="zmdi" ng-if="tabelaParceiros.ordem === m.chave" ng-class="tabelaParceiros.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                    </th>
+                    <th class="cc-num" ng-click="ordenarPor(tabelaParceiros, 'deltaMes')">Δ mês
+                      <i class="zmdi" ng-if="tabelaParceiros.ordem === 'deltaMes'" ng-class="tabelaParceiros.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="l in tabelaParceiros.pagina track by l.id">
+                    <td title="{{l.nome}}"><a ng-click="aplicarParceiro(l)">{{l.nome}}</a></td>
+                    <td class="cc-num cc-grupo-ativo">{{fmt(l.ativos)}}</td>
+                    <td class="cc-num cc-grupo-ativo">{{fmtBrl(l.receitaAtiva)}}</td>
+                    <td class="cc-num" ng-class="{'cc-zero': !l.qtd}">{{fmt(l.qtd)}}</td>
+                    <td class="cc-num" ng-class="{'cc-delta-neg': l.churn > 0, 'cc-zero': !l.qtd}">{{fmtPctSimples(l.churn)}}</td>
+                    <td class="cc-num cc-grupo-valor" ng-class="{'cc-zero': !l.qtd}">{{fmtBrl(l.valor)}}</td>
+                    <td class="cc-num cc-grupo-valor" ng-class="{'cc-zero': !l.qtd}">{{fmtPctSimples(l.churnReceita)}}</td>
+                    <td class="cc-num cc-grupo-valor">{{fmtBrl(l.ticket)}}</td>
+                    <td class="cc-num" title="{{fmtDuracao(l.tempoMedio)}}">{{fmt(l.tempoMedio)}}<span ng-if="l.tempoMedio !== null"> d</span></td>
+                    <td class="cc-num" ng-class="{'cc-zero': !l.recontratar}">{{fmt(l.recontratar)}}</td>
+                    <td>
+                      <svg class="cc-spark" viewBox="0 0 80 22" preserveAspectRatio="none">
+                        <polyline ng-repeat="seg in l.sparkline.qtd track by $index" ng-attr-points="{{seg}}"></polyline>
+                      </svg>
+                    </td>
+                    <td class="cc-num" ng-repeat="m in meses" ng-class="{'cc-mes-atual': $last, 'cc-zero': !l[m.chave]}">
+                      <a ng-if="l[m.chave]" ng-click="irParaPeriodo(m.date, l.id)" title="Abrir {{l.nome}} em {{m.rotulo}}">{{fmt(l[m.chave])}}</a>
+                      <span ng-if="!l[m.chave]">0</span>
+                    </td>
+                    <td class="cc-num" ng-class="classeDelta(l.deltaMes)">{{fmtSinal(l.deltaMes)}}</td>
+                  </tr>
+                  <tr ng-if="!tabelaParceiros.pagina.length">
+                    <td colspan="30" class="text-center" style="color: #90a4ae;">Nenhum revendedor encontrado para "{{tabelaParceiros.busca}}".</td>
+                  </tr>
+                </tbody>
+                <tfoot ng-if="tabelaParceiros.totais">
+                  <tr>
+                    <td>Total ({{fmt(tabelaParceiros.totais.parceiros)}} parceiros)</td>
+                    <td class="cc-num cc-grupo-ativo">{{fmt(tabelaParceiros.totais.ativos)}}</td>
+                    <td class="cc-num cc-grupo-ativo">{{fmtBrl(tabelaParceiros.totais.receitaAtiva)}}</td>
+                    <td class="cc-num">{{fmt(tabelaParceiros.totais.qtd)}}</td>
+                    <td class="cc-num">{{fmtPctSimples(tabelaParceiros.totais.churn)}}</td>
+                    <td class="cc-num cc-grupo-valor">{{fmtBrl(tabelaParceiros.totais.valor)}}</td>
+                    <td class="cc-num cc-grupo-valor">{{fmtPctSimples(tabelaParceiros.totais.churnReceita)}}</td>
+                    <td class="cc-num cc-grupo-valor">{{fmtBrl(tabelaParceiros.totais.ticket)}}</td>
+                    <td class="cc-num">{{fmt(tabelaParceiros.totais.tempoMedio)}} d</td>
+                    <td class="cc-num">{{fmt(tabelaParceiros.totais.recontratar)}}</td>
+                    <td></td>
+                    <td class="cc-num" ng-repeat="m in meses" ng-class="{'cc-mes-atual': $last}">{{fmt(tabelaParceiros.totais[m.chave])}}</td>
+                    <td class="cc-num" ng-class="classeDelta(tabelaParceiros.totais.deltaMes)">{{fmtSinal(tabelaParceiros.totais.deltaMes)}}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <div class="cc-paginacao" ng-if="tabelaParceiros.filtradas.length > tabelaParceiros.porPagina">
+              <span>
+                Exibindo {{fmt((tabelaParceiros.paginaAtual - 1) * tabelaParceiros.porPagina + 1)}}–{{fmt((tabelaParceiros.paginaAtual - 1) * tabelaParceiros.porPagina + tabelaParceiros.pagina.length)}}
+                de {{fmt(tabelaParceiros.filtradas.length)}}
+              </span>
+              <span>
+                <button class="btn btn-default" ng-click="irParaPagina(tabelaParceiros, 1)" ng-disabled="tabelaParceiros.paginaAtual === 1"><i class="zmdi zmdi-skip-previous"></i></button>
+                <button class="btn btn-default" ng-click="irParaPagina(tabelaParceiros, tabelaParceiros.paginaAtual - 1)" ng-disabled="tabelaParceiros.paginaAtual === 1"><i class="zmdi zmdi-chevron-left"></i></button>
+                <button class="btn btn-default" ng-repeat="p in paginasVisiveis(tabelaParceiros)" ng-class="{'ativo': p === tabelaParceiros.paginaAtual}" ng-click="irParaPagina(tabelaParceiros, p)">{{p}}</button>
+                <button class="btn btn-default" ng-click="irParaPagina(tabelaParceiros, tabelaParceiros.paginaAtual + 1)" ng-disabled="tabelaParceiros.paginaAtual === tabelaParceiros.totalPaginas"><i class="zmdi zmdi-chevron-right"></i></button>
+                <button class="btn btn-default" ng-click="irParaPagina(tabelaParceiros, tabelaParceiros.totalPaginas)" ng-disabled="tabelaParceiros.paginaAtual === tabelaParceiros.totalPaginas"><i class="zmdi zmdi-skip-next"></i></button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== Tabela — serviços ===================== -->
+        <div class="card" id="cc-tabela-servicos">
+          <div class="card-header ch-alt">
+            <h2>Serviços nos contratos cancelados (12 m)</h2>
+            <small class="cc-sub">Um serviço por linha · {{fmt(tabelaServicos.linhas.length)}} serviço(s) · contratos = contratos cancelados que tinham o serviço · valores em R$/mês</small>
+          </div>
+          <div class="card-body card-padding">
+            <div class="row">
+              <div class="col-sm-5">
+                <div class="form-group fg-float m-b-20">
+                  <div class="fg-line fg-toggled">
+                    <input type="text" class="form-control" ng-model="tabelaServicos.busca" ng-change="onBuscarTabela(tabelaServicos)"
+                      ng-model-options="{ debounce: 200 }" />
+                    <label class="fg-label">Buscar serviço</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-7 text-right" style="padding-top: 8px;">
+                <button class="btn btn-default btn-sm waves-effect" ng-click="exportarCsvServicos()" ng-disabled="!tabelaServicos.filtradas.length">
+                  <i class="zmdi zmdi-download"></i> Exportar CSV ({{fmt(tabelaServicos.filtradas.length)}} linhas)
+                </button>
+              </div>
+            </div>
+
+            <div class="cc-estado" ng-if="!tabelaServicos.linhas.length">Nenhum serviço nos contratos cancelados do período.</div>
+
+            <div class="cc-tabela-wrap" ng-if="tabelaServicos.linhas.length">
+              <table class="table table-hover table-condensed cc-tabela cc-larga">
+                <thead>
+                  <tr>
+                    <th ng-click="ordenarPor(tabelaServicos, 'nome')">Serviço
+                      <i class="zmdi" ng-if="tabelaServicos.ordem === 'nome'" ng-class="tabelaServicos.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                    </th>
+                    <th class="cc-num" ng-click="ordenarPor(tabelaServicos, 'contratos')">Contratos
+                      <i class="zmdi" ng-if="tabelaServicos.ordem === 'contratos'" ng-class="tabelaServicos.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                    </th>
+                    <th class="cc-num" ng-click="ordenarPor(tabelaServicos, 'pct')">% dos cancelados
+                      <i class="zmdi" ng-if="tabelaServicos.ordem === 'pct'" ng-class="tabelaServicos.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                    </th>
+                    <th class="cc-num" ng-click="ordenarPor(tabelaServicos, 'unidades')">Unidades
+                      <i class="zmdi" ng-if="tabelaServicos.ordem === 'unidades'" ng-class="tabelaServicos.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                    </th>
+                    <th class="cc-num cc-grupo-valor" ng-click="ordenarPor(tabelaServicos, 'valor')">Valor
+                      <i class="zmdi" ng-if="tabelaServicos.ordem === 'valor'" ng-class="tabelaServicos.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                    </th>
+                    <th class="cc-num cc-grupo-valor" ng-click="ordenarPor(tabelaServicos, 'valorMedio')">Valor médio / contrato
+                      <i class="zmdi" ng-if="tabelaServicos.ordem === 'valorMedio'" ng-class="tabelaServicos.desc ? 'zmdi-caret-down' : 'zmdi-caret-up'"></i>
+                    </th>
+                    <th>Tend. 12 m</th>
+                    <th class="cc-num" ng-repeat="m in meses" ng-class="{'cc-mes-atual': $last}">{{m.rotulo}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="l in tabelaServicos.pagina track by l.id">
+                    <td title="{{l.nome}}">{{l.nome}}</td>
+                    <td class="cc-num">{{fmt(l.contratos)}}</td>
+                    <td class="cc-num">{{fmtPctSimples(l.pct)}}</td>
+                    <td class="cc-num">{{fmt(l.unidades)}}</td>
+                    <td class="cc-num cc-grupo-valor">{{fmtBrl(l.valor)}}</td>
+                    <td class="cc-num cc-grupo-valor">{{fmtBrl(l.valorMedio)}}</td>
+                    <td>
+                      <svg class="cc-spark" viewBox="0 0 80 22" preserveAspectRatio="none">
+                        <polyline ng-repeat="seg in l.sparkline.contratos track by $index" ng-attr-points="{{seg}}"></polyline>
+                      </svg>
+                    </td>
+                    <td class="cc-num" ng-repeat="v in l.series.contratos track by $index" ng-class="{'cc-mes-atual': $last, 'cc-zero': !v}">{{fmt(v)}}</td>
+                  </tr>
+                  <tr ng-if="!tabelaServicos.pagina.length">
+                    <td colspan="20" class="text-center" style="color: #90a4ae;">Nenhum serviço encontrado para "{{tabelaServicos.busca}}".</td>
+                  </tr>
+                </tbody>
+                <tfoot ng-if="tabelaServicos.totais">
+                  <tr>
+                    <td>Total ({{fmt(tabelaServicos.linhas.length)}} serviços)</td>
+                    <td class="cc-num">{{fmt(tabelaServicos.totais.contratos)}}</td>
+                    <td class="cc-num"></td>
+                    <td class="cc-num">{{fmt(tabelaServicos.totais.unidades)}}</td>
+                    <td class="cc-num cc-grupo-valor">{{fmtBrl(tabelaServicos.totais.valor)}}</td>
+                    <td class="cc-num cc-grupo-valor"></td>
+                    <td></td>
+                    <td class="cc-num" ng-repeat="m in meses" ng-class="{'cc-mes-atual': $last}"></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <div class="cc-paginacao" ng-if="tabelaServicos.filtradas.length > tabelaServicos.porPagina">
+              <span>
+                Exibindo {{fmt((tabelaServicos.paginaAtual - 1) * tabelaServicos.porPagina + 1)}}–{{fmt((tabelaServicos.paginaAtual - 1) * tabelaServicos.porPagina + tabelaServicos.pagina.length)}}
+                de {{fmt(tabelaServicos.filtradas.length)}}
+              </span>
+              <span>
+                <button class="btn btn-default" ng-click="irParaPagina(tabelaServicos, 1)" ng-disabled="tabelaServicos.paginaAtual === 1"><i class="zmdi zmdi-skip-previous"></i></button>
+                <button class="btn btn-default" ng-click="irParaPagina(tabelaServicos, tabelaServicos.paginaAtual - 1)" ng-disabled="tabelaServicos.paginaAtual === 1"><i class="zmdi zmdi-chevron-left"></i></button>
+                <button class="btn btn-default" ng-repeat="p in paginasVisiveis(tabelaServicos)" ng-class="{'ativo': p === tabelaServicos.paginaAtual}" ng-click="irParaPagina(tabelaServicos, p)">{{p}}</button>
+                <button class="btn btn-default" ng-click="irParaPagina(tabelaServicos, tabelaServicos.paginaAtual + 1)" ng-disabled="tabelaServicos.paginaAtual === tabelaServicos.totalPaginas"><i class="zmdi zmdi-chevron-right"></i></button>
+                <button class="btn btn-default" ng-click="irParaPagina(tabelaServicos, tabelaServicos.totalPaginas)" ng-disabled="tabelaServicos.paginaAtual === tabelaServicos.totalPaginas"><i class="zmdi zmdi-skip-next"></i></button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

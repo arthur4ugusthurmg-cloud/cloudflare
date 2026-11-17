@@ -1,0 +1,113 @@
+<div class="container-fluid" data-ng-controller="CampanhaEdicaoController" ng-init="onInit()">      
+
+    <div class="card">
+        <div class="card-header ch-alt">
+            <h2>{{registro.nome}}</h2>
+
+            <button  ng-click="onRemover(registro)" class="btn bgm-red btn-float btn-float waves-effect pull-right"><i class="zmdi zmdi-delete"></i></button>
+        </div>
+
+        <div class="card-body card-padding">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <div id="imagem-input" class="fileinput fileinput-new" data-provides="fileinput">                        
+                        <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="line-height: 200px;">
+                            <img ng-src="{{registro.imagem}}"/>
+                        </div>
+                        <div>
+                            <span class="btn btn-info btn-file">
+                                <span class="fileinput-new">{{'SELECIONAR-IMAGEM'|translate}}</span>
+                                <span class="fileinput-exists">{{'ALTERAR'|translate}}</span>
+                                <input type="file" name="...">
+                            </span>
+                            <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">{{'REMOVER'|translate}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <br/>
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <input type="text" class="form-control fg-input input-lg" ng-model="registro.nome">
+                    <label class="fg-label">{{'NOME'|translate}}</label>
+                </div>
+            </div>
+            <br/>
+            <div class="form-group fg-float m-b-30">
+                <div class="fg-line">
+                    <textarea class="form-control input-lg" msd-elastic ng-model="registro.texto"></textarea>
+                    <label class="fg-label">{{'TEXTO'|translate}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 5px">
+        <div class="card-header ch-alt">
+            <h2>{{'TRANSMISSOES'|translate}}</h2>
+            <button ng-click="onMostarModalAssociarTransmissao(registro)" class="btn bgm-teal btn-float waves-effect pull-right"><i class="zmdi zmdi-plus"></i></button>
+        </div>
+
+        <div class="card-body card-padding">
+            <p>{{'TRANSMISSOES-DESCRICAO'|translate}}</p>
+
+            <div class="row">
+                <div class="col-sm-6" ng-repeat="transmissao in registro.transmissoes">
+                    <div class="card" style="margin-bottom: 15px">
+                        <div class="card-header ch-alt">
+                            <h2>{{transmissao.nome}}</h2>
+                            <button  ng-click="onRemoverTransmissao(transmissao)" class="btn bgm-red btn-float btn-float waves-effect pull-right"><i class="zmdi zmdi-delete"></i></button>
+                        </div>
+                        <div class="card-body card-padding">
+                            <br/>
+                            <span ng-if="transmissao.enviado">Enviado com sucesso!</span>
+                            <span ng-if="!transmissao.enviado">Aguardando envio...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="card" style="margin-top: 10px">
+        <div class="card-header ch-alt">
+            <h2>{{'AUDITORIA'|translate}}</h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <br/>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group m-b-30">
+                        <label>{{'CRIADOR'|translate}}</label>
+                        <div>{{registro.criador}}</div>
+                    </div>
+                    <br/>
+                    <div class="form-group m-b-30">
+                        <label>{{'DATA-CRIACAO'|translate}}</label>
+                        <div>{{registro.dataCriacao|date:('DATE-FORMAT'|translate)}}</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group m-b-30">
+                        <label>{{'ATUALIZADOR'|translate}}</label>
+                        <div>{{registro.atualizador}}</div>
+                    </div>
+                    <br/>
+                    <div class="form-group m-b-30">
+                        <label>{{'DATA-ATUALIZACAO'|translate}}</label>
+                        <div>{{registro.dataAtualizacao|date:('DATE-FORMAT'|translate)}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <button ng-click="onSalvar()" class="btn btn-float bgm-blue m-btn waves-effect waves-circle"><i class="zmdi zmdi-floppy"></i></button>
+
+</div>
+
+
